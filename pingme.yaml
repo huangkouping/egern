@@ -2,17 +2,17 @@ name: PingMe签到
 description: 😀 新增PingMe签到 | 🤫 支持获取签到参数和每日签到&任务 | 🤫 原作者 @ZenMoFiShi | mickeu修改为支持 🎈Egern 并添加随机设备ID与参数开关 | 😀 
 compat_arguments:
   arg3: '30 8,20 * * *'
-  PROXY: PROXY
+  PROXY: 美国节点
 compat_arguments_schema:
   arg3:
     name: PM定时
     default_value: '30 8,20 * * *'
   PROXY:
-    name: PROXY
+    name: 美国节点
     description: 代理规则使用的策略
-    default_value: PROXY
+    default_value: 美国节点
     options:
-    - PROXY
+    - 美国节点
     - DIRECT
     - 手动选择
     - 自动选择
