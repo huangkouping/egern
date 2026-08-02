@@ -41,7 +41,7 @@ jobs:
           )
           text = re.sub(
               r"(?m)^description:.*$",
-              "description: 😀 PingMe每日签到与任务｜支持签到参数抓取｜代理策略可自由填写（需与主配置名称里的节点名称一致，如：填写“美国节点”签到奖励为0.004）｜自动同步 mickeu/Egern 原版更新",
+              "description: 😀 PingMe每日签到与任务，默认0点整每4小时签到一次｜支持签到参数抓取｜代理策略可自由填写（需与主配置名称里的节点名称一致，如：填写“美国节点”签到奖励为0.004）｜自动同步 mickeu/Egern 原版更新",
               text,
               count=1,
           )
