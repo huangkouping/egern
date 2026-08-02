@@ -8,16 +8,9 @@ compat_arguments_schema:
     name: PM定时
     default_value: '30 8,20 * * *'
   PROXY:
-    name: 美国节点
-    description: 代理规则使用的策略
+    name: 代理策略
+    description: 输入主配置中的策略组名称，需与配置文件完全一致
     default_value: 美国节点
-    options:
-    - 美国节点
-    - DIRECT
-    - 手动选择
-    - 自动选择
-    - 故障转移
-    - 负载均衡
 env:
   PINGME_CAPTURE: 'true'
 env_schema:
@@ -34,7 +27,7 @@ dns: {}
 rules:
 - domain:
     match: api.pingmeapp.net
-    policy: 美国节点
+    policy: PROXY
 scriptings:
 - schedule:
     name: PingMe签到
