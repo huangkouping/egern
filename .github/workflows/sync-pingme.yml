@@ -18,10 +18,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download and modify PingMe
+      - name: Download and customize PingMe
         run: |
           curl -fsSL https://raw.githubusercontent.com/mickeu/Egern/main/pingme.yaml -o pingme.yaml
-          sed -i 's/policy: PROXY/policy: 美国节点/g' pingme.yaml
+          sed -i \
+            -e 's/^  PROXY: PROXY$/  PROXY: 美国节点/' \
+            -e 's/^    name: PROXY$/    name: 美国节点/' \
+            -e 's/^    default_value: PROXY$/    default_value: 美国节点/' \
+            -e 's/^    - PROXY$/    - 美国节点/' \
+            -e 's/policy: PROXY/policy: 美国节点/g' \
+            pingme.yaml
 
       - name: Commit changes
         run: |
