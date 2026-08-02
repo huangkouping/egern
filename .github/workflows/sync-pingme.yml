@@ -21,13 +21,29 @@ jobs:
       - name: Download and customize PingMe
         run: |
           curl -fsSL https://raw.githubusercontent.com/mickeu/Egern/main/pingme.yaml -o pingme.yaml
-          sed -i \
-            -e 's/^  PROXY: PROXY$/  PROXY: 美国节点/' \
-            -e 's/^    name: PROXY$/    name: 美国节点/' \
-            -e 's/^    default_value: PROXY$/    default_value: 美国节点/' \
-            -e 's/^    - PROXY$/    - 美国节点/' \
-            -e 's/policy: PROXY/policy: 美国节点/g' \
-            pingme.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path("pingme.yaml")
+          text = path.read_text()
+          text = re.sub(
+              r"(?m)^  PROXY: .*$",
+              "  PROXY: 美国节点",
+              text,
+              count=1,
+          )
+          text = re.sub(
+              r"(?ms)^  PROXY:\n.*?(?=^env:)",
+              "  PROXY:\n"
+              "    name: 代理策略\n"
+              "    description: 输入主配置中的策略组名称，需与配置文件完全一致\n"
+              "    default_value: 美国节点\n",
+              text,
+              count=1,
+          )
+          path.write_text(text)
+          PY
 
       - name: Commit changes
         run: |
