@@ -1,0 +1,46 @@
+name: 更新自定义直连规则集
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/merge-direct-rules.py"
+      - ".github/workflows/update-custom-direct.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-custom-direct
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 下载并合并规则
+        run: python scripts/merge-direct-rules.py
+
+      - name: 提交更新
+        run: |
+          if git diff --quiet -- custom-direct.list; then
+            echo "上游规则没有变化"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add custom-direct.list
+          git commit -m "自动更新直连规则集"
+          git push
