@@ -1,3 +1,8 @@
+# Egern 自定义直连规则集
+# 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容
+# 在 Egern 中订阅本文件，并将策略统一设置为 DIRECT
+
+# ===== 自定义规则 =====
 DOMAIN-KEYWORD,localhost
 DOMAIN-KEYWORD,icsignx
 DOMAIN-SUFFIX,wuchuyun.com
