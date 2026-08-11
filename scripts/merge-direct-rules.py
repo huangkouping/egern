@@ -12,25 +12,23 @@ CUSTOM_RULES = [
     "DOMAIN-SUFFIX,snssdk.com",
 ]
 
+# 这里只同步用户明确指定的“防去广告误杀”直连来源。
+# 不要为了补全 App 分流而加入普通业务、广告、统计或推广域名。
 SOURCES = [
     (
-        "微信规则（blackmatrix7）",
+        "微信防误杀规则（blackmatrix7）",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/WeChat/WeChat.list",
     ),
     (
-        "抖音规则（fmz200）",
+        "抖音防误杀规则（fmz200）",
         "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
     ),
     (
-        "抖音补充规则（blackmatrix7）",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/DouYin/DouYin.list",
-    ),
-    (
-        "抖音 PCDN 规则（takoyakiwhite）",
+        "抖音 PCDN 防误杀规则（takoyakiwhite）",
         "https://raw.githubusercontent.com/takoyakiwhite/asoul_mirror/main/douyin_pcdn.list",
     ),
     (
-        "小红书规则（blackmatrix7）",
+        "小红书防误杀规则（blackmatrix7）",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/XiaoHongShu/XiaoHongShu.list",
     ),
 ]
@@ -77,14 +75,16 @@ def section(title: str, rules: list[str], source: str | None = None) -> list[str
 
 def main() -> None:
     output = [
-        "# Egern 自定义直连规则集",
+        "# Egern 防去广告误杀直连规则集",
         "# 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容",
+        "# 用途：让被去广告规则误拦的正常内容恢复显示",
         "# 在 Egern 中订阅本文件，并将策略统一设置为 DIRECT",
+        "# 不以补全 App 分流为目标，不主动收录广告、统计或推广域名",
         "# 相同规则按首次出现位置保留，后续分组中的重复项自动忽略",
         "",
     ]
     seen: set[str] = set()
-    output.extend(section("自定义规则", unique_rules(CUSTOM_RULES, seen)))
+    output.extend(section("自定义防误杀规则", unique_rules(CUSTOM_RULES, seen)))
 
     for title, url in SOURCES:
         rules = unique_rules(fetch_rules(url), seen)
