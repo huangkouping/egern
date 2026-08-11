@@ -22,6 +22,10 @@ SOURCES = [
         "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
     ),
     (
+        "抖音 PCDN 规则（takoyakiwhite）",
+        "https://raw.githubusercontent.com/takoyakiwhite/asoul_mirror/main/douyin_pcdn.list",
+    ),
+    (
         "小红书规则（blackmatrix7）",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/XiaoHongShu/XiaoHongShu.list",
     ),
