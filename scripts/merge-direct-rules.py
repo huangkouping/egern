@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
+import time
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 OUTPUT = Path("custom-direct.list")
+FETCH_ATTEMPTS = 4
+RETRY_DELAYS = (3, 8, 15)
 
 CUSTOM_RULES = [
     "DOMAIN-KEYWORD,localhost",
@@ -34,11 +38,34 @@ SOURCES = [
 ]
 
 
-def fetch_rules(url: str) -> list[str]:
-    request = Request(url, headers={"User-Agent": "custom-direct-rule-sync/1.0"})
-    with urlopen(request, timeout=30) as response:
-        text = response.read().decode("utf-8-sig")
+def download_text(url: str) -> str:
+    last_error: Exception | None = None
+    for attempt in range(1, FETCH_ATTEMPTS + 1):
+        try:
+            request = Request(
+                url,
+                headers={
+                    "User-Agent": "custom-direct-rule-sync/2.0",
+                    "Accept": "text/plain,*/*",
+                },
+            )
+            with urlopen(request, timeout=45) as response:
+                return response.read().decode("utf-8-sig")
+        except (HTTPError, URLError, TimeoutError, OSError) as error:
+            last_error = error
+            if attempt == FETCH_ATTEMPTS:
+                break
+            delay = RETRY_DELAYS[attempt - 1]
+            print(f"下载失败（{attempt}/{FETCH_ATTEMPTS}）：{url}；{delay} 秒后重试：{error}")
+            time.sleep(delay)
 
+    raise RuntimeError(
+        f"上游连续 {FETCH_ATTEMPTS} 次下载失败，保留现有输出文件：{url}"
+    ) from last_error
+
+
+def fetch_rules(url: str) -> list[str]:
+    text = download_text(url)
     rules = []
     for raw_line in text.splitlines():
         line = raw_line.strip()
@@ -49,7 +76,7 @@ def fetch_rules(url: str) -> list[str]:
             line = f"{rule_type.strip().upper()},{value.strip()}"
         rules.append(line)
     if not rules:
-        raise RuntimeError(f"上游规则为空，停止覆盖输出文件：{url}")
+        raise RuntimeError(f"上游规则为空，保留现有输出文件：{url}")
     return rules
 
 
@@ -90,6 +117,7 @@ def main() -> None:
         rules = unique_rules(fetch_rules(url), seen)
         output.extend(section(title, rules, url))
 
+    # 只有全部上游成功后才覆盖，任何一个来源失败都会保留旧文件。
     OUTPUT.write_text("\n".join(output).rstrip() + "\n", encoding="utf-8")
 
 
