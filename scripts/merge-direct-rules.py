@@ -33,11 +33,15 @@ def fetch_rules(url: str) -> list[str]:
     with urlopen(request, timeout=30) as response:
         text = response.read().decode("utf-8-sig")
 
-    rules = [
-        line.strip()
-        for line in text.splitlines()
-        if line.strip() and not line.lstrip().startswith(("#", ";"))
-    ]
+    rules = []
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith(("#", ";")):
+            continue
+        if "," in line:
+            rule_type, value = line.split(",", 1)
+            line = f"{rule_type.strip()},{value.strip()}"
+        rules.append(line)
     if not rules:
         raise RuntimeError(f"上游规则为空，停止覆盖输出文件：{url}")
     return rules
