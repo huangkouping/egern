@@ -12,15 +12,6 @@ UPDATED_PREFIX = "# 规则内容更新时间（北京时间）："
 FETCH_ATTEMPTS = 4
 RETRY_DELAYS = (3, 8, 15)
 
-# Apple 官方列出的 Apple Intelligence、Siri 与 Private Cloud Compute 端点。
-APPLE_INTELLIGENCE_RULES = [
-    "DOMAIN,guzzoni.apple.com",
-    "DOMAIN,apple-relay.cloudflare.com",
-    "DOMAIN,apple-relay.fastly-edge.com",
-    "DOMAIN,cp4.cloudflare.com",
-    "DOMAIN,apple-relay.apple.com",
-]
-
 
 def download_text() -> str:
     last_error: Exception | None = None
@@ -97,10 +88,6 @@ def main() -> None:
         "",
         "# ===== Apple 地区受限服务（代理） =====",
         *rules,
-        "",
-        "# ===== Apple Intelligence / Siri / Private Cloud Compute（代理） =====",
-        "# 来源：https://support.apple.com/101555",
-        *[rule for rule in APPLE_INTELLIGENCE_RULES if rule.lower() not in seen],
         "",
     ]
     new_content = "\n".join(output)
