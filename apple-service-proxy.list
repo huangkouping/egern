@@ -1,6 +1,6 @@
 # Apple 地区受限服务代理规则集（排除 iCloud）
 # 本文件由 GitHub Actions 自动同步生成，请勿直接编辑生成内容
-# 规则内容更新时间（北京时间）：2026-08-16 07:53:00
+# 规则内容更新时间（北京时间）：2026-08-16 07:56:43
 # 上游来源：https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/AppleService.list
 # 使用方法：在 Egern 中订阅本文件，并选择合适的境外代理策略
 # iCloud 过滤策略：自动排除 icloud.com 及其全部子域名，继续由直连规则处理
@@ -17,3 +17,11 @@ DOMAIN,news-client-search.apple.com
 DOMAIN,news-edge.apple.com
 DOMAIN,news-events.apple.com
 DOMAIN-SUFFIX,sports.apple.com
+
+# ===== Apple Intelligence / Siri / Private Cloud Compute（代理） =====
+# 来源：https://support.apple.com/101555
+DOMAIN,guzzoni.apple.com
+DOMAIN,apple-relay.cloudflare.com
+DOMAIN,apple-relay.fastly-edge.com
+DOMAIN,cp4.cloudflare.com
+DOMAIN,apple-relay.apple.com
