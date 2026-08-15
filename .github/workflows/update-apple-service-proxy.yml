@@ -1,0 +1,66 @@
+name: 更新 AppleService 代理规则集
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "29 */6 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/sync-apple-service-proxy.py"
+      - ".github/workflows/update-apple-service-proxy.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-apple-service-proxy
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 下载、过滤并生成规则
+        run: python scripts/sync-apple-service-proxy.py
+
+      - name: 提交更新
+        run: |
+          if git diff --quiet -- apple-service-proxy.list; then
+            echo "上游规则没有变化"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apple-service-proxy.list
+          git commit -m "自动更新 AppleService 代理规则集"
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+
+            if git push origin HEAD:main; then
+              echo "AppleService 规则集更新已成功推送"
+              exit 0
+            fi
+
+            if [ "$attempt" -lt 3 ]; then
+              echo "推送失败（$attempt/3），重新同步主分支后重试"
+              sleep $((attempt * 5))
+            fi
+          done
+
+          echo "连续 3 次推送失败"
+          exit 1
