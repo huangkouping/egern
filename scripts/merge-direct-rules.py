@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 import time
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 OUTPUT = Path("custom-direct.list")
+UPDATED_PREFIX = "# 规则内容更新时间（北京时间）："
 FETCH_ATTEMPTS = 4
 RETRY_DELAYS = (3, 8, 15)
 
@@ -100,10 +103,19 @@ def section(title: str, rules: list[str], source: str | None = None) -> list[str
     return lines
 
 
+def without_updated_at(text: str) -> str:
+    """比较规则内容时忽略更新时间，避免每 6 小时产生无意义提交。"""
+    return "\n".join(
+        line for line in text.splitlines() if not line.startswith(UPDATED_PREFIX)
+    ).rstrip() + "\n"
+
+
 def main() -> None:
+    updated_at = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
     output = [
         "# Egern 防去广告误杀直连规则集",
         "# 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容",
+        f"{UPDATED_PREFIX}{updated_at}",
         "# 用途：让被去广告规则误拦的正常内容恢复显示",
         "# 在 Egern 中订阅本文件，并将策略统一设置为 DIRECT",
         "# 不以补全 App 分流为目标，不主动收录广告、统计或推广域名",
@@ -118,7 +130,13 @@ def main() -> None:
         output.extend(section(title, rules, url))
 
     # 只有全部上游成功后才覆盖，任何一个来源失败都会保留旧文件。
-    OUTPUT.write_text("\n".join(output).rstrip() + "\n", encoding="utf-8")
+    new_content = "\n".join(output).rstrip() + "\n"
+    if OUTPUT.exists():
+        old_content = OUTPUT.read_text(encoding="utf-8")
+        if without_updated_at(old_content) == without_updated_at(new_content):
+            print("规则内容没有变化，保留原更新时间")
+            return
+    OUTPUT.write_text(new_content, encoding="utf-8")
 
 
 if __name__ == "__main__":
