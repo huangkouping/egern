@@ -19,7 +19,7 @@ CUSTOM_RULES = [
     "DOMAIN-SUFFIX,snssdk.com",
 ]
 
-# 这里只同步用户明确指定的“防去广告误杀”直连来源。
+# 这里只同步用户明确指定的防误杀及基础服务直连来源。
 # 不要为了补全 App 分流而加入普通业务、广告、统计或推广域名。
 SOURCES = [
     (
@@ -37,6 +37,18 @@ SOURCES = [
     (
         "小红书防误杀规则（blackmatrix7）",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/XiaoHongShu/XiaoHongShu.list",
+    ),
+    (
+        "Apple Push 直连规则（Bwy999）",
+        "https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/ApplePush.list",
+    ),
+    (
+        "App Store 与 Apple ID 直连规则（Bwy999）",
+        "https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/AppStore.list",
+    ),
+    (
+        "Apple 下载、CDN 与 iCloud 直连规则（Bwy999）",
+        "https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/AppleDirect.list",
     ),
 ]
 
@@ -113,10 +125,10 @@ def without_updated_at(text: str) -> str:
 def main() -> None:
     updated_at = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
     output = [
-        "# Egern 防去广告误杀直连规则集",
+        "# Egern 防误杀及基础服务直连规则集",
         "# 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容",
         f"{UPDATED_PREFIX}{updated_at}",
-        "# 用途：让被去广告规则误拦的正常内容恢复显示",
+        "# 用途：恢复被去广告规则误拦的正常内容，并保障指定基础服务直连",
         "# 在 Egern 中订阅本文件，并将策略统一设置为 DIRECT",
         "# 不以补全 App 分流为目标，不主动收录广告、统计或推广域名",
         "# 相同规则按首次出现位置保留，后续分组中的重复项自动忽略",
