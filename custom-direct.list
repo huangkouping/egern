@@ -1,7 +1,7 @@
-# Egern 防去广告误杀直连规则集
+# Egern 防误杀及基础服务直连规则集
 # 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容
-# 规则内容更新时间（北京时间）：2026-08-16 07:41:12
-# 用途：让被去广告规则误拦的正常内容恢复显示
+# 规则内容更新时间（北京时间）：2026-08-16 07:44:40
+# 用途：恢复被去广告规则误拦的正常内容，并保障指定基础服务直连
 # 在 Egern 中订阅本文件，并将策略统一设置为 DIRECT
 # 不以补全 App 分流为目标，不主动收录广告、统计或推广域名
 # 相同规则按首次出现位置保留，后续分组中的重复项自动忽略
@@ -97,3 +97,35 @@ DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-SUFFIX,xhscdn.com
 DOMAIN-SUFFIX,xhscdn.net
 DOMAIN-SUFFIX,xiaohongshu.com
+
+# ===== Apple Push 直连规则（Bwy999） =====
+# 来源：https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/ApplePush.list
+DOMAIN-SUFFIX,push.apple.com
+IP-CIDR,17.249.0.0/16,no-resolve
+IP-CIDR,17.252.0.0/16,no-resolve
+IP-CIDR,17.57.144.0/22,no-resolve
+IP-CIDR,17.188.128.0/18,no-resolve
+IP-CIDR,17.188.20.0/23,no-resolve
+IP-CIDR6,2620:149:a44::/48,no-resolve
+IP-CIDR6,2403:300:a42::/48,no-resolve
+IP-CIDR6,2403:300:a51::/48,no-resolve
+
+# ===== App Store 与 Apple ID 直连规则（Bwy999） =====
+# 来源：https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/AppStore.list
+DOMAIN,account.apple.com
+DOMAIN,appleid.cdn-apple.com
+DOMAIN,idmsa.apple.com
+DOMAIN,gsa.apple.com
+DOMAIN,testflight.apple.com
+DOMAIN,beta.itunes.apple.com
+
+# ===== Apple 下载、CDN 与 iCloud 直连规则（Bwy999） =====
+# 来源：https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/AppleDirect.list
+DOMAIN-SUFFIX,mzstatic.com
+DOMAIN-SUFFIX,aaplimg.com
+DOMAIN-SUFFIX,apps.apple.com
+DOMAIN-SUFFIX,itunes.apple.com
+DOMAIN-SUFFIX,cdn-apple.com
+DOMAIN-SUFFIX,icloud.com
+DOMAIN-SUFFIX,icloud-content.com
+DOMAIN-SUFFIX,apple-cloudkit.com
