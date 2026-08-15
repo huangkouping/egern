@@ -133,7 +133,7 @@ def main() -> None:
     new_content = "\n".join(output).rstrip() + "\n"
     if OUTPUT.exists():
         old_content = OUTPUT.read_text(encoding="utf-8")
-        if without_updated_at(old_content) == without_updated_at(new_content):
+        if UPDATED_PREFIX in old_content and without_updated_at(old_content) == without_updated_at(new_content):
             print("规则内容没有变化，保留原更新时间")
             return
     OUTPUT.write_text(new_content, encoding="utf-8")
