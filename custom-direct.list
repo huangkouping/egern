@@ -13,6 +13,10 @@ DOMAIN-SUFFIX,wuchuyun.com
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,snssdk.com
 DOMAIN,time.apple.com
+# Apple GC 配置/后台服务
+DOMAIN,profile.gc.apple.com
+# Apple 天气服务边缘配置
+DOMAIN,weather-edge.apple.com
 DOMAIN-SUFFIX,ls.apple.com
 DOMAIN,wps.apple.com
 DOMAIN,gsp9-ssl.apple.com
@@ -59,12 +63,10 @@ USER-AGENT,WeChat*
 IP-ASN,132203,no-resolve
 
 # ===== 抖音防误杀规则（fmz200） =====
-# 来源：https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list
 DOMAIN-SUFFIX,amemv.com
 DOMAIN-SUFFIX,douyinvod.com
 
 # ===== 抖音 PCDN 防误杀规则（takoyakiwhite） =====
-# 来源：https://raw.githubusercontent.com/takoyakiwhite/asoul_mirror/main/douyin_pcdn.list
 DOMAIN-SUFFIX,pkoplink.com
 DOMAIN-SUFFIX,ydycdn.com
 DOMAIN-SUFFIX,cjjd14.com
@@ -101,7 +103,6 @@ DOMAIN,push-rtmp-l1.ixigua.com
 DOMAIN,pull-hs-f5-hot.flive.douyincdn.com
 
 # ===== 小红书防误杀规则（blackmatrix7） =====
-# 来源：https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/XiaoHongShu/XiaoHongShu.list
 DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-SUFFIX,xhscdn.com
 DOMAIN-SUFFIX,xhscdn.net
