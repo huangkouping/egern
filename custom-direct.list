@@ -1,6 +1,6 @@
 # Egern 防误杀及基础服务直连规则集
 # 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容
-# 规则内容更新时间（北京时间）：2026-08-21 03:00:00
+# 规则内容更新时间（北京时间）：2026-08-21 21:12:23
 # 用途：恢复被去广告规则误拦的正常内容，并保障指定基础服务直连
 # 在 Egern 中订阅本文件，并将策略统一设置为 DIRECT
 # 不以补全 App 分流为目标，不主动收录广告、统计或推广域名
@@ -13,10 +13,6 @@ DOMAIN-SUFFIX,wuchuyun.com
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,snssdk.com
 DOMAIN,time.apple.com
-# Apple GC 配置/后台服务
-DOMAIN,profile.gc.apple.com
-# Apple 天气服务边缘配置
-DOMAIN,weather-edge.apple.com
 DOMAIN-SUFFIX,ls.apple.com
 DOMAIN,wps.apple.com
 DOMAIN,gsp9-ssl.apple.com
@@ -63,10 +59,12 @@ USER-AGENT,WeChat*
 IP-ASN,132203,no-resolve
 
 # ===== 抖音防误杀规则（fmz200） =====
+# 来源：https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list
 DOMAIN-SUFFIX,amemv.com
 DOMAIN-SUFFIX,douyinvod.com
 
 # ===== 抖音 PCDN 防误杀规则（takoyakiwhite） =====
+# 来源：https://raw.githubusercontent.com/takoyakiwhite/asoul_mirror/main/douyin_pcdn.list
 DOMAIN-SUFFIX,pkoplink.com
 DOMAIN-SUFFIX,ydycdn.com
 DOMAIN-SUFFIX,cjjd14.com
@@ -103,6 +101,7 @@ DOMAIN,push-rtmp-l1.ixigua.com
 DOMAIN,pull-hs-f5-hot.flive.douyincdn.com
 
 # ===== 小红书防误杀规则（blackmatrix7） =====
+# 来源：https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/XiaoHongShu/XiaoHongShu.list
 DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-SUFFIX,xhscdn.com
 DOMAIN-SUFFIX,xhscdn.net
