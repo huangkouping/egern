@@ -1,8 +1,8 @@
 # Apple 地区受限服务代理规则集（排除 iCloud）
 # 本文件由 GitHub Actions 自动同步生成，请勿直接编辑生成内容
-# 规则内容更新时间（北京时间）：2026-08-16 07:57:33
+# 规则内容更新时间（北京时间）：2026-08-21 12:46:00
 # 上游来源：https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/AppleService.list
-# 使用方法：在 Egern 中订阅本文件，并选择合适的境外代理策略
+# 使用方法：在 Egern 中订阅本文件，并将策略设置为“苹果服务”
 # iCloud 过滤策略：自动排除 icloud.com 及其全部子域名，继续由直连规则处理
 # 本次过滤的 iCloud 规则：DOMAIN,gateway.icloud.com
 
@@ -17,3 +17,19 @@ DOMAIN,news-client-search.apple.com
 DOMAIN,news-edge.apple.com
 DOMAIN,news-events.apple.com
 DOMAIN-SUFFIX,sports.apple.com
+
+# ===== 用户确认的 Apple 服务（代理） =====
+# 以下 4 个域名来自用户实际连接日志，均曾因未命中规则而走兜底香港节点。
+# 用户明确指定：不走直连，统一交给 Egern 的“苹果服务”策略。
+
+# iTunes 服务入口：商店及相关 Apple 服务入口；用户确认走苹果服务
+DOMAIN,itunes.com
+
+# iPhone 信息提交服务：Apple 设备相关信息/服务提交接口；用户确认走苹果服务
+DOMAIN,iphonesubmissions.apple.com
+
+# Apple Key Transparency：与 iMessage 联系人密钥验证等安全机制相关；用户确认走苹果服务
+DOMAIN,kt-prod.ess.apple.com
+
+# Apple 后台服务：公开资料对具体用途说明有限；根据实际日志确认走苹果服务
+DOMAIN,humb.apple.com
