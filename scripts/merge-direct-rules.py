@@ -17,6 +17,15 @@ CUSTOM_RULES = [
     "DOMAIN-SUFFIX,wuchuyun.com",
     "DOMAIN-SUFFIX,sentry.io",
     "DOMAIN-SUFFIX,snssdk.com",
+    "DOMAIN,time.apple.com",
+    "DOMAIN-SUFFIX,ls.apple.com",
+    "DOMAIN,wps.apple.com",
+    "DOMAIN,gsp9-ssl.apple.com",
+    "DOMAIN,gdmf.apple.com",
+    "DOMAIN,lcdn-locator.apple.com",
+    "DOMAIN,known-issues.apple.com",
+    "DOMAIN,ontology.health.apple.com",
+    "DOMAIN-SUFFIX,intra.ke.com",
 ]
 
 # 这里只同步用户明确指定的防误杀及基础服务直连来源。
