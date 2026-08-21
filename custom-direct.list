@@ -1,6 +1,6 @@
 # Egern 防误杀及基础服务直连规则集
 # 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容
-# 规则内容更新时间（北京时间）：2026-08-16 07:44:40
+# 规则内容更新时间（北京时间）：2026-08-21 03:00:00
 # 用途：恢复被去广告规则误拦的正常内容，并保障指定基础服务直连
 # 在 Egern 中订阅本文件，并将策略统一设置为 DIRECT
 # 不以补全 App 分流为目标，不主动收录广告、统计或推广域名
@@ -12,6 +12,15 @@ DOMAIN-KEYWORD,icsignx
 DOMAIN-SUFFIX,wuchuyun.com
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,snssdk.com
+DOMAIN,time.apple.com
+DOMAIN-SUFFIX,ls.apple.com
+DOMAIN,wps.apple.com
+DOMAIN,gsp9-ssl.apple.com
+DOMAIN,gdmf.apple.com
+DOMAIN,lcdn-locator.apple.com
+DOMAIN,known-issues.apple.com
+DOMAIN,ontology.health.apple.com
+DOMAIN-SUFFIX,intra.ke.com
 
 # ===== 微信防误杀规则（blackmatrix7） =====
 # 来源：https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/WeChat/WeChat.list
