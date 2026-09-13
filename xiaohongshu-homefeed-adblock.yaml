@@ -10,7 +10,7 @@ scriptings:
   - http_response:
       name: 小红书首页广告与直播过滤
       match: '^https?:\\/\\/[a-zA-Z0-9.-]+\\.xiaohongshu\\.com\\/api\\/sns\\/(?:v\\d+\\/)?(?:homefeed|web\\/v\\d+\\/homefeed)(?:\\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/81dd4566dfe626fe979e0e9ef66cd88a81783517/xiaohongshu-homefeed-adblock.js
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/8f5a29aee8ee249895520160ff3c8460ad1e0f29/xiaohongshu-homefeed-adblock.js
       body_required: true
       timeout: 10
 
