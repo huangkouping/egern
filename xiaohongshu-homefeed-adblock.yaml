@@ -1,14 +1,14 @@
-name: 🧹 小红书首页信息流广告过滤
+name: 🧹 小红书首页广告与直播过滤
 description: |-
-  仅屏蔽小红书首页“发现”信息流中的商业投放广告。
-  保留普通图文、视频、直播及普通商品笔记，避免因过滤全部视频造成首页大片空白。
+  屏蔽小红书首页“发现”信息流中的商业投放广告和直播卡片。
+  保留普通图文、普通视频及普通商品笔记，避免因过滤全部视频造成首页大片空白。
   更新日期：2026-09-13
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
 scriptings:
   - http_response:
-      name: 小红书首页信息流广告过滤
+      name: 小红书首页广告与直播过滤
       match: '^https?:\/\/[a-zA-Z0-9.-]+\.xiaohongshu\.com\/api\/sns\/(?:v\d+\/)?(?:homefeed|web\/v\d+\/homefeed)(?:\?|$)'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js
       body_required: true
