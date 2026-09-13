@@ -1,6 +1,6 @@
 /*
- * 小红书首页信息流广告过滤
- * 仅移除带有明确广告标识的卡片，保留普通图文、视频、直播及普通商品笔记。
+ * 小红书首页信息流广告与直播过滤
+ * 移除带有明确广告标识的卡片和首页直播卡片，保留普通图文、视频及普通商品笔记。
  * 适用于 Egern 的 HTTP Response Script。
  * Updated: 2026-09-13
  */
@@ -32,25 +32,40 @@
     return false;
   };
 
-  const filterAds = (items) => {
+  const isLiveCard = (item) => {
+    if (!item || typeof item !== "object") return false;
+
+    const modelType = String(item.model_type || "").toLowerCase();
+    const itemType = String(item.type || "").toLowerCase();
+
+    if (modelType === "live" || modelType.startsWith("live_")) return true;
+    if (itemType === "live" || itemType.startsWith("live_")) return true;
+    if (hasOwn(item, "live_info") || hasOwn(item, "live_card_info")) return true;
+
+    return false;
+  };
+
+  const filterBlockedCards = (items) => {
     if (!Array.isArray(items)) return items;
-    const filtered = items.filter((item) => !isPromotedAd(item));
+    const filtered = items.filter(
+      (item) => !isPromotedAd(item) && !isLiveCard(item)
+    );
     const removed = items.length - filtered.length;
     if (removed > 0) {
-      console.log(`[小红书首页广告过滤] 已移除 ${removed} 条投放广告`);
+      console.log(`[小红书首页过滤] 已移除 ${removed} 条广告或直播卡片`);
     }
     return filtered;
   };
 
   // App 常见结构：data 为数组；兼容 data.items / data.feeds 两种结构。
   if (Array.isArray(payload?.data)) {
-    payload.data = filterAds(payload.data);
+    payload.data = filterBlockedCards(payload.data);
   } else if (payload?.data && typeof payload.data === "object") {
     if (Array.isArray(payload.data.items)) {
-      payload.data.items = filterAds(payload.data.items);
+      payload.data.items = filterBlockedCards(payload.data.items);
     }
     if (Array.isArray(payload.data.feeds)) {
-      payload.data.feeds = filterAds(payload.data.feeds);
+      payload.data.feeds = filterBlockedCards(payload.data.feeds);
     }
   }
 
