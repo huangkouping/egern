@@ -85,6 +85,25 @@
         return true;
       }
 
+      // 新版 App 会把“直播”仅作为头像角标/标签返回。
+      // 只检查角标、标签等元数据字段，不检查笔记标题和正文，避免误伤普通内容。
+      if (
+        /(tag|badge|label|icon|subscript|corner|mark)/i.test(key) &&
+        typeof child === "string" &&
+        (child.includes("直播") || /(^|[^a-z])live([^a-z]|$)/i.test(child))
+      ) {
+        return true;
+      }
+
+      if (
+        /(tag|badge|label|icon|subscript|corner|mark)/i.test(key) &&
+        child &&
+        typeof child === "object" &&
+        JSON.stringify(child).includes("直播")
+      ) {
+        return true;
+      }
+
       if (containsLiveMarker(child, depth + 1)) return true;
     }
 
