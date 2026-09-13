@@ -14,17 +14,24 @@
   try {
     payload = JSON.parse($response.body);
   } catch (error) {
-    console.log(`[小红书首页广告过滤] JSON 解析失败：${error}`);
+    console.log(`[小红书首页过滤] JSON 解析失败：${error}`);
     return $done({});
   }
 
   const hasOwn = (object, key) =>
     Object.prototype.hasOwnProperty.call(object, key);
 
+  const hasMeaningfulValue = (value) => {
+    if (value === null || value === undefined || value === false) return false;
+    if (value === 0 || value === "0" || value === "") return false;
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === "object") return Object.keys(value).length > 0;
+    return true;
+  };
+
   const isPromotedAd = (item) => {
     if (!item || typeof item !== "object") return false;
 
-    // 小红书 App 首页投放内容的主要标记，以及兼容可能出现的同义字段。
     if (hasOwn(item, "ads_info") || hasOwn(item, "ad_info")) return true;
     if (item.is_ad === true || item.is_ad === 1 || item.is_ad === "1") return true;
     if (item.model_type === "ads" || item.model_type === "ad") return true;
@@ -32,24 +39,65 @@
     return false;
   };
 
-  const isLiveCard = (item) => {
-    if (!item || typeof item !== "object") return false;
+  // 直播标记经常藏在 note_card、user 等嵌套对象中，不能只检查卡片最外层。
+  const containsLiveMarker = (value, depth = 0) => {
+    if (!value || typeof value !== "object" || depth > 8) return false;
 
-    const modelType = String(item.model_type || "").toLowerCase();
-    const itemType = String(item.type || "").toLowerCase();
+    for (const [rawKey, child] of Object.entries(value)) {
+      const key = rawKey.toLowerCase();
 
-    if (modelType === "live" || modelType.startsWith("live_")) return true;
-    if (itemType === "live" || itemType.startsWith("live_")) return true;
-    if (hasOwn(item, "live_info") || hasOwn(item, "live_card_info")) return true;
+      if (
+        ["live_info", "live_card_info", "live_room_info", "live_room", "live_data"]
+          .includes(key) &&
+        hasMeaningfulValue(child)
+      ) {
+        return true;
+      }
+
+      if (
+        ["live_id", "live_room_id", "room_id"].includes(key) &&
+        hasMeaningfulValue(child)
+      ) {
+        return true;
+      }
+
+      if (
+        key === "is_live" &&
+        (child === true || child === 1 || child === "1")
+      ) {
+        return true;
+      }
+
+      if (
+        ["live_status", "live_state"].includes(key) &&
+        ["1", "live", "living", "on", "online"].includes(
+          String(child).toLowerCase()
+        )
+      ) {
+        return true;
+      }
+
+      if (
+        ["model_type", "type", "card_type"].includes(key) &&
+        (String(child).toLowerCase() === "live" ||
+          String(child).toLowerCase().startsWith("live_"))
+      ) {
+        return true;
+      }
+
+      if (containsLiveMarker(child, depth + 1)) return true;
+    }
 
     return false;
   };
 
   const filterBlockedCards = (items) => {
     if (!Array.isArray(items)) return items;
+
     const filtered = items.filter(
-      (item) => !isPromotedAd(item) && !isLiveCard(item)
+      (item) => !isPromotedAd(item) && !containsLiveMarker(item)
     );
+
     const removed = items.length - filtered.length;
     if (removed > 0) {
       console.log(`[小红书首页过滤] 已移除 ${removed} 条广告或直播卡片`);
@@ -57,7 +105,6 @@
     return filtered;
   };
 
-  // App 常见结构：data 为数组；兼容 data.items / data.feeds 两种结构。
   if (Array.isArray(payload?.data)) {
     payload.data = filterBlockedCards(payload.data);
   } else if (payload?.data && typeof payload.data === "object") {
