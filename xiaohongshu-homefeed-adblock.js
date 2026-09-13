@@ -1,7 +1,7 @@
 /*
- * 小红书首页广告与直播过滤
- * 精确适配 rec.xiaohongshu.com/api/sns/v6/homefeed
- * 保留普通图文和视频；删除广告及带 user.live 的直播推荐卡片。
+ * 小红书首页信息流广告与直播过滤
+ * 移除带有明确广告标识的卡片和首页直播卡片，保留普通图文、视频及普通商品笔记。
+ * 适用于 Egern 的 HTTP Response Script。
  * Updated: 2026-09-13
  */
 
@@ -14,85 +14,58 @@
   try {
     payload = JSON.parse($response.body);
   } catch (error) {
-    console.log("[小红书首页过滤] JSON解析失败：" + error);
+    console.log(`[小红书首页广告过滤] JSON 解析失败：${error}`);
     return $done({});
   }
 
-  const isAd = (item) => {
-    if (!item || typeof item !== "object") return false;
-    return (
-      item.is_ads === true ||
-      item.is_ads === 1 ||
-      item.is_ads === "1" ||
-      item.is_ad === true ||
-      item.is_ad === 1 ||
-      item.is_ad === "1" ||
-      (item.ads_info && typeof item.ads_info === "object") ||
-      (item.ad_info && typeof item.ad_info === "object") ||
-      item.model_type === "ads" ||
-      item.model_type === "ad"
-    );
-  };
+  const hasOwn = (object, key) =>
+    Object.prototype.hasOwnProperty.call(object, key);
 
-  const isLive = (item) => {
+  const isPromotedAd = (item) => {
     if (!item || typeof item !== "object") return false;
 
-    // 2026-09-13 实际抓包字段：
-    // data[].user.live = { room_id, live_status, live_link, ... }
-    const live = item.user && item.user.live;
-    if (!live || typeof live !== "object") return false;
+    // 小红书 App 首页投放内容的主要标记，以及兼容可能出现的同义字段。
+    if (hasOwn(item, "ads_info") || hasOwn(item, "ad_info")) return true;
+    if (item.is_ad === true || item.is_ad === 1 || item.is_ad === "1") return true;
+    if (item.model_type === "ads" || item.model_type === "ad") return true;
 
-    return (
-      Object.keys(live).length > 0 &&
-      (live.room_id ||
-        live.user_id ||
-        live.live_link ||
-        live.live_status === 1 ||
-        live.live_status === 2 ||
-        live.live_status === "1" ||
-        live.live_status === "2")
-    );
+    return false;
   };
 
-  const filterItems = (items) => {
+  const isLiveCard = (item) => {
+    if (!item || typeof item !== "object") return false;
+
+    const modelType = String(item.model_type || "").toLowerCase();
+    const itemType = String(item.type || "").toLowerCase();
+
+    if (modelType === "live" || modelType.startsWith("live_")) return true;
+    if (itemType === "live" || itemType.startsWith("live_")) return true;
+    if (hasOwn(item, "live_info") || hasOwn(item, "live_card_info")) return true;
+
+    return false;
+  };
+
+  const filterBlockedCards = (items) => {
     if (!Array.isArray(items)) return items;
-
-    let adsRemoved = 0;
-    let liveRemoved = 0;
-
-    const filtered = items.filter((item) => {
-      if (isAd(item)) {
-        adsRemoved += 1;
-        return false;
-      }
-      if (isLive(item)) {
-        liveRemoved += 1;
-        return false;
-      }
-      return true;
-    });
-
-    console.log(
-      "[小红书首页过滤] 扫描 " +
-        items.length +
-        " 条，删除广告 " +
-        adsRemoved +
-        " 条，删除直播 " +
-        liveRemoved +
-        " 条"
+    const filtered = items.filter(
+      (item) => !isPromotedAd(item) && !isLiveCard(item)
     );
-
+    const removed = items.length - filtered.length;
+    if (removed > 0) {
+      console.log(`[小红书首页过滤] 已移除 ${removed} 条广告或直播卡片`);
+    }
     return filtered;
   };
 
-  if (Array.isArray(payload.data)) {
-    payload.data = filterItems(payload.data);
-  } else if (payload.data && typeof payload.data === "object") {
+  // App 常见结构：data 为数组；兼容 data.items / data.feeds 两种结构。
+  if (Array.isArray(payload?.data)) {
+    payload.data = filterBlockedCards(payload.data);
+  } else if (payload?.data && typeof payload.data === "object") {
     if (Array.isArray(payload.data.items)) {
-      payload.data.items = filterItems(payload.data.items);
+      payload.data.items = filterBlockedCards(payload.data.items);
     }
     if (Array.isArray(payload.data.feeds)) {
-      payload.data.feeds = filterItems(payload.data.feeds);
+      payload.data.feeds = filterBlockedCards(payload.data.feeds);
     }
   }
 
