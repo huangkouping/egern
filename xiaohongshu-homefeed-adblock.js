@@ -29,15 +29,55 @@
     return true;
   };
 
-  const isPromotedAd = (item) => {
-    if (!item || typeof item !== "object") return false;
+  const containsAdMarker = (value, depth = 0) => {
+    if (!value || typeof value !== "object" || depth > 8) return false;
 
-    if (hasOwn(item, "ads_info") || hasOwn(item, "ad_info")) return true;
-    if (item.is_ad === true || item.is_ad === 1 || item.is_ad === "1") return true;
-    if (item.model_type === "ads" || item.model_type === "ad") return true;
+    for (const [rawKey, child] of Object.entries(value)) {
+      const key = rawKey.toLowerCase();
+      const normalized = String(child).toLowerCase();
+
+      // 商业投放标记可能位于 item、note_card 或推荐元数据内。
+      if (
+        ["ads_info", "ad_info", "advertise_info", "advertisement_info",
+         "promotion_info", "sponsor_info", "commercial_info"].includes(key) &&
+        hasMeaningfulValue(child)
+      ) {
+        return true;
+      }
+
+      if (
+        ["is_ad", "is_ads", "is_advertise", "is_sponsored", "is_promotion"]
+          .includes(key) &&
+        (child === true || child === 1 || child === "1")
+      ) {
+        return true;
+      }
+
+      if (
+        ["model_type", "card_type", "feed_type"].includes(key) &&
+        ["ad", "ads", "advertise", "advertisement", "sponsor", "sponsored",
+         "promotion", "commercial"].includes(normalized)
+      ) {
+        return true;
+      }
+
+      // 只在角标/标签元数据中识别广告文案，不检查标题和正文。
+      if (
+        /(tag|badge|label|icon|subscript|corner|mark)/i.test(key) &&
+        typeof child === "string" &&
+        ["广告", "推广", "赞助", "商业推广"].some((word) => child.includes(word))
+      ) {
+        return true;
+      }
+
+      if (containsAdMarker(child, depth + 1)) return true;
+    }
 
     return false;
   };
+
+  const isPromotedAd = (item) => containsAdMarker(item);
+
 
   // 直播标记经常藏在 note_card、user 等嵌套对象中，不能只检查卡片最外层。
   const containsLiveMarker = (value, depth = 0) => {
