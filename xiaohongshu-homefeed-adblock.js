@@ -150,17 +150,69 @@
     return false;
   };
 
+  // 临时诊断：输出仍被保留卡片的关键元数据，避免记录图片、令牌和长正文。
+  const diagnosticMeta = (value, path = "item", depth = 0, hits = []) => {
+    if (!value || typeof value !== "object" || depth > 7 || hits.length >= 60) {
+      return hits;
+    }
+
+    for (const [rawKey, child] of Object.entries(value)) {
+      const key = rawKey.toLowerCase();
+      const childPath = `${path}.${rawKey}`;
+      const relevant =
+        /(ad|ads|advert|promot|sponsor|commercial|business|live|room|tag|badge|label|icon|subscript|corner|mark|reason|recommend|type|status|state|style|source)/i.test(key);
+
+      if (relevant && (typeof child !== "object" || child === null)) {
+        let preview = String(child);
+        if (preview.length > 100) preview = preview.slice(0, 100);
+        hits.push(`${childPath}=${preview}`);
+      }
+
+      if (child && typeof child === "object") {
+        diagnosticMeta(child, childPath, depth + 1, hits);
+      }
+      if (hits.length >= 60) break;
+    }
+    return hits;
+  };
+
+  const getNickname = (item) =>
+    item?.note_card?.user?.nickname ||
+    item?.note_card?.user?.nick_name ||
+    item?.user?.nickname ||
+    item?.user?.nick_name ||
+    "未知作者";
+
   const filterBlockedCards = (items) => {
     if (!Array.isArray(items)) return items;
 
-    const filtered = items.filter(
-      (item) => !isPromotedAd(item) && !containsLiveMarker(item)
-    );
+    const filtered = [];
+    let removed = 0;
 
-    const removed = items.length - filtered.length;
-    if (removed > 0) {
-      console.log(`[小红书首页过滤] 已移除 ${removed} 条广告或直播卡片`);
-    }
+    items.forEach((item, index) => {
+      const ad = isPromotedAd(item);
+      const live = containsLiveMarker(item);
+
+      if (ad || live) {
+        removed += 1;
+        console.log(
+          `[XHS过滤详情][删除${index}][${getNickname(item)}] 原因=${ad ? "广告" : "直播"}`
+        );
+        return;
+      }
+
+      filtered.push(item);
+      const noteCard = item?.note_card || {};
+      const user = noteCard?.user || item?.user || {};
+      const meta = diagnosticMeta(item).join(" | ");
+      console.log(
+        `[XHS诊断][保留${index}][${getNickname(item)}] 顶层=${Object.keys(item || {}).join(",")}; note_card=${Object.keys(noteCard).join(",")}; user=${Object.keys(user).join(",")}; 元数据=${meta || "无"}`
+      );
+    });
+
+    console.log(
+      `[小红书首页过滤] 本批扫描 ${items.length} 条，移除 ${removed} 条，保留 ${filtered.length} 条`
+    );
     return filtered;
   };
 
