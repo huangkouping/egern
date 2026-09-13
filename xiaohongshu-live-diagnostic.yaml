@@ -1,0 +1,17 @@
+name: 🔎 小红书直播来源诊断（临时）
+description: |-
+  临时诊断模块：仅记录小红书直播状态来源，不修改任何响应内容。
+  刷新首页后请在 Egern 日志中搜索“XHS直播诊断”。
+author: huangkouping / Codex
+
+scriptings:
+  - http_response:
+      name: 小红书直播来源诊断
+      match: '^https?:\\/\\/[a-zA-Z0-9.-]+\\.xiaohongshu\\.com\\/api\\/sns\\/'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/c29e9b5e982960351fd58e044fc0b7f6bc06640f/xiaohongshu-live-diagnostic.js
+      body_required: true
+      timeout: 10
+
+mitm:
+  hostnames:
+    - '*.xiaohongshu.com'
