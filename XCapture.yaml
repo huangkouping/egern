@@ -1,0 +1,11 @@
+name: X专用抓包
+description: 仅对X（Twitter）接口域名启用MITM，用于定位首页推广内容。安装后只开启“HTTP全局抓包”，不要开启“全局MITM”。抓取完成后请停用本模块。
+author: huangkouping
+icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png
+mitm:
+  hostnames:
+    includes:
+    - api.x.com
+    - api.twitter.com
+    - x.com
+    - twitter.com
