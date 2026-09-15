@@ -1,0 +1,8 @@
+name: Instagram专用抓包
+description: 仅对Instagram首页接口域名启用MITM，用于定位赞助内容。启用后若首页无法加载，请立即停用本模块。
+author: huangkouping
+icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png
+mitm:
+  hostnames:
+    includes:
+    - i.instagram.com
