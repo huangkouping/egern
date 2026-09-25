@@ -1,0 +1,19 @@
+# Muse / Meta AI
+# Egern rule-set
+# Keep Muse / Meta AI traffic on the selected proxy policy.
+# Common Meta shared domains are intentionally excluded to avoid hijacking
+# unrelated Facebook / Instagram / Threads traffic.
+
+DOMAIN-SUFFIX,meta.ai
+DOMAIN-SUFFIX,ai.meta.com
+DOMAIN-SUFFIX,muse.com
+DOMAIN-SUFFIX,muse.ai
+
+# Meta AI / Muse API & service hosts
+DOMAIN,api.meta.ai
+DOMAIN,graph.meta.ai
+DOMAIN,www.meta.ai
+
+# Meta AI related host patterns
+DOMAIN-KEYWORD,meta-ai
+DOMAIN-KEYWORD,metaai
