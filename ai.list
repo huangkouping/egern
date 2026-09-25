@@ -1,6 +1,6 @@
 # AI 服务代理规则集（含 Muse）
 # 本文件由 GitHub Actions 自动同步生成，请勿直接编辑
-# 规则内容更新时间（北京时间）：2026-09-25 19:40:48
+# 规则内容更新时间（北京时间）：2026-09-25 19:48:55
 # 上游来源：https://kelee.one/Tool/Loon/Lsr/AI.lsr
 # 使用方法：在 Egern 中订阅本文件，并将策略设置为“AI”
 # 同步策略：完整同步上游 AI 规则，并自动合并 Muse 自定义规则
@@ -248,7 +248,25 @@ DOMAIN, api.zeldoc.ai
 DOMAIN, ai.zenifra.com
 DOMAIN, zenmux.ai
 
-# ===== Muse 自定义补充规则 =====
+# ===== 海外主流 AI + Muse 自定义补充规则 =====
+DOMAIN-SUFFIX,midjourney.com
+DOMAIN-SUFFIX,midjourneycdn.com
+DOMAIN-SUFFIX,runwayml.com
+DOMAIN-SUFFIX,runwayml.cloud
+DOMAIN-SUFFIX,elevenlabs.io
+DOMAIN-SUFFIX,suno.com
+DOMAIN-SUFFIX,cursor.com
+DOMAIN-SUFFIX,cursor.sh
+DOMAIN-SUFFIX,character.ai
+DOMAIN-SUFFIX,ideogram.ai
+DOMAIN-SUFFIX,leonardo.ai
+DOMAIN-SUFFIX,replit.com
+DOMAIN-SUFFIX,replit.dev
+DOMAIN-SUFFIX,lumalabs.ai
+DOMAIN-SUFFIX,pika.art
+DOMAIN-SUFFIX,gamma.app
+DOMAIN-SUFFIX,cohere.com
+DOMAIN-SUFFIX,cohere.ai
 DOMAIN-SUFFIX,meta.ai
 DOMAIN-SUFFIX,ai.meta.com
 DOMAIN-SUFFIX,muse.com
