@@ -4,8 +4,9 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
-UPSTREAM = "https://kelee.one/Tool/Loon/Lsr/AI.lsr"
-OUTPUT = Path("ai.list")
+AI_UPSTREAM = "https://kelee.one/Tool/Loon/Lsr/AI.lsr"
+GOOGLEVOICE_UPSTREAM = "https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list"
+OUTPUT = Path("us.list")
 
 EXTRA_AI_RULES = [
     # Midjourney
@@ -53,25 +54,33 @@ MUSE_RULES = [
     "DOMAIN-KEYWORD,metaai",
 ]
 
-req = Request(UPSTREAM, headers={
-    "User-Agent": "Loon/852 CFNetwork/3860.300.31 Darwin/25.2.0",
-    "Accept": "*/*",
-    "Accept-Language": "zh-CN,zh-Hans;q=0.9",
-    "Referer": "https://kelee.one/",
-    "Cache-Control": "no-cache",
-})
-with urlopen(req, timeout=30) as resp:
-    raw = resp.read().decode("utf-8-sig")
+def fetch(url, referer=None):
+    headers = {
+        "User-Agent": "Loon/852 CFNetwork/3860.300.31 Darwin/25.2.0",
+        "Accept": "*/*",
+        "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+        "Cache-Control": "no-cache",
+    }
+    if referer:
+        headers["Referer"] = referer
+    req = Request(url, headers=headers)
+    with urlopen(req, timeout=30) as resp:
+        return resp.read().decode("utf-8-sig")
 
-upstream_rules = []
+def collect(raw, seen):
+    rules = []
+    for line in raw.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line not in seen:
+            seen.add(line)
+            rules.append(line)
+    return rules
+
 seen = set()
-for line in raw.splitlines():
-    line = line.strip()
-    if not line or line.startswith("#"):
-        continue
-    if line not in seen:
-        seen.add(line)
-        upstream_rules.append(line)
+ai_rules = collect(fetch(AI_UPSTREAM, "https://kelee.one/"), seen)
+googlevoice_rules = collect(fetch(GOOGLEVOICE_UPSTREAM, "https://github.com/"), seen)
 
 custom_rules = []
 for rule in EXTRA_AI_RULES + MUSE_RULES:
@@ -82,19 +91,26 @@ for rule in EXTRA_AI_RULES + MUSE_RULES:
 now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
 
 lines = [
-    "# AI 服务代理规则集（含 Muse）",
+    "# US 服务代理规则集",
     "# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑",
     f"# 规则内容更新时间（北京时间）：{now}",
-    f"# 上游来源：{UPSTREAM}",
-    '# 使用方法：在 Egern 中订阅本文件，并将策略设置为“AI”',
-    "# 同步策略：完整同步上游 AI 规则，并自动合并 Muse 自定义规则",
+    f"# AI 上游：{AI_UPSTREAM}",
+    f"# Google Voice 上游：{GOOGLEVOICE_UPSTREAM}",
+    '# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组',
+    "# 同步策略：AI + 海外主流 AI 补充 + Muse + Google Voice",
     "",
-    "# ===== AI 服务（上游同步） =====",
-    *upstream_rules,
+    "# ===== AI 服务（可莉上游同步） =====",
+    *ai_rules,
     "",
     "# ===== 海外主流 AI + Muse 自定义补充规则 =====",
     *custom_rules,
     "",
+    "# ===== Google Voice（Blackmatrix7 上游同步） =====",
+    *googlevoice_rules,
+    "",
 ]
 OUTPUT.write_text("\n".join(lines), encoding="utf-8")
-print(f"已生成 {OUTPUT}：上游 {len(upstream_rules)} 条，自定义新增 {len(custom_rules)} 条")
+print(
+    f"已生成 {OUTPUT}：AI {len(ai_rules)} 条，"
+    f"自定义 {len(custom_rules)} 条，Google Voice {len(googlevoice_rules)} 条"
+)
