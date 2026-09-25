@@ -1,0 +1,59 @@
+name: Sync AI rules
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-ai.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-ai-rules
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch upstream and merge Muse rules
+        shell: bash
+        run: |
+          set -euo pipefail
+          upstream="https://kelee.one/Tool/Loon/Lsr/AI.lsr"
+          tmp="$(mktemp)"
+          curl --fail --silent --show-error --location --retry 3 --connect-timeout 15 "$upstream" -o "$tmp"
+
+          {
+            cat "$tmp"
+            printf '\n\n# --- Custom: Muse / Meta AI ---\n'
+            printf '%s\n' \
+              'DOMAIN-SUFFIX,meta.ai' \
+              'DOMAIN-SUFFIX,ai.meta.com' \
+              'DOMAIN-SUFFIX,muse.com' \
+              'DOMAIN-SUFFIX,muse.ai' \
+              'DOMAIN,api.meta.ai' \
+              'DOMAIN,graph.meta.ai' \
+              'DOMAIN,www.meta.ai' \
+              'DOMAIN-KEYWORD,meta-ai' \
+              'DOMAIN-KEYWORD,metaai'
+          } | awk '!seen[$0]++' > ai.lsr
+
+      - name: Commit only when changed
+        shell: bash
+        run: |
+          if git diff --quiet -- ai.lsr; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ai.lsr
+          git commit -m "chore: sync AI rules and merge Muse"
+          git push
