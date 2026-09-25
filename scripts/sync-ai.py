@@ -19,7 +19,13 @@ MUSE_RULES = [
     "DOMAIN-KEYWORD,metaai",
 ]
 
-req = Request(UPSTREAM, headers={"User-Agent": "Mozilla/5.0 GitHub-Actions"})
+req = Request(UPSTREAM, headers={
+    "User-Agent": "Loon/852 CFNetwork/3860.300.31 Darwin/25.2.0",
+    "Accept": "*/*",
+    "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+    "Referer": "https://kelee.one/",
+    "Cache-Control": "no-cache",
+})
 with urlopen(req, timeout=30) as resp:
     raw = resp.read().decode("utf-8-sig")
 
