@@ -1,4 +1,4 @@
-name: 更新 AI 代理规则集
+name: 更新 US 代理规则集
 
 on:
   workflow_dispatch:
@@ -9,13 +9,13 @@ on:
       - main
     paths:
       - "scripts/sync-ai.py"
-      - ".github/workflows/update-ai.yml"
+      - ".github/workflows/update-us.yml"
 
 permissions:
   contents: write
 
 concurrency:
-  group: update-ai
+  group: update-us
   cancel-in-progress: true
 
 jobs:
@@ -37,22 +37,22 @@ jobs:
 
       - name: 提交更新
         run: |
-          if git diff --quiet -- ai.list; then
+          if git diff --quiet -- us.list; then
             echo "上游规则没有变化"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ai.list
-          git commit -m "自动更新 AI 代理规则集"
+          git add us.list
+          git commit -m "自动更新 US 代理规则集"
 
           for attempt in 1 2 3; do
             git fetch origin main
             git rebase origin/main
 
             if git push origin HEAD:main; then
-              echo "AI 规则集更新已成功推送"
+              echo "US 规则集更新已成功推送"
               exit 0
             fi
 
