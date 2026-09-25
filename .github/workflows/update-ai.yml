@@ -37,7 +37,7 @@ jobs:
 
       - name: 提交更新
         run: |
-          if git diff --quiet -- us.list; then
+          if [ -z "$(git status --porcelain -- us.list)" ]; then
             echo "上游规则没有变化"
             exit 0
           fi
