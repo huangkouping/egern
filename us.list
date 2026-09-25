@@ -1,6 +1,6 @@
 # US 服务代理规则集
 # 本文件由 GitHub Actions 自动同步生成，请勿直接编辑
-# 规则内容更新时间（北京时间）：2026-09-25 20:02:38
+# 规则内容更新时间（北京时间）：2026-09-26 01:07:23
 # AI 上游：https://kelee.one/Tool/Loon/Lsr/AI.lsr
 # Google Voice 上游：https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list
 # 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组
