@@ -9,7 +9,7 @@ on:
       - main
     paths:
       - "scripts/sync-ai.py"
-      - ".github/workflows/update-us.yml"
+      - ".github/workflows/update-ai.yml"
 
 permissions:
   contents: write
