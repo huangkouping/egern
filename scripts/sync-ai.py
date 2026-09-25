@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# US 规则同步：AI + Google Voice
 from datetime import datetime
 from pathlib import Path
 from urllib.request import Request, urlopen
