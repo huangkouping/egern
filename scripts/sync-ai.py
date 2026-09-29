@@ -10,6 +10,9 @@ GOOGLEVOICE_UPSTREAM = "https://github.com/blackmatrix7/ios_rule_script/raw/mast
 OUTPUT = Path("us.list")
 
 EXTRA_AI_RULES = [
+    # Cue / Manus（DOMAIN-SUFFIX 同时覆盖主域名及全部子域名）
+    "DOMAIN-SUFFIX,cue.im",
+    "DOMAIN-SUFFIX,manus.im",
     # Midjourney
     "DOMAIN-SUFFIX,midjourney.com",
     "DOMAIN-SUFFIX,midjourneycdn.com",
