@@ -1,1 +1,382 @@
-# US 服务代理规则集\n# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑\n# 规则内容更新时间（北京时间）：2026-09-30 09:57:18\n# AI 上游：https://kelee.one/Tool/Loon/Lsr/AI.lsr\n# DDGKSF AI 上游：https://ddgksf2013.top/filter/Ai.yaml\n# Google Voice 上游：https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list\n# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组\n# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice\n\n# ===== AI 服务（可莉上游同步） =====\nAND, ((DOMAIN-KEYWORD, chatgpt-async-webps-prod-), (DOMAIN-SUFFIX, webpubsub.azure.com))\nAND, ((DOMAIN-KEYWORD, openaicom-api-), (DOMAIN-SUFFIX, azurefd.net))\nDOMAIN, chatgpt.livekit.cloud\nDOMAIN, host.livekit.cloud\nDOMAIN, openai.com.cdn.cloudflare.net\nDOMAIN, openaiapi-site.azureedge.net\nDOMAIN, openaicomproductionae4b.blob.core.windows.net\nDOMAIN, production-openaicom-storage.azureedge.net\nDOMAIN, turn.livekit.cloud\nDOMAIN, openaicom.imgix.net\nDOMAIN-SUFFIX, chat.com\nDOMAIN-SUFFIX, chatgpt.com\nDOMAIN-SUFFIX, crixet.com\nDOMAIN-SUFFIX, oaistatic.com\nDOMAIN-SUFFIX, oaiusercontent.com\nDOMAIN-SUFFIX, openai.com\nDOMAIN-SUFFIX, sora.com\nDOMAIN-SUFFIX, chatgpt.site\nDOMAIN, api.githubcopilot.com\nDOMAIN, copilot-proxy.githubusercontent.com\nDOMAIN, copilot.microsoft.com\nDOMAIN, sydney.bing.com\nDOMAIN, models.inference.ai.azure.com\nDOMAIN, ai.google.dev\nDOMAIN, aida.googleapis.com\nDOMAIN, aicode.googleapis.com\nDOMAIN, aistudio.google.com\nDOMAIN, alkalicore-pa.clients6.google.com\nDOMAIN, alkalimakersuite-pa.clients6.google.com\nDOMAIN, bard.google.com\nDOMAIN, deepmind.com\nDOMAIN, deepmind.google\nDOMAIN, geller-pa.googleapis.com\nDOMAIN, gemini.google\nDOMAIN, gemini.google.com\nDOMAIN, generativeai.google\nDOMAIN, generativelanguage.googleapis.com\nDOMAIN, makersuite.google.com\nDOMAIN, proactivebackend-pa.googleapis.com\nDOMAIN, robinfrontend-pa.googleapis.com\nDOMAIN, webchannel-alkalimakersuite-pa.clients6.google.com\nDOMAIN, notebooklm.google\nDOMAIN, notebooklm.google.com\nDOMAIN, jules.google\nDOMAIN, jules.google.com\nDOMAIN, labs.google\nDOMAIN, aisandbox-pa.googleapis.com\nDOMAIN-SUFFIX, antigravity.google\nDOMAIN-SUFFIX, antigravity-unleash.goog\nDOMAIN, daily-cloudcode-pa.sandbox.googleapis.com\nDOMAIN, daily-cloudcode-pa.googleapis.com\nAND, ((DOMAIN-KEYWORD, antigravity-auto-updater-), (DOMAIN-SUFFIX, run.app))\nDOMAIN-SUFFIX, anthropic.com\nDOMAIN-SUFFIX, claude.ai\nDOMAIN-SUFFIX, claudeusercontent.com\nIP-CIDR, 160.79.104.0/23, no-resolve\nIP-CIDR6, 2607:6bc0::/48, no-resolve\nDOMAIN-SUFFIX, grazie.ai\nDOMAIN-SUFFIX, grazie.aws.intellij.net\nDOMAIN-SUFFIX, jetbrains.ai\nDOMAIN, chat.mistral.ai\nDOMAIN, console.mistral.ai\nDOMAIN-SUFFIX, mistral.ai\nDOMAIN, api.x.ai\nDOMAIN-SUFFIX, x.ai\nDOMAIN-SUFFIX, grok.com\nDOMAIN, trae-api-sg.mchost.guru\nDOMAIN-SUFFIX, trae.ai\nDOMAIN-SUFFIX, tokenflux.ai\nDOMAIN-SUFFIX, groq.com\nDOMAIN-SUFFIX, together.ai\nDOMAIN, api.hyperbolic.xyz\nDOMAIN-SUFFIX, hyperbolic.ai\nDOMAIN-SUFFIX, jina.ai\nDOMAIN-SUFFIX, gpustack.ai\nDOMAIN-SUFFIX, voyageai.com\nDOMAIN, aiplatform.googleapis.com\nDOMAIN-SUFFIX, cerebras.ai\nDOMAIN, ai-gateway.vercel.sh\nDOMAIN-SUFFIX, kiro.dev\nDOMAIN-SUFFIX, commandcode.ai\nDOMAIN-SUFFIX, typesafe.ai\nDOMAIN-SUFFIX, devin.ai\nDOMAIN, cdn.delta.dev\nDOMAIN, delta.zed.dev\nDOMAIN, api.zed.dev\nDOMAIN, zed-us-east-1-zed-production.c15t.dev\nDOMAIN, cloud.zed.dev\nDOMAIN, api.302.ai\nDOMAIN, routellm.abacus.ai\nDOMAIN, api.abliteration.ai\nDOMAIN, api.above.dev\nDOMAIN, agentrouter.org\nDOMAIN-SUFFIX, agnes-ai.com\nDOMAIN, api.aiand.com\nDOMAIN, api.ai-router.dev\nDOMAIN, api.ai21.com\nDOMAIN, microquickjs.com\nDOMAIN, api.aixy-gateway.com\nDOMAIN, aki.io\nDOMAIN, dashscope-intl.aliyuncs.com\nDOMAIN, coding-intl.dashscope.aliyuncs.com\nDOMAIN, token-plan.ap-southeast-1.maas.aliyuncs.com\nDOMAIN, api.ambient.xyz\nDOMAIN, developer.amd.com.cn\nDOMAIN, api.anyapi.ai\nDOMAIN, api.arcee.ai\nDOMAIN, api.auriko.ai\nDOMAIN, inference.baseten.co\nDOMAIN, api.berget.ai\nDOMAIN, openai.blueclaw.network\nDOMAIN, openai.bothub.ru\nDOMAIN, hyper.charm.land\nDOMAIN, llm.chutes.ai\nDOMAIN, api.clarifai.com\nDOMAIN, api.claudin.io\nDOMAIN-SUFFIX, cline.bot\nDOMAIN, api-sherlock.cloudferro.com\nDOMAIN, inference.coralbricks.ai\nDOMAIN, api.inference.wandb.ai\nDOMAIN, api.cortecs.ai\nDOMAIN, crof.ai\nDOMAIN, api.crossmodel.ai\nDOMAIN, api.inference.crusoecloud.com\nDOMAIN, daoxe.com\nDOMAIN, api.llmgateway.io\nDOMAIN, inference.do-ai.run\nDOMAIN, api.dinference.com\nDOMAIN, echo.tracerml.ai\nDOMAIN, api.edenai.run\nDOMAIN, api.empiriolabs.ai\nDOMAIN, models.think.evroc.com\nDOMAIN, go.fastrouter.ai\nDOMAIN-SUFFIX, fireworks.ai\nDOMAIN, cc.freemodel.dev\nDOMAIN, api.friendli.ai\nDOMAIN, app.frogbot.ai\nDOMAIN, api.gmi-serving.com\nDOMAIN, api.greenpt.ai\nDOMAIN, ai-gateway.helicone.ai\nDOMAIN, inference.hetzner.com\nDOMAIN, api.hpc-ai.com\nDOMAIN, router.huggingface.co\nDOMAIN, api.impossibl.com\nDOMAIN, api.inceptionlabs.ai\nDOMAIN, api.inceptron.io\nDOMAIN, api.inco.ai\nDOMAIN, infer.flow7.org\nDOMAIN, inference.net\nDOMAIN, model.inferx.net\nDOMAIN, api.intelligence.io.solutions\nDOMAIN, api.iteracompute.com\nDOMAIN, api.jalapeno-cloud.ai\nDOMAIN, kenari.id\nDOMAIN, api.kilo.ai\nDOMAIN, api-gw.klok.ipaas.se\nDOMAIN, api.koscompute.com\nDOMAIN, api.getlilac.com\nDOMAIN, api.llama.com\nDOMAIN, api.llmtech.eu\nDOMAIN, llmtr.com\nDOMAIN, api.longcat.chat\nDOMAIN, api.lucidquery.com\nDOMAIN, api.meganova.ai\nDOMAIN, api.melious.ai\nDOMAIN, api-gateway.merge.dev\nDOMAIN, imagine.meta.com\nDOMAIN-SUFFIX, meta.ai\nDOMAIN-SUFFIX, minimax.io\nDOMAIN, models.mixlayer.ai\nDOMAIN, inference.us-west.modal.direct\nDOMAIN, api.modeloracle.com\nDOMAIN, modelishub.com\nDOMAIN, api.moonshot.ai\nDOMAIN, api.kimi.ai\nDOMAIN, api.morphllm.com\nDOMAIN, api.nan.builders\nDOMAIN, nano-gpt.com\nDOMAIN, cloud-api.near.ai\nDOMAIN, api.tokenfactory.nebius.com\nDOMAIN, router.neosmith.ai\nDOMAIN, api.neuralwatt.com\nDOMAIN, api.nova.amazon.com\nDOMAIN, api.novita.ai\nDOMAIN, integrate.api.nvidia.com\nDOMAIN, inference.generativeai.us-chicago-1.oci.oraclecloud.com\nDOMAIN, api.ofox.ai\nDOMAIN-SUFFIX, ollama.com\nDOMAIN-SUFFIX, opencode.ai\nDOMAIN, api.openreason.app\nDOMAIN-SUFFIX, openrouter.ai\nDOMAIN, api.opper.ai\nDOMAIN, api.orcarouter.ai\nDOMAIN, oai.endpoints.kepler.ai.cloud.ovh.net\nDOMAIN, api.pendra.ai\nDOMAIN, pplx-res.cloudinary.com\nDOMAIN-SUFFIX, pplx.ai\nDOMAIN-SUFFIX, perplexity.ai\nDOMAIN-SUFFIX, perplexity.com\nDOMAIN, api.pioneer.ai\nDOMAIN-SUFFIX, poe.com\nDOMAIN, inference.poolside.ai\nDOMAIN, api.regolo.ai\nDOMAIN, router.requesty.ai\nDOMAIN, api.routing.run\nDOMAIN, api.runinfra.ai\nDOMAIN, api.sakana.ai\nDOMAIN, api.sarvam.ai\nDOMAIN, api.scaleway.ai\nDOMAIN, api.scx.ai\nDOMAIN, api.siliconflow.com\nDOMAIN, api.openai-compat.model-serving.eu01.onstackit.cloud\nDOMAIN, api.stdcmpt.com\nDOMAIN, api.stepfun.ai\nDOMAIN, api.subconscious.dev\nDOMAIN, llm.submodel.ai\nDOMAIN, api.synthetic.new\nDOMAIN, api.temprhq.io\nDOMAIN, api.tensorx.ai\nDOMAIN, api.thegrid.ai\nDOMAIN, tinker.thinkingmachines.dev\nDOMAIN, inference.tinfoil.sh\nDOMAIN, api.tokengo.com\nDOMAIN, api.tokenrouter.com\nDOMAIN, api.trustedrouter.com\nDOMAIN, api.code.umans.ai\nDOMAIN, api.unorouter.com\nDOMAIN, api.upstage.ai\nDOMAIN, vancine.com\nDOMAIN, api.lab.vispark.in\nDOMAIN, api.vivgrid.com\nDOMAIN, api.vultrinference.com\nDOMAIN, pass.wafer.ai\nDOMAIN, api.wallabytoken.com\nDOMAIN, token-plan-sgp.xiaomimimo.com\nDOMAIN, token-plan-ams.xiaomimimo.com\nDOMAIN, xpersona.co\nDOMAIN-SUFFIX, z.ai\nDOMAIN, api.zeldoc.ai\nDOMAIN, ai.zenifra.com\nDOMAIN, zenmux.ai\n\n# ===== DDGKSF AI 补充（已与可莉排重） =====\npayload:\n- DOMAIN,api.statsig.com\n- DOMAIN,browser-intake-datadoghq.com\n- DOMAIN,static.cloudflareinsights.com\n- DOMAIN-SUFFIX,algolia.net\n- DOMAIN-SUFFIX,auth0.com\n- DOMAIN-SUFFIX,cloudflare.com\n- DOMAIN-SUFFIX,arkoselabs.com\n- DOMAIN-SUFFIX,statsigapi.net\n- DOMAIN-SUFFIX,featuregates.org\n- DOMAIN-SUFFIX,identrust.com\n- DOMAIN-SUFFIX,intercom.io\n- DOMAIN-SUFFIX,intercomcdn.com\n- DOMAIN-SUFFIX,launchdarkly.com\n- DOMAIN-SUFFIX,segment.io\n- DOMAIN-SUFFIX,amazonaws.com\n- DOMAIN-SUFFIX,wp.com\n- DOMAIN-SUFFIX,sentry.io\n- DOMAIN-SUFFIX,stripe.com\n- DOMAIN,cdn.usefathom.com\n- DOMAIN-SUFFIX,anthropic.com\n- DOMAIN-SUFFIX,claude.ai\n- DOMAIN-SUFFIX,claude.com\n- DOMAIN-SUFFIX,claudeusercontent.com\n- DOMAIN-SUFFIX,cursor.sh\n- DOMAIN-SUFFIX,cursor.com\n- DOMAIN-SUFFIX,cursor-cdn.com\n- DOMAIN-SUFFIX,cursorapi.com\n- DOMAIN-SUFFIX,cursorvm.com\n- DOMAIN-SUFFIX,dify.ai\n- DOMAIN,ai.google.dev\n- DOMAIN,makersuite.google.com\n- DOMAIN-SUFFIX,gemini.google.com\n- DOMAIN-SUFFIX,apis.google.com\n- DOMAIN-SUFFIX,clients6.google.com\n- DOMAIN-SUFFIX,clients4.google.com\n- DOMAIN-SUFFIX,deepmind.com\n- DOMAIN-SUFFIX,deepmind.google\n- DOMAIN-SUFFIX,generativeai.google\n- DOMAIN-SUFFIX,colab.google.com\n- DOMAIN-SUFFIX,colab.research.google.com\n- DOMAIN-SUFFIX,developerprofiles.google.com\n- DOMAIN-SUFFIX,googleusercontent.com\n- DOMAIN-SUFFIX,googleapis.com\n- DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com\n- DOMAIN-SUFFIX,grazie.ai\n- DOMAIN-SUFFIX,meta.ai\n- DOMAIN-SUFFIX,meta.com\n- DOMAIN-SUFFIX,atmeta.com\n- DOMAIN-SUFFIX,llamameta.net\n- DOMAIN-SUFFIX,llama.com\n- DOMAIN-SUFFIX,muse.ai\n- DOMAIN,production.museai.com\n- DOMAIN,connect.facebook.net\n- DOMAIN,meta-ohttp-config-prod.fastly-edge.com\n- DOMAIN,meta-ohttp-relay-prod.fastly-edge.com\n- DOMAIN-SUFFIX,facebook.com\n- DOMAIN-SUFFIX,fbcdn.net\n- DOMAIN-SUFFIX,notebooklm.google.com\n- DOMAIN-SUFFIX,notebooklm.google\n- DOMAIN,api.msn.com\n- DOMAIN,assets.msn.com\n- DOMAIN,copilot.microsoft.com\n- DOMAIN,gateway.bingviz.microsoft.net\n- DOMAIN,gateway.bingviz.microsoftapp.net\n- DOMAIN,in.appcenter.ms\n- DOMAIN,location.microsoft.com\n- DOMAIN,odc.officeapps.live.com\n- DOMAIN,r.bing.com\n- DOMAIN,self.events.data.microsoft.com\n- DOMAIN,services.bingapis.com\n- DOMAIN,sydney.bing.com\n- DOMAIN,www.bing.com\n- DOMAIN-SUFFIX,api.microsoftapp.net\n- DOMAIN-SUFFIX,bing-shopping.microsoft-falcon.io\n- DOMAIN-SUFFIX,edgeservices.bing.com\n- DOMAIN-SUFFIX,midjourney.com\n- DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net\n- DOMAIN,openaicomproductionae4b.blob.core.windows.net\n- DOMAIN,production-openaicom-storage.azureedge.net\n- DOMAIN-SUFFIX,ai.com\n- DOMAIN-SUFFIX,chatgpt.com\n- DOMAIN-SUFFIX,livekit.cloud\n- DOMAIN-SUFFIX,oaistatic.com\n- DOMAIN-SUFFIX,oaiusercontent.com\n- DOMAIN-SUFFIX,openai.com\n- DOMAIN-SUFFIX,azureedge.net\n- DOMAIN-SUFFIX,imgix.net\n- DOMAIN,pplx-res.cloudinary.com\n- DOMAIN-SUFFIX,perplexity.ai\n- DOMAIN-SUFFIX,pplx.ai\n- DOMAIN-SUFFIX,perplexity.com\n- DOMAIN-SUFFIX,poe.com\n- DOMAIN-SUFFIX,poecdn.net\n- DOMAIN-SUFFIX,x.ai\n- DOMAIN-SUFFIX,grok.com\n- DOMAIN-SUFFIX,mistral.ai\n- DOMAIN-SUFFIX,huggingface.co\n- DOMAIN-SUFFIX,hf.co\n- DOMAIN-SUFFIX,hf.space\n- DOMAIN-SUFFIX,manus.im\n- DOMAIN-SUFFIX,manuscdn.com\n\n# ===== 海外主流 AI + Muse 自定义补充规则 =====\nDOMAIN-SUFFIX,cue.im\nDOMAIN-SUFFIX,manus.im\nDOMAIN-SUFFIX,midjourney.com\nDOMAIN-SUFFIX,midjourneycdn.com\nDOMAIN-SUFFIX,runwayml.com\nDOMAIN-SUFFIX,runwayml.cloud\nDOMAIN-SUFFIX,elevenlabs.io\nDOMAIN-SUFFIX,suno.com\nDOMAIN-SUFFIX,cursor.com\nDOMAIN-SUFFIX,cursor.sh\nDOMAIN-SUFFIX,character.ai\nDOMAIN-SUFFIX,ideogram.ai\nDOMAIN-SUFFIX,leonardo.ai\nDOMAIN-SUFFIX,replit.com\nDOMAIN-SUFFIX,replit.dev\nDOMAIN-SUFFIX,lumalabs.ai\nDOMAIN-SUFFIX,pika.art\nDOMAIN-SUFFIX,gamma.app\nDOMAIN-SUFFIX,cohere.com\nDOMAIN-SUFFIX,cohere.ai\nDOMAIN-SUFFIX,meta.ai\nDOMAIN-SUFFIX,ai.meta.com\nDOMAIN-SUFFIX,muse.com\nDOMAIN-SUFFIX,muse.ai\nDOMAIN,api.meta.ai\nDOMAIN,graph.meta.ai\nDOMAIN,www.meta.ai\nDOMAIN-KEYWORD,meta-ai\nDOMAIN-KEYWORD,metaai\n\n# ===== Google Voice（Blackmatrix7 上游同步） =====\nDOMAIN,lens.l.google.com\n
+# US 服务代理规则集
+# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑
+# 规则内容更新时间（北京时间）：2026-09-30 09:57:50
+# AI 上游：https://kelee.one/Tool/Loon/Lsr/AI.lsr
+# DDGKSF AI 上游：https://ddgksf2013.top/filter/Ai.yaml
+# Google Voice 上游：https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list
+# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组
+# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice
+
+# ===== AI 服务（可莉上游同步） =====
+AND, ((DOMAIN-KEYWORD, chatgpt-async-webps-prod-), (DOMAIN-SUFFIX, webpubsub.azure.com))
+AND, ((DOMAIN-KEYWORD, openaicom-api-), (DOMAIN-SUFFIX, azurefd.net))
+DOMAIN, chatgpt.livekit.cloud
+DOMAIN, host.livekit.cloud
+DOMAIN, openai.com.cdn.cloudflare.net
+DOMAIN, openaiapi-site.azureedge.net
+DOMAIN, openaicomproductionae4b.blob.core.windows.net
+DOMAIN, production-openaicom-storage.azureedge.net
+DOMAIN, turn.livekit.cloud
+DOMAIN, openaicom.imgix.net
+DOMAIN-SUFFIX, chat.com
+DOMAIN-SUFFIX, chatgpt.com
+DOMAIN-SUFFIX, crixet.com
+DOMAIN-SUFFIX, oaistatic.com
+DOMAIN-SUFFIX, oaiusercontent.com
+DOMAIN-SUFFIX, openai.com
+DOMAIN-SUFFIX, sora.com
+DOMAIN-SUFFIX, chatgpt.site
+DOMAIN, api.githubcopilot.com
+DOMAIN, copilot-proxy.githubusercontent.com
+DOMAIN, copilot.microsoft.com
+DOMAIN, sydney.bing.com
+DOMAIN, models.inference.ai.azure.com
+DOMAIN, ai.google.dev
+DOMAIN, aida.googleapis.com
+DOMAIN, aicode.googleapis.com
+DOMAIN, aistudio.google.com
+DOMAIN, alkalicore-pa.clients6.google.com
+DOMAIN, alkalimakersuite-pa.clients6.google.com
+DOMAIN, bard.google.com
+DOMAIN, deepmind.com
+DOMAIN, deepmind.google
+DOMAIN, geller-pa.googleapis.com
+DOMAIN, gemini.google
+DOMAIN, gemini.google.com
+DOMAIN, generativeai.google
+DOMAIN, generativelanguage.googleapis.com
+DOMAIN, makersuite.google.com
+DOMAIN, proactivebackend-pa.googleapis.com
+DOMAIN, robinfrontend-pa.googleapis.com
+DOMAIN, webchannel-alkalimakersuite-pa.clients6.google.com
+DOMAIN, notebooklm.google
+DOMAIN, notebooklm.google.com
+DOMAIN, jules.google
+DOMAIN, jules.google.com
+DOMAIN, labs.google
+DOMAIN, aisandbox-pa.googleapis.com
+DOMAIN-SUFFIX, antigravity.google
+DOMAIN-SUFFIX, antigravity-unleash.goog
+DOMAIN, daily-cloudcode-pa.sandbox.googleapis.com
+DOMAIN, daily-cloudcode-pa.googleapis.com
+AND, ((DOMAIN-KEYWORD, antigravity-auto-updater-), (DOMAIN-SUFFIX, run.app))
+DOMAIN-SUFFIX, anthropic.com
+DOMAIN-SUFFIX, claude.ai
+DOMAIN-SUFFIX, claudeusercontent.com
+IP-CIDR, 160.79.104.0/23, no-resolve
+IP-CIDR6, 2607:6bc0::/48, no-resolve
+DOMAIN-SUFFIX, grazie.ai
+DOMAIN-SUFFIX, grazie.aws.intellij.net
+DOMAIN-SUFFIX, jetbrains.ai
+DOMAIN, chat.mistral.ai
+DOMAIN, console.mistral.ai
+DOMAIN-SUFFIX, mistral.ai
+DOMAIN, api.x.ai
+DOMAIN-SUFFIX, x.ai
+DOMAIN-SUFFIX, grok.com
+DOMAIN, trae-api-sg.mchost.guru
+DOMAIN-SUFFIX, trae.ai
+DOMAIN-SUFFIX, tokenflux.ai
+DOMAIN-SUFFIX, groq.com
+DOMAIN-SUFFIX, together.ai
+DOMAIN, api.hyperbolic.xyz
+DOMAIN-SUFFIX, hyperbolic.ai
+DOMAIN-SUFFIX, jina.ai
+DOMAIN-SUFFIX, gpustack.ai
+DOMAIN-SUFFIX, voyageai.com
+DOMAIN, aiplatform.googleapis.com
+DOMAIN-SUFFIX, cerebras.ai
+DOMAIN, ai-gateway.vercel.sh
+DOMAIN-SUFFIX, kiro.dev
+DOMAIN-SUFFIX, commandcode.ai
+DOMAIN-SUFFIX, typesafe.ai
+DOMAIN-SUFFIX, devin.ai
+DOMAIN, cdn.delta.dev
+DOMAIN, delta.zed.dev
+DOMAIN, api.zed.dev
+DOMAIN, zed-us-east-1-zed-production.c15t.dev
+DOMAIN, cloud.zed.dev
+DOMAIN, api.302.ai
+DOMAIN, routellm.abacus.ai
+DOMAIN, api.abliteration.ai
+DOMAIN, api.above.dev
+DOMAIN, agentrouter.org
+DOMAIN-SUFFIX, agnes-ai.com
+DOMAIN, api.aiand.com
+DOMAIN, api.ai-router.dev
+DOMAIN, api.ai21.com
+DOMAIN, microquickjs.com
+DOMAIN, api.aixy-gateway.com
+DOMAIN, aki.io
+DOMAIN, dashscope-intl.aliyuncs.com
+DOMAIN, coding-intl.dashscope.aliyuncs.com
+DOMAIN, token-plan.ap-southeast-1.maas.aliyuncs.com
+DOMAIN, api.ambient.xyz
+DOMAIN, developer.amd.com.cn
+DOMAIN, api.anyapi.ai
+DOMAIN, api.arcee.ai
+DOMAIN, api.auriko.ai
+DOMAIN, inference.baseten.co
+DOMAIN, api.berget.ai
+DOMAIN, openai.blueclaw.network
+DOMAIN, openai.bothub.ru
+DOMAIN, hyper.charm.land
+DOMAIN, llm.chutes.ai
+DOMAIN, api.clarifai.com
+DOMAIN, api.claudin.io
+DOMAIN-SUFFIX, cline.bot
+DOMAIN, api-sherlock.cloudferro.com
+DOMAIN, inference.coralbricks.ai
+DOMAIN, api.inference.wandb.ai
+DOMAIN, api.cortecs.ai
+DOMAIN, crof.ai
+DOMAIN, api.crossmodel.ai
+DOMAIN, api.inference.crusoecloud.com
+DOMAIN, daoxe.com
+DOMAIN, api.llmgateway.io
+DOMAIN, inference.do-ai.run
+DOMAIN, api.dinference.com
+DOMAIN, echo.tracerml.ai
+DOMAIN, api.edenai.run
+DOMAIN, api.empiriolabs.ai
+DOMAIN, models.think.evroc.com
+DOMAIN, go.fastrouter.ai
+DOMAIN-SUFFIX, fireworks.ai
+DOMAIN, cc.freemodel.dev
+DOMAIN, api.friendli.ai
+DOMAIN, app.frogbot.ai
+DOMAIN, api.gmi-serving.com
+DOMAIN, api.greenpt.ai
+DOMAIN, ai-gateway.helicone.ai
+DOMAIN, inference.hetzner.com
+DOMAIN, api.hpc-ai.com
+DOMAIN, router.huggingface.co
+DOMAIN, api.impossibl.com
+DOMAIN, api.inceptionlabs.ai
+DOMAIN, api.inceptron.io
+DOMAIN, api.inco.ai
+DOMAIN, infer.flow7.org
+DOMAIN, inference.net
+DOMAIN, model.inferx.net
+DOMAIN, api.intelligence.io.solutions
+DOMAIN, api.iteracompute.com
+DOMAIN, api.jalapeno-cloud.ai
+DOMAIN, kenari.id
+DOMAIN, api.kilo.ai
+DOMAIN, api-gw.klok.ipaas.se
+DOMAIN, api.koscompute.com
+DOMAIN, api.getlilac.com
+DOMAIN, api.llama.com
+DOMAIN, api.llmtech.eu
+DOMAIN, llmtr.com
+DOMAIN, api.longcat.chat
+DOMAIN, api.lucidquery.com
+DOMAIN, api.meganova.ai
+DOMAIN, api.melious.ai
+DOMAIN, api-gateway.merge.dev
+DOMAIN, imagine.meta.com
+DOMAIN-SUFFIX, meta.ai
+DOMAIN-SUFFIX, minimax.io
+DOMAIN, models.mixlayer.ai
+DOMAIN, inference.us-west.modal.direct
+DOMAIN, api.modeloracle.com
+DOMAIN, modelishub.com
+DOMAIN, api.moonshot.ai
+DOMAIN, api.kimi.ai
+DOMAIN, api.morphllm.com
+DOMAIN, api.nan.builders
+DOMAIN, nano-gpt.com
+DOMAIN, cloud-api.near.ai
+DOMAIN, api.tokenfactory.nebius.com
+DOMAIN, router.neosmith.ai
+DOMAIN, api.neuralwatt.com
+DOMAIN, api.nova.amazon.com
+DOMAIN, api.novita.ai
+DOMAIN, integrate.api.nvidia.com
+DOMAIN, inference.generativeai.us-chicago-1.oci.oraclecloud.com
+DOMAIN, api.ofox.ai
+DOMAIN-SUFFIX, ollama.com
+DOMAIN-SUFFIX, opencode.ai
+DOMAIN, api.openreason.app
+DOMAIN-SUFFIX, openrouter.ai
+DOMAIN, api.opper.ai
+DOMAIN, api.orcarouter.ai
+DOMAIN, oai.endpoints.kepler.ai.cloud.ovh.net
+DOMAIN, api.pendra.ai
+DOMAIN, pplx-res.cloudinary.com
+DOMAIN-SUFFIX, pplx.ai
+DOMAIN-SUFFIX, perplexity.ai
+DOMAIN-SUFFIX, perplexity.com
+DOMAIN, api.pioneer.ai
+DOMAIN-SUFFIX, poe.com
+DOMAIN, inference.poolside.ai
+DOMAIN, api.regolo.ai
+DOMAIN, router.requesty.ai
+DOMAIN, api.routing.run
+DOMAIN, api.runinfra.ai
+DOMAIN, api.sakana.ai
+DOMAIN, api.sarvam.ai
+DOMAIN, api.scaleway.ai
+DOMAIN, api.scx.ai
+DOMAIN, api.siliconflow.com
+DOMAIN, api.openai-compat.model-serving.eu01.onstackit.cloud
+DOMAIN, api.stdcmpt.com
+DOMAIN, api.stepfun.ai
+DOMAIN, api.subconscious.dev
+DOMAIN, llm.submodel.ai
+DOMAIN, api.synthetic.new
+DOMAIN, api.temprhq.io
+DOMAIN, api.tensorx.ai
+DOMAIN, api.thegrid.ai
+DOMAIN, tinker.thinkingmachines.dev
+DOMAIN, inference.tinfoil.sh
+DOMAIN, api.tokengo.com
+DOMAIN, api.tokenrouter.com
+DOMAIN, api.trustedrouter.com
+DOMAIN, api.code.umans.ai
+DOMAIN, api.unorouter.com
+DOMAIN, api.upstage.ai
+DOMAIN, vancine.com
+DOMAIN, api.lab.vispark.in
+DOMAIN, api.vivgrid.com
+DOMAIN, api.vultrinference.com
+DOMAIN, pass.wafer.ai
+DOMAIN, api.wallabytoken.com
+DOMAIN, token-plan-sgp.xiaomimimo.com
+DOMAIN, token-plan-ams.xiaomimimo.com
+DOMAIN, xpersona.co
+DOMAIN-SUFFIX, z.ai
+DOMAIN, api.zeldoc.ai
+DOMAIN, ai.zenifra.com
+DOMAIN, zenmux.ai
+
+# ===== DDGKSF AI 补充（已与可莉排重） =====
+DOMAIN,api.statsig.com
+DOMAIN,browser-intake-datadoghq.com
+DOMAIN,static.cloudflareinsights.com
+DOMAIN-SUFFIX,algolia.net
+DOMAIN-SUFFIX,auth0.com
+DOMAIN-SUFFIX,cloudflare.com
+DOMAIN-SUFFIX,arkoselabs.com
+DOMAIN-SUFFIX,statsigapi.net
+DOMAIN-SUFFIX,featuregates.org
+DOMAIN-SUFFIX,identrust.com
+DOMAIN-SUFFIX,intercom.io
+DOMAIN-SUFFIX,intercomcdn.com
+DOMAIN-SUFFIX,launchdarkly.com
+DOMAIN-SUFFIX,segment.io
+DOMAIN-SUFFIX,amazonaws.com
+DOMAIN-SUFFIX,wp.com
+DOMAIN-SUFFIX,sentry.io
+DOMAIN-SUFFIX,stripe.com
+DOMAIN,cdn.usefathom.com
+DOMAIN-SUFFIX,anthropic.com
+DOMAIN-SUFFIX,claude.ai
+DOMAIN-SUFFIX,claude.com
+DOMAIN-SUFFIX,claudeusercontent.com
+DOMAIN-SUFFIX,cursor.sh
+DOMAIN-SUFFIX,cursor.com
+DOMAIN-SUFFIX,cursor-cdn.com
+DOMAIN-SUFFIX,cursorapi.com
+DOMAIN-SUFFIX,cursorvm.com
+DOMAIN-SUFFIX,dify.ai
+DOMAIN,ai.google.dev
+DOMAIN,makersuite.google.com
+DOMAIN-SUFFIX,gemini.google.com
+DOMAIN-SUFFIX,apis.google.com
+DOMAIN-SUFFIX,clients6.google.com
+DOMAIN-SUFFIX,clients4.google.com
+DOMAIN-SUFFIX,deepmind.com
+DOMAIN-SUFFIX,deepmind.google
+DOMAIN-SUFFIX,generativeai.google
+DOMAIN-SUFFIX,colab.google.com
+DOMAIN-SUFFIX,colab.research.google.com
+DOMAIN-SUFFIX,developerprofiles.google.com
+DOMAIN-SUFFIX,googleusercontent.com
+DOMAIN-SUFFIX,googleapis.com
+DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
+DOMAIN-SUFFIX,grazie.ai
+DOMAIN-SUFFIX,meta.ai
+DOMAIN-SUFFIX,meta.com
+DOMAIN-SUFFIX,atmeta.com
+DOMAIN-SUFFIX,llamameta.net
+DOMAIN-SUFFIX,llama.com
+DOMAIN-SUFFIX,muse.ai
+DOMAIN,production.museai.com
+DOMAIN,connect.facebook.net
+DOMAIN,meta-ohttp-config-prod.fastly-edge.com
+DOMAIN,meta-ohttp-relay-prod.fastly-edge.com
+DOMAIN-SUFFIX,facebook.com
+DOMAIN-SUFFIX,fbcdn.net
+DOMAIN-SUFFIX,notebooklm.google.com
+DOMAIN-SUFFIX,notebooklm.google
+DOMAIN,api.msn.com
+DOMAIN,assets.msn.com
+DOMAIN,copilot.microsoft.com
+DOMAIN,gateway.bingviz.microsoft.net
+DOMAIN,gateway.bingviz.microsoftapp.net
+DOMAIN,in.appcenter.ms
+DOMAIN,location.microsoft.com
+DOMAIN,odc.officeapps.live.com
+DOMAIN,r.bing.com
+DOMAIN,self.events.data.microsoft.com
+DOMAIN,services.bingapis.com
+DOMAIN,sydney.bing.com
+DOMAIN,www.bing.com
+DOMAIN-SUFFIX,api.microsoftapp.net
+DOMAIN-SUFFIX,bing-shopping.microsoft-falcon.io
+DOMAIN-SUFFIX,edgeservices.bing.com
+DOMAIN-SUFFIX,midjourney.com
+DOMAIN,openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
+DOMAIN,openaicomproductionae4b.blob.core.windows.net
+DOMAIN,production-openaicom-storage.azureedge.net
+DOMAIN-SUFFIX,ai.com
+DOMAIN-SUFFIX,chatgpt.com
+DOMAIN-SUFFIX,livekit.cloud
+DOMAIN-SUFFIX,oaistatic.com
+DOMAIN-SUFFIX,oaiusercontent.com
+DOMAIN-SUFFIX,openai.com
+DOMAIN-SUFFIX,azureedge.net
+DOMAIN-SUFFIX,imgix.net
+DOMAIN,pplx-res.cloudinary.com
+DOMAIN-SUFFIX,perplexity.ai
+DOMAIN-SUFFIX,pplx.ai
+DOMAIN-SUFFIX,perplexity.com
+DOMAIN-SUFFIX,poe.com
+DOMAIN-SUFFIX,poecdn.net
+DOMAIN-SUFFIX,x.ai
+DOMAIN-SUFFIX,grok.com
+DOMAIN-SUFFIX,mistral.ai
+DOMAIN-SUFFIX,huggingface.co
+DOMAIN-SUFFIX,hf.co
+DOMAIN-SUFFIX,hf.space
+DOMAIN-SUFFIX,manus.im
+DOMAIN-SUFFIX,manuscdn.com
+
+# ===== 海外主流 AI + Muse 自定义补充规则 =====
+DOMAIN-SUFFIX,cue.im
+DOMAIN-SUFFIX,midjourneycdn.com
+DOMAIN-SUFFIX,runwayml.com
+DOMAIN-SUFFIX,runwayml.cloud
+DOMAIN-SUFFIX,elevenlabs.io
+DOMAIN-SUFFIX,suno.com
+DOMAIN-SUFFIX,character.ai
+DOMAIN-SUFFIX,ideogram.ai
+DOMAIN-SUFFIX,leonardo.ai
+DOMAIN-SUFFIX,replit.com
+DOMAIN-SUFFIX,replit.dev
+DOMAIN-SUFFIX,lumalabs.ai
+DOMAIN-SUFFIX,pika.art
+DOMAIN-SUFFIX,gamma.app
+DOMAIN-SUFFIX,cohere.com
+DOMAIN-SUFFIX,cohere.ai
+DOMAIN-SUFFIX,ai.meta.com
+DOMAIN-SUFFIX,muse.com
+DOMAIN,api.meta.ai
+DOMAIN,graph.meta.ai
+DOMAIN,www.meta.ai
+DOMAIN-KEYWORD,meta-ai
+DOMAIN-KEYWORD,metaai
+
+# ===== Google Voice（Blackmatrix7 上游同步） =====
+DOMAIN,lens.l.google.com
