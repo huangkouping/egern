@@ -76,8 +76,10 @@ def collect(raw, seen):
     rules = []
     for line in raw.splitlines():
         line = line.strip()
-        if not line or line.startswith("#"):
+        if not line or line.startswith("#") or line in {"payload:", "rules:"}:
             continue
+        if line.startswith("- "):
+            line = line[2:].strip()
         if line not in seen:
             seen.add(line)
             rules.append(line)
