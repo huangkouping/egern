@@ -85,6 +85,7 @@ def collect(raw, seen):
 
 seen = set()
 ai_rules = collect(fetch(AI_UPSTREAM, "https://kelee.one/"), seen)
+ddgk_ai_rules = collect(fetch(DDGK_AI_UPSTREAM, "https://ddgksf2013.top/"), seen)
 googlevoice_rules = collect(fetch(GOOGLEVOICE_UPSTREAM, "https://github.com/"), seen)
 
 custom_rules = []
@@ -118,8 +119,7 @@ lines = [
     *googlevoice_rules,
     "",
 ]
-OUTPUT.write_text("
-".join(lines), encoding="utf-8")
+OUTPUT.write_text("\\n".join(lines), encoding="utf-8")
 print(
     f"已生成 {OUTPUT}：AI {len(ai_rules)} 条，"
     f"DDGKSF 去重后新增 {len(ddgk_ai_rules)} 条，自定义 {len(custom_rules)} 条，"
