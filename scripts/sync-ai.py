@@ -119,7 +119,7 @@ lines = [
     *googlevoice_rules,
     "",
 ]
-OUTPUT.write_text("\\n".join(lines), encoding="utf-8")
+OUTPUT.write_text(chr(10).join(lines), encoding="utf-8")
 print(
     f"已生成 {OUTPUT}：AI {len(ai_rules)} 条，"
     f"DDGKSF 去重后新增 {len(ddgk_ai_rules)} 条，自定义 {len(custom_rules)} 条，"
