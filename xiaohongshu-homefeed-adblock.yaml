@@ -1,8 +1,8 @@
-name: 🧹 小红书首页广告与直播过滤
+name: 🧹 小红书首页广告、直播与开屏广告过滤
 description: |-
-  屏蔽小红书首页“发现”信息流中的商业投放广告和直播卡片。
+  屏蔽小红书首页“发现”信息流中的商业投放广告、直播卡片及启动开屏广告。
   保留普通图文、普通视频及普通商品笔记，避免因过滤全部视频造成首页大片空白。
-  已按 2026-10-03 实际抓包适配 rec.xiaohongshu.com/api/sns/v6/homefeed。
+  已按 2026-10-03 实际抓包适配 homefeed 与 system_service/splash 系列接口。
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
@@ -10,7 +10,15 @@ scriptings:
   - http_response:
       name: 小红书首页广告与直播过滤
       match: '^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/homefeed|web/v\d+/homefeed)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-2
+      body_required: true
+      timeout: 10
+      update_interval: 3600
+
+  - http_response:
+      name: 小红书开屏广告过滤
+      match: '^https://edith\.xiaohongshu\.com/api/sns/v2/system_service/(?:splash_config|splash_online_decision|splash_async_optimization)(?:\?|$)'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-2
       body_required: true
       timeout: 10
       update_interval: 3600
@@ -20,3 +28,4 @@ mitm:
     includes:
       - rec.xiaohongshu.com
       - www.xiaohongshu.com
+      - edith.xiaohongshu.com
