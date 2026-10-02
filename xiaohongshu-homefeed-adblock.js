@@ -23,6 +23,26 @@
     typeof $request !== "undefined" && $request.url ? $request.url : ""
   );
 
+  const moduleEnv =
+    typeof ctx !== "undefined" && ctx && ctx.env ? ctx.env : {};
+
+  // 未设置、旧版 Egern 不支持设置或读取异常时，全部默认开启屏蔽。
+  const envEnabled = (key) => {
+    const value = moduleEnv[key];
+    if (value === undefined || value === null || value === "") return true;
+    return !["false", "0", "off", "no"].includes(
+      String(value).trim().toLowerCase()
+    );
+  };
+
+  const settings = {
+    homeAds: envEnabled("BLOCK_HOME_ADS"),
+    homeLive: envEnabled("BLOCK_HOME_LIVE"),
+    splashAds: envEnabled("BLOCK_SPLASH_ADS"),
+    adResources: envEnabled("BLOCK_AD_RESOURCES"),
+    adEngage: envEnabled("BLOCK_AD_ENGAGE"),
+  };
+
   const hasOwn = (object, key) =>
     Object.prototype.hasOwnProperty.call(object, key);
 
@@ -68,11 +88,11 @@
     let liveRemoved = 0;
 
     const filtered = items.filter((item) => {
-      if (isPromotedAd(item)) {
+      if (settings.homeAds && isPromotedAd(item)) {
         adsRemoved += 1;
         return false;
       }
-      if (isLiveCard(item)) {
+      if (settings.homeLive && isLiveCard(item)) {
         liveRemoved += 1;
         return false;
       }
@@ -153,16 +173,16 @@
   };
 
   if (requestUrl.includes("/system_service/splash_config")) {
-    filterSplashConfig();
+    if (settings.splashAds) filterSplashConfig();
   } else if (
     requestUrl.includes("/system_service/splash_online_decision") ||
     requestUrl.includes("/system_service/splash_async_optimization")
   ) {
-    rejectSplashDecision();
+    if (settings.splashAds) rejectSplashDecision();
   } else if (requestUrl.includes("/api/sns/v1/ads/resource")) {
-    filterAdResources();
+    if (settings.adResources) filterAdResources();
   } else if (requestUrl.includes("/api/sns/v1/tag/ads_engage")) {
-    filterAdsEngage();
+    if (settings.adEngage) filterAdsEngage();
   } else if (Array.isArray(payload?.data)) {
     payload.data = filterBlockedCards(payload.data);
   } else if (payload?.data && typeof payload.data === "object") {
