@@ -1,6 +1,6 @@
 /*
- * 小红书首页信息流广告与直播过滤
- * 移除明确的商业投放广告和首页直播卡片。
+ * 小红书首页广告、直播与开屏广告过滤
+ * 移除首页商业投放广告、首页直播卡片和开屏广告候选素材。
  * 保留普通图文、普通视频及普通商品笔记。
  * 适用于 Egern HTTP Response Script。
  * Updated: 2026-10-03
@@ -15,9 +15,13 @@
   try {
     payload = JSON.parse($response.body);
   } catch (error) {
-    console.log(`[小红书首页过滤] JSON 解析失败：${error}`);
+    console.log(`[小红书过滤] JSON 解析失败：${error}`);
     return $done({});
   }
+
+  const requestUrl = String(
+    typeof $request !== "undefined" && $request.url ? $request.url : ""
+  );
 
   const hasOwn = (object, key) =>
     Object.prototype.hasOwnProperty.call(object, key);
@@ -46,8 +50,6 @@
     if (modelType === "live" || modelType.startsWith("live_")) return true;
     if (itemType === "live" || itemType.startsWith("live_")) return true;
 
-    // 2026-10-03 抓包确认：首页直播卡为 type=live、
-    // model_type=live_v2，并在顶层包含 live 对象。
     if (
       hasOwn(item, "live") ||
       hasOwn(item, "live_info") ||
@@ -86,7 +88,44 @@
     return filtered;
   };
 
-  if (Array.isArray(payload?.data)) {
+  const filterSplashConfig = () => {
+    if (!payload?.data || typeof payload.data !== "object") return;
+
+    const groupAds = Array.isArray(payload.data.ads_groups)
+      ? payload.data.ads_groups.reduce(
+          (sum, group) => sum + (Array.isArray(group?.ads) ? group.ads.length : 0),
+          0
+        )
+      : 0;
+    const biddingAds = Array.isArray(payload.data.bidding_ads)
+      ? payload.data.bidding_ads.length
+      : 0;
+
+    payload.data.ads_groups = [];
+    payload.data.bidding_ads = [];
+
+    console.log(
+      `[小红书开屏过滤] 清除候选广告 ${groupAds + biddingAds} 条`
+    );
+  };
+
+  const rejectSplashDecision = () => {
+    if (!payload?.data || typeof payload.data !== "object") return;
+
+    payload.data.ads_id = "-1";
+    payload.data.track_id = "";
+    payload.data.track_url = "";
+    console.log("[小红书开屏过滤] 已取消本次开屏广告投放");
+  };
+
+  if (requestUrl.includes("/system_service/splash_config")) {
+    filterSplashConfig();
+  } else if (
+    requestUrl.includes("/system_service/splash_online_decision") ||
+    requestUrl.includes("/system_service/splash_async_optimization")
+  ) {
+    rejectSplashDecision();
+  } else if (Array.isArray(payload?.data)) {
     payload.data = filterBlockedCards(payload.data);
   } else if (payload?.data && typeof payload.data === "object") {
     if (Array.isArray(payload.data.items)) {
