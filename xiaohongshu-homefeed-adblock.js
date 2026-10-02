@@ -1,6 +1,6 @@
 /*
- * 小红书首页广告、直播与开屏广告过滤
- * 移除首页商业投放广告、首页直播卡片和开屏广告候选素材。
+ * 小红书广告内容、直播与开屏广告过滤
+ * 移除首页商业投放广告、首页直播卡片、开屏广告和广告素材库。
  * 保留普通图文、普通视频及普通商品笔记。
  * 适用于 Egern HTTP Response Script。
  * Updated: 2026-10-03
@@ -118,6 +118,40 @@
     console.log("[小红书开屏过滤] 已取消本次开屏广告投放");
   };
 
+  const filterAdResources = () => {
+    if (!Array.isArray(payload?.data)) return;
+
+    const groups = payload.data.length;
+    const resources = payload.data.reduce(
+      (sum, group) =>
+        sum + (Array.isArray(group?.resources) ? group.resources.length : 0),
+      0
+    );
+
+    payload.data = [];
+    console.log(
+      `[小红书广告素材过滤] 清除 ${groups} 组、${resources} 个素材链接`
+    );
+  };
+
+  const filterAdsEngage = () => {
+    if (!payload?.data || typeof payload.data !== "object") return;
+
+    const images = Array.isArray(payload.data.default_img_list)
+      ? payload.data.default_img_list.length
+      : 0;
+
+    payload.data.type = -1;
+    payload.data.forward = "";
+    payload.data.keyword_list = [];
+    payload.data.default_img_list = [];
+    payload.data.landing_page_flag = 0;
+    payload.data.forward_timing_flag = 0;
+    payload.data.deeplink_forward_timing_flag = 0;
+
+    console.log(`[小红书广告互动过滤] 清除默认图片 ${images} 张`);
+  };
+
   if (requestUrl.includes("/system_service/splash_config")) {
     filterSplashConfig();
   } else if (
@@ -125,6 +159,10 @@
     requestUrl.includes("/system_service/splash_async_optimization")
   ) {
     rejectSplashDecision();
+  } else if (requestUrl.includes("/api/sns/v1/ads/resource")) {
+    filterAdResources();
+  } else if (requestUrl.includes("/api/sns/v1/tag/ads_engage")) {
+    filterAdsEngage();
   } else if (Array.isArray(payload?.data)) {
     payload.data = filterBlockedCards(payload.data);
   } else if (payload?.data && typeof payload.data === "object") {
