@@ -6,11 +6,48 @@ description: |-
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
+env_schema:
+  BLOCK_HOME_ADS:
+    name: 屏蔽首页广告
+    description: 关闭后恢复首页“发现”信息流中的商业投放广告。
+    default_value: "true"
+    options:
+      - "true"
+      - "false"
+  BLOCK_HOME_LIVE:
+    name: 屏蔽首页直播
+    description: 关闭后恢复首页信息流中的直播卡片。
+    default_value: "true"
+    options:
+      - "true"
+      - "false"
+  BLOCK_SPLASH_ADS:
+    name: 屏蔽开屏广告
+    description: 清空开屏候选素材并取消开屏广告投放决策。
+    default_value: "true"
+    options:
+      - "true"
+      - "false"
+  BLOCK_AD_RESOURCES:
+    name: 屏蔽广告素材库
+    description: 清空广告素材库接口下发的图片和视频链接。
+    default_value: "true"
+    options:
+      - "true"
+      - "false"
+  BLOCK_AD_ENGAGE:
+    name: 屏蔽广告互动内容
+    description: 清空广告互动接口下发的默认图片和跳转信息。
+    default_value: "true"
+    options:
+      - "true"
+      - "false"
+
 scriptings:
   - http_response:
       name: 小红书首页广告与直播过滤
       match: '^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/homefeed|web/v\d+/homefeed)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-3
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-4
       body_required: true
       timeout: 10
       update_interval: 3600
@@ -18,7 +55,7 @@ scriptings:
   - http_response:
       name: 小红书开屏广告过滤
       match: '^https://edith\.xiaohongshu\.com/api/sns/v2/system_service/(?:splash_config|splash_online_decision|splash_async_optimization)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-3
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-4
       body_required: true
       timeout: 10
       update_interval: 3600
@@ -26,7 +63,7 @@ scriptings:
   - http_response:
       name: 小红书广告素材与互动内容过滤
       match: '^https://(?:edith|www)\.xiaohongshu\.com/api/sns/v1/(?:ads/resource|tag/ads_engage)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-3
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261003-4
       body_required: true
       timeout: 10
       update_interval: 3600
