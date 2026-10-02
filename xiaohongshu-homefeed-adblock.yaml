@@ -2,18 +2,21 @@ name: 🧹 小红书首页广告与直播过滤
 description: |-
   屏蔽小红书首页“发现”信息流中的商业投放广告和直播卡片。
   保留普通图文、普通视频及普通商品笔记，避免因过滤全部视频造成首页大片空白。
-  更新日期：2026-09-13
+  已按 2026-10-03 实际抓包适配 rec.xiaohongshu.com/api/sns/v6/homefeed。
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
 scriptings:
   - http_response:
       name: 小红书首页广告与直播过滤
-      match: '^https?:\\/\\/[a-zA-Z0-9.-]+\\.xiaohongshu\\.com\\/api\\/sns\\/(?:v\\d+\\/)?(?:homefeed|web\\/v\\d+\\/homefeed)(?:\\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/fe9c058d2c2c41ec0c925fe9b8618b79a84200cf/xiaohongshu-homefeed-adblock.js
+      match: '^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/homefeed|web/v\d+/homefeed)(?:\?|$)'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js
       body_required: true
       timeout: 10
+      update_interval: 3600
 
 mitm:
   hostnames:
-    - '*.xiaohongshu.com'
+    includes:
+      - rec.xiaohongshu.com
+      - www.xiaohongshu.com
