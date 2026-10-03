@@ -78,6 +78,19 @@
       return true;
     }
 
+    // 部分首页卡片本身仍是普通 video/note，但作者头像处带有直播标记。
+    // 2026-10-03 抓包确认：直播信息位于 item.user.live，活动状态为 2。
+    const userLive = item.user?.live;
+    if (userLive && typeof userLive === "object") {
+      const liveStatus = Number(userLive.live_status);
+      if (
+        liveStatus === 2 ||
+        (Boolean(userLive.room_id) && Boolean(userLive.live_link))
+      ) {
+        return true;
+      }
+    }
+
     return false;
   };
 
