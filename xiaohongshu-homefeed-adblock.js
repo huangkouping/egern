@@ -91,6 +91,21 @@
       }
     }
 
+    // 少数普通视频未携带 user.live，但推荐轨迹明确来自直播笔记池。
+    // 仅匹配直播专用轨迹标记，避免用宽泛的 "live" 误伤普通视频。
+    const liveTrack = [
+      item.recommend?.track_id,
+      item.track_id_mix_rank,
+      item.track_info,
+      item.rec_extra_info,
+    ]
+      .filter((value) => typeof value === "string")
+      .join(" ");
+
+    if (/livenote|living_note|live_dssm/i.test(liveTrack)) {
+      return true;
+    }
+
     return false;
   };
 
