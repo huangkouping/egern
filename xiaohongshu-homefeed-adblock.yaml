@@ -1,8 +1,5 @@
-name: 🧹 小红书广告内容、直播与开屏过滤
-description: |-
-  屏蔽小红书首页“发现”信息流中的商业投放广告、直播卡片、启动开屏广告及广告素材库。
-  保留普通图文、普通视频及普通商品笔记，避免因过滤全部视频造成首页大片空白。
-  已按 2026-10-03 实际抓包适配 homefeed、system_service/splash、ads/resource 与 tag/ads_engage。
+name: 小红书去开屏/直播/广告
+description: 屏蔽开屏、首页直播及广告内容。
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
