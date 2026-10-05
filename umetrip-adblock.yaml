@@ -1,24 +1,21 @@
 name: 航旅纵横去广告
 description: |-
   屏蔽开屏、首页及应用内广告。
-  规则更新时间：2026-10-05 17:42（北京时间）
-  同步检查：2026-10-05 17:43（北京时间）
+  规则更新时间：2026-10-05 17:49（北京时间）
+  同步检查：2026-10-05 17:49（北京时间）
   墨鱼源：成功
-  Kelee源：失败（HTTP 403，使用快照 2024-07-26 21:19:28）
-author: ddgksf2013 / Kelee / huangkouping
-icon: https://gitlab.com/lodepuly/iconlibrary/-/raw/main/App_icon/120px/Umetrip.png
+author: ddgksf2013 / huangkouping
+icon: airplane
 homepage: https://github.com/huangkouping/egern
 
 url_rewrites:
   - match: '^https:\/\/oss\.umetrip\.com\/fs\/advert\/'
     location: 'http://reject-img/'
-  - match: '^https?:\/\/(discardrp|startup)\.umetrip\.com\/gateway\/api\/umetrip\/native'
-    location: 'http://reject/'
 
 scriptings:
   - http_response:
       name: 航旅纵横广告净化
-      match: '^https?://(?:activity\.umetrip\.com|appmsg\.umetrip\.com|event\.umetrip\.com|flightstatus\.umetrip\.com|home\.umetrip\.com|opactivity\.umetrip\.com|sns\.umetrip\.com|umeflightstatus\.umetrip\.com|umehome\.umetrip\.com|umerp\.umetrip\.com|umestartup\.umetrip\.com|umeuser\.umetrip\.com|user\.umetrip\.com|114\.115\.217\.129)/gateway/api/umetrip/native(?:\\?.*)?$'
+      match: '^https?://(?:activity\.umetrip\.com|appmsg\.umetrip\.com|event\.umetrip\.com|flightstatus\.umetrip\.com|home\.umetrip\.com|opactivity\.umetrip\.com|sns\.umetrip\.com|startup\.umetrip\.com|umeflightstatus\.umetrip\.com|umehome\.umetrip\.com|umerp\.umetrip\.com|umestartup\.umetrip\.com|umeuser\.umetrip\.com|user\.umetrip\.com)/gateway/api/umetrip/native(?:\\?.*)?$'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/umetrip-adblock.js?v=202610051735
       body_required: true
       timeout: 15
@@ -29,7 +26,6 @@ mitm:
     includes:
       - activity.umetrip.com
       - appmsg.umetrip.com
-      - discardrp.umetrip.com
       - event.umetrip.com
       - flightstatus.umetrip.com
       - home.umetrip.com
@@ -43,4 +39,3 @@ mitm:
       - umestartup.umetrip.com
       - umeuser.umetrip.com
       - user.umetrip.com
-      - 114.115.217.129

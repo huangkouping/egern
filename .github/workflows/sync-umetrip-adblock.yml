@@ -9,7 +9,7 @@ on:
       - main
     paths:
       - "scripts/sync-umetrip-adblock.py"
-      - "upstreams/umetrip-kelee.lpx"
+      - "upstreams/umetrip-ddgksf.conf"
       - ".github/workflows/sync-umetrip-adblock.yml"
 
 permissions:
@@ -33,7 +33,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 下载、校验并合并两个上游
+      - name: 下载并校验墨鱼上游
         run: python scripts/sync-umetrip-adblock.py
 
       - name: 提交有效更新
@@ -42,11 +42,10 @@ jobs:
             umetrip-adblock.yaml
             umetrip-adblock.js
             upstreams/umetrip-ddgksf.conf
-            upstreams/umetrip-kelee.lpx
           )
 
           if git diff --quiet -- "${files[@]}"; then
-            echo "两个上游、合并结果及同步状态均无变化"
+            echo "上游、模块及同步状态均无变化"
             exit 0
           fi
 

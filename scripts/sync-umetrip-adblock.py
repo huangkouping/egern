@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Merge the ddgksf2013 and Kelee Umetrip ad-block sources for Egern."""
+"""Synchronize the ddgksf2013 Umetrip ad-block source for Egern."""
 
 import re
 import time
@@ -9,24 +9,19 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
-DD_CONFIG_URL = "https://ddgksf2013.top/rewrite/UmetripAds.conf"
-KELEE_URL = "https://kelee.one/Tool/Loon/Lpx/Umetrip_remove_ads.lpx"
-DD_SNAPSHOT = Path("upstreams/umetrip-ddgksf.conf")
-KELEE_SNAPSHOT = Path("upstreams/umetrip-kelee.lpx")
+CONFIG_URL = "https://ddgksf2013.top/rewrite/UmetripAds.conf"
+CONFIG_SNAPSHOT = Path("upstreams/umetrip-ddgksf.conf")
 SCRIPT_OUTPUT = Path("umetrip-adblock.js")
 MODULE_OUTPUT = Path("umetrip-adblock.yaml")
 RULE_UPDATED_PREFIX = "  规则更新时间："
 CHECKED_PREFIX = "  同步检查："
-DD_STATUS_PREFIX = "  墨鱼源："
-KELEE_STATUS_PREFIX = "  Kelee源："
+SOURCE_STATUS_PREFIX = "  墨鱼源："
 RETRIES = 4
-LAST_FETCH_ERRORS: dict[str, str] = {}
 
 
-def fetch(url: str, user_agents: tuple[str, ...], required: bool = True) -> str | None:
+def fetch(url: str, user_agents: tuple[str, ...]) -> tuple[str | None, str | None]:
     last_error: Exception | None = None
-    attempts = RETRIES if required else 2
-    for attempt in range(1, attempts + 1):
+    for attempt in range(1, RETRIES + 1):
         for user_agent in user_agents:
             try:
                 request = Request(
@@ -34,66 +29,53 @@ def fetch(url: str, user_agents: tuple[str, ...], required: bool = True) -> str 
                     headers={
                         "User-Agent": user_agent,
                         "Accept": "text/plain,*/*",
-                        "Referer": "https://ddgksf2013.top/" if "ddgksf2013" in url else "https://kelee.one/",
+                        "Referer": "https://ddgksf2013.top/",
                     },
                 )
                 with urlopen(request, timeout=45) as response:
                     text = response.read().decode("utf-8-sig")
                 if "<html" in text[:500].lower() or "<!doctype" in text[:500].lower():
                     raise ValueError("服务器返回了网页而不是规则文件")
-                LAST_FETCH_ERRORS.pop(url, None)
-                return text
+                return text, None
             except (HTTPError, URLError, TimeoutError, OSError, UnicodeError, ValueError) as error:
                 last_error = error
-        if attempt < attempts:
+        if attempt < RETRIES:
             delay = (3, 8, 15)[attempt - 1]
-            print(f"下载失败（{attempt}/{attempts}）：{url}；{delay} 秒后重试：{last_error}")
+            print(f"下载失败（{attempt}/{RETRIES}）：{url}；{delay} 秒后重试：{last_error}")
             time.sleep(delay)
-    if required:
-        raise RuntimeError(f"必需上游下载失败，保留现有文件：{url}") from last_error
-    LAST_FETCH_ERRORS[url] = str(last_error or "未知错误")
-    print(f"警告：暂时无法读取 {url}，继续使用仓库中的最近有效快照：{last_error}")
-    return None
+    return None, str(last_error or "未知错误")
 
 
-def validate_dd_config(text: str) -> None:
+def validate_config(text: str) -> None:
     required = ("hostname =", "script-response-body", "umetrip.ads.js")
     if not all(token in text for token in required):
-        raise RuntimeError("墨鱼版配置校验失败，拒绝覆盖现有文件")
+        raise RuntimeError("墨鱼版配置校验失败")
 
 
 def validate_script(text: str) -> None:
     if len(text) < 500 or "$done" not in text or "cleanDocument" not in text:
-        raise RuntimeError("墨鱼版脚本校验失败，拒绝覆盖现有文件")
+        raise RuntimeError("墨鱼版脚本校验失败")
 
 
-def validate_kelee(text: str) -> None:
-    if "umetrip" not in text.lower() or not any(token in text for token in ("[Rewrite]", "[Script]", "hostname")):
-        raise RuntimeError("Kelee 配置校验失败，拒绝覆盖最近有效快照")
-
-
-def parse_hosts(*texts: str) -> list[str]:
+def parse_hosts(text: str) -> list[str]:
     hosts: set[str] = set()
-    for text in texts:
-        for line in text.splitlines():
-            if re.match(r"^\s*hostname\s*=", line, re.I):
-                values = line.split("=", 1)[1]
-                hosts.update(value.strip() for value in values.split(",") if value.strip())
-    hosts.update({"discardrp.umetrip.com", "114.115.217.129"})
-    return sorted(hosts, key=lambda value: (value.replace(".", "").isdigit(), value))
+    for line in text.splitlines():
+        if re.match(r"^\s*hostname\s*=", line, re.I):
+            hosts.update(value.strip() for value in line.split("=", 1)[1].split(",") if value.strip())
+    return sorted(hosts)
 
 
-def find_dd_script_url(text: str) -> str:
+def find_script_url(text: str) -> str:
     match = re.search(r"script-response-body\s+(https?://\S+)", text)
     if not match:
         raise RuntimeError("未在墨鱼版配置中找到响应脚本地址")
     return match.group(1)
 
 
-def parse_rejects(dd_text: str, kelee_text: str) -> list[tuple[str, str]]:
+def parse_rejects(text: str) -> list[tuple[str, str]]:
     rules: list[tuple[str, str]] = []
     seen: set[tuple[str, str]] = set()
-    for line in (dd_text + "\n" + kelee_text).splitlines():
+    for line in text.splitlines():
         stripped = line.strip()
         if not stripped or stripped.startswith(("#", "//", ";")):
             continue
@@ -101,8 +83,6 @@ def parse_rejects(dd_text: str, kelee_text: str) -> list[tuple[str, str]]:
         if not match:
             continue
         pattern, action = match.group(1), match.group(2).lower()
-        # Kelee 的旧规则写成了 http?，转换到 Egern 时修正为同时匹配 HTTP/HTTPS。
-        pattern = pattern.replace("^http?:", "^https?:", 1)
         location = {
             "reject": "http://reject/",
             "reject-img": "http://reject-img/",
@@ -123,7 +103,7 @@ def yaml_quote(value: str) -> str:
 
 
 def without_runtime_status(text: str) -> str:
-    prefixes = (RULE_UPDATED_PREFIX, CHECKED_PREFIX, DD_STATUS_PREFIX, KELEE_STATUS_PREFIX)
+    prefixes = (RULE_UPDATED_PREFIX, CHECKED_PREFIX, SOURCE_STATUS_PREFIX, "  Kelee源：")
     return "\n".join(line for line in text.splitlines() if not line.startswith(prefixes)).rstrip() + "\n"
 
 
@@ -142,24 +122,15 @@ def short_error(error: str) -> str:
 
 
 def snapshot_date(text: str) -> str:
-    match = re.search(r"(?im)^\s*(?:#!date=|//\s*@UpdateTime\s+)([^\r\n]+)", text)
+    match = re.search(r"(?im)^\s*//\s*@UpdateTime\s+([^\r\n]+)", text)
     return match.group(1).strip() if match else "最近有效版本"
 
 
-def build_module(
-    dd_text: str,
-    kelee_text: str,
-    rule_stamp: str,
-    checked_stamp: str,
-    dd_status: str,
-    kelee_status: str,
-    cache_key: str,
-) -> str:
-    hosts = parse_hosts(dd_text, kelee_text)
-    response_hosts = [host for host in hosts if host not in {"oss.umetrip.com", "startup.umetrip.com", "discardrp.umetrip.com"}]
+def build_module(config_text: str, rule_stamp: str, checked_stamp: str, source_status: str, cache_key: str) -> str:
+    hosts = parse_hosts(config_text)
+    response_hosts = [host for host in hosts if host != "oss.umetrip.com"]
     domain_parts = [re.escape(host) for host in response_hosts]
     response_match = rf"^https?://(?:{'|'.join(domain_parts)})/gateway/api/umetrip/native(?:\\?.*)?$"
-    rejects = parse_rejects(dd_text, kelee_text)
 
     lines = [
         "name: 航旅纵横去广告",
@@ -167,15 +138,14 @@ def build_module(
         "  屏蔽开屏、首页及应用内广告。",
         f"{RULE_UPDATED_PREFIX}{rule_stamp}（北京时间）",
         f"{CHECKED_PREFIX}{checked_stamp}（北京时间）",
-        f"{DD_STATUS_PREFIX}{dd_status}",
-        f"{KELEE_STATUS_PREFIX}{kelee_status}",
-        "author: ddgksf2013 / Kelee / huangkouping",
-        "icon: https://gitlab.com/lodepuly/iconlibrary/-/raw/main/App_icon/120px/Umetrip.png",
+        f"{SOURCE_STATUS_PREFIX}{source_status}",
+        "author: ddgksf2013 / huangkouping",
+        "icon: airplane",
         "homepage: https://github.com/huangkouping/egern",
         "",
         "url_rewrites:",
     ]
-    for pattern, location in rejects:
+    for pattern, location in parse_rejects(config_text):
         lines.extend([f"  - match: {yaml_quote(pattern)}", f"    location: {yaml_quote(location)}"])
     lines.extend(
         [
@@ -199,50 +169,53 @@ def build_module(
 
 
 def main() -> None:
-    dd_text = fetch(DD_CONFIG_URL, ("Surge", "Quantumult X"), required=True)
-    assert dd_text is not None
-    validate_dd_config(dd_text)
-
-    dd_script_url = find_dd_script_url(dd_text)
-    script_text = fetch(dd_script_url, ("Quantumult X", "Surge"), required=True)
-    assert script_text is not None
-    validate_script(script_text)
-
-    kelee_download = fetch(KELEE_URL, ("Loon", "Surge", "Mozilla/5.0"), required=False)
-    if kelee_download is not None:
-        validate_kelee(kelee_download)
-        kelee_text = kelee_download
-        kelee_status = "成功"
-    elif KELEE_SNAPSHOT.exists():
-        kelee_text = KELEE_SNAPSHOT.read_text(encoding="utf-8")
-        validate_kelee(kelee_text)
-        error = short_error(LAST_FETCH_ERRORS.get(KELEE_URL, "连接失败"))
-        kelee_status = f"失败（{error}，使用快照 {snapshot_date(kelee_text)}）"
+    downloaded_config, config_error = fetch(CONFIG_URL, ("Surge", "Quantumult X"))
+    if downloaded_config is not None:
+        validate_config(downloaded_config)
+        config_text = downloaded_config
+    elif CONFIG_SNAPSHOT.exists():
+        config_text = CONFIG_SNAPSHOT.read_text(encoding="utf-8")
+        validate_config(config_text)
     else:
-        raise RuntimeError("Kelee 上游不可用且仓库中没有有效快照")
+        raise RuntimeError("墨鱼源不可用且仓库中没有有效配置快照")
+
+    script_url = find_script_url(config_text)
+    downloaded_script, script_error = fetch(script_url, ("Quantumult X", "Surge"))
+    if downloaded_script is not None:
+        validate_script(downloaded_script)
+        script_text = downloaded_script
+    elif SCRIPT_OUTPUT.exists():
+        script_text = SCRIPT_OUTPUT.read_text(encoding="utf-8")
+        validate_script(script_text)
+    else:
+        raise RuntimeError("墨鱼源脚本不可用且仓库中没有有效脚本快照")
+
+    errors = [short_error(error) for error in (config_error, script_error) if error]
+    if errors:
+        source_status = f"失败（{', '.join(dict.fromkeys(errors))}，使用快照 {snapshot_date(config_text)}）"
+    else:
+        source_status = "成功"
 
     old_script = SCRIPT_OUTPUT.read_text(encoding="utf-8") if SCRIPT_OUTPUT.exists() else ""
     script_changed = old_script != script_text
     now = datetime.now(ZoneInfo("Asia/Shanghai"))
     stamp = now.strftime("%Y-%m-%d %H:%M")
     cache_key = now.strftime("%Y%m%d%H%M")
-    if MODULE_OUTPUT.exists() and not script_changed:
-        old_module = MODULE_OUTPUT.read_text(encoding="utf-8")
+    old_module = MODULE_OUTPUT.read_text(encoding="utf-8") if MODULE_OUTPUT.exists() else ""
+    if old_module and not script_changed:
         old_cache_key = re.search(r"umetrip-adblock\.js\?v=(\d+)", old_module)
         if old_cache_key:
             cache_key = old_cache_key.group(1)
-    candidate = build_module(dd_text, kelee_text, stamp, stamp, "成功", kelee_status, cache_key)
 
-    if MODULE_OUTPUT.exists() and not script_changed:
-        if without_runtime_status(old_module) == without_runtime_status(candidate):
-            rule_stamp = old_rule_timestamp(old_module, stamp)
-            candidate = build_module(dd_text, kelee_text, rule_stamp, stamp, "成功", kelee_status, cache_key)
-            print("合并后的有效规则没有变化，保留原规则更新时间；刷新同步状态")
+    candidate = build_module(config_text, stamp, stamp, source_status, cache_key)
+    if old_module and not script_changed and without_runtime_status(old_module) == without_runtime_status(candidate):
+        rule_stamp = old_rule_timestamp(old_module, stamp)
+        candidate = build_module(config_text, rule_stamp, stamp, source_status, cache_key)
+        print("有效规则没有变化，保留原规则更新时间；刷新同步状态")
 
-    DD_SNAPSHOT.parent.mkdir(parents=True, exist_ok=True)
-    DD_SNAPSHOT.write_text(dd_text.rstrip() + "\n", encoding="utf-8")
-    if kelee_download is not None:
-        KELEE_SNAPSHOT.write_text(kelee_text.rstrip() + "\n", encoding="utf-8")
+    CONFIG_SNAPSHOT.parent.mkdir(parents=True, exist_ok=True)
+    if downloaded_config is not None:
+        CONFIG_SNAPSHOT.write_text(config_text.rstrip() + "\n", encoding="utf-8")
     SCRIPT_OUTPUT.write_text(script_text.rstrip() + "\n", encoding="utf-8")
     MODULE_OUTPUT.write_text(candidate, encoding="utf-8")
 
