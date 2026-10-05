@@ -42,6 +42,12 @@ jobs:
           old_time = re.search(r"更新时间：([^（\n]+)", text)
           updated_at = now if status == "成功" else (old_time.group(1).strip() if old_time else "未知")
           text = re.sub(
+              r"(?m)^name:.*$",
+              "name: PingMe签到[H]",
+              text,
+              count=1,
+          )
+          text = re.sub(
               r"(?m)^description:[^\n]*\n(?:^[ \t]+.*\n)*",
               "description: |-\n"
               "  PingMe 自动签到\n"
