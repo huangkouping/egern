@@ -28,20 +28,14 @@ jobs:
           path = Path("pingme.yaml")
           text = path.read_text()
           text = re.sub(
+              r"(?m)^description:.*$",
+              "description: 😀 PingMe 自动签到",
+              text,
+              count=1,
+          )
+          text = re.sub(
               r"(?m)^  arg3:.*$",
               "  arg3: '0 */4 * * *'",
-              text,
-              count=1,
-          )
-          text = re.sub(
-              r"(?m)^    default_value:.*$",
-              "    default_value: '0 */4 * * *'",
-              text,
-              count=1,
-          )
-          text = re.sub(
-              r"(?m)^description:.*$",
-              "description: 😀 PingMe每日签到与任务，默认0点整每4小时签到一次｜支持签到参数抓取｜代理策略可自由填写（需与主配置名称里的节点名称一致，如：填写“美国节点”签到奖励为0.004）｜自动同步 mickeu/Egern 原版更新",
               text,
               count=1,
           )
@@ -52,11 +46,29 @@ jobs:
               count=1,
           )
           text = re.sub(
-              r"(?ms)^  PROXY:\n.*?(?=^env:)",
+              r"(?ms)^compat_arguments_schema:\n.*?(?=^env:)",
+              "compat_arguments_schema:\n"
+              "  arg3:\n"
+              "    name: 签到时间\n"
+              "    description: 默认每天0点开始，每4小时签到一次；可填写 Cron 表达式调整。\n"
+              "    default_value: '0 */4 * * *'\n"
               "  PROXY:\n"
               "    name: 代理策略\n"
-              "    description: 输入主配置中的策略组名称，需与配置文件完全一致\n"
+              "    description: 填写主配置中的策略组名称，需完全一致；例如“美国节点”。\n"
               "    default_value: 美国节点\n",
+              text,
+              count=1,
+          )
+          text = re.sub(
+              r"(?ms)^env_schema:\n.*?(?=^author:)",
+              "env_schema:\n"
+              "  PINGME_CAPTURE:\n"
+              "    name: 抓取签到参数\n"
+              "    description: 默认开启。关闭后不再抓取签到参数；脚本每次运行会随机生成设备ID。\n"
+              "    default_value: 'true'\n"
+              "    options:\n"
+              "    - 'true'\n"
+              "    - 'false'\n",
               text,
               count=1,
           )

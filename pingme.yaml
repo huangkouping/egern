@@ -1,22 +1,23 @@
 name: PingMe签到
-description: 😀 PingMe每日签到与任务，默认0点整每4小时签到一次｜支持签到参数抓取｜代理策略可自由填写（需与主配置名称里的节点名称一致，如：填写“美国节点”签到奖励为0.004）｜自动同步 mickeu/Egern 原版更新
+description: 😀 PingMe 自动签到
 compat_arguments:
   arg3: '0 */4 * * *'
   PROXY: 美国节点
 compat_arguments_schema:
   arg3:
-    name: PM定时
+    name: 签到时间
+    description: 默认每天0点开始，每4小时签到一次；可填写 Cron 表达式调整。
     default_value: '0 */4 * * *'
   PROXY:
     name: 代理策略
-    description: 输入主配置中的策略组名称，需与配置文件完全一致
+    description: 填写主配置中的策略组名称，需完全一致；例如“美国节点”。
     default_value: 美国节点
 env:
   PINGME_CAPTURE: 'true'
 env_schema:
   PINGME_CAPTURE:
-    name: PM'token
-    description: 关闭后不再抓取签到参数（默认开启 true）。每运行一次随机生成设备ID，防止被检测。
+    name: 抓取签到参数
+    description: 默认开启。关闭后不再抓取签到参数；脚本每次运行会随机生成设备ID。
     default_value: 'true'
     options:
     - 'true'
