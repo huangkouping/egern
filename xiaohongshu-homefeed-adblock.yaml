@@ -1,7 +1,7 @@
 name: 小红书去开屏/直播/广告
 description: |-
   屏蔽开屏、首页直播及广告内容。
-  更新时间：2026-10-05 09:55（北京时间）
+  更新时间：2026-10-05 10:03（北京时间）
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
@@ -16,6 +16,13 @@ env_schema:
   BLOCK_HOME_LIVE:
     name: 屏蔽首页直播
     description: 屏蔽直播卡片及作者正在直播的普通笔记。
+    default_value: "true"
+    options:
+      - "true"
+      - "false"
+  BLOCK_MEDICAL_PROMOTION:
+    name: 屏蔽疑似医美推广
+    description: 根据账号和内容特征组合识别，可能误删，可随时关闭。
     default_value: "true"
     options:
       - "true"
@@ -46,7 +53,7 @@ scriptings:
   - http_response:
       name: 小红书首页广告与直播过滤
       match: '^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/homefeed|web/v\d+/homefeed)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-7
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
       body_required: true
       timeout: 10
       update_interval: 3600
@@ -54,7 +61,7 @@ scriptings:
   - http_response:
       name: 小红书开屏广告过滤
       match: '^https://edith\.xiaohongshu\.com/api/sns/v2/system_service/(?:splash_config|splash_online_decision|splash_async_optimization)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-7
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
       body_required: true
       timeout: 10
       update_interval: 3600
@@ -62,7 +69,7 @@ scriptings:
   - http_response:
       name: 小红书广告素材与互动内容过滤
       match: '^https://(?:edith|www)\.xiaohongshu\.com/api/sns/v1/(?:ads/resource|tag/ads_engage)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-7
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
       body_required: true
       timeout: 10
       update_interval: 3600
