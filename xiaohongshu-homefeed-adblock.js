@@ -3,7 +3,7 @@
  * 移除首页商业投放广告、首页直播卡片、开屏广告和广告素材库。
  * 保留普通图文、普通视频及普通商品笔记。
  * 适用于 Egern HTTP Response Script。
- * Updated: 2026-10-03
+ * Updated: 2026-10-05
  */
 
 (function () {
@@ -80,16 +80,33 @@
 
     // 部分首页卡片本身仍是普通 video/note，但作者头像处带有直播标记。
     // 2026-10-03 抓包确认：直播信息位于 item.user.live，活动状态为 2。
-    const userLive = item.user?.live;
-    if (userLive && typeof userLive === "object") {
-      const liveStatus = Number(userLive.live_status);
+    const isActiveLiveInfo = (liveInfo) => {
+      if (!liveInfo || typeof liveInfo !== "object") return false;
+
+      const liveStatus = Number(
+        liveInfo.live_status ?? liveInfo.status ?? liveInfo.room_status
+      );
       if (
+        liveStatus === 1 ||
         liveStatus === 2 ||
-        (Boolean(userLive.room_id) && Boolean(userLive.live_link))
+        (Boolean(liveInfo.room_id) &&
+          (Boolean(liveInfo.live_link) ||
+            Boolean(liveInfo.stream_url) ||
+            Boolean(liveInfo.cover)))
       ) {
         return true;
       }
-    }
+      return false;
+    };
+
+    const authorLiveCandidates = [
+      item.user?.live,
+      item.author?.live,
+      item.note_card?.user?.live,
+      item.note_card?.author?.live,
+    ];
+
+    if (authorLiveCandidates.some(isActiveLiveInfo)) return true;
 
     // 少数普通视频未携带 user.live，但推荐轨迹明确来自直播笔记池。
     // 仅匹配直播专用轨迹标记，避免用宽泛的 "live" 误伤普通视频。
@@ -127,11 +144,10 @@
       return true;
     });
 
-    if (adsRemoved > 0 || liveRemoved > 0) {
-      console.log(
-        `[小红书首页过滤] 广告 ${adsRemoved} 条，直播 ${liveRemoved} 条，保留 ${filtered.length} 条`
-      );
-    }
+    // 每批都输出，便于区分“规则未命中”与“小红书本地缓存/预加载”。
+    console.log(
+      `[小红书首页过滤 v7] 扫描 ${items.length} 条，广告 ${adsRemoved} 条，直播 ${liveRemoved} 条，保留 ${filtered.length} 条`
+    );
 
     return filtered;
   };
