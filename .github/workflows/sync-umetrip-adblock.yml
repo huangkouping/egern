@@ -46,7 +46,7 @@ jobs:
           )
 
           if git diff --quiet -- "${files[@]}"; then
-            echo "两个上游及合并结果均无变化"
+            echo "两个上游、合并结果及同步状态均无变化"
             exit 0
           fi
 
