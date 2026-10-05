@@ -1,0 +1,44 @@
+name: 航旅纵横去广告
+description: |-
+  屏蔽开屏、首页及应用内广告。
+  更新时间：2026-10-05 17:36（北京时间）
+  自动同步：墨鱼版、Kelee 版
+author: ddgksf2013 / Kelee / huangkouping
+icon: https://gitlab.com/lodepuly/iconlibrary/-/raw/main/App_icon/120px/Umetrip.png
+homepage: https://github.com/huangkouping/egern
+
+url_rewrites:
+  - match: '^https:\/\/oss\.umetrip\.com\/fs\/advert\/'
+    location: 'http://reject-img/'
+  - match: '^https?:\/\/(discardrp|startup)\.umetrip\.com\/gateway\/api\/umetrip\/native'
+    location: 'http://reject/'
+
+scriptings:
+  - http_response:
+      name: 航旅纵横广告净化
+      match: '^https?://(?:activity\.umetrip\.com|appmsg\.umetrip\.com|event\.umetrip\.com|flightstatus\.umetrip\.com|home\.umetrip\.com|opactivity\.umetrip\.com|sns\.umetrip\.com|umeflightstatus\.umetrip\.com|umehome\.umetrip\.com|umerp\.umetrip\.com|umestartup\.umetrip\.com|umeuser\.umetrip\.com|user\.umetrip\.com|114\.115\.217\.129)/gateway/api/umetrip/native(?:\\?.*)?$'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/umetrip-adblock.js?v=202610051735
+      body_required: true
+      timeout: 15
+      update_interval: 3600
+
+mitm:
+  hostnames:
+    includes:
+      - activity.umetrip.com
+      - appmsg.umetrip.com
+      - discardrp.umetrip.com
+      - event.umetrip.com
+      - flightstatus.umetrip.com
+      - home.umetrip.com
+      - opactivity.umetrip.com
+      - oss.umetrip.com
+      - sns.umetrip.com
+      - startup.umetrip.com
+      - umeflightstatus.umetrip.com
+      - umehome.umetrip.com
+      - umerp.umetrip.com
+      - umestartup.umetrip.com
+      - umeuser.umetrip.com
+      - user.umetrip.com
+      - 114.115.217.129
