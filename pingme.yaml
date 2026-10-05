@@ -1,5 +1,8 @@
 name: PingMe签到
-description: 😀 PingMe 自动签到
+description: |-
+  PingMe 自动签到
+  更新时间：2026-10-05 18:03（北京时间）
+  同步状态：成功
 compat_arguments:
   arg3: '0 */4 * * *'
   PROXY: 美国节点
