@@ -134,7 +134,7 @@ def without_updated_at(text: str) -> str:
 def main() -> None:
     updated_at = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
     output = [
-        "# Egern 防误杀及基础服务直连规则集",
+        "# 直连规则集[H]",
         "# 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容",
         f"{UPDATED_PREFIX}{updated_at}",
         "# 用途：恢复被去广告规则误拦的正常内容，并保障指定基础服务直连",

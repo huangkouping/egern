@@ -99,7 +99,7 @@ for rule in EXTRA_AI_RULES + MUSE_RULES:
 now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
 
 lines = [
-    "# US 服务代理规则集",
+    "# Ai&US规则集[H]",
     "# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑",
     f"# 规则内容更新时间（北京时间）：{now}",
     f"# AI 上游：{AI_UPSTREAM}",

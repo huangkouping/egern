@@ -99,7 +99,7 @@ def main() -> None:
 
     updated_at = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
     output = [
-        "# Apple 地区受限服务代理规则集（排除 iCloud）",
+        "# 苹果服务规则[H]",
         "# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑生成内容",
         f"{UPDATED_PREFIX}{updated_at}",
         f"# 上游来源：{SOURCE}",
