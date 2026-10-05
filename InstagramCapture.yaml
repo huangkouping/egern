@@ -1,8 +1,0 @@
-name: Instagram专用抓包
-description: 第二轮测试：仅对graph.instagram.com启用MITM。启用后若Instagram异常，请立即停用本模块。
-author: huangkouping
-icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png
-mitm:
-  hostnames:
-    includes:
-    - graph.instagram.com
