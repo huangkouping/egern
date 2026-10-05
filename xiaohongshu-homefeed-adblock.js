@@ -3,7 +3,7 @@
  * 移除首页商业投放广告、首页直播卡片、开屏广告和广告素材库。
  * 保留普通图文、普通视频及普通商品笔记。
  * 适用于 Egern HTTP Response Script。
- * Updated: 2026-10-05
+ * Updated: 2026-10-05 10:03 CST
  */
 
 (function () {
@@ -38,6 +38,7 @@
   const settings = {
     homeAds: envEnabled("BLOCK_HOME_ADS"),
     homeLive: envEnabled("BLOCK_HOME_LIVE"),
+    medicalPromotion: envEnabled("BLOCK_MEDICAL_PROMOTION"),
     splashAds: envEnabled("BLOCK_SPLASH_ADS"),
     adResources: envEnabled("BLOCK_AD_RESOURCES"),
     adEngage: envEnabled("BLOCK_AD_ENGAGE"),
@@ -126,11 +127,39 @@
     return false;
   };
 
+  const isMedicalPromotion = (item) => {
+    if (!item || typeof item !== "object") return false;
+
+    const nickname = String(
+      item.user?.nickname || item.author?.nickname || ""
+    );
+    const contentText = [item.title, item.name, item.desc]
+      .filter((value) => typeof value === "string")
+      .join(" ");
+    const allText = `${nickname} ${contentText}`;
+
+    // 必须同时具备医美项目和商业账号/营销表达，避免仅凭单个关键词误删。
+    const medicalService =
+      /双眼皮|眼袋|开眼角|隆鼻|鼻修复|植发|发际线|正畸|牙贴面|牙套|口腔|下巴后缩|嘴凸|祛斑|祛痘|吸脂|脂肪填充|玻尿酸|肉毒素|热玛吉|超声炮|医美|整形|抗衰|微整/i;
+    const commercialAccount =
+      /医生|医师|博士|主任|院长|助理|团队|医院|诊所|机构|医美|整形|美容|植发|正畸|口腔|牙贴面|眼袋|双眼皮|抗衰|微整|皮肤科|眼科|修复/i;
+    const marketingLanguage =
+      /预约|面诊|案例|招募|限时|名额|排班|加号|到院|价格|低价|优惠|免费|咨询|方案|改善|效果|术后|恢复|变美|设计/i;
+
+    let score = 0;
+    if (commercialAccount.test(nickname)) score += 3;
+    if (medicalService.test(contentText)) score += 2;
+    if (marketingLanguage.test(allText)) score += 2;
+
+    return score >= 5;
+  };
+
   const filterBlockedCards = (items) => {
     if (!Array.isArray(items)) return items;
 
     let adsRemoved = 0;
     let liveRemoved = 0;
+    let medicalPromotionRemoved = 0;
 
     const filtered = items.filter((item) => {
       if (settings.homeAds && isPromotedAd(item)) {
@@ -141,12 +170,16 @@
         liveRemoved += 1;
         return false;
       }
+      if (settings.medicalPromotion && isMedicalPromotion(item)) {
+        medicalPromotionRemoved += 1;
+        return false;
+      }
       return true;
     });
 
     // 每批都输出，便于区分“规则未命中”与“小红书本地缓存/预加载”。
     console.log(
-      `[小红书首页过滤 v7] 扫描 ${items.length} 条，广告 ${adsRemoved} 条，直播 ${liveRemoved} 条，保留 ${filtered.length} 条`
+      `[小红书首页过滤 v8] 扫描 ${items.length} 条，广告 ${adsRemoved} 条，直播 ${liveRemoved} 条，疑似医美推广 ${medicalPromotionRemoved} 条，保留 ${filtered.length} 条`
     );
 
     return filtered;
