@@ -4,11 +4,10 @@ from datetime import datetime
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-from zoneinfo import ZoneInfo
 
 SOURCE = "https://raw.githubusercontent.com/Bwy999/Surge/master/Ruleset/AppleService.list"
 OUTPUT = Path("apple-service-proxy.list")
-UPDATED_PREFIX = "# 规则内容更新时间（北京时间）："
+UPDATED_PREFIX = "# 规则内容更新时间："
 FETCH_ATTEMPTS = 4
 RETRY_DELAYS = (3, 8, 15)
 
@@ -97,9 +96,9 @@ def main() -> None:
     if not rules:
         raise RuntimeError("过滤后的 AppleService 规则为空，保留现有输出文件")
 
-    updated_at = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
+    updated_at = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
     output = [
-        "# 苹果服务规则[H]",
+        "# 苹果服务规则©️",
         "# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑生成内容",
         f"{UPDATED_PREFIX}{updated_at}",
         f"# 上游来源：{SOURCE}",
