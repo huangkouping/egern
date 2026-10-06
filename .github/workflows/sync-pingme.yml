@@ -20,6 +20,7 @@ jobs:
 
       - name: Download and customize PingMe
         run: |
+          cp pingme.yaml /tmp/pingme-previous.yaml
           sync_status="成功"
           if curl -fsSL https://raw.githubusercontent.com/mickeu/Egern/main/pingme.yaml -o /tmp/pingme-upstream.yaml; then
             mv /tmp/pingme-upstream.yaml pingme.yaml
@@ -38,8 +39,9 @@ jobs:
           text = path.read_text()
           status = os.environ["SYNC_STATUS"]
           now = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M")
-          old_time = re.search(r"更新时间：([^（\n]+)", text)
-          updated_at = now if status == "成功" else (old_time.group(1).strip() if old_time else "未知")
+          previous = Path("/tmp/pingme-previous.yaml").read_text()
+          old_time = re.search(r"更新时间：([^（\\n]+)", previous)
+          updated_at = old_time.group(1).strip() if old_time else now
           text = re.sub(
               r"(?m)^name:.*$",
               "name: PingMe签到©️",
@@ -49,9 +51,8 @@ jobs:
           text = re.sub(
               r"(?m)^description:[^\n]*\n(?:^[ \t]+.*\n)*",
               "description: |-\n"
-              "  PingMe 自动签到\n"
-              f"  更新时间：{updated_at}\n"
-              f"  同步状态：{status}\n",
+              "  PingMe 自动签到。\n"
+              f"  更新时间：{updated_at}（同步{status}）\n",
               text,
               count=1,
           )
@@ -94,6 +95,8 @@ jobs:
               text,
               count=1,
           )
+          if text != previous:
+              text = re.sub(r"更新时间：[^（\\n]+", f"更新时间：{now}", text, count=1)
           path.write_text(text)
           PY
 
