@@ -3,7 +3,6 @@
 from datetime import datetime
 from pathlib import Path
 from urllib.request import Request, urlopen
-from zoneinfo import ZoneInfo
 
 AI_UPSTREAM = "https://kelee.one/Tool/Loon/Lsr/AI.lsr"
 DDGK_AI_UPSTREAM = "https://ddgksf2013.top/filter/Ai.yaml"
@@ -96,12 +95,12 @@ for rule in EXTRA_AI_RULES + MUSE_RULES:
         seen.add(rule)
         custom_rules.append(rule)
 
-now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
+now = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
 
 lines = [
-    "# Ai&US规则集[H]",
+    "# Ai&US规则集©️",
     "# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑",
-    f"# 规则内容更新时间（北京时间）：{now}",
+    f"# 规则内容更新时间：{now}",
     f"# AI 上游：{AI_UPSTREAM}",
     f"# DDGKSF AI 上游：{DDGK_AI_UPSTREAM}",
     f"# Google Voice 上游：{GOOGLEVOICE_UPSTREAM}",
