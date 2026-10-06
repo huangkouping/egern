@@ -3,7 +3,7 @@
  * 移除首页商业投放广告、首页直播卡片、开屏广告和广告素材库。
  * 保留普通图文、普通视频及普通商品笔记。
  * 适用于 Egern HTTP Response Script。
- * Updated: 2026-10-05 10:03 CST
+ * Updated: 2026-10-05 10:03
  */
 
 (function () {
