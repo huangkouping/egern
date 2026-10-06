@@ -1,12 +1,12 @@
 name: 网页去广告[H]
 description: |-
-  过滤 attract.gaqwvqor.cc 横幅、推广卡片、弹窗及播放器广告。
-  更新时间：2026-10-06 · v1
+  过滤网站及备用入口的横幅、推广卡片、弹窗和播放器广告。
+  更新时间：2026-10-06 16:44（北京时间）· v2
 author: huangkouping
 scriptings:
   - http_response:
       name: 网页广告过滤
-      match: '^https://attract\.gaqwvqor\.cc/(?:$|\?|(?:category|archives|page)/|storage/static/(?:popup-feed|player-pause-ad)\.json)'
+      match: '^https?://(?:attract\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc)|(?:[a-z0-9-]+\.)?fytdugpm\.cc|d9altmxkp5q0i\.cloudfront\.net)/'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.js?v=20261006-1
       body_required: true
       timeout: 10
@@ -15,3 +15,16 @@ mitm:
   hostnames:
     includes:
       - attract.gaqwvqor.cc
+      - blw66.com
+      - '*.blw66.com'
+      - 911bla.com
+      - '*.911bla.com'
+      - 911aa2.com
+      - '*.911aa2.com'
+      - 911bg20.com
+      - '*.911bg20.com'
+      - ckspzdnd.cc
+      - '*.ckspzdnd.cc'
+      - fytdugpm.cc
+      - '*.fytdugpm.cc'
+      - d9altmxkp5q0i.cloudfront.net
