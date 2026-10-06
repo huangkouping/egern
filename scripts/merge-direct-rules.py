@@ -2,12 +2,11 @@
 import time
 from datetime import datetime
 from pathlib import Path
-from zoneinfo import ZoneInfo
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 OUTPUT = Path("custom-direct.list")
-UPDATED_PREFIX = "# 规则内容更新时间（北京时间）："
+UPDATED_PREFIX = "# 规则内容更新时间："
 FETCH_ATTEMPTS = 4
 RETRY_DELAYS = (3, 8, 15)
 
@@ -132,9 +131,9 @@ def without_updated_at(text: str) -> str:
 
 
 def main() -> None:
-    updated_at = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
+    updated_at = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
     output = [
-        "# 直连规则集[H]",
+        "# 直连规则集©️",
         "# 本文件由 GitHub Actions 自动生成，请勿直接编辑生成内容",
         f"{UPDATED_PREFIX}{updated_at}",
         "# 用途：恢复被去广告规则误拦的正常内容，并保障指定基础服务直连",
