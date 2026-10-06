@@ -1,7 +1,7 @@
-name: 网页去广告[H]
+name: 911爆料网去广告[H]
 description: |-
-  过滤网站及备用入口的横幅、推广卡片、弹窗和播放器广告。
-  更新时间：2026-10-06 16:44（北京时间）· v2
+  屏蔽网页广告。
+  更新时间：2026-10-06 16:49（北京时间）· v2
 author: huangkouping
 scriptings:
   - http_response:
