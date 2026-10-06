@@ -1,0 +1,17 @@
+name: 网页去广告[H]
+description: |-
+  过滤 attract.gaqwvqor.cc 横幅、推广卡片、弹窗及播放器广告。
+  更新时间：2026-10-06 · v1
+author: huangkouping
+scriptings:
+  - http_response:
+      name: 网页广告过滤
+      match: '^https://attract\.gaqwvqor\.cc/(?:$|\?|(?:category|archives|page)/|storage/static/(?:popup-feed|player-pause-ad)\.json)'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.js?v=20261006-1
+      body_required: true
+      timeout: 10
+      update_interval: 3600
+mitm:
+  hostnames:
+    includes:
+      - attract.gaqwvqor.cc
