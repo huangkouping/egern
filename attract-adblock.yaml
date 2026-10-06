@@ -1,7 +1,7 @@
-name: 911爆料网去广告[H]
+name: 911爆料网去广告©️
 description: |-
   屏蔽网页广告。
-  更新时间：2026-10-06 17:02（北京时间）· v4
+  更新时间：2026-10-06 17:02· v4
 author: huangkouping
 scriptings:
   - http_response:
