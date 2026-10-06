@@ -1,7 +1,7 @@
 name: PingMe签到©️
 description: |-
   PingMe 自动签到
-  更新时间：2026-10-06 13:00
+  更新时间：2026-10-06 09:13
   同步状态：成功
 compat_arguments:
   arg3: '0 */4 * * *'
