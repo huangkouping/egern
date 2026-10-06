@@ -1,12 +1,12 @@
 name: 911爆料网去广告[H]
 description: |-
   屏蔽网页广告。
-  更新时间：2026-10-06 16:57（北京时间）· v3
+  更新时间：2026-10-06 17:02（北京时间）· v4
 author: huangkouping
 scriptings:
   - http_response:
       name: 网页广告过滤
-      match: '^https?://(?:attract\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc)|(?:[a-z0-9-]+\.)?fytdugpm\.cc|d9altmxkp5q0i\.cloudfront\.net)/'
+      match: '^https?://(?:(?:attract|ancient|asleep)\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc)|(?:[a-z0-9-]+\.)?fytdugpm\.cc|d9altmxkp5q0i\.cloudfront\.net)/'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.js?v=20261006-3
       body_required: true
       timeout: 10
@@ -15,6 +15,8 @@ mitm:
   hostnames:
     includes:
       - attract.gaqwvqor.cc
+      - ancient.gaqwvqor.cc
+      - asleep.gaqwvqor.cc
       - blw66.com
       - '*.blw66.com'
       - 911bla.com
