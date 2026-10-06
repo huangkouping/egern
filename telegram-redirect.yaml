@@ -1,6 +1,6 @@
 # Version: 1.1.0
-# Updated: 2026-10-06 09:30 (Asia/Shanghai)
-name: Telegram跳转[H]
+# Updated: 2026-10-06 09:30
+name: Telegram跳转©️
 description: |-
   将 Telegram 链接跳转到指定客户端。
   支持 Telegram、Nagram、Swiftgram、Turrit、iMe、Nicegram、Lingogram。
@@ -23,7 +23,7 @@ env_schema:
 
 scriptings:
   - http_request:
-      name: Telegram 链接跳转[H]
+      name: Telegram 链接跳转©️
       match: ^https?://(t\.me|telegram\.me)/.+
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.js
       timeout: 10
