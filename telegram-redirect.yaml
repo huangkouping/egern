@@ -1,0 +1,30 @@
+name: Telegram跳转[H]
+description: 将 t.me 与 telegram.me 链接跳转到指定 Telegram 客户端，已修复 Nagram 跳转。
+author: huangkouping
+icon: https://iili.io/KQX347S.png
+
+env_schema:
+  CLIENT:
+    name: Telegram 客户端
+    description: 选择要跳转到的客户端
+    default_value: Nagram
+    options:
+      - Telegram
+      - Nagram
+      - Swiftgram
+      - Turrit
+      - iMe
+      - Nicegram
+      - Lingogram
+
+scriptings:
+  - http_request:
+      name: Telegram 链接跳转[H]
+      match: ^https?://(t\.me|telegram\.me)/.+
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.js
+      timeout: 10
+
+mitm:
+  hostnames:
+    - t.me
+    - telegram.me
