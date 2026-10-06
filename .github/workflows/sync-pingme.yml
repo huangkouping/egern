@@ -33,17 +33,16 @@ jobs:
           from datetime import datetime
           import os
           import re
-          from zoneinfo import ZoneInfo
 
           path = Path("pingme.yaml")
           text = path.read_text()
           status = os.environ["SYNC_STATUS"]
-          now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M")
+          now = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M")
           old_time = re.search(r"更新时间：([^（\n]+)", text)
           updated_at = now if status == "成功" else (old_time.group(1).strip() if old_time else "未知")
           text = re.sub(
               r"(?m)^name:.*$",
-              "name: PingMe签到[H]",
+              "name: PingMe签到©️",
               text,
               count=1,
           )
@@ -51,7 +50,7 @@ jobs:
               r"(?m)^description:[^\n]*\n(?:^[ \t]+.*\n)*",
               "description: |-\n"
               "  PingMe 自动签到\n"
-              f"  更新时间：{updated_at}（北京时间）\n"
+              f"  更新时间：{updated_at}\n"
               f"  同步状态：{status}\n",
               text,
               count=1,
