@@ -1,9 +1,7 @@
 # Version: 1.1.0
 # Updated: 2026-10-06 09:30
 name: Telegram跳转©️
-description: |-
-  将 Telegram 链接跳转到指定客户端。
-  支持 Telegram、Nagram、Swiftgram、Turrit、iMe、Nicegram、Lingogram。
+description: 跳转到指定 Telegram 客户端。
 author: huangkouping
 icon: https://iili.io/KQX347S.png
 
