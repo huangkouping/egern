@@ -1,7 +1,7 @@
 name: 小羞片网站去广告©️
 description: '屏蔽网页及视频插播广告。
 
-  更新时间：2026-10-07 14:21（CMS 同步正常）'
+  更新时间：2026-10-07 14:25（CMS 同步正常）'
 author: huangkouping
 scriptings:
 - http_response:
