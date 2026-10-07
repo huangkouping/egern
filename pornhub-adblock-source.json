@@ -1,0 +1,8 @@
+{
+  "script_url": "https://ddgksf2013.top/scripts/pornhub.ads.js",
+  "script_sha256": null,
+  "status": "Pornhub 源异常，仅基础规则",
+  "error": "source_is_html",
+  "template": "User-provided Pornhub Egern configuration",
+  "api_match": "^https?:\\/\\/(cn|www)\\.pornhub\\.com\\/_xa\\/ads"
+}
