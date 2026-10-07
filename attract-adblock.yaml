@@ -1,55 +1,223 @@
 name: 小羞片网站去广告©️
-description: |-
-  屏蔽网页广告。
-  更新时间：2026-10-07 14:14
+description: '屏蔽网页及视频插播广告。
+
+  更新时间：2026-10-07 14:21（CMS 同步正常）'
 author: huangkouping
 scriptings:
-  - http_response:
-      name: 网页广告过滤
-      match: '^https?://(?:(?:attract|ancient|asleep)\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc|fytdugpm\.cc|91jq508\.com|lgyggwws\.cc|pjitqyei\.cc|hlwf22\.com|heiliao\.com|91cg1\.com|lhrkglii\.cc|iadapjby\.cc|qxrguuar\.cc|lhxgoxlj\.cc|heiliao88\.com)|(?:d9altmxkp5q0i|d169l2tv32yjx4)\.cloudfront\.net)(?::\d+)?/'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.js?v=20261007-4
-      body_required: true
-      timeout: 10
-      update_interval: 3600
+- http_response:
+    name: 网页广告过滤
+    match: ^https?://(?:(?:attract|ancient|asleep)\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc|fytdugpm\.cc|91jq508\.com|lgyggwws\.cc|pjitqyei\.cc|hlwf22\.com|heiliao\.com|91cg1\.com|lhrkglii\.cc|iadapjby\.cc|qxrguuar\.cc|lhxgoxlj\.cc|heiliao88\.com)|(?:d9altmxkp5q0i|d169l2tv32yjx4)\.cloudfront\.net)(?::\d+)?/
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.js?v=20261007-4
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜黑木耳
+    match: ^https?:\/\/m3u8\.(hmrvideo|heimuertv)\.com\/play\/(.+).m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜量子資源
+    match: ^https?:\/\/((?:v\.lzcdn|v\.cdnlz|vip.*\.lz[-]?cdn)\d+\.com)\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜非凡資源
+    match: ^https?:\/\/(super|svipsvip|vip)\.ffzy[A-Za-z0-9-]+\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜暴風影視
+    match: ^https?:\/\/c\d+\.rrcdnbf\d+\.com\/video\/(.+)\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜快看資源
+    match: ^https?:\/\/vip\.kuaikan-(cdn|play)\d+\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜ikun
+    match: ^https:\/\/bfikuncdn\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜魔都動漫
+    match: ^https:\/\/play\.modujx\d+\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜360
+    match: ^https:\/\/vod\.lyhuicheng\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜U酷資源
+    match: ^https:\/\/ukzy\.ukubf\d+\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜櫻花資源
+    match: ^https:\/\/.+\.wgslsw\.com\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜樂視資源
+    match: ^https:\/\/leshiyuncdn\.36s\.top\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜飛刀資源
+    match: ^https:\/\/.+\.feidaozy\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜奧斯卡資源
+    match: ^https:\/\/askzycdn\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜91麻豆
+    match: ^https:\/\/.+\.97img\.com\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜番號資源
+    match: ^https:\/\/.+\.bfbfhao\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜草榴資源
+    match: ^https:\/\/player\.cl9987\.com:188\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜易看資源
+    match: ^https:\/\/v\.ykv3\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜鯊魚資源
+    match: ^https:\/\/.+\.3sybf\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜奶香香
+    match: ^https:\/\/bfnxxcdn\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: CMS 插播过滤｜黃瓜資源
+    match: ^https:\/\/player\.huangguam3u\.com\/.+\/hls\/.+\.m3u8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
+    body_required: true
+    timeout: 10
+    update_interval: 3600
 mitm:
   hostnames:
     includes:
-      - attract.gaqwvqor.cc
-      - ancient.gaqwvqor.cc
-      - asleep.gaqwvqor.cc
-      - blw66.com
-      - '*.blw66.com'
-      - 911bla.com
-      - '*.911bla.com'
-      - 911aa2.com
-      - '*.911aa2.com'
-      - 911bg20.com
-      - '*.911bg20.com'
-      - ckspzdnd.cc
-      - '*.ckspzdnd.cc'
-      - fytdugpm.cc
-      - '*.fytdugpm.cc'
-      - d9altmxkp5q0i.cloudfront.net
-      - 91jq508.com
-      - '*.91jq508.com'
-      - lgyggwws.cc
-      - '*.lgyggwws.cc'
-      - pjitqyei.cc
-      - '*.pjitqyei.cc'
-      - hlwf22.com
-      - '*.hlwf22.com'
-      - heiliao.com
-      - '*.heiliao.com'
-      - 91cg1.com
-      - '*.91cg1.com'
-      - lhrkglii.cc
-      - '*.lhrkglii.cc'
-      - d169l2tv32yjx4.cloudfront.net
-      - iadapjby.cc
-      - '*.iadapjby.cc'
-      - qxrguuar.cc
-      - '*.qxrguuar.cc'
-      - lhxgoxlj.cc
-      - '*.lhxgoxlj.cc'
-      - heiliao88.com
-      - '*.heiliao88.com'
+    - attract.gaqwvqor.cc
+    - ancient.gaqwvqor.cc
+    - asleep.gaqwvqor.cc
+    - blw66.com
+    - '*.blw66.com'
+    - 911bla.com
+    - '*.911bla.com'
+    - 911aa2.com
+    - '*.911aa2.com'
+    - 911bg20.com
+    - '*.911bg20.com'
+    - ckspzdnd.cc
+    - '*.ckspzdnd.cc'
+    - fytdugpm.cc
+    - '*.fytdugpm.cc'
+    - d9altmxkp5q0i.cloudfront.net
+    - 91jq508.com
+    - '*.91jq508.com'
+    - lgyggwws.cc
+    - '*.lgyggwws.cc'
+    - pjitqyei.cc
+    - '*.pjitqyei.cc'
+    - hlwf22.com
+    - '*.hlwf22.com'
+    - heiliao.com
+    - '*.heiliao.com'
+    - 91cg1.com
+    - '*.91cg1.com'
+    - lhrkglii.cc
+    - '*.lhrkglii.cc'
+    - d169l2tv32yjx4.cloudfront.net
+    - iadapjby.cc
+    - '*.iadapjby.cc'
+    - qxrguuar.cc
+    - '*.qxrguuar.cc'
+    - lhxgoxlj.cc
+    - '*.lhxgoxlj.cc'
+    - heiliao88.com
+    - '*.heiliao88.com'
+    - m3u8.heimuertv.com
+    - m3u8.hmrvideo.com
+    - v.cdnlz*.com
+    - v.lzcdn*.com
+    - vip*.lz-cdn*.com
+    - vip.lzcdn*.com
+    - '*.ffzy*.com'
+    - '*.rrcdnbf*.com'
+    - vip.kuaikan*.com
+    - bfikuncdn.com
+    - play.modujx*.com
+    - vod.lyhuicheng.com
+    - ukzy.ukubf*.com
+    - '*.wgslsw.com'
+    - askzycdn.com
+    - t0.97img.com
+    - '*.bfbfhao.com'
+    - player.cl9987.com:188
+    - v.ykv3.com
+    - '*.3sybf.com'
+    - bfnxxcdn.com
+    - player.huangguam3u.com
+    - leshiyuncdn.36s.top
+    - cs1.feidaozy.com
+url_rewrites:
+- match: (^https?:\/\/s\d+\.bfengbf\.com\/video)(.+)_z5q\.ts
+  location: $1$2.ts
+  status_code: 302
