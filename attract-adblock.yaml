@@ -1,7 +1,7 @@
 name: 小羞片网站去广告©️
 description: '屏蔽网页及视频插播广告。
 
-  更新时间：2026-10-07 14:25（CMS 同步正常）'
+  更新时间：2026-10-07 20:50（CMS 同步正常；Pornhub 源异常，仅基础规则）'
 author: huangkouping
 scriptings:
 - http_response:
@@ -217,7 +217,17 @@ mitm:
     - player.huangguam3u.com
     - leshiyuncdn.36s.top
     - cs1.feidaozy.com
+    - cn.pornhub.com
+    - www.pornhub.com
 url_rewrites:
 - match: (^https?:\/\/s\d+\.bfengbf\.com\/video)(.+)_z5q\.ts
   location: $1$2.ts
   status_code: 302
+rewrites:
+- match: ^https?:\/\/(cn|www)\.pornhub\.com\/_xa\/ads
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
