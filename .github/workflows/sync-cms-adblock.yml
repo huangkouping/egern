@@ -1,9 +1,10 @@
-name: Sync CMS ad filtering
+name: Sync website advertising sources
 on:
   workflow_dispatch:
   push:
     paths:
       - scripts/sync-cms-adblock.py
+      - scripts/sync-pornhub-adblock.py
       - .github/workflows/sync-cms-adblock.yml
   schedule:
     - cron: '25 */6 * * *'
@@ -21,20 +22,28 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install PyYAML==6.0.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Fetch and adapt CMS source
         id: sync
         continue-on-error: true
         run: python scripts/sync-cms-adblock.py
+      - name: Check Pornhub script source and merge rules
+        id: pornhub
+        continue-on-error: true
+        run: python scripts/sync-pornhub-adblock.py
       - name: Commit rules or failure status
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add attract-adblock.yaml cms-adblock.js cms-adblock-source.json
+          git add attract-adblock.yaml cms-adblock.js cms-adblock-source.json pornhub-adblock-source.json
+          if [ -f pornhub-adblock.js ]; then git add pornhub-adblock.js; fi
           if ! git diff --cached --quiet; then
             git commit -m 'Sync CMS advertising source and status'
             git pull --rebase
             git push
           fi
       - name: Report failed synchronization
-        if: steps.sync.outcome == 'failure'
+        if: steps.sync.outcome == 'failure' || steps.pornhub.outcome == 'failure'
         run: exit 1
