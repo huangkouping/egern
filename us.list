@@ -1,6 +1,6 @@
 # Ai&US规则集©️
 # 本文件由 GitHub Actions 自动同步生成，请勿直接编辑
-# 规则内容更新时间：2026-10-07 13:16:14
+# 规则内容更新时间：2026-10-07 23:02:51
 # AI 上游：https://kelee.one/Tool/Loon/Lsr/AI.lsr
 # DDGKSF AI 上游：https://ddgksf2013.top/filter/Ai.yaml
 # Google Voice 上游：https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list
@@ -63,6 +63,7 @@ DOMAIN, daily-cloudcode-pa.googleapis.com
 AND, ((DOMAIN-KEYWORD, antigravity-auto-updater-), (DOMAIN-SUFFIX, run.app))
 DOMAIN-SUFFIX, anthropic.com
 DOMAIN-SUFFIX, claude.ai
+DOMAIN-SUFFIX, claude.com
 DOMAIN-SUFFIX, claudeusercontent.com
 IP-CIDR, 160.79.104.0/23, no-resolve
 IP-CIDR6, 2607:6bc0::/48, no-resolve
