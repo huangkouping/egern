@@ -1,12 +1,12 @@
 name: 小羞片网站去广告©️
 description: |-
   屏蔽网页广告。
-  更新时间：2026-10-07 13:07
+  更新时间：2026-10-07 14:10
 author: huangkouping
 scriptings:
   - http_response:
       name: 网页广告过滤
-      match: '^https?://(?:(?:attract|ancient|asleep)\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc|fytdugpm\.cc|91jq508\.com|lgyggwws\.cc|pjitqyei\.cc|hlwf22\.com|heiliao\.com|91cg1\.com)|d9altmxkp5q0i\.cloudfront\.net)(?::\d+)?/'
+      match: '^https?://(?:(?:attract|ancient|asleep)\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc|fytdugpm\.cc|91jq508\.com|lgyggwws\.cc|pjitqyei\.cc|hlwf22\.com|heiliao\.com|91cg1\.com|lhrkglii\.cc|iadapjby\.cc|qxrguuar\.cc)|(?:d9altmxkp5q0i|d169l2tv32yjx4)\.cloudfront\.net)(?::\d+)?/'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.js?v=20261007-4
       body_required: true
       timeout: 10
@@ -42,3 +42,10 @@ mitm:
       - '*.heiliao.com'
       - 91cg1.com
       - '*.91cg1.com'
+      - lhrkglii.cc
+      - '*.lhrkglii.cc'
+      - d169l2tv32yjx4.cloudfront.net
+      - iadapjby.cc
+      - '*.iadapjby.cc'
+      - qxrguuar.cc
+      - '*.qxrguuar.cc'
