@@ -20,6 +20,11 @@ PREFIX = 'CMS 插播过滤'
 def stamp():
     return datetime.now(ZoneInfo('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M')
 
+def description(data, updated, cms_status):
+    ph = re.search(r'Pornhub[^；）\n]+', data.get('description', ''))
+    status = cms_status + ('；' + ph[0] if ph else '')
+    return '屏蔽网页及视频插播广告。\n更新时间：' + updated + '（' + status + '）'
+
 def adapt_script(source):
     source, n = re.subn(r'async function fetchJxResult\(\) \{[\s\S]*?\nfunction getArg\(\)',
         'async function fetchJxResult() { return; }\n\nfunction getArg()', source, count=1)
@@ -82,7 +87,7 @@ def build(plugin, source, updated):
     data['url_rewrites'] = [r for r in data.get('url_rewrites', []) if r.get('match') not in [old.get('rewrite_match'), match]]
     data['url_rewrites'].append({'match': match, 'location': location, 'status_code': 302})
     data['name'] = '小羞片网站去广告©️'
-    data['description'] = '屏蔽网页及视频插播广告。\n更新时间：' + updated + '（CMS 同步正常）'
+    data['description'] = description(data, updated, 'CMS 同步正常')
     meta = {'plugin_url': PLUGIN, 'script_url': SCRIPT,
         'plugin_sha256': hashlib.sha256(plugin.encode()).hexdigest(),
         'script_sha256': hashlib.sha256(source.encode()).hexdigest(),
@@ -115,7 +120,7 @@ if __name__ == '__main__':
     except Exception as error:
         # Keep the last working script/rules if downloading or validation fails.
         data = yaml.safe_load(MODULE.read_text())
-        data['description'] = '屏蔽网页及视频插播广告。\n更新时间：' + (args.updated_at or stamp()) + '（CMS 同步失败，沿用现有规则）'
+        data['description'] = description(data, args.updated_at or stamp(), 'CMS 同步失败，沿用现有规则')
         MODULE.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False, width=1000))
         print('CMS sync failed:', type(error).__name__)
         raise SystemExit(1)
