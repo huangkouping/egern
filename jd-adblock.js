@@ -1,4 +1,4 @@
-/* 京东去广告©️ v2 — Egern 原生 Response Script。 */
+/* 京东去广告©️ v3 — Egern 原生 Response Script。 */
 export default async function (ctx) {
   const request = ctx.request;
   if (!request || !ctx.response) return;
@@ -7,13 +7,13 @@ export default async function (ctx) {
   let fid = '';
   const match = request.url.match(/[?&]functionId=([^&]+)/);
   if (match) { try { fid = decodeURIComponent(match[1]); } catch (_) {} }
-  console.log('[京东去广告 v2] 已命中：' + (fid || 'API'));
+  console.log('[京东去广告 v3] 已命中：' + (fid || 'API'));
   const original = await ctx.response.text();
   const pass = { body: original };
-  if (!original) { console.log('[京东去广告 v2] 空响应'); return pass; }
+  if (!original) { console.log('[京东去广告 v3] 空响应'); return pass; }
   let obj;
   try { obj = JSON.parse(original); } catch (_) {
-    console.log('[京东去广告 v2] 非 JSON，原样放行，长度：' + original.length);
+    console.log('[京东去广告 v3] 非 JSON，原样放行，长度：' + original.length);
     return pass;
   }
   if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return pass;
@@ -52,7 +52,21 @@ export default async function (ctx) {
   // 抓包中的普通/深色导航，保留其余项及原有顺序、标识。
   if (fid === 'readCustomSurfaceList' || (obj.result && obj.result.modeMap)) {
     const modes = obj.result && obj.result.modeMap;
-    if (modes) Object.keys(modes).forEach(k => filter(modes[k], 'navigationAll', i => !i || i.functionId !== 'find'));
+    const before = changed;
+    if (modes) Object.keys(modes).forEach(k => {
+      filter(modes[k], 'navigationAll', i => !i || i.functionId !== 'find');
+      if (Array.isArray(modes[k].navigationAll)) modes[k].navigationAll.forEach((i, n) => {
+        if (i && typeof i.position === 'number') set(i, 'position', n + 1);
+      });
+    });
+    if (changed > before) {
+      const result = obj.result;
+      // 数组、顺序字符串和位置必须一致，避免仍按五栏配置渲染。
+      if (typeof result.navigationOrder === 'string') set(result, 'navigationOrder', result.navigationOrder.split(',').filter(x => x !== 'find').join(','));
+      if (typeof result.paramValues === 'string') set(result, 'paramValues', result.paramValues.split('_').filter(x => x !== 'Discover').join('_'));
+      if (result.fromLocalCache === '1') set(result, 'fromLocalCache', '0');
+      console.log('[京东去广告 v3] 导航顺序：' + (result.navigationOrder || '已更新'));
+    }
   }
   // 首页仅移除悬浮推广，正常商品、搜索、分类均保留。
   if (fid === 'welcomeHome' || (Array.isArray(p.floorList) && p.naviVer !== undefined)) {
@@ -89,6 +103,6 @@ export default async function (ctx) {
       if (Array.isArray(o.images)) { set(o, 'images', []); set(o, 'showTimesDaily', 0); }
     });
   }
-  console.log('[京东去广告 v2] ' + (fid || '配置') + '：处理 ' + changed + ' 项');
+  console.log('[京东去广告 v3] ' + (fid || '配置') + '：处理 ' + changed + ' 项');
   return changed ? { body: JSON.stringify(obj) } : pass;
 }
