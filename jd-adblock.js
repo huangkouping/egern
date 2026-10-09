@@ -1,4 +1,4 @@
-/* 京东去广告©️ v3 — Egern 原生 Response Script。 */
+/* 京东去广告©️ v4 — Egern 原生 Response Script。 */
 export default async function (ctx) {
   const request = ctx.request;
   if (!request || !ctx.response) return;
@@ -7,13 +7,13 @@ export default async function (ctx) {
   let fid = '';
   const match = request.url.match(/[?&]functionId=([^&]+)/);
   if (match) { try { fid = decodeURIComponent(match[1]); } catch (_) {} }
-  console.log('[京东去广告 v3] 已命中：' + (fid || 'API'));
+  console.log('[京东去广告 v4] 已命中：' + (fid || 'API'));
   const original = await ctx.response.text();
   const pass = { body: original };
-  if (!original) { console.log('[京东去广告 v3] 空响应'); return pass; }
+  if (!original) { console.log('[京东去广告 v4] 空响应'); return pass; }
   let obj;
   try { obj = JSON.parse(original); } catch (_) {
-    console.log('[京东去广告 v3] 非 JSON，原样放行，长度：' + original.length);
+    console.log('[京东去广告 v4] 非 JSON，原样放行，长度：' + original.length);
     return pass;
   }
   if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return pass;
@@ -65,12 +65,32 @@ export default async function (ctx) {
       if (typeof result.navigationOrder === 'string') set(result, 'navigationOrder', result.navigationOrder.split(',').filter(x => x !== 'find').join(','));
       if (typeof result.paramValues === 'string') set(result, 'paramValues', result.paramValues.split('_').filter(x => x !== 'Discover').join('_'));
       if (result.fromLocalCache === '1') set(result, 'fromLocalCache', '0');
-      console.log('[京东去广告 v3] 导航顺序：' + (result.navigationOrder || '已更新'));
+      console.log('[京东去广告 v4] 导航顺序：' + (result.navigationOrder || '已更新'));
     }
   }
   // 首页仅移除悬浮推广，正常商品、搜索、分类均保留。
   if (fid === 'welcomeHome' || (Array.isArray(p.floorList) && p.naviVer !== undefined)) {
     filter(p, 'floorList', f => !f || !['float', 'bottomXview'].includes(f.type));
+    filter(p, 'futureFloorList', f => !f || !['float', 'bottomXview'].includes(f.type));
+    // 新抓包中 webViewFloorList 13776 同时配置二楼内容和推广弹层。
+    // 保留楼层，只关弹层开关；不影响二楼浏览历史、订单提醒。
+    if (Array.isArray(p.webViewFloorList)) p.webViewFloorList.forEach(f => {
+      if (f && Array.isArray(f.webViewList)) f.webViewList.forEach(v => set(v, 'showXview', 0));
+    });
+    set(p, 'backXViewSwitch', 0);
+    set(p, 'pullBubble', 0);
+    console.log('[京东去广告 v4] 首页：剩余浮窗楼层 ' + (p.floorList || []).filter(f => f && ['float', 'bottomXview'].includes(f.type)).length);
+  }
+  // 新抓包直接下发 jutou_ad_dialog（广告弹窗），不删其他业务组件。
+  if (fid === 'delivery_component') {
+    filter(p, 'compInfoList', c => !c || c.compCode !== 'jutou_ad_dialog');
+  }
+  // 此模板在新抓包中加载上面的广告弹窗组件，保留其他模板及响应状态。
+  if (fid === 'queryPagePopWindow' && obj.stayWindowModule && obj.stayWindowModule.floor && obj.stayWindowModule.floor.styleId === '00038880') {
+    remove(obj, 'stayWindowModule');
+  }
+  if (fid === 'getBubbleInfo') {
+    filter(obj, 'result', b => !(b && b.extraMap && b.extraMap.isFloat === '1' && typeof b.extraMap.floatUrl === 'string' && /^https?:\/\/pro\.m\.jd\.com\//.test(b.extraMap.floatUrl)));
   }
   // 首页/我的的营销弹层配置；不处理支付、订单及其他页面的弹层。
   if (fid === 'xview2Config' || (Array.isArray(p.targets) && p.targets.some(t => t && t.targetName === 'JDMainPageViewController'))) {
@@ -103,6 +123,6 @@ export default async function (ctx) {
       if (Array.isArray(o.images)) { set(o, 'images', []); set(o, 'showTimesDaily', 0); }
     });
   }
-  console.log('[京东去广告 v3] ' + (fid || '配置') + '：处理 ' + changed + ' 项');
+  console.log('[京东去广告 v4] ' + (fid || '配置') + '：处理 ' + changed + ' 项');
   return changed ? { body: JSON.stringify(obj) } : pass;
 }
