@@ -1,13 +1,22 @@
-/* 京东去广告©️ v1 — 仅修改指定广告配置，未知响应原样放行。 */
-(function () {
-  const request = $request;
-  const original = $response.body;
-  if (typeof original !== 'string' || !original) return $done({});
+/* 京东去广告©️ v2 — Egern 原生 Response Script。 */
+export default async function (ctx) {
+  const request = ctx.request;
+  if (!request || !ctx.response) return;
   const allowed = /^https?:\/\/api\.m\.jd\.com\/(?:client\.action|api)?(?:\?|$)/;
-  if (!allowed.test(request.url)) return $done({});
+  if (!allowed.test(request.url)) return;
+  let fid = '';
+  const match = request.url.match(/[?&]functionId=([^&]+)/);
+  if (match) { try { fid = decodeURIComponent(match[1]); } catch (_) {} }
+  console.log('[京东去广告 v2] 已命中：' + (fid || 'API'));
+  const original = await ctx.response.text();
+  const pass = { body: original };
+  if (!original) { console.log('[京东去广告 v2] 空响应'); return pass; }
   let obj;
-  try { obj = JSON.parse(original); } catch (_) { return $done({}); }
-  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return $done({});
+  try { obj = JSON.parse(original); } catch (_) {
+    console.log('[京东去广告 v2] 非 JSON，原样放行，长度：' + original.length);
+    return pass;
+  }
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return pass;
   let changed = 0;
   function set(o, key, value) {
     if (o && Object.prototype.hasOwnProperty.call(o, key) && JSON.stringify(o[key]) !== JSON.stringify(value)) {
@@ -22,13 +31,12 @@
     const next = o[key].filter(keep);
     if (next.length !== o[key].length) { changed += o[key].length - next.length; o[key] = next; }
   }
-  let fid = '';
-  const match = request.url.match(/[?&]functionId=([^&]+)/);
-  if (match) { try { fid = decodeURIComponent(match[1]); } catch (_) {} }
-  if (!fid && typeof request.body === 'string') {
-    const m = request.body.match(/(?:^|&)functionId=([^&]+)/);
+  if (!fid && request.body && typeof request.text === 'function') {
+    let requestText = '';
+    try { requestText = await request.text(); } catch (_) {}
+    const m = requestText.match(/(?:^|&)functionId=([^&]+)/);
     if (m) { try { fid = decodeURIComponent(m[1]); } catch (_) {} }
-    else { try { fid = JSON.parse(request.body).functionId || ''; } catch (_) {} }
+    else { try { fid = JSON.parse(requestText).functionId || ''; } catch (_) {} }
   }
   const p = obj.data && typeof obj.data === 'object' && !Array.isArray(obj.data) ? obj.data : obj;
 
@@ -81,7 +89,6 @@
       if (Array.isArray(o.images)) { set(o, 'images', []); set(o, 'showTimesDaily', 0); }
     });
   }
-  if (!changed) return $done({});
-  console.log('[京东去广告 v1] ' + (fid || '配置') + '：处理 ' + changed + ' 项');
-  return $done({ body: JSON.stringify(obj) });
-})();
+  console.log('[京东去广告 v2] ' + (fid || '配置') + '：处理 ' + changed + ' 项');
+  return changed ? { body: JSON.stringify(obj) } : pass;
+}
