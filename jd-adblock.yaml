@@ -1,15 +1,15 @@
 name: 京东去广告©️
 description: |-
   过滤开屏、推荐、推广浮窗及底部“逛”。
-  更新时间：2026-10-09 10:54
+  更新时间：2026-10-09 11:12
 author: huangkouping
 scriptings:
   - http_response:
-      name: 京东广告过滤
+      name: 京东广告过滤 v2
       match: '^https?://api\.m\.jd\.com/(?:client\.action|api)?(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=20261009-1
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=20261009-2
       body_required: true
-      max_size: -1
+      max_size: 2097152
       timeout: 10
       update_interval: 3600
 mitm:
