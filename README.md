@@ -38,7 +38,7 @@
 | --- | --- | --- | --- |
 | 小红书去直播广告©️ | 过滤开屏、首页「发现」商业广告、直播卡片，以及作者正在直播的普通笔记；支持疑似医美推广过滤。 | 各功能可独立开关；保留未命中过滤条件的普通图文、视频及商品笔记。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
 | 小羞片网站去广告©️ | 合并指定网站的网页广告清理、CMS 视频播放列表插播过滤，以及 Pornhub 网页过滤与广告接口处理。 | 包含自编网页脚本及同步适配的上游脚本；仅处理配置中匹配的网址或播放资源。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
-| 京东去广告与深度净化版©️ | 根据抓包定向清理首页 float 浮标，关闭消息推荐及我的推荐预加载、缓存配置。 | 不拦截共享商品推荐；我的完整布局和消息横线隐藏效果仍需实机确认。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
+| 京东去开屏广告©️ | 仅拦截开屏广告及启动广告物料接口。 | 不处理首页浮窗、我的推荐或消息抽屉；无脚本、HTTPDNS 或 QUIC 拦截。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
 
 ### 小红书去直播广告©️
 
@@ -68,22 +68,13 @@
 
 **视频部分**同步 CMS 上游的资源匹配规则及脚本，处理符合条件的 M3U8 播放列表。页面是否使用已匹配的播放器资源，会影响过滤效果；新增镜像也需要收录到配置中。
 
-### 京东去广告与深度净化版©️
+### 京东去开屏广告©️
 
-当前为抓包定向版 v1，使用 Egern 原生响应脚本，不再使用上一版的全局推荐拦截和全局 QUIC 阻断。无上游自动同步任务。
+仅保留开屏入口 `start`、启动广告物料入口 `queryMaterialAdverts` 的 URL 拦截，返回空 JSON 对象。不以 `start` 前缀匹配 `startup` 设备配置。
 
-| 目标 | 处理方式 | 当前验证范围 |
-| --- | --- | --- |
-| 首页“立即抽奖”浮标 | 删除 welcomeHome 顶层 floorList / futureFloorList 中的 float；保留 ruleFloat 资质入口与普通楼层。 | 当前 HAR 的首页回放移除 1 个 float 楼层；手机显示效果待确认。 |
-| 我的“为你推荐／潮流好货” | 关闭抓包中明确存在的推荐预加载、缓存配置；兼容旧版 personinfoBusiness 推荐楼层，并仅在共享推荐请求带明确文字页面标识时清空目标推荐列表。 | 当前 HAR 未捕获我的完整布局；不能确认标签、容器均能隐藏，加密或数字场景不会猜测拦截。 |
-| 消息底部推荐抽屉 | 关闭 basicConfig 中 JDMessage 的 support_recommendfloor、support_recommendfeeds 和 fetchfeeds_api。 | 已验证响应中的 3 个配置被修改；横线和完整抽屉能否消失仍需实机确认。 |
+首页浮窗、我的“为你推荐／潮流好货”、消息推荐抽屉等净化均已删除；同时移除 HTTPDNS、IP、QUIC、广告域名拦截和配套响应脚本。模块仅保留 api.m.jd.com 的 MITM 配置，实际开屏效果取决于客户端版本与广告缓存。
 
-- 保留抓包中 msgConfig 的数字类型；不修改 popMainSwitch、station 投递配置和正常消息提醒。
-- 保留共享 uniformRecommend9 商品流、订单、物流、地址、二楼历史与提醒，不整接口拦截 xview2Config。
-- UDP 443 阻断仅限定 api.m.jd.com；保留此前提供的指定 HTTPDNS 入口和 DSP 拦截，不保证强制解密所有请求。
-- 独立开屏物料接口 start / queryMaterialAdverts 返回空对象；不再以前缀 start 误拦 startup 设备配置。
-- 对 2026-10-15 HAR 的 64 条京东 API 记录回放，只改写 welcomeHome 和 basicConfig。离线回放不等于实机目标已全部去除。
-- Egern 脚本日志以“京东定向 v1”开头，只输出接口名称和修改项数，不记录账号、地址或令牌。
+安装地址保持不变；更新原模块即可，无需单独安装脚本。本模块手动维护，无上游定时同步任务。
 
 ## 签到模块
 
@@ -112,7 +103,7 @@
 3. **HTTPS 处理：** 网页和 App 的 HTTPS 改写需要相关主机进入 MITM 范围，并安装、信任 Egern 证书。签到的定时任务与参数抓取是不同环节。
 4. **更新：** 更新远程模块或规则集后，再检查实际配置及日志；配套脚本由模块自动引用，无需逐个安装。
 
-仓库内容删除不会自动卸载手机中的已安装模块；需在 Egern 中手动删除。此前的京东脚本版已移除；当前目录中的京东模块已更新为抓包定向脚本版。
+仓库内容删除不会自动卸载手机中的已安装模块；需在 Egern 中手动删除。京东模块现仅保留去开屏，配套净化脚本已移除。
 
 ## 定时更新与同步状态
 
@@ -125,7 +116,7 @@
 | Ai&US规则集 | 合并可莉 AI、DDGKSF AI、Google Voice 及自定义规则，按规则文本去重。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/update-ai.yml) |
 | PingMe签到 | 同步上游模块，保留本仓库的标题、简介和默认参数定制。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-pingme.yml) |
 | 小羞片网站去广告 | 检查 CMS 插件、CMS 脚本与 Pornhub 脚本，合并规则并记录同步状态。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-cms-adblock.yml) |
-| 小红书去直播广告、Telegram跳转、京东定向净化 | 手动维护；京东去开屏与首页浮窗来自用户提供配置，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
+| 小红书去直播广告、Telegram跳转、京东去开屏广告 | 手动维护，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
 
 ### 如何判断更新与同步
 
@@ -167,7 +158,6 @@
 | 文件 | 用途 |
 | --- | --- |
 | [xiaohongshu-homefeed-adblock.js](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.js) | 小红书接口过滤脚本。 |
-| [jd-adblock.js](https://github.com/huangkouping/egern/blob/main/jd-adblock.js) | 京东定向净化脚本，按接口与数据结构处理。 |
 | [attract-adblock.js](https://github.com/huangkouping/egern/blob/main/attract-adblock.js) | 指定网站的网页广告清理脚本。 |
 | [cms-adblock.js](https://github.com/huangkouping/egern/blob/main/cms-adblock.js) | 从 CMS 上游同步适配的视频过滤脚本。 |
 | [pornhub-adblock.js](https://github.com/huangkouping/egern/blob/main/pornhub-adblock.js) | 同步保存的 Pornhub 网页过滤脚本。 |
