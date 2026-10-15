@@ -1,7 +1,7 @@
-name: 京东全方位去广告（增强版）©️
+name: 京东去开屏与首页浮窗©️
 description: |-
-  拦截开屏、活动浮层和搜索推广；含首页整接口拦截。
-  更新时间：2026-10-15 14:22
+  拦截开屏、首页浮窗及搜索推广。
+  更新时间：2026-10-15 14:29
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
 # 来源：用户提供配置；仅适配 Egern 组合规则语法，未实机验证。
@@ -43,12 +43,6 @@ rules:
       match: bdsp-x.jd.com
       policy: REJECT
   - domain_suffix:
-      match: d-ad.jd.com
-      policy: REJECT
-  - domain_suffix:
-      match: advertising.jd.com
-      policy: REJECT
-  - domain_suffix:
       match: janapi.jd.com
       policy: REJECT
 
@@ -63,10 +57,6 @@ url_rewrites:
 
   # 搜索框默认词与推广热词
   - match: "^https?://api\\.m\\.jd\\.com/client\\.action\\?functionId=searchBoxWord"
-    location: "http://reject-dict/"
-
-  # 用户配置中的推荐物料接口
-  - match: "^https?://api\\.m\\.jd\\.com/client\\.action\\?functionId=stationPullService"
     location: "http://reject-dict/"
 
   # 金融相关启动图与加载图
