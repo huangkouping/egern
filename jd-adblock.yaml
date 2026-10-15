@@ -1,58 +1,14 @@
-name: 京东去广告与深度净化版©️
+name: 京东去开屏广告©️
 description: |-
-  定向过滤首页浮标与推荐配置。
-  更新时间：2026-10-15 20:13
+  仅拦截开屏广告及启动广告物料。
+  更新时间：2026-10-15 20:17
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
-# 定向版 v1。首页浮标及推荐配置已按 2026-10-15 HAR 回放验证；
-# 我的完整布局、消息横线是否消失仍需实机确认。
-rules:
-  - domain:
-      match: dns.jd.com
-      policy: REJECT
-  - ip_cidr:
-      match: 101.124.19.122/32
-      policy: REJECT
-      no_resolve: true
-  - ip_cidr6:
-      match: 2402:db40:5100:1011::5/128
-      policy: REJECT
-      no_resolve: true
-  # 仅限京东 API UDP 443，不再全局阻断 QUIC。
-  - and:
-      match:
-        - domain:
-            match: api.m.jd.com
-        - protocol:
-            match: udp
-        - dest_port:
-            match: "443"
-      policy: REJECT
-  - domain_suffix:
-      match: dsp.jd.com
-      policy: REJECT
-  - domain_suffix:
-      match: dsp-x.jd.com
-      policy: REJECT
-  - domain_suffix:
-      match: bdsp-x.jd.com
-      policy: REJECT
-
-# 仅拦截独立广告入口；startup 设备配置不再被 start 前缀误拦。
+# 仅保留此前配置中的开屏入口，不处理首页、我的或消息页。
+# 精确匹配 functionId，避免 start 前缀误拦 startup 设备配置。
 url_rewrites:
   - match: '^https?://api\.m\.jd\.com/client\.action\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
     location: http://reject-dict/
-
-# 兼容 URL / POST 参数识别，按返回数据结构定向处理。
-scriptings:
-  - http_response:
-      name: 京东定向净化 v1
-      match: '^https?://api\.m\.jd\.com/(?:client\.action|api)?(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=20261015-target1
-      body_required: true
-      max_size: 2097152
-      timeout: 10
-      update_interval: 3600
 
 mitm:
   hostnames:
