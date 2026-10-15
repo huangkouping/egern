@@ -38,7 +38,7 @@
 | --- | --- | --- | --- |
 | 小红书去直播广告©️ | 过滤开屏、首页「发现」商业广告、直播卡片，以及作者正在直播的普通笔记；支持疑似医美推广过滤。 | 各功能可独立开关；保留未命中过滤条件的普通图文、视频及商品笔记。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
 | 小羞片网站去广告©️ | 合并指定网站的网页广告清理、CMS 视频播放列表插播过滤，以及 Pornhub 网页过滤与广告接口处理。 | 包含自编网页脚本及同步适配的上游脚本；仅处理配置中匹配的网址或播放资源。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
-| 京东全方位去广告（增强版）©️ | 用户提供的开屏、浮层、搜索推广及物料拦截配置；包含指定 HTTPDNS 入口与 API UDP 443 阻断。 | 未实机验证；整体拦截 welcomeHome 可能影响正常首页。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
+| 京东去开屏与首页浮窗©️ | 用户提供的开屏、首页浮窗、搜索推广及广告图片拦截配置；包含指定 HTTPDNS 入口与 API UDP 443 阻断。 | 未实机验证；整体拦截 welcomeHome 可能影响正常首页。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
 
 ### 小红书去直播广告©️
 
@@ -68,7 +68,7 @@
 
 **视频部分**同步 CMS 上游的资源匹配规则及脚本，处理符合条件的 M3U8 播放列表。页面是否使用已匹配的播放器资源，会影响过滤效果；新增镜像也需要收录到配置中。
 
-### 京东全方位去广告（增强版）©️
+### 京东去开屏与首页浮窗©️
 
 基于用户提供的配置发布，仅修正 Egern 的域名、UDP、443 端口组合规则写法，不沿用此前已删除的京东过滤脚本。此版本无远程 JavaScript，也未配置上游定时同步。
 
@@ -104,7 +104,7 @@
 3. **HTTPS 处理：** 网页和 App 的 HTTPS 改写需要相关主机进入 MITM 范围，并安装、信任 Egern 证书。签到的定时任务与参数抓取是不同环节。
 4. **更新：** 更新远程模块或规则集后，再检查实际配置及日志；配套脚本由模块自动引用，无需逐个安装。
 
-仓库内容删除不会自动卸载手机中的已安装模块；需在 Egern 中手动删除。此前的京东脚本版已移除；当前目录中的京东模块为另行提供的纯规则增强版。
+仓库内容删除不会自动卸载手机中的已安装模块；需在 Egern 中手动删除。此前的京东脚本版已移除；当前目录中的京东模块为另行提供的纯规则版本。
 
 ## 定时更新与同步状态
 
@@ -117,7 +117,7 @@
 | Ai&US规则集 | 合并可莉 AI、DDGKSF AI、Google Voice 及自定义规则，按规则文本去重。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/update-ai.yml) |
 | PingMe签到 | 同步上游模块，保留本仓库的标题、简介和默认参数定制。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-pingme.yml) |
 | 小羞片网站去广告 | 检查 CMS 插件、CMS 脚本与 Pornhub 脚本，合并规则并记录同步状态。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-cms-adblock.yml) |
-| 小红书去直播广告、Telegram跳转、京东增强版 | 手动维护；京东增强版来自用户提供配置，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
+| 小红书去直播广告、Telegram跳转、京东去开屏与首页浮窗 | 手动维护；京东去开屏与首页浮窗来自用户提供配置，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
 
 ### 如何判断更新与同步
 
