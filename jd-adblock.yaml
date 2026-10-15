@@ -1,13 +1,11 @@
 name: 京东去广告与深度净化版©️
 description: |-
-  清理首页浮窗、推荐流及消息推广。
-  更新时间：2026-10-15 20:04
+  定向过滤首页浮标与推荐配置。
+  更新时间：2026-10-15 20:13
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
-# 用户提供配置；未实机验证。
-# 注意：全局阻断 QUIC，不限京东；全部 uniformRecommend 均被拦截。
-# 可能影响首页正常商品推荐、二楼浏览历史、提醒及其他业务浮层。
-# 阻断指定 HTTPDNS 入口不保证回落本地 DNS。
+# 定向版 v1。首页浮标及推荐配置已按 2026-10-15 HAR 回放验证；
+# 我的完整布局、消息横线是否消失仍需实机确认。
 rules:
   - domain:
       match: dns.jd.com
@@ -20,12 +18,16 @@ rules:
       match: 2402:db40:5100:1011::5/128
       policy: REJECT
       no_resolve: true
-
-  # 沿用用户配置：全局 QUIC 阻断
-  - protocol:
-      match: quic
+  # 仅限京东 API UDP 443，不再全局阻断 QUIC。
+  - and:
+      match:
+        - domain:
+            match: api.m.jd.com
+        - protocol:
+            match: udp
+        - dest_port:
+            match: "443"
       policy: REJECT
-
   - domain_suffix:
       match: dsp.jd.com
       policy: REJECT
@@ -35,46 +37,24 @@ rules:
   - domain_suffix:
       match: bdsp-x.jd.com
       policy: REJECT
-  - domain_suffix:
-      match: janapi.jd.com
-      policy: REJECT
-  - domain_suffix:
-      match: mars.jd.com
-      policy: REJECT
-  - domain_suffix:
-      match: uranus.jd.com
-      policy: REJECT
 
-body_rewrites:
-  # 首页顶层 floorList 中的 float / ruleFloat；移除弹窗字段
-  - response_jq:
-      match: '^https?://api\.m\.jd\.com/client\.action\?functionId=welcomeHome'
-      filter: 'if .floorList then .floorList |= map(select(.type != "float" and .type != "ruleFloat")) else . end | del(.popMessage, .popMessageBig)'
-
-  # 消息页推广开关；字段适配需实机确认
-  - response_jq:
-      match: '^https?://api\.m\.jd\.com/client\.action\?functionId=msgConfig'
-      filter: '.popMainSwitch = false | .stationPVSwitch = "0" | .isPullStationRecord = "0" | .promotionWidgetUserFlag = "0"'
-
+# 仅拦截独立广告入口；startup 设备配置不再被 start 前缀误拦。
 url_rewrites:
-  # 拦截全部统一推荐，包括可能承载首页正常商品的接口
-  - match: '^https?://api\.m\.jd\.com/client\.action\?functionId=uniformRecommend.*'
+  - match: '^https?://api\.m\.jd\.com/client\.action\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
     location: http://reject-dict/
 
-  - match: '^https?://api\.m\.jd\.com/client\.action\?functionId=stationPullService'
-    location: http://reject-dict/
-
-  # 整接口拦截，可能同时影响非广告内容
-  - match: '^https?://api\.m\.jd\.com/.*functionId=(superRedBagHome|xview2Config|queryPagePopWindow|secondFloor|SecFloorBrowseHistory|deliverLayer)'
-    location: http://reject-dict/
-
-  - match: '^https?://api\.m\.jd\.com/client\.action\?functionId=(start|queryMaterialAdverts)'
-    location: http://reject-dict/
-
-  - match: '^https?://api\.m\.jd\.com/client\.action\?functionId=searchBoxWord'
-    location: http://reject-dict/
+# 兼容 URL / POST 参数识别，按返回数据结构定向处理。
+scriptings:
+  - http_response:
+      name: 京东定向净化 v1
+      match: '^https?://api\.m\.jd\.com/(?:client\.action|api)?(?:\?|$)'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=20261015-target1
+      body_required: true
+      max_size: 2097152
+      timeout: 10
+      update_interval: 3600
 
 mitm:
   hostnames:
-    - api.m.jd.com
-    - ms.jr.jd.com
+    includes:
+      - api.m.jd.com
