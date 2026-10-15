@@ -1,0 +1,83 @@
+name: 京东全方位去广告（增强版）©️
+description: |-
+  拦截开屏、活动浮层和搜索推广；含首页整接口拦截。
+  更新时间：2026-10-15 14:17
+icon: bag.fill
+
+# 来源：用户提供配置；仅适配 Egern 组合规则语法，未实机验证。
+# 注意：welcomeHome 是首页综合接口，整体返回 {} 可能影响正常首页。
+# HTTPDNS 域名/IP 沿用用户配置；阻断后不保证回落系统 DNS 或触发 MITM。
+rules:
+  # 1. 阻断配置中指定的 HTTPDNS 入口
+  - domain:
+      match: dns.jd.com
+      policy: REJECT
+  - ip_cidr:
+      match: 101.124.19.122/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr6:
+      match: 2402:db40:5100:1011::5/128
+      policy: REJECT
+      no_resolve: true
+
+  # 2. 仅阻断 api.m.jd.com 的 UDP 443，保留 TCP
+  - and:
+      match:
+        - domain:
+            match: api.m.jd.com
+        - protocol:
+            match: udp
+        - dest_port:
+            match: "443"
+      policy: REJECT
+
+  # 3. 用户配置中的广告分发、DSP 与上报域名
+  - domain_suffix:
+      match: dsp.jd.com
+      policy: REJECT
+  - domain_suffix:
+      match: dsp-x.jd.com
+      policy: REJECT
+  - domain_suffix:
+      match: bdsp-x.jd.com
+      policy: REJECT
+  - domain_suffix:
+      match: d-ad.jd.com
+      policy: REJECT
+  - domain_suffix:
+      match: advertising.jd.com
+      policy: REJECT
+  - domain_suffix:
+      match: janapi.jd.com
+      policy: REJECT
+
+url_rewrites:
+  # 开屏启动广告与广告物料下发
+  - match: "^https?://api\\.m\\.jd\\.com/client\\.action\\?functionId=(start|queryMaterialAdverts)"
+    location: "http://reject-dict/"
+
+  # 首页弹窗、活动悬浮窗与浮层；welcomeHome 整体拦截可能影响正常首页
+  - match: "^https?://api\\.m\\.jd\\.com/client\\.action\\?functionId=(deliverLayer|welcomeHome)"
+    location: "http://reject-dict/"
+
+  # 搜索框默认词与推广热词
+  - match: "^https?://api\\.m\\.jd\\.com/client\\.action\\?functionId=searchBoxWord"
+    location: "http://reject-dict/"
+
+  # 用户配置中的推荐物料接口
+  - match: "^https?://api\\.m\\.jd\\.com/client\\.action\\?functionId=stationPullService"
+    location: "http://reject-dict/"
+
+  # 金融相关启动图与加载图
+  - match: "^https?://ms\\.jr\\.jd\\.com/gw/generic/aladdin/na/m/getLoadingPicture"
+    location: "http://reject-dict/"
+
+  # 广告物料图片 CDN 资源
+  - match: "^https?://img\\d+\\.360buyimg\\.com/jddjadvertise/"
+    location: "http://reject-img/"
+
+mitm:
+  hostnames:
+    - api.m.jd.com
+    - ms.jr.jd.com
