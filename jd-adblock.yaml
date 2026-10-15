@@ -1,8 +1,8 @@
 name: 京东全方位去广告（增强版）©️
 description: |-
   拦截开屏、活动浮层和搜索推广；含首页整接口拦截。
-  更新时间：2026-10-15 14:17
-icon: bag.fill
+  更新时间：2026-10-15 14:22
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
 # 来源：用户提供配置；仅适配 Egern 组合规则语法，未实机验证。
 # 注意：welcomeHome 是首页综合接口，整体返回 {} 可能影响正常首页。
