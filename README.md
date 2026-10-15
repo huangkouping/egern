@@ -38,7 +38,7 @@
 | --- | --- | --- | --- |
 | 小红书去直播广告©️ | 过滤开屏、首页「发现」商业广告、直播卡片，以及作者正在直播的普通笔记；支持疑似医美推广过滤。 | 各功能可独立开关；保留未命中过滤条件的普通图文、视频及商品笔记。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
 | 小羞片网站去广告©️ | 合并指定网站的网页广告清理、CMS 视频播放列表插播过滤，以及 Pornhub 网页过滤与广告接口处理。 | 包含自编网页脚本及同步适配的上游脚本；仅处理配置中匹配的网址或播放资源。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
-| 京东去开屏与首页浮窗©️ | 用户提供的开屏、首页浮窗、搜索推广及广告图片拦截配置；包含指定 HTTPDNS 入口与 API UDP 443 阻断。 | 未实机验证；整体拦截 welcomeHome 可能影响正常首页。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
+| 京东去开屏与去首页浮窗（精准版）©️ | 用户提供的开屏、独立弹窗及搜索推广拦截；通过 response_jq 删除首页指定浮窗字段。 | 保留 welcomeHome 响应，仅清理指定字段；字段适配及过滤效果未实机验证。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
 
 ### 小红书去直播广告©️
 
@@ -68,14 +68,16 @@
 
 **视频部分**同步 CMS 上游的资源匹配规则及脚本，处理符合条件的 M3U8 播放列表。页面是否使用已匹配的播放器资源，会影响过滤效果；新增镜像也需要收录到配置中。
 
-### 京东去开屏与首页浮窗©️
+### 京东去开屏与去首页浮窗（精准版）©️
 
-基于用户提供的配置发布，仅修正 Egern 的域名、UDP、443 端口组合规则写法，不沿用此前已删除的京东过滤脚本。此版本无远程 JavaScript，也未配置上游定时同步。
+基于用户提供的配置更新，保留京东图标，修正 UDP 443 组合规则语法。不使用 JavaScript，也未配置上游定时同步。
 
-- `welcomeHome` 返回空对象会影响整个首页响应，不是只删除广告楼层；可能出现内容缺失或加载异常。
-- 当前正则沿用原配置，仅匹配 `functionId` 紧随问号的 URL；不覆盖参数位于其他位置或 POST 正文中的请求。
-- HTTPDNS 入口及 IP 沿用提供内容，未核验完整性；阻断后不保证回落系统 DNS，阻断 UDP 也不保证一定能解密 HTTPS。
-- 未承诺去除「我的」推荐区、消息 AI 推荐或底部「逛」。效果需要实机验证；出现页面异常时先停用模块。
+- `getTabHomeInfo`、`welcomeHome` 使用 `response_jq` 删除 `.data` 下的 `floats`、`floatLayer`、`floatActivity`、`bubble` 和 `navigation.floats`。
+- `welcomeHome` 不再整接口拦截，避免与正文清理冲突；独立弹窗接口 `deliverLayer` 仍返回空对象。
+- 保留开屏、启动物料和搜索默认推广词拦截；移除上一版的金融启动图及广告图片 CDN 规则。
+- jq 语法及样例已检查，但这些字段是否存在于当前版本响应中、能否去除实际浮窗，仍需实机确认；“精准版”为配置名称，不代表已验证效果。
+- 当前 URL 正则要求 `functionId` 紧随问号，不覆盖 POST 正文中的参数；阻断指定 HTTPDNS 和 UDP 入口也不保证能解密所有请求。
+- 未包含「我的」推荐区、消息 AI 推荐或底部「逛」过滤。
 
 ## 签到模块
 
