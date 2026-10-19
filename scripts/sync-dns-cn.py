@@ -4,11 +4,11 @@ from datetime import datetime
 from pathlib import Path
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
-import re
 
 SOURCES = {
     "DouYin": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/DouYin/DouYin.list",
     "China": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/China/China.list",
+    "China_Domain": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/China/China_Domain.list",
     "Direct": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Direct/Direct.list",
 }
 LOCAL_DOMAINS = [
@@ -42,6 +42,12 @@ for name, url in SOURCES.items():
     for raw in data.splitlines():
         line = raw.strip()
         if not line or line.startswith(("#", ";", "//")):
+            continue
+        if name == "China_Domain":
+            if line.startswith("."):
+                add("DOMAIN-SUFFIX," + line[1:], rules)
+            elif "." in line and " " not in line and "," not in line:
+                add("DOMAIN," + line, rules)
             continue
         parts = [p.strip() for p in line.split(",")]
         if len(parts) >= 2 and parts[0].upper() in ALLOWED and parts[1]:
