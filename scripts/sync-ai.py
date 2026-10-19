@@ -7,6 +7,8 @@ from urllib.request import Request, urlopen
 AI_UPSTREAM = "https://kelee.one/Tool/Loon/Lsr/AI.lsr"
 DDGK_AI_UPSTREAM = "https://ddgksf2013.top/filter/Ai.yaml"
 GOOGLEVOICE_UPSTREAM = "https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list"
+OPENAI_UPSTREAM = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/OpenAI/OpenAI.list"
+GEMINI_UPSTREAM = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Gemini/Gemini.list"
 OUTPUT = Path("us.list")
 
 EXTRA_AI_RULES = [
@@ -87,6 +89,8 @@ def collect(raw, seen):
 seen = set()
 ai_rules = collect(fetch(AI_UPSTREAM, "https://kelee.one/"), seen)
 ddgk_ai_rules = collect(fetch(DDGK_AI_UPSTREAM, "https://ddgksf2013.top/"), seen)
+openai_rules = collect(fetch(OPENAI_UPSTREAM), seen)
+gemini_rules = collect(fetch(GEMINI_UPSTREAM), seen)
 googlevoice_rules = collect(fetch(GOOGLEVOICE_UPSTREAM, "https://github.com/"), seen)
 
 custom_rules = []
@@ -104,6 +108,8 @@ lines = [
     f"# AI 上游：{AI_UPSTREAM}",
     f"# DDGKSF AI 上游：{DDGK_AI_UPSTREAM}",
     f"# Google Voice 上游：{GOOGLEVOICE_UPSTREAM}",
+    f"# OpenAI 上游：{OPENAI_UPSTREAM}",
+    f"# Gemini 上游：{GEMINI_UPSTREAM}",
     '# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组',
     "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice",
     "",
@@ -112,6 +118,12 @@ lines = [
     "",
     "# ===== DDGKSF AI 补充（已与可莉排重） =====",
     *ddgk_ai_rules,
+    "",
+    "# ===== Blackmatrix7 OpenAI 补充（排重） =====",
+    *openai_rules,
+    "",
+    "# ===== Blackmatrix7 Gemini 补充（排重） =====",
+    *gemini_rules,
     "",
     "# ===== 海外主流 AI + Muse 自定义补充规则 =====",
     *custom_rules,
@@ -124,5 +136,5 @@ OUTPUT.write_text(chr(10).join(lines), encoding="utf-8")
 print(
     f"已生成 {OUTPUT}：AI {len(ai_rules)} 条，"
     f"DDGKSF 去重后新增 {len(ddgk_ai_rules)} 条，自定义 {len(custom_rules)} 条，"
-    f"Google Voice {len(googlevoice_rules)} 条"
+    f"OpenAI {len(openai_rules)} 条，Gemini {len(gemini_rules)} 条，Google Voice {len(googlevoice_rules)} 条"
 )
