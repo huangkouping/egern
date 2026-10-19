@@ -18,6 +18,23 @@ SOURCES = [
  ("GMOogway", "https://raw.githubusercontent.com/GMOogway/shadowrocket-rules/master/sr_proxy_list.module"),
 ]
 OUTPUT = Path("dns-global.list")
+DOMESTIC = Path("dns-cn.list")
+# DNS conflict policy: domestic exact rules win; overseas-specific rules stay abroad.
+# The large GMOogway proxy list must not override known domestic DNS rules.
+def domestic_keys():
+    if not DOMESTIC.is_file():
+        raise RuntimeError("Missing dns-cn.list; cannot safely audit cross-list conflicts")
+    keys = set()
+    for line in DOMESTIC.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line.startswith(("DOMAIN,", "DOMAIN-SUFFIX,", "DOMAIN-KEYWORD,")):
+            keys.add(line.lower())
+    if len(keys) < 1000:
+        raise RuntimeError("Domestic DNS file unexpectedly small; refusing unsafe update")
+    return keys
+
+DOMESTIC_KEYS = domestic_keys()
+excluded = []
 ALLOWED = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD"}
 seen = set()
 sections = []
@@ -41,6 +58,13 @@ for name, url in SOURCES:
             continue
         rule = parts[0].upper() + "," + parts[1]
         key = rule.lower()
+        if key in DOMESTIC_KEYS:
+            excluded.append((name, rule))
+            continue
+        # .cn is intentionally handled by the local Egern domestic wildcard.
+        if parts[0].upper() in {"DOMAIN", "DOMAIN-SUFFIX"} and parts[1].lower().endswith(".cn"):
+            excluded.append((name, rule))
+            continue
         if key not in seen:
             seen.add(key)
             rules.append(rule)
@@ -53,10 +77,12 @@ lines = [
     "# GitHub Actions 自动同步生成；供 Egern DNS forward 的 proxy_rule_set 使用",
     f"# 规则内容更新时间（北京时间）：{now}",
     "# 已剔除代理策略字段、IP-CIDR/GEOIP 等非域名规则，按规则类型及内容排重",
-    "# 注意：此规则集不等于代理分流规则；请将国外 DNS 规则置于国内兜底规则之前",
+    "# 冲突处理：完全相同的国内域名规则及 .cn 域名归国内 DNS；保留其他海外规则",
+    f"# 本次跨文件排除：{len(excluded)} 条（含不同上游重复排除记录）",
+    "# 注意：关键词、父子域名等隐性重叠需结合 Egern 实际匹配顺序验证",
     "",
 ]
 for name, rules in sections:
     lines.extend([f"# ===== {name}（{len(rules)} 条） =====", *rules, ""])
 OUTPUT.write_text("\n".join(lines), encoding="utf-8")
-print(f"Generated {OUTPUT}: {len(seen)} rules from {len(SOURCES)} sources")
+print(f"Generated {OUTPUT}: {len(seen)} rules from {len(SOURCES)} sources; excluded {len(excluded)} domestic conflicts")
