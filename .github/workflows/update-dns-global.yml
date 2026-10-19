@@ -1,0 +1,44 @@
+name: 更新国外 DNS 规则集
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 */6 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/sync-dns-global.py"
+      - ".github/workflows/update-dns-global.yml"
+permissions:
+  contents: write
+concurrency:
+  group: update-dns-global
+  cancel-in-progress: true
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 生成国外 DNS 规则
+        run: python scripts/sync-dns-global.py
+      - name: 提交更新
+        run: |
+          if [ -z "$(git status --porcelain -- dns-global.list)" ]; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dns-global.list
+          git commit -m "自动更新国外 DNS 规则集"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 5))
+          done
+          exit 1
