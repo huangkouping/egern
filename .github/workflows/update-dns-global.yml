@@ -8,6 +8,7 @@ on:
     paths:
       - "scripts/sync-dns-global.py"
       - ".github/workflows/update-dns-global.yml"
+      - "dns-cn.list"
 permissions:
   contents: write
 concurrency:
