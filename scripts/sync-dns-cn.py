@@ -32,7 +32,7 @@ seen = set()
 sections = []
 
 def add(rule, target):
-    if rule.upper() in EXCLUDED_RULES:
+    if rule.upper() in {item.upper() for item in EXCLUDED_RULES}:
         excluded.append(rule)
         return
     key = rule.replace(" ", "").lower()
@@ -81,6 +81,6 @@ lines = [
 for name, rules in sections:
     lines += [f"# ===== {name}（{len(rules)} 条） =====", *rules, ""]
 assert len(seen) > 3000, "Unexpectedly small domestic ruleset"
-assert not any(r in seen for r in EXCLUDED_RULES)
+assert not any(r.lower() in seen for r in EXCLUDED_RULES)
 OUTPUT.write_text("\n".join(lines), encoding="utf-8")
 print(f"Generated {OUTPUT}: {sum(len(x[1]) for x in sections)} unique rules")
