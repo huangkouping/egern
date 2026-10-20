@@ -1,6 +1,6 @@
 # 国内 DNS 规则集©️
 # 自动同步生成；供 Egern DNS forward 的 proxy_rule_set 使用
-# 规则内容更新时间（北京时间）：2026-10-20 08:00:47
+# 规则内容更新时间（北京时间）：2026-10-20 08:01:14
 # 原始正则已转为 DOMAIN-SUFFIX，主域名及子域名均匹配
 # 仅保留 DNS 可匹配的域名类规则，排除 IP-CIDR / GEOIP 等
 # 上游：https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/DouYin/DouYin.list | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/China/China.list | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/China/China_Domain.list | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Direct/Direct.list
@@ -37,20 +37,18 @@ DOMAIN-SUFFIX,ixiguavideo.com
 DOMAIN-SUFFIX,pstatp.com
 DOMAIN-SUFFIX,toutiao.com
 
-# ===== China 上游规则（11 条） =====
+# ===== China 上游规则（9 条） =====
 DOMAIN-SUFFIX,cn
-DOMAIN-SUFFIX,ms
 DOMAIN-KEYWORD,.tmall.com
 DOMAIN-KEYWORD,alicdn
 DOMAIN-KEYWORD,alipay
 DOMAIN-KEYWORD,aliyun
 DOMAIN-KEYWORD,baidu
 DOMAIN-KEYWORD,beplay
-DOMAIN-KEYWORD,microsoft
 DOMAIN-KEYWORD,officecdn
 DOMAIN-KEYWORD,taobao
 
-# ===== China_Domain 上游规则（3674 条） =====
+# ===== China_Domain 上游规则（3673 条） =====
 DOMAIN-SUFFIX,00cdn.com
 DOMAIN-SUFFIX,0123456789.com
 DOMAIN-SUFFIX,0379home.com
@@ -3337,7 +3335,6 @@ DOMAIN-SUFFIX,win7china.com
 DOMAIN-SUFFIX,win8.net
 DOMAIN-SUFFIX,win8china.com
 DOMAIN-SUFFIX,windows.com
-DOMAIN-SUFFIX,windows.net
 DOMAIN-SUFFIX,windows10zj.com
 DOMAIN-SUFFIX,windows7en.com
 DOMAIN-SUFFIX,windowsupdate.com
@@ -3726,7 +3723,7 @@ DOMAIN,weixin.com
 DOMAIN,www.libvideo.com
 DOMAIN,www.yxssp.com
 
-# ===== Direct 上游规则（187 条） =====
+# ===== Direct 上游规则（185 条） =====
 DOMAIN,ad.10010.com
 DOMAIN,ad.12306.cn
 DOMAIN,ain.bgm.tv
@@ -3895,7 +3892,6 @@ DOMAIN-KEYWORD,elsevier
 DOMAIN-KEYWORD,ess.apple.com
 DOMAIN-KEYWORD,gsa.apple.com
 DOMAIN-KEYWORD,humb.apple.com
-DOMAIN-KEYWORD,icloud.com
 DOMAIN-KEYWORD,ls.apple.com
 DOMAIN-KEYWORD,o.lencr.org
 DOMAIN-KEYWORD,pkulaw
@@ -3903,7 +3899,6 @@ DOMAIN-KEYWORD,push.apple.com
 DOMAIN-KEYWORD,readcube
 DOMAIN-KEYWORD,sciencedirect
 DOMAIN-KEYWORD,ssl.apple.com
-DOMAIN-KEYWORD,trip.com
 DOMAIN-KEYWORD,ttcdn-tos.kkimg.cc
 DOMAIN-KEYWORD,vip.ffzy-online
 DOMAIN-KEYWORD,vip.ffzy-play
