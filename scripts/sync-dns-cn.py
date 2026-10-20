@@ -20,10 +20,21 @@ LOCAL_DOMAINS = [
 ]
 OUTPUT = Path("dns-cn.list")
 ALLOWED = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD"}
+EXCLUDED_RULES = {
+    "DOMAIN-SUFFIX,ms",
+    "DOMAIN-SUFFIX,windows.net",
+    "DOMAIN-KEYWORD,microsoft",
+    "DOMAIN-KEYWORD,icloud.com",
+    "DOMAIN-KEYWORD,trip.com",
+}
+excluded = []
 seen = set()
 sections = []
 
 def add(rule, target):
+    if rule.upper() in EXCLUDED_RULES:
+        excluded.append(rule)
+        return
     key = rule.replace(" ", "").lower()
     if key not in seen:
         seen.add(key)
@@ -64,9 +75,12 @@ lines = [
     "# 原始正则已转为 DOMAIN-SUFFIX，主域名及子域名均匹配",
     "# 仅保留 DNS 可匹配的域名类规则，排除 IP-CIDR / GEOIP 等",
     "# 上游：" + " | ".join(SOURCES.values()),
+    "# 已排除宽泛规则：" + ", ".join(sorted(EXCLUDED_RULES)),
     "",
 ]
 for name, rules in sections:
     lines += [f"# ===== {name}（{len(rules)} 条） =====", *rules, ""]
+assert len(seen) > 3000, "Unexpectedly small domestic ruleset"
+assert not any(r in seen for r in EXCLUDED_RULES)
 OUTPUT.write_text("\n".join(lines), encoding="utf-8")
 print(f"Generated {OUTPUT}: {sum(len(x[1]) for x in sections)} unique rules")
