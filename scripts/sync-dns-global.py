@@ -84,5 +84,21 @@ lines = [
 ]
 for name, rules in sections:
     lines.extend([f"# ===== {name}（{len(rules)} 条） =====", *rules, ""])
+# Guard against missing critical foreign services or accidental reintroduction
+# of exact domestic overlaps. Other parent/child overlaps are intentionally
+# retained because deleting them would break region-specific subdomains.
+critical = {
+    "DOMAIN-SUFFIX,openai.com",
+    "DOMAIN-SUFFIX,google.com",
+    "DOMAIN-SUFFIX,telegram.org",
+    "DOMAIN-SUFFIX,tiktok.com",
+}
+missing = critical - seen
+if missing:
+    raise RuntimeError(f"Missing critical overseas DNS rules: {sorted(missing)}")
+if seen & DOMESTIC_KEYS:
+    raise RuntimeError("Exact domestic/foreign DNS overlap detected")
+if len(seen) < 10000:
+    raise RuntimeError("Overseas DNS rules unexpectedly small")
 OUTPUT.write_text("\n".join(lines), encoding="utf-8")
 print(f"Generated {OUTPUT}: {len(seen)} rules from {len(SOURCES)} sources; excluded {len(excluded)} domestic conflicts")
