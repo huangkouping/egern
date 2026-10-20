@@ -93,7 +93,7 @@ critical = {
     "DOMAIN-SUFFIX,telegram.org",
     "DOMAIN-SUFFIX,tiktok.com",
 }
-missing = critical - seen
+missing = {item.lower() for item in critical} - seen
 if missing:
     raise RuntimeError(f"Missing critical overseas DNS rules: {sorted(missing)}")
 if seen & DOMESTIC_KEYS:
