@@ -1,9 +1,9 @@
 # 国外 DNS 规则集©️
 # GitHub Actions 自动同步生成；供 Egern DNS forward 的 proxy_rule_set 使用
-# 规则内容更新时间（北京时间）：2026-10-20 07:46:52
+# 规则内容更新时间（北京时间）：2026-10-20 08:01:27
 # 已剔除代理策略字段、IP-CIDR/GEOIP 等非域名规则，按规则类型及内容排重
 # 冲突处理：完全相同的国内域名规则及 .cn 域名归国内 DNS；保留其他海外规则
-# 本次跨文件排除：208 条（含不同上游重复排除记录）
+# 本次跨文件排除：207 条（含不同上游重复排除记录）
 # 注意：关键词、父子域名等隐性重叠需结合 Egern 实际匹配顺序验证
 
 # ===== TikTok（27 条） =====
@@ -1524,7 +1524,7 @@ DOMAIN-KEYWORD,gmail
 DOMAIN-KEYWORD,google
 DOMAIN-KEYWORD,recaptcha
 
-# ===== GMOogway（26052 条） =====
+# ===== GMOogway（26053 条） =====
 DOMAIN-SUFFIX,finisharabia.com
 DOMAIN-SUFFIX,intel.co.ae
 DOMAIN-SUFFIX,fullxxxmovies.net
@@ -27308,6 +27308,7 @@ DOMAIN-SUFFIX,apple.com.py
 DOMAIN-SUFFIX,bmw-welt.com
 DOMAIN-SUFFIX,intel.jp
 DOMAIN-SUFFIX,msk.kitazawa.me
+DOMAIN-SUFFIX,windows.net
 DOMAIN-SUFFIX,macbookair.kr
 DOMAIN-SUFFIX,beatsbydredanmarks.com
 DOMAIN-SUFFIX,grupobmw.com
