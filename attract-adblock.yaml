@@ -1,9 +1,17 @@
 name: 小羞片网站去广告©️
 description: '屏蔽网页及视频插播广告。
 
-  更新时间：2026-10-07 20:53（CMS 同步正常；Pornhub 同步正常）'
+  更新时间：2026-10-24 07:17（CMS 同步正常；Pornhub 同步正常）'
 author: huangkouping
 scriptings:
+- http_response:
+    name: 555电影网广告过滤
+    match: '^https://(?:www\.)?555k06\.com(?::443)?/'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/movie555-adblock.js?v=20261024-1
+    body_required: true
+    max_size: 4194304
+    timeout: 10
+    update_interval: 3600
 - http_response:
     name: 网页广告过滤
     match: ^https?://(?:(?:attract|ancient|asleep)\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc|fytdugpm\.cc|91jq508\.com|lgyggwws\.cc|pjitqyei\.cc|hlwf22\.com|heiliao\.com|91cg1\.com|lhrkglii\.cc|iadapjby\.cc|qxrguuar\.cc|lhxgoxlj\.cc|heiliao88\.com)|(?:d9altmxkp5q0i|d169l2tv32yjx4)\.cloudfront\.net)(?::\d+)?/
@@ -162,6 +170,8 @@ scriptings:
 mitm:
   hostnames:
     includes:
+    - 555k06.com
+    - www.555k06.com
     - attract.gaqwvqor.cc
     - ancient.gaqwvqor.cc
     - asleep.gaqwvqor.cc
