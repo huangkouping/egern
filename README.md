@@ -65,8 +65,13 @@
 | 域名及可选一层子域名 | `blw66.com`、`911bla.com`、`911aa2.com`、`911bg20.com`、`ckspzdnd.cc`、`fytdugpm.cc`、`91jq508.com`、`lgyggwws.cc`、`pjitqyei.cc`、`hlwf22.com`、`heiliao.com`、`91cg1.com`、`lhrkglii.cc`、`iadapjby.cc`、`qxrguuar.cc`、`lhxgoxlj.cc`、`heiliao88.com` |
 | 指定 CloudFront 镜像 | `d9altmxkp5q0i.cloudfront.net`、`d169l2tv32yjx4.cloudfront.net` |
 | Pornhub | `cn.pornhub.com`、`www.pornhub.com` |
+| 555 电影网 | `555k06.com`、`www.555k06.com` |
 
 **视频部分**同步 CMS 上游的资源匹配规则及脚本，处理符合条件的 M3U8 播放列表。页面是否使用已匹配的播放器资源，会影响过滤效果；新增镜像也需要收录到配置中。
+
+**555 电影网适配：** 使用 [luestr/userscripts 的 555Movie_adblock.user.js](https://github.com/luestr/userscripts/blob/main/adblock/555Movie_adblock.user.js) v1.2.0 快照，保留 MIT 授权并封装为 Egern 原生响应脚本。仅对上述两个域名的 HTML 注入浏览器端逻辑，处理源脚本识别的广告请求、弹窗、图标墙、浮动推广和播放器横幅。不是视频 M3U8 去插播规则，也不扩展到其他站点。
+
+此项为 **2026-10-24 手动适配快照，未加入定时同步**，现有 CMS / Pornhub 同步任务不负责更新它。已完成离线注入和部分浏览器 API 模拟测试，未实站验证；网页 CSP 可能阻止注入，不会为此移除或放宽安全策略。实际效果请以设备测试为准。
 
 ### 京东去开屏广告©️
 
@@ -147,6 +152,7 @@
 | --- | --- |
 | PingMe签到 | [mickeu / pingme.yaml](https://raw.githubusercontent.com/mickeu/Egern/main/pingme.yaml)、[PingMeSignin.js](https://raw.githubusercontent.com/mickeu/Egern/main/PingMeSignin.js)、[pingme_capture.js](https://raw.githubusercontent.com/mickeu/Egern/main/pingme_capture.js) |
 | CMS 视频过滤 | [Yswag / cmsAdblock.plugin](https://raw.githubusercontent.com/Yswag/for-own-use/main/loon-plugin/cmsAdblock.plugin)、[cmsAdblock.js](https://raw.githubusercontent.com/Yswag/for-own-use/main/js/cmsAdblock.js) |
+| 555 电影网网页过滤 | [可莉 / luestr userscript](https://raw.githubusercontent.com/luestr/userscripts/main/adblock/555Movie_adblock.user.js)（v1.2.0 快照，MIT） |
 | Pornhub 网页过滤 | [ddgksf2013 / pornhub.ads.js](https://ddgksf2013.top/scripts/pornhub.ads.js) |
 
 感谢上述上游作者。同步、适配与本仓库的定制逻辑见下方配套文件；第三方内容的授权以其原仓库说明为准。
@@ -158,6 +164,7 @@
 | 文件 | 用途 |
 | --- | --- |
 | [xiaohongshu-homefeed-adblock.js](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.js) | 小红书接口过滤脚本。 |
+| [movie555-adblock.js](https://github.com/huangkouping/egern/blob/main/movie555-adblock.js) | 555 电影网 userscript 的 Egern HTML 注入适配，内含源脚本及 MIT 授权。 |
 | [attract-adblock.js](https://github.com/huangkouping/egern/blob/main/attract-adblock.js) | 指定网站的网页广告清理脚本。 |
 | [cms-adblock.js](https://github.com/huangkouping/egern/blob/main/cms-adblock.js) | 从 CMS 上游同步适配的视频过滤脚本。 |
 | [pornhub-adblock.js](https://github.com/huangkouping/egern/blob/main/pornhub-adblock.js) | 同步保存的 Pornhub 网页过滤脚本。 |
