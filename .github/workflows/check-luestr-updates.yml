@@ -1,0 +1,65 @@
+# 每 6 小时检查 luestr 去广告脚本有没有新版本。
+# 注意：这是 GitHub 里的自动检查，代替之前在 Muse 里建的定时任务。
+# 只检查、不自动改文件：发现新版本时在仓库里开一个 Issue 提醒，转换和更新仍需手动确认。
+# GitHub 的 schedule 用 UTC 时间，'0 */6 * * *' 对应北京时间 08:00 / 14:00 / 20:00 / 02:00 左右，
+# GitHub 调度可能有延迟，不是精确到分钟。
+name: Check luestr adblock updates
+
+"on":
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check luestr versions
+        run: |
+          set -e
+          check() {
+            local label="$1"
+            local local_file="$2"
+            local remote_url="$3"
+            local saved remote
+            saved="$(grep -oP 'from luestr/userscripts.*v\K[0-9]+\.[0-9]+\.[0-9]+' "$local_file" | head -n1)"
+            remote="$(curl -fsSL "$remote_url" | grep -oP '@version\s+\K[0-9]+\.[0-9]+\.[0-9]+' | head -n1)"
+            echo "$label: saved=$saved remote=$remote"
+            if [ "$saved" != "$remote" ]; then
+              echo "$label: $saved -> $remote" >> updates.txt
+            fi
+          }
+          : > updates.txt
+          check "每日大赛" "mrds-adblock.js" "https://raw.githubusercontent.com/luestr/userscripts/main/adblock/MRDS_adblock.user.js"
+          check "51吃瓜" "51cg-adblock.js" "https://raw.githubusercontent.com/luestr/userscripts/main/adblock/51cg_adblock.user.js"
+          check "黑料网" "hl365-adblock.js" "https://raw.githubusercontent.com/luestr/userscripts/main/adblock/hl365_adblock.user.js"
+          check "91porn" "91porn-adblock.js" "https://raw.githubusercontent.com/luestr/userscripts/main/adblock/91porn_adblock.user.js"
+          if [ -s updates.txt ]; then
+            echo "updates_found=true" >> "$GITHUB_ENV"
+            cat updates.txt
+          else
+            echo "updates_found=false" >> "$GITHUB_ENV"
+            echo "No updates."
+          fi
+
+      - name: Open issue if updated
+        if: env.updates_found == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          updates="$(tr '\n' '; ' < updates.txt)"
+          if gh issue list --state open --search "luestr 去广告脚本有更新" --json title | grep -F "$updates" > /dev/null; then
+            echo "Issue already open, skipping."
+            exit 0
+          fi
+          gh issue create --title "luestr 去广告脚本有更新：$updates" --body "以下脚本在 luestr/userscripts 上有新版本，当前仓库里还是旧的转换版，需要重新转换后更新：
+
+          $(cat updates.txt)
+
+          转换方法：把对应 .user.js 的油猴头去掉，按 Egern 注入版重新生成，不要直接把 .user.js 链接填进 script_url。"
