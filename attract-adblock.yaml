@@ -1,7 +1,7 @@
 name: 小羞片网站去广告©️
 description: '屏蔽网页及视频插播广告。
 
-  更新时间：2026-10-24 22:30（新增：每日大赛、51吃瓜、黑料网；CMS 同步正常；Pornhub 同步正常）'
+  更新时间：2026-10-24 23:00（修复：补上 51cg1.com 的 MITM，否则 51吃瓜脚本无法生效；CMS 同步正常；Pornhub 同步正常）'
 author: huangkouping
 scriptings:
 - http_response:
@@ -234,8 +234,13 @@ mitm:
     - '*.heiliao88.com'
     - mrds66.com
     - www.mrds66.com
+    - '*.mrds66.com'
     - hl365.com
     - www.hl365.com
+    - '*.hl365.com'
+    - 51cg1.com
+    - www.51cg1.com
+    - '*.51cg1.com'
     - m3u8.heimuertv.com
     - m3u8.hmrvideo.com
     - v.cdnlz*.com
