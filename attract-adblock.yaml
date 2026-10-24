@@ -1,12 +1,12 @@
 name: 小羞片网站去广告©️
 description: '屏蔽网页及视频插播广告。
 
-  更新时间：2026-10-24 23:00（修复：补上 51cg1.com 的 MITM，否则 51吃瓜脚本无法生效；CMS 同步正常；Pornhub 同步正常）'
+  更新时间：2026-10-25 00:04（CMS 同步正常；Pornhub 同步正常）'
 author: huangkouping
 scriptings:
 - http_response:
     name: 555电影网广告过滤
-    match: '^https://(?:www\.)?555k06\.com(?::443)?/'
+    match: ^https://(?:www\.)?555k06\.com(?::443)?/
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/movie555-adblock.js?v=20261024-1
     body_required: true
     max_size: 4194304
