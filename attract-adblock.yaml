@@ -1,7 +1,7 @@
 name: 小羞片网站去广告©️
 description: '屏蔽网页及视频插播广告。
 
-  更新时间：2026-10-24 07:17（CMS 同步正常；Pornhub 同步正常）'
+  更新时间：2026-10-24 22:30（新增：每日大赛、51吃瓜、黑料网；CMS 同步正常；Pornhub 同步正常）'
 author: huangkouping
 scriptings:
 - http_response:
@@ -16,6 +16,27 @@ scriptings:
     name: 网页广告过滤
     match: ^https?://(?:(?:attract|ancient|asleep)\.gaqwvqor\.cc|(?:[a-z0-9-]+\.)?(?:blw66\.com|911bla\.com|911aa2\.com|911bg20\.com|ckspzdnd\.cc|fytdugpm\.cc|91jq508\.com|lgyggwws\.cc|pjitqyei\.cc|hlwf22\.com|heiliao\.com|91cg1\.com|lhrkglii\.cc|iadapjby\.cc|qxrguuar\.cc|lhxgoxlj\.cc|heiliao88\.com)|(?:d9altmxkp5q0i|d169l2tv32yjx4)\.cloudfront\.net)(?::\d+)?/
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.js?v=20261007-4
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 每日大赛网广告过滤
+    match: ^https?://(?:www\.)?mrds66\.com(?::\d+)?/
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/mrds-adblock.js?v=20261024-1
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 51吃瓜网广告过滤
+    match: ^https?://(?:www\.)?51cg1\.com(?::\d+)?/
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/51cg-adblock.js?v=20261024-1
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 黑料网广告过滤
+    match: ^https?://(?:www\.)?hl365\.com(?::\d+)?/
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/hl365-adblock.js?v=20261024-1
     body_required: true
     timeout: 10
     update_interval: 3600
@@ -211,6 +232,10 @@ mitm:
     - '*.lhxgoxlj.cc'
     - heiliao88.com
     - '*.heiliao88.com'
+    - mrds66.com
+    - www.mrds66.com
+    - hl365.com
+    - www.hl365.com
     - m3u8.heimuertv.com
     - m3u8.hmrvideo.com
     - v.cdnlz*.com
