@@ -1,7 +1,7 @@
 name: 小羞片网站去广告©️
 description: '屏蔽网页及视频插播广告。
 
-  更新时间：2026-10-25 00:04（CMS 同步正常；Pornhub 同步正常）'
+  更新时间：2026-10-25 06:15（新增：91porn；CMS 同步正常；Pornhub 同步正常）'
 author: huangkouping
 scriptings:
 - http_response:
@@ -37,6 +37,13 @@ scriptings:
     name: 黑料网广告过滤
     match: ^https?://(?:www\.)?hl365\.com(?::\d+)?/
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/hl365-adblock.js?v=20261024-1
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 91porn网广告过滤
+    match: ^https?://(?:www\.)?91porn\.com(?::\d+)?/
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/91porn-adblock.js?v=20261025-1
     body_required: true
     timeout: 10
     update_interval: 3600
@@ -241,6 +248,9 @@ mitm:
     - 51cg1.com
     - www.51cg1.com
     - '*.51cg1.com'
+    - 91porn.com
+    - www.91porn.com
+    - '*.91porn.com'
     - m3u8.heimuertv.com
     - m3u8.hmrvideo.com
     - v.cdnlz*.com
