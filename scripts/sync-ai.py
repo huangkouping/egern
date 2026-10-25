@@ -74,6 +74,15 @@ def fetch(url, referer=None):
     with urlopen(req, timeout=30) as resp:
         return resp.read().decode("utf-8-sig")
 
+# Sentry 为共享诊断服务，由 custom-direct.list 负责直连。
+# 对所有同步源执行排除，避免后续更新重新引入美国分流。
+def is_direct_only_rule(line):
+    parts = [part.strip() for part in line.split(",")]
+    if len(parts) < 2 or parts[0].upper() not in {"DOMAIN", "DOMAIN-SUFFIX"}:
+        return False
+    host = parts[1].lower().rstrip(".")
+    return host == "sentry.io" or host.endswith(".sentry.io")
+
 def collect(raw, seen):
     rules = []
     for line in raw.splitlines():
@@ -82,6 +91,8 @@ def collect(raw, seen):
             continue
         if line.startswith("- "):
             line = line[2:].strip()
+        if is_direct_only_rule(line):
+            continue
         if line not in seen:
             seen.add(line)
             rules.append(line)
@@ -96,7 +107,7 @@ googlevoice_rules = collect(fetch(GOOGLEVOICE_UPSTREAM, "https://github.com/"), 
 
 custom_rules = []
 for rule in EXTRA_AI_RULES + MUSE_RULES:
-    if rule not in seen:
+    if not is_direct_only_rule(rule) and rule not in seen:
         seen.add(rule)
         custom_rules.append(rule)
 
@@ -105,13 +116,14 @@ now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
 lines = [
     "# Ai&US规则集©️",
     "# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑",
-    f"# 规则内容更新时间（北京时间）：{now}",
+    f"# 规则内容更新时间：{now}",
     f"# AI 上游：{AI_UPSTREAM}",
     f"# DDGKSF AI 上游：{DDGK_AI_UPSTREAM}",
     f"# Google Voice 上游：{GOOGLEVOICE_UPSTREAM}",
     f"# OpenAI 上游：{OPENAI_UPSTREAM}",
     f"# Gemini 上游：{GEMINI_UPSTREAM}",
     '# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组',
+    "# 直连排除：sentry.io 及其子域名（由直连规则集处理）",
     "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice",
     "",
     "# ===== AI 服务（可莉上游同步） =====",
