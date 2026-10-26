@@ -1,13 +1,13 @@
 # Ai&US规则集©️
 # 本文件由 GitHub Actions 自动同步生成，请勿直接编辑
-# 规则内容更新时间：2026-10-26 07:12:12
+# 规则内容更新时间：2026-10-26 12:40:44
 # AI 上游：https://kelee.one/Tool/Loon/Lsr/AI.lsr
 # DDGKSF AI 上游：https://ddgksf2013.top/filter/Ai.yaml
 # Google Voice 上游：https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list
 # OpenAI 上游：https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/OpenAI/OpenAI.list
 # Gemini 上游：https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Gemini/Gemini.list
-# 直连排除：sentry.io 及其子域名（由直连规则集处理）
 # 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组
+# 直连排除：sentry.io 及其子域名（由直连规则集处理）
 # 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice
 
 # ===== AI 服务（可莉上游同步） =====
