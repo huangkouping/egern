@@ -1,6 +1,6 @@
 # 国内 DNS 规则集©️
 # 自动同步生成；供 Egern DNS forward 的 proxy_rule_set 使用
-# 规则内容更新时间（北京时间）：2026-10-27 13:14:49
+# 规则内容更新时间（北京时间）：2026-10-27 20:23:52
 # 原始正则已转为 DOMAIN-SUFFIX，主域名及子域名均匹配
 # 仅保留 DNS 可匹配的域名类规则，排除 IP-CIDR / GEOIP 等
 # 上游：https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/DouYin/DouYin.list | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/China/China.list | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/China/China_Domain.list | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Direct/Direct.list
