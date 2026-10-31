@@ -1,0 +1,103 @@
+name: 汽水音乐去广告©️
+description: |-
+  去除广告及推广，精简页面；不含最近播放接口的视频流清理。
+  更新时间：2026-10-31 20:19
+open_url: https://apps.apple.com/app/id1605585211
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/SodaMusic.png
+
+# 基于用户提供的配置备份，按用户要求省略无法读取的 SodaMusic_remove_ads.js。
+# 不处理 /luna/me/recently-played-media，保留其余内联规则。
+# 合并 get_domains 和 card 的重复接口处理。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: "(?i)^https://tnc\\d-(bjlgy|ali[a-z]{2})\\d?\\.zijieapi\\.com/get_domains/v\\d/\\?"
+    actions:
+      - response_body:
+          jq: "setpath([\"data\",\"opaque_data_enabled\"]; 0) | setpath([\"data\",\"ttnet_http_dns_enabled\"]; 0) | setpath([\"data\",\"ttnet_quic_enabled\"]; 0) | setpath([\"data\",\"ttnet_tt_http_dns\"]; 0) | .data.ttnet_dispatch_actions |= map(select(.action != \"dispatch\" and .action != \"tc\"))"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/commerce/upsells_config\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(api|api5-lq)\\.qishui\\.com/luna/ads/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/ads/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://webcast-open\\.douyin\\.com/webcast/openapi/feed/\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/treasure/entrance/config\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/me\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"reward_ad_banner\"]])"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/activities\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/feed/song-tab\\?"
+    actions:
+      - response_body:
+          jq: "del(.items[] | select(.type == \"video_track_mix\"))"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/card\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"preview_guide\"]]) | del(.card_items[] | select(has(\"priority_display\")))"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/media_ads\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/more-panel\\?"
+    actions:
+      - response_body:
+          jq: ".blocks |= map(select(.type != \"related_video\"))"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/commerce/upsells\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/commerce/v2/commerce_info\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(beta-luna\\.douyin|api5-lq\\.qishui)\\.com/luna/listen-video/reminder\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+mitm:
+  hostnames:
+    includes:
+      - webcast-open.douyin.com
+      - beta-luna.douyin.com
+      - api.qishui.com
+      - api5-lq.qishui.com
+      - 'tnc*-*.zijieapi.com'
