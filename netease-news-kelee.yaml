@@ -1,0 +1,100 @@
+name: 网易新闻去广告🅥
+description: '更新时间：2026-11-01 07:37
+
+  清理开屏广告、置顶条目及搜索推荐。
+
+  同步状态：脚本镜像同步正常；最近检查：2026-11-01 07:37'
+open_url: https://apps.apple.com/app/id425349261
+author: RuCu6[https://github.com/RuCu6]
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/NeteaseNews.png
+compat_arguments_desc: '【使用说明】
+
+  开启 MitM 并信任证书，启用后重新打开网易新闻。
+
+  与“网易新闻去开屏广告©️”及其他网易新闻去广告模块二选一启用。
+
+  JS 已备份，每 6 小时检查公开镜像，失败时保留上次有效版本。
+
+  脚本源版本为 2024-01-12，未必与可莉服务器当前版本一致，效果待实测。
+
+
+  【实际范围】
+
+  清理开屏广告、置顶条目、猜你想搜及搜索框填充词。
+
+  镜像中的 hotWordList 热搜榜清理代码被注释，仍保持源逻辑，不宣称已过滤全部热搜或信息流广告。
+
+  不含“只保留官方媒体”功能。原配置还包含部分其他网易应用的广告接口拦截。'
+dns: {}
+rules:
+- domain:
+    match: nex.163.com
+    policy: DIRECT
+- domain:
+    match: gw.m.163.com
+    policy: DIRECT
+rewrites:
+- match: (?i)^https?://interface\.music\.163\.com/eapi/ad
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://c\.m\.163\.com/nc/gl/
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://client\.mail\.163\.com/apptrack/confinfo/searchMultiAds
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://g1\.163\.com/madfeedback
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://interface\.music\.163\.com/eapi/ad/
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://support\.you\.163\.com/xhr/boot/getBootMedia\.json
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://interface3?\.music\.163\.com/eapi/(ad|abtest|sp|hot|store|search/(specialkeyword|defaultkeyword|hot))
+  actions:
+  - respond:
+      status: 404
+- name: 移除网易新闻开屏广告
+  match: (?i)^https://nex\.163\.com/q
+  actions:
+  - response_script:
+      name: 移除网易新闻开屏广告
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=6215309d0923
+      timeout: 20
+      body_required: true
+- name: 网易新闻置顶条目清理
+  match: (?i)^https://gw\.m\.163\.com/nc/api/v1/feed/dynamic/headline-list\?
+  actions:
+  - response_script:
+      name: 网易新闻置顶条目清理
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=6215309d0923
+      timeout: 20
+      body_required: true
+- name: 网易新闻搜索推荐清理
+  match: (?i)^https://gw\.m\.163\.com/nc/api/v1/search/hot-word
+  actions:
+  - response_script:
+      name: 网易新闻搜索推荐清理
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=6215309d0923
+      timeout: 20
+      body_required: true
+mitm:
+  hostnames:
+    includes:
+    - nex.163.com
+    - interface.music.163.com
+    - c.m.163.com
+    - client.mail.163.com
+    - g1.163.com
+    - support.you.163.com
+    - interface3?.music.163.com
+    - gw.m.163.com
