@@ -1,0 +1,22 @@
+name: 中国联通去开屏广告©️
+description: |-
+  去除中国联通 App 开屏广告。
+  更新时间：2026-10-31 21:09
+
+# 基于用户提供的配置备份，保留 HTTP 引擎设置及原响应内容，显式补充状态码 200。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+http_engine_hosts:
+  - m.client.10010.com:80
+rewrites:
+  - match: '^https?:\/\/m\.client\.10010\.com\/mobileService\/customer\/accountListData\.htm'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{"imgIndex":"0","adv":{"startup_adv":{"advCntList":[],"buttonList":[]}},"respCode":"0000"}'
+mitm:
+  hostnames:
+    includes:
+      - m.client.10010.com
