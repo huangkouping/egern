@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "last_checked": "2026-11-01 07:37",
+  "last_success": "2026-11-01 07:37",
+  "last_updated": "2026-11-01 07:37",
+  "source_url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/NeteaseNews_remove_ads/kelee_NeteaseNews_remove_ads.js",
+  "source_version": "2024-01-12",
+  "source_sha256": "7fb9b13023152d3b55aa986e590442a6101ab911dded0d026bac66f5a7befd23",
+  "script_sha256": "6215309d09235a0e829768e6c3bd8eb9e20f5a04b14aca6d4eeeaf5e277b6b5b",
+  "scope": "Sync the public JavaScript mirror; local module rules are maintained separately."
+}
