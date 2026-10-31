@@ -1,0 +1,70 @@
+name: 百度网盘去广告©️
+description: |-
+  去除广告及弹窗，精简首页入口。
+  更新时间：2026-10-31 21:06
+open_url: https://apps.apple.com/app/id547166701
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/BaiduNetDisk.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: "(?i)^https://pan\\.baidu\\.com/api/getconfig\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://pan\\.baidu\\.com/api/getsyscfg\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://pan\\.baidu\\.com/api/taskscore/tasklist\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://pan\\.baidu\\.com/act/api/activityentry\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://pan\\.baidu\\.com/rest/\\d\\.\\d/pcs/adv\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://pan\\.baidu\\.com/api/plugin/get\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://pan\\.baidu\\.com/recommend/query/list\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://pan\.baidu\.com/feed/kingkongdistrict\?'
+    actions:
+      - response_body:
+          jq: '.data.data |= map(select(.type != "novel" and .type != "shortplay" and .type != "print" and .type != "job_hunt"))'
+mitm:
+  hostnames:
+    includes:
+      - pan.baidu.com
