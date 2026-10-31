@@ -43,7 +43,7 @@
     const html = $response.body;
     if (!/<body\b[^>]*>/i.test(html) || html.includes('id="hkp-jd-price"')) return finish({});
     const insert = content => html.replace(/<body\b[^>]*>/i, opening => opening + content);
-    const panel = content => '<section id="hkp-jd-price" style="margin:12px;padding:12px;border:1px solid #eee;border-radius:12px;background:#fff;color:#222;font:13px -apple-system,sans-serif">' + content + '</section>';
+    const panel = content => '<style>#hkp-jd-price{box-sizing:border-box;margin:10px 0;padding:10px;border:0;border-radius:12px;background:#fff9f9;color:#333;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;font-size:13px;line-height:1.45;overflow:hidden}#hkp-jd-price .hkp-price-table{width:100%;margin:0;border:0;border-collapse:separate;border-spacing:0;table-layout:fixed;text-align:left;color:#333;font:600 13px/1.45 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}#hkp-jd-price .hkp-price-table th{padding:13px 10px;background:#ed1021;color:#fff;font-size:14px;font-weight:700;text-align:left;white-space:nowrap;border:0}#hkp-jd-price .hkp-price-table th:first-child{border-radius:8px 0 0 0}#hkp-jd-price .hkp-price-table th:last-child{border-radius:0 8px 0 0}#hkp-jd-price .hkp-price-table td{padding:14px 10px;border:0;border-bottom:1px solid #ececec;background:transparent;vertical-align:middle;font-weight:600;overflow-wrap:anywhere}#hkp-jd-price .hkp-price-table td:nth-child(2){white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.2px}#hkp-jd-price .hkp-up{color:#d71925}#hkp-jd-price .hkp-down{color:#159447}#hkp-jd-price .hkp-source{margin:8px 2px 0;color:#999;font-size:10px;font-weight:400;line-height:1.4}@media(max-width:350px){#hkp-jd-price .hkp-price-table th,#hkp-jd-price .hkp-price-table td{padding-left:6px;padding-right:6px;font-size:12px}}</style><section id="hkp-jd-price">' + content + '</section>';
     let saved;
     try { saved = JSON.parse($persistentStore.read(key) || 'null'); } catch (_) {}
     if (!saved || typeof saved !== 'object' || !saved.c_mmbDevId) {
@@ -92,8 +92,12 @@
       const wanted = new Set(['当前到手价','历史最低价','618价格','双11价格','30天最低价','60天最低价','180天最低价']);
       const rows = Array.isArray(list) ? list.filter(row => row && wanted.has(row.Name)) : [];
       if (!rows.length) throw new Error('该商品暂无可显示的比价记录');
-      const cells = rows.map(row => '<tr>' + [row.Name, row.Date || '—', row.Price == null ? '—' : row.Price, row.Difference || '—'].map(value => '<td style="padding:9px 4px;border-bottom:1px solid #eee">' + escapeHTML(value) + '</td>').join('') + '</tr>').join('');
-      const table = '<strong>历史比价</strong><table style="width:100%;border-collapse:collapse;text-align:left;margin-top:8px"><thead><tr><th>类型</th><th>日期</th><th>价格</th><th>差价</th></tr></thead><tbody>' + cells + '</tbody></table><div style="margin-top:9px;color:#777;font-size:11px">数据来自慢慢买，仅供参考，优惠条件以商品页为准。</div>';
+      const cells = rows.map(row => {
+        const difference = String(row.Difference || '—');
+        const color = difference.includes('↑') ? 'hkp-up' : difference.includes('↓') ? 'hkp-down' : '';
+        return '<tr>' + [row.Name, row.Date || '—', row.Price == null ? '—' : row.Price, difference].map((value, index) => '<td' + (index === 3 && color ? ' class="' + color + '"' : '') + '>' + escapeHTML(value) + '</td>').join('') + '</tr>';
+      }).join('');
+      const table = '<table class="hkp-price-table" aria-label="京东历史比价"><colgroup><col style="width:30%"><col style="width:30%"><col style="width:20%"><col style="width:20%"></colgroup><thead><tr><th>类型</th><th>日期</th><th>价格</th><th>差价</th></tr></thead><tbody>' + cells + '</tbody></table><div class="hkp-source">慢慢买历史价格 · 仅供参考</div>';
       return finish({body:insert(panel(table))});
     } catch (error) {
       return finish({body:insert(panel('历史比价暂不可用：' + escapeHTML(error.message || '查询失败') + '。可打开慢慢买检查，或重新捕获参数。'))});
