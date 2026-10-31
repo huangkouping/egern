@@ -1,0 +1,49 @@
+name: 网易有道词典去广告©️
+description: |-
+  去除开屏、弹窗及右上角推广。
+  更新时间：2026-10-31 20:51
+open_url: https://apps.apple.com/app/id353115739
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YoudaoDict.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: '(?i)^https://dict\.youdao\.com/homepage/toolbar/get/'
+    actions:
+      - response_body:
+          jq: 'delpaths([["data","vipTag"]])'
+  - match: '(?i)^https://dict\.youdao\.com/vip/activity/startup/'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://dict\.youdao\.com/vip/activity/retention/configs\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://dict\.youdao\.com/vip/activity/retention/match\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://dict\.youdao\.com/vip/user/paid/guide\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+mitm:
+  hostnames:
+    includes:
+      - dict.youdao.com
