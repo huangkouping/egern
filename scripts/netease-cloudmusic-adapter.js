@@ -1,6 +1,6 @@
 /* 网易云音乐去广告：RuCu6 / Keywos 公开镜像的 Egern 原生适配。
  * Source: SOURCE_URL
- * 排除会员等级显示修改；只处理模块匹配的广告与界面响应。
+ * 保留源脚本全部处理逻辑；仅适配 Egern 二进制响应、压缩和参数接口。
  */
 export default async function(ctx) {
   let original;
