@@ -2,7 +2,8 @@
  * 小红书保存去水印补充，仅处理媒体接口。
  * 参考 ddgksf2013 redbook_json.js V1.0.27 (2025-08-17) 的水印标记及源地址缓存思路。
  * 来源：https://github.com/Moli-X/Resources/blob/main/QuantumultX/Rewrite/Script/redbook_json.js
- * 独立实现：不修改广告、直播、商品、菜单、保存权限或其他开关。
+ * 评论区参考 fmz200/wool_scripts/Scripts/xiaohongshu/xiaohongshu.js（2026-06-05）。
+ * 仅适配水印：保留广告、直播、商品、菜单及保存权限逻辑。
  * 缓存仅保存在客户端，不发起额外网络请求；未命中时保留原响应。
  */
 (function () {
@@ -10,7 +11,7 @@
   if (typeof $response === "undefined" || typeof $response.body !== "string") return finish({});
   const request = typeof $request === "undefined" ? {} : $request;
   const url = String(request.url || "");
-  const endpoint = url.match(/^https?:\/\/[a-zA-Z0-9.-]+\.xiaohongshu\.com\/api\/sns\/v\d+\/(note\/(?:tabfeed|redtube|videofeed|feed|imagefeed|video\/save|live_photo\/save)|system_service\/config)(?:\?|$)/);
+  const endpoint = url.match(/^https?:\/\/[a-zA-Z0-9.-]+\.xiaohongshu\.com\/api\/sns\/v\d+\/(note\/comment\/(?:list|sub_comments)|interaction\/comment\/video\/download|note\/(?:tabfeed|redtube|videofeed|feed|imagefeed|video\/save|live_photo\/save)|system_service\/config)(?:\?|$)/);
   if (!endpoint) return finish({});
   let payload;
   try { payload = JSON.parse($response.body); } catch (_) { return finish({}); }
@@ -19,12 +20,13 @@
   const original = JSON.stringify(payload);
   const store = typeof $persistentStore !== "undefined" ? $persistentStore : null;
   const cacheKey = "huangkouping.xhs.watermark.v1";
-  let cache = {videos: [], photos: []};
+  let cache = {videos: [], photos: [], comments: []};
   try {
     const saved = store && JSON.parse(store.read(cacheKey) || "null");
     if (object(saved)) {
       cache.videos = Array.isArray(saved.videos) ? saved.videos.filter(object) : [];
       cache.photos = Array.isArray(saved.photos) ? saved.photos.filter(object) : [];
+      cache.comments = Array.isArray(saved.comments) ? saved.comments.filter(object) : [];
     }
   } catch (_) {}
   let cacheChanged = false;
@@ -82,9 +84,51 @@
     }
     return "";
   };
+  // 仅处理评论媒体和水印身份字段；不修改账号 user_id、昵称、正文或点赞。
+  const processComments = data => {
+    const process = comment => {
+      if (!object(comment)) return;
+      const pictures = Array.isArray(comment.pictures) ? comment.pictures : [];
+      const videos = Array.isArray(comment.videos) ? comment.videos : [];
+      if (pictures.length || videos.length) {
+        if (object(comment.user)) delete comment.user.red_id;
+        if (pictures.length && comment.comment_type === 3) comment.comment_type = 2;
+        if (comment.media_source_type === 1) comment.media_source_type = 0;
+        watermark(comment);
+      }
+      for (const picture of pictures) {
+        if (!object(picture)) continue;
+        const originalImage = picture.meme_package && picture.meme_package.image_url;
+        if (typeof originalImage === "string" && /^https?:\/\//.test(originalImage)) {
+          picture.url = originalImage;
+          picture.origin_url = originalImage;
+        }
+      }
+      for (const media of pictures.concat(videos)) {
+        if (!object(media) || !media.video_id) continue;
+        let info = media.video_info;
+        if (typeof info === "string") {
+          try { info = JSON.parse(info); } catch (_) { continue; }
+        }
+        if (!object(info)) continue;
+        const originalUrl = mediaUrl(info);
+        if (originalUrl) put("comments", {video_id: String(media.video_id), url: originalUrl}, "video_id");
+      }
+      if (Array.isArray(comment.sub_comments)) comment.sub_comments.forEach(process);
+    };
+    if (object(data) && Array.isArray(data.comments)) data.comments.forEach(process);
+  };
   try {
     const path = endpoint[1];
-    if (path === "system_service/config") {
+    if (path === "note/comment/list" || path === "note/comment/sub_comments") {
+      processComments(payload.data);
+    } else if (path === "interaction/comment/video/download") {
+      const video = object(payload.data) && payload.data.video;
+      if (object(video) && video.video_id) {
+        const found = cache.comments.find(v => v.video_id === String(video.video_id));
+        if (found) video.video_url = found.url;
+      }
+    } else if (path === "system_service/config") {
       if (object(payload.data)) delete payload.data.watermark_pic_path;
     } else if (path === "note/video/save") {
       if (object(payload.data)) {
