@@ -1,0 +1,80 @@
+name: 汽水音乐净化·墨鱼版©️
+description: |-
+  更新时间：2026-11-01 05:08
+  过滤广告、弹窗、搜索及音乐流推广；无远程脚本依赖。
+author: ddgksf2013[https://github.com/ddgksf2013]
+homepage: https://github.com/ddgksf2013/Rewrite/blob/master/AdBlock/QiShuiMusicAds.conf
+open_url: https://apps.apple.com/app/id1605585211
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/SodaMusic.png
+compat_arguments_desc: |-
+  【来源】
+  墨鱼 QiShuiMusicAds.conf V1.0.6，源更新时间 2025-09-26。
+  按原配置保留 11 条规则，仅转换格式；无远程 JS/jq 文件依赖。
+  手动维护，当前 App 效果待实测。
+
+  【使用】
+  与“汽水音乐去广告🅥”二选一启用，避免重复改写。
+  需开启 MitM，安装并信任证书。
+  上游要求先挂载规则再安装 App；如已有安装，可先测试效果，不必立即卸载。
+
+  【规则范围】
+  此版本会拦截 /luna/commerce、/location/info 及 TNC get_domains 请求，
+  并把音乐流限定为 track 类型。若影响页面或网络，请停用本模块。
+dns: {}
+rewrites:
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/media_ads'
+  actions:
+  - respond:
+      status: 200
+      body: ''
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/ads'
+  actions:
+  - respond:
+      status: 200
+      body: ''
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/location\/info'
+  actions:
+  - respond:
+      status: 200
+      body: ''
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/commerce'
+  actions:
+  - respond:
+      status: 200
+      body: ''
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/hashtag\/recommend'
+  actions:
+  - respond:
+      status: 200
+      body: ''
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/me\?'
+  actions:
+  - response_body:
+      jq: del(.reward_ad_banner)
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/card'
+  actions:
+  - response_body:
+      jq: del(.preview_guide)
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/search-block'
+  actions:
+  - response_body:
+      jq: del(.search_chart_block)
+- match: '^https:\/\/tnc.*zijieapi\.com\/get_domains'
+  actions:
+  - respond:
+      status: 200
+      body: ''
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/activities'
+  actions:
+  - response_body:
+      jq: del(.activity_map)
+- match: '^https:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,3}\/luna\/feed\/song-tab'
+  actions:
+  - response_body:
+      jq: .items |= map(select(.type == "track"))
+mitm:
+  hostnames:
+    includes:
+    - beta-luna.douyin.com
+    - api.qishui.com
+    - 'tnc*-*.zijieapi.com'
