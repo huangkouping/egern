@@ -1,7 +1,7 @@
 name: 小红书去直播广告©️
 description: |-
-  屏蔽开屏、首页直播和广告。
-  更新时间：2026-10-06 09:31
+  屏蔽开屏、首页直播和广告，增加保存去水印。
+  更新时间：2026-10-31 21:26
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
@@ -70,6 +70,15 @@ scriptings:
       name: 小红书广告素材与互动内容过滤
       match: '^https://(?:edith|www)\.xiaohongshu\.com/api/sns/v1/(?:ads/resource|tag/ads_engage)(?:\?|$)'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
+      body_required: true
+      timeout: 10
+      update_interval: 3600
+
+  # 保存去水印补充，与原有广告/直播脚本使用不同接口。
+  - http_response:
+      name: 小红书保存去水印
+      match: '^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/(?:tabfeed|redtube|videofeed|feed|imagefeed|video/save|live_photo/save)|system_service/config)(?:\?|$)'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261031-1
       body_required: true
       timeout: 10
       update_interval: 3600
