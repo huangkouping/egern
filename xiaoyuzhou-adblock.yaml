@@ -1,0 +1,50 @@
+name: 小宇宙去广告©️
+description: |-
+  去除开屏及发现页推广、搜索推荐词和 AI 总结。
+  更新时间：2026-10-31 20:58
+open_url: https://apps.apple.com/app/id1488894313
+author: wish
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/CosmosPodcast.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 包含 category 接口拦截，可能影响分类入口内容。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: '(?i)^https://api\.xiaoyuzhoufm\.com/v1/discovery-feed/list'
+    actions:
+      - response_body:
+          jq: '.data |= map(select(.type != "DISCOVERY_HEADER" and .type != "DISCOVERY_BANNER"))'
+  - match: '(?i)^https://api\.xiaoyuzhoufm\.com/v\d/flash'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://api\.xiaoyuzhoufm\.com/v\d/ai'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://api\.xiaoyuzhoufm\.com/v\d/search/get'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https?://api\.xiaoyuzhoufm\.com/v\d/category'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+mitm:
+  hostnames:
+    includes:
+      - api.xiaoyuzhoufm.com
