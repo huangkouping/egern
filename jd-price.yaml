@@ -1,9 +1,20 @@
 name: 京东比价©️
 description: |-
-  更新时间：2026-10-31 22:43
-  在京东商品详情页显示慢慢买历史价格表，采用京东红表头和圆角卡片。
-  首次使用：安装慢慢买，进入“我的”，收到参数已保存通知后重新打开京东商品详情；未显示时点击商品“详情”。
-  参数只保存在本机，查询时发送至慢慢买。查询失败会显示原因；价格仅供参考。
+  更新时间：2026-10-31 22:45
+  京东商品详情页历史比价；操作步骤见模块使用说明。
+manual: https://github.com/huangkouping/egern/blob/main/jd-price-guide.md
+compat_arguments_desc: |-
+  【使用说明】
+  1. 启用本模块，关闭其他京东比价模块，确认 MitM 证书已安装并受信任。
+  2. 打开慢慢买 App → 我的，收到“参数已保存”通知。
+  3. 重新进入京东商品详情；未显示时点击商品“详情”。
+  4. 模块更新后重新进入商品页即可，一般无需重新捕获参数。参数失效时重做第 2 步。
+
+  【差价说明】
+  差价＝该行价格－当前到手价。绿色负数表示更低，红色正数表示更高，相同显示 0，缺少有效价格显示 —。
+
+  【数据说明】
+  价格由慢慢买提供，仅供参考。参数仅在本机保存，查询时发送至慢慢买接口。
 author: wf021325[https://github.com/wf021325], githubdulong[https://github.com/githubdulong], mw418[https://github.com/mw418], huangkouping
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id414245413
