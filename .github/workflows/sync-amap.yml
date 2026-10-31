@@ -1,0 +1,50 @@
+name: Sync Amap public JQ mirrors
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/sync-amap.yml
+      - scripts/sync-amap.py
+      - scripts/amap-base.yaml
+      - tests/test-amap-sync.py
+  schedule:
+    - cron: '43 */6 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: sync-amap
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install PyYAML==6.0.2
+      - name: Ensure jq is available
+        run: |
+          if ! command -v jq >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y jq
+          fi
+      - name: Verify last-good retention and recovery
+        run: python tests/test-amap-sync.py
+      - name: Synchronize two public mirror files
+        id: sync
+        continue-on-error: true
+        run: python scripts/sync-amap.py
+      - name: Commit valid rules or failure status
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Sync Amap public JQ mirrors and status'
+            git pull --rebase
+            git push
+          fi
+      - name: Report failed synchronization
+        if: steps.sync.outcome == 'failure'
+        run: exit 1
