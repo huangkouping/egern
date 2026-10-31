@@ -8,6 +8,8 @@ on:
       - scripts/sync-colorfulclouds.py
       - scripts/sync-pinduoduo.py
       - scripts/pinduoduo-base.yaml
+      - scripts/sync-netease-news.py
+      - scripts/netease-news-base.yaml
       - scripts/amap-base.yaml
       - tests/test-amap-sync.py
   schedule:
@@ -49,16 +51,20 @@ jobs:
         id: pinduoduo
         continue-on-error: true
         run: python scripts/sync-pinduoduo.py
+      - name: Synchronize NetEase News public script mirror
+        id: neteasenews
+        continue-on-error: true
+        run: python scripts/sync-netease-news.py
       - name: Commit valid rules or failure status
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json
+          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json netease-news-kelee.yaml netease-news-kelee.js netease-news-sync-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Sync Amap public JQ mirrors and status'
             git pull --rebase
             git push
           fi
       - name: Report failed synchronization
-        if: steps.sync.outcome == 'failure' || steps.colorfulclouds.outcome == 'failure' || steps.pinduoduo.outcome == 'failure'
+        if: steps.sync.outcome == 'failure' || steps.colorfulclouds.outcome == 'failure' || steps.pinduoduo.outcome == 'failure' || steps.neteasenews.outcome == 'failure'
         run: exit 1
