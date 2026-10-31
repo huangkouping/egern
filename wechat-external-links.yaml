@@ -1,0 +1,51 @@
+name: 微信外部链接解锁©️
+description: |-
+  更新时间：2026-10-31 22:53
+  外链确认页自动跳转，支持支付宝通知跳转及可选网页存档。
+author: zZPiglet[https://github.com/zZPiglet], huangkouping
+homepage: https://github.com/zZPiglet/Task/blob/master/asset/UnblockURLinWeChat.js
+open_url: https://apps.apple.com/app/id414478124
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png
+compat_arguments_desc: |-
+  【使用说明】
+  1. 启用本模块，关闭旧的微信外链解锁模块，确认 MitM 已开启且证书受信任。
+  2. 在微信中重新打开外部链接，遇到支持的确认页时自动跳转。
+  3. 支付宝链接通过通知跳转；如需使用，请允许 Egern 发送通知。
+  4. 封禁页在能够解析原链接时提供浏览器通知；默认不跳转到存档网站。
+  5. “网页存档”仅尝试打开第三方已有存档，并非实时原网页；目标链接会发送至存档服务。
+
+  【适用范围】
+  仅处理 weixin110.qq.com、security.wechat.com 的 newredirectconfirmcgi 页面。
+  不能保证所有微信版本及链接都有效，不能解除目标网站本身的登录、权限或访问限制。
+  JS 已备份到本仓库；无可莉服务器、BoxJs 或远程代码库依赖。手动维护。
+env_schema:
+  FORCE_REDIRECT:
+    name: 普通外链自动跳转
+    description: 默认开启，跳过支持的外链确认页。关闭后保留页面，通过通知打开浏览器；不强制重定向封禁页。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  USE_ARCHIVE:
+    name: 封禁链接尝试网页存档
+    description: 默认关闭。开启后，解析成功的封禁链接会发送至 Internet Archive，尝试打开已有存档；可能无存档或无法访问。
+    default_value: 'false'
+    options:
+    - 'true'
+    - 'false'
+scriptings:
+- http_response:
+    name: 微信外部链接解锁
+    match: '(?i)^https://(weixin110\.qq|security\.wechat)\.com/cgi-bin/mmspamsupport-bin/newredirectconfirmcgi\?'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/wechat-external-links.js?v=20261031-1
+    env:
+      FORCE_REDIRECT: 'true'
+      USE_ARCHIVE: 'false'
+    timeout: 20
+    body_required: true
+    update_interval: 3600
+mitm:
+  hostnames:
+    includes:
+    - weixin110.qq.com
+    - security.wechat.com
