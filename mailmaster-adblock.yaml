@@ -1,0 +1,47 @@
+name: 网易邮箱大师去广告©️
+description: |-
+  去除开屏及任务提醒，精简侧栏和我的页面。
+  更新时间：2026-10-31 20:50
+open_url: https://apps.apple.com/app/id897003024
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MailMaster.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: '(?i)^https://appconf\.mail\.163\.com/mailmaster/api/http/urlConfig\.do$'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://appconf\.mail\.163\.com/mailmaster/api/page/v2/conf\.do$'
+    actions:
+      - response_body:
+          jq: 'delpaths([["data","functionOperatorInfoList"],["data","memberOperator"],["data","activityTabInfoList"]])'
+  - match: '(?i)^https://appconf\.mail\.163\.com/mailmaster/api/config/function\.do$'
+    actions:
+      - response_body:
+          jq: '.data.config[] |= if .result.tools then .result.tools |= map(select(.name == "邮件追踪" or .name == "替身邮箱")) else . end | del(.data.config[] | select(.functionName == "Function-AD"))'
+  - match: '(?i)^https://dashi\.163\.com/task-center-api/fapi/task/list$'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://appconf\.mail\.163\.com/mailoperating/mailmaster/api/operator/get$'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+mitm:
+  hostnames:
+    includes:
+      - appconf.mail.163.com
+      - dashi.163.com
