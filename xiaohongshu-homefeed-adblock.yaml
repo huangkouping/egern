@@ -1,7 +1,7 @@
 name: 小红书去直播广告©️
 description: |-
   屏蔽开屏、首页直播和广告，支持笔记及评论区保存去水印。
-  更新时间：2026-10-31 21:36
+  更新时间：2026-10-31 21:41
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
@@ -91,16 +91,10 @@ scriptings:
       timeout: 10
       update_interval: 3600
 
-rewrites:
-  # 替换客户端生成评论图片水印所用的图片资源。
+url_rewrites:
+  # 评论图片水印素材：使用 Egern 原生透明图片响应。
   - match: '(?i)^https://ci\.xiaohongshu\.com/system_config/watermark'
-    actions:
-      - respond:
-          status: 200
-          headers:
-            Content-Type: image/gif
-          body:
-            base64: R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+    location: http://reject-img/
 
 mitm:
   hostnames:
