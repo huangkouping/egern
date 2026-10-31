@@ -1,6 +1,15 @@
-// 来源：RuCu6，镜像 https://github.com/AEtso/Loon/blob/master/Scripts/adrive.js
-// 按源文件备份，未验证当前 App 版本。
-// 2024-07-15 21:30
+/* RuCu6 / 可莉公开镜像备份；源逻辑保持，补充异常透传与单次完成。
+ * Source: https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/AliYunDrive_remove_ads/kelee_AliYunDrive_remove_ads.js
+ */
+(function (complete) {
+let finished = false;
+const $done = value => { if (!finished) { finished = true; complete(value); } };
+try {
+if (typeof $response === "undefined" || typeof $response.body !== "string") return $done({});
+/*
+引用地址 https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/adrive.js
+*/
+// 2024-07-15 22:28:47
 
 const url = $request.url;
 if (!$response.body) $done({});
@@ -26,13 +35,13 @@ if (url.includes("/v1/users/onboard_list")) {
   }
 } else if (url.includes("/v1/user/home/widgets") || url.includes("/v2/users/home/widgets")) {
   const item = [
-    "album", // 相册
+    // "album", // 相册
     "banners", // 顶部奖励
-    "coreFeatures", // 横版图标
+    // "coreFeatures", // 横版图标
     "introduceAlipan", // 认识阿里云盘
     "mainBackup", // 手机备份
     "minorBackup", // 备份设备列表
-    "signIn" // 签到
+    // "signIn" // 签到
   ];
   item.forEach((i) => {
     delete obj[i];
@@ -40,3 +49,6 @@ if (url.includes("/v1/users/onboard_list")) {
 }
 
 $done({ body: JSON.stringify(obj) });
+
+} catch (_) { $done({}); }
+})($done);
