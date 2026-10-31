@@ -1,0 +1,62 @@
+[
+  {
+    "name": "企迈点单系统去广告",
+    "pattern": "^https://webapi\\.qmai\\.cn/web/catering/design/homePage-Config",
+    "filename": "kff.js"
+  },
+  {
+    "name": "EMS中国邮政物流速递去广告",
+    "pattern": "^https://ump\\.ems\\.com\\.cn/new-generation-extend/redis/pageInfoByChannel",
+    "filename": "ems.js"
+  },
+  {
+    "name": "小兔充充去广告",
+    "pattern": "^https://mapi\\.xiaotucc\\.com/(mall/main|main_page/index/getActivity)",
+    "filename": "xiaotucc.js"
+  },
+  {
+    "name": "全家微会员去广告",
+    "pattern": "^https://minifm\\.maxxipoint\\.com/banner/list",
+    "filename": "FamilyMart.js"
+  },
+  {
+    "name": "罗森点点去广告",
+    "pattern": "^https://lawsonapi\\.yorentown\\.com/area/sh-lawson/app/v1/home",
+    "filename": "lawson.js"
+  },
+  {
+    "name": "茶颜悦色去广告",
+    "pattern": "^https://miniapp\\.sexytea2013\\.com/cms/slot/queryByCodes\\?codes=INDEX_TOP_BANNER",
+    "filename": "chayanyuese_remove_ads.js"
+  },
+  {
+    "name": "COCO点单去广告",
+    "pattern": "^https://coco-com\\.e\\.verystar\\.net/v1/home/info",
+    "filename": "coco.js"
+  },
+  {
+    "name": "滴滴青桔去广告",
+    "pattern": "^https://htwkop\\.xiaojukeji\\.com/gateway\\?api=hm\\.fa\\.homeConfig",
+    "filename": "qingju.js"
+  },
+  {
+    "name": "一点点+去广告",
+    "pattern": "^https://cappapi\\.alittle-tea\\.com/open\\?method=catering\\.set\\.ad",
+    "filename": "alittle-tea.js"
+  },
+  {
+    "name": "M Stand去广告",
+    "pattern": "^https://api\\.prod\\.dj\\.mstand\\.cn/scrm/mini/app/index/info",
+    "filename": "M_Stand.js"
+  },
+  {
+    "name": "T3出行去广告",
+    "pattern": "^https://passenger\\.t3go\\.cn/(solution\\-|common\\-)?(passenger\\-)?(activity\\-|app\\-)?api/notoken/(trip/)?api/(home/|common/)?(v[1-3]/)?(ad/getNegativescreen|solution/passenger/open/getHomeMenu|leftmenu|getHomeInfoGlobal)",
+    "filename": "T3.js"
+  },
+  {
+    "name": "古茗去广告",
+    "pattern": "^https://newton\\.gumingnc\\.com/newton-buyer/newton/buyer/(ump|touch|external/front)",
+    "filename": "ming.js"
+  }
+]
