@@ -1,7 +1,7 @@
 name: 小红书去直播广告©️
 description: |-
-  屏蔽开屏、首页直播和广告，增加保存去水印。
-  更新时间：2026-10-31 21:26
+  屏蔽开屏、首页直播和广告，支持笔记及评论区保存去水印。
+  更新时间：2026-10-31 21:36
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
@@ -78,14 +78,34 @@ scriptings:
   - http_response:
       name: 小红书保存去水印
       match: '^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/(?:tabfeed|redtube|videofeed|feed|imagefeed|video/save|live_photo/save)|system_service/config)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261031-1
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261031-2
       body_required: true
       timeout: 10
       update_interval: 3600
 
+  - http_response:
+      name: 小红书评论区保存去水印
+      match: '^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/comment/(?:list|sub_comments)|interaction/comment/video/download)(?:\?|$)'
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261031-2
+      body_required: true
+      timeout: 10
+      update_interval: 3600
+
+rewrites:
+  # 替换客户端生成评论图片水印所用的图片资源。
+  - match: '(?i)^https://ci\.xiaohongshu\.com/system_config/watermark'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: image/gif
+          body:
+            base64: R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+
 mitm:
   hostnames:
     includes:
+      - ci.xiaohongshu.com
       - rec.xiaohongshu.com
       - www.xiaohongshu.com
       - edith.xiaohongshu.com
