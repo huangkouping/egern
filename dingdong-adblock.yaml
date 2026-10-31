@@ -1,0 +1,128 @@
+name: 叮咚买菜去广告©️
+description: |-
+  去除广告及推荐，精简我的页面和 AI 入口。
+  更新时间：2026-10-31 19:58
+open_url: https://apps.apple.com/app/id768082524
+author: zirawell[https://github.com/zirawell], 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], wish
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DingdongMaicai.png
+
+# 基于用户提供的完整配置备份，合并 newDetails 的两条响应处理。
+# 无远程 JavaScript 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rules:
+  - domain:
+      match: trackercollect.ddxq.mobi
+      policy: REJECT
+  - domain:
+      match: ddfs-public.ddimg.mobi
+      policy: REJECT
+  - domain:
+      match: rttrack.ddxq.mobi
+      policy: REJECT
+rewrites:
+  - match: "(?i)^https?://119\\.29\\.29\\.\\d+/d"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/advert/"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/getHomeAdPop"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/vip/getVipAd/\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/homeApi/marketingNotice\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/search/rollHotKeyword\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/search/rankingList\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/search/hotKeyword\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/order/getRecommend$"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/homeApi/userLike\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://user\\.api\\.ddxq\\.mobi/userportal-service/api/v1/user/queryMyPage/\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/homeApi/categoriesNewDetail\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"ad_info\"]])"
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/tool/getConfig\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"ai_enter_config\"]])"
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/guide-service/userLike/flowData$"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/newDetails\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"top_advert_data\"],[\"data\",\"suspension\"]]) | .data.list |= map(select(has(\"capsule_freedom_zone\") | not))"
+  - match: "(?i)^https://maicai\\.api\\.ddxq\\.mobi/guide-service/productApi/productDetail/info\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"detail\",\"chatEntry\"]])"
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/bottomNavi"
+    actions:
+      - response_body:
+          jq: "del(.data.adId?) | if (.data.bottom_list? | length > 0) then .data.bottom_list |= map(select(.type != \"eatwhat\")) else . end"
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/homeFlowDetail"
+    actions:
+      - response_body:
+          jq: "walk(if type == \"object\" and has(\"list\") then .list |= map(if type == \"object\" and has(\"multi_advertise_data_list\") then del(.multi_advertise_data_list) else . end) else . end)"
+mitm:
+  hostnames:
+    includes:
+      - '119.29.29.*'
+      - maicai.api.ddxq.mobi
+      - user.api.ddxq.mobi
