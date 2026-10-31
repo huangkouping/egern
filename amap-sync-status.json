@@ -1,8 +1,8 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-01 07:24",
-  "last_success": "2026-11-01 07:24",
-  "last_updated": "2026-11-01 07:24",
+  "last_checked": "2026-11-01 07:25",
+  "last_success": "2026-11-01 07:25",
+  "last_updated": "2026-11-01 07:25",
   "upstream_repository": "ifflagged/Romeo",
   "upstream_commit": "6ee0561d3102705ed43b1101fb2843d31c9cde0e",
   "source_paths": {
@@ -10,8 +10,8 @@
     "search_poi_detail.jq": "Modules/JavaScript/Kelee/Amap_remove_ads/kelee_search_poi_detail.jq"
   },
   "source_sha256": {
-    "updatable.jq": "5ab82ed24f6ac5a05ffc31e40f99d6afc0404f6dc005b15e55d2f8d9ee96bf92",
-    "search_poi_detail.jq": "a8677cb284fcbaa03737f44edca6eb33ca51a3f0a176d41ce0c53125ab09f174"
+    "updatable.jq": "dba0888e3e4491e282ce58e547e3a4125f6fd96057d0d5eaf878450fa40bd647",
+    "search_poi_detail.jq": "7def102b752835f8cbe63167b75dbe19997cb532f7e35d8283de4eeb5f2d4eb6"
   },
   "base_sha256": "9f38ae0a66af33e7200cf0bf5579e9b15ce2421fd46b4adf2b73fe0a8596af53",
   "scope": "Only the two public JQ mirror dependencies; base rules are maintained locally."
