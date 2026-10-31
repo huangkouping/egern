@@ -1,0 +1,561 @@
+name: 可莉广告过滤器©️
+description: |-
+  拦截部分应用开屏广告及推广请求。
+  更新时间：2026-10-31 20:04
+open_url: ''
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/KeLee.png
+
+# 基于用户提供的完整配置备份，只删除完全重复的规则和 MITM 主机名。
+# 保留原规则顺序及响应内容，无远程 JS 依赖。
+# 手动维护，未配置上游定时同步。
+dns: {}
+rules:
+  - domain:
+      match: "acdn.adnxs.com"
+      policy: "REJECT"
+  - domain:
+      match: "mediation.adnxs.com"
+      policy: "REJECT"
+  - domain:
+      match: "sin3-ib.adnxs.com"
+      policy: "REJECT"
+  - domain:
+      match: "sdkconfig.ad.xiaomi.com"
+      policy: "REJECT"
+  - domain:
+      match: "data.mistat.xiaomi.com"
+      policy: "REJECT"
+  - domain:
+      match: "tracking.intl.miui.com"
+      policy: "REJECT"
+  - domain_suffix:
+      match: "doubleclick-cn.net"
+      policy: "REJECT"
+  - domain_suffix:
+      match: "doubleclick.net"
+      policy: "REJECT"
+  - domain:
+      match: "business.msstatic.com"
+      policy: "REJECT"
+  - domain_suffix:
+      match: "v1d.szbdyd.com"
+      policy: "REJECT"
+  - url_regex:
+      match: "^http://cdn\\.wup\\.huya\\.com/launch/queryHttpDns$"
+      policy: "REJECT"
+  - domain_suffix:
+      match: "m1.ad.10010.com"
+      policy: "REJECT"
+  - domain:
+      match: "ad.21cn.com"
+      policy: "REJECT"
+  - domain:
+      match: "ad.k.21cn.com"
+      policy: "REJECT"
+  - domain:
+      match: "admarket.21cn.com"
+      policy: "REJECT"
+  - domain:
+      match: "adshows.21cn.com"
+      policy: "REJECT"
+  - ip_cidr:
+      match: "122.229.8.47/32"
+      policy: "REJECT"
+      no_resolve: true
+  - ip_cidr:
+      match: "122.229.29.89/32"
+      policy: "REJECT"
+      no_resolve: true
+  - url_regex:
+      match: "^http://p\\.kuaidi100\\.com/mobile/mobileapi\\.do"
+      policy: "REJECT"
+  - url_regex:
+      match: "^http://p\\.kuaidi100\\.com/advertisement/"
+      policy: "REJECT"
+  - domain:
+      match: "mall-dsp2.qinlinkeji.com"
+      policy: "REJECT"
+  - domain:
+      match: "mallapi2.qinlinkeji.com"
+      policy: "REJECT"
+  - domain:
+      match: "open-pixon.ads-pixiv.net"
+      policy: "REJECT"
+rewrites:
+  - match: "(?i)^https?://api-access\\.pangolin-sdk-toutiao\\.com/api/ad/union/sdk"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://cdn\\.web\\.chelaile\\.net\\.cn/info-flow/index\\.html"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://mercury-gateway\\.ixiaochuan\\.cn/mercury/v1/ad/"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https?://api\\.m\\.mi\\.com/v\\d/app/start"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://api\\.jr\\.mi\\.com/v\\d/adv/"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://api\\.jr\\.mi\\.com/jr/api/playScreen"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://api-mifit.+?\\.huami\\.com/discovery/mi/discovery/.+?_ad\\?"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://home\\.mi\\.com/cgi-op/api/v\\d/recommendation/banner"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https?://(api-mifit|api-mifit-\\w+)\\.huami\\.com/discovery/mi/discovery/\\w+_ad\\?"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https?://api-mifit\\.huami\\.com/discovery/mi/discovery/homepage_ad\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"image/gif"}
+          body: {"base64":"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="}
+  - match: "(?i)^https?://api-mifit\\.huami\\.com/discovery/mi/discovery/sleep_ad\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"image/gif"}
+          body: {"base64":"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="}
+  - match: "(?i)^https?://api-mifit\\.huami\\.com/discovery/mi/discovery/sport_summary_ad\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"image/gif"}
+          body: {"base64":"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="}
+  - match: "(?i)^https?://api-mifit\\.huami\\.com/discovery/mi/discovery/sport_training_ad\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"image/gif"}
+          body: {"base64":"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="}
+  - match: "(?i)^https?://api-mifit\\.huami\\.com/discovery/mi/discovery/step_detail_ad\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"image/gif"}
+          body: {"base64":"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="}
+  - match: "(?i)^https?://api-mifit\\.huami\\.com/discovery/mi/discovery/training_video_ad\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"image/gif"}
+          body: {"base64":"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="}
+  - match: "(?i)^https://shopapi\\.io\\.mi\\.com/mtop/mf/resource/homePage/pageConfig"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https://api-mifit-cn2\\.huami\\.com/discovery/mi/cards/startpage_ad"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://apiwz\\.midukanshu\\.com/advert/getPopup$"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://apiwz\\.midukanshu\\.com/advert/treasureInfo$"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://apiwz\\.midukanshu\\.com/config/getAds$"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.dailmo\\.com/img/61/23c7125bfe6166d69f3bff5b0ca4d31e\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.dailmo\\.com/img/50/edb40c6392f848df37f9c31d8a6f90f6\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.dailmo\\.com/img/6/90585d9e96c73dd49644af57d8501624\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.dailmo\\.com/img/5/6cb2aa237ce1f65944aa1ecb29fbdeef\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.allahall\\.com/img/61/23c7125bfe6166d69f3bff5b0ca4d31e\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.allahall\\.com/img/50/edb40c6392f848df37f9c31d8a6f90f6\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.allahall\\.com/img/6/90585d9e96c73dd49644af57d8501624\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.allahall\\.com/img/5/6cb2aa237ce1f65944aa1ecb29fbdeef\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://img\\.allahall\\.com/img/59/6a13a75dfe46ebfdac96bd27ef098885\\.jpg"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://app\\.zhoudamozi\\.com/ad/.+"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https://api\\.(pinduoduo|yangkeduo)\\.com/api/cappuccino/splash"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://gw\\.alicdn\\.com/mt/"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://gw\\.alicdn\\.com/tfs/.+\\d{3,4}-\\d{4}"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://gw\\.alicdn\\.com/tps/.+\\d{3,4}-\\d{4}"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.idle\\.home\\.welcome"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://m\\.qianbao\\.qq\\.com/services/walletHome/getQQshopData\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://m\\.qianbao\\.qq\\.com/services/walletHome/getGameData\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://m\\.qianbao\\.qq\\.com/services/walletHome/getFootData\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://hfapp-service\\.qweather\\.net/v2\\.0/app/ad/list\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^http://home\\.umetrip\\.com/gateway/api/umetrip/native"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^http://umerp\\.umetrip\\.com/gateway/api/umetrip/native"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https?://us\\.l\\.qq\\.com/exapp"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https://client\\.app\\.coc\\.10086\\.cn/biz-orange/DN/init/startInit$"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://dict\\.youdao\\.com/course/tab/translateTab"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://dict\\.youdao\\.com/homepage/tile"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api-overmind\\.youdao\\.com/openapi/get/luna/dict/dict-mobile/prod/dictCommonConfig"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://cdke\\.youdao\\.com/course3/recommend/dict/startup"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://dict\\.youdao\\.com/commonsearch"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://dict\\.youdao\\.com/vip/activity/couponinfo"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://dict\\.youdao\\.com/dictusertask/system"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https?://ecard\\.shenzhentong\\.com/wxweb/bwxppub2/QryAdvertList\\.do"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://mob\\.mddcloud\\.com\\.cn/adApi/advert/(first|third)part/advertList"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https?://t-dsp\\.pinduoduo\\.com"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://mobads-pre-config\\.cdn\\.bcebos\\.com/preload\\.php"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^http?://sfo\\.mddcloud\\.com\\.cn/api/v2/sfo/popup_displays?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https?://tower\\.ubixioe\\.com/mob/mediation"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https?://toblog\\.ctobsnssdk\\.com"
+    actions:
+      - respond:
+          status: 200
+  - match: "(?i)^https?://conf-darwin\\.xycdn\\.com"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https?://sdk1xyajs\\.data\\.kuiniuca\\.com"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://gw\\.chuangkit\\.com/team/app/common/ad/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://qiye\\.gaoding\\.com/api/v3/oc/v2/delivery-pits/ios-splash/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://p0\\.pipi\\.cn/(adAdmin|mediaplus/maoyantong_ads_fe)/\\w+\\.jpg\\?imageMogr2/quality/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://p0\\.pipi\\.cn/(adAdmin|mediaplus/maoyantong_ads_fe)/\\w+\\.(jpg|png)\\?imageMogr2/thumbnail/(860x0|!165x165|!1049x1169)"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.zcool\\.com\\.cn/v\\d\\.\\d\\.\\d/common/open-screen"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://shealthyapi\\.senssun\\.com/v1/app/banner/findByType\\?type=bottom$"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://lanfanapp\\.com/api/v1/ads/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://client-api-v2\\.oray\\.com/materials/SLCC_IOS_STARTUP"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://client-api-v2\\.oray\\.com/materials/SLCC_IOS_DEVICE"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://client-api-v2\\.oray\\.com/materials/SUNLOGIN_CLIENT_IOS_PROMOTION"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://app\\.10099\\.com\\.cn/contact-web/api/version/getFlashScreenPage"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://api\\.flydigi\\.com/android/v2/ad"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.xiangji\\.qq\\.com/splash$"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://cdn\\.cmgadx\\.com/sdk/pool/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://qadx\\.qinlinad\\.com/ad/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://watch\\.iot\\.mi\\.com/cgi-op/api/v1/watch/health/resource\\?business=MI_WATCH_SPORT"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://watch\\.iot\\.mi\\.com/cgi-op/api/v1/watch/health/resource\\?business=MI_HEALTH_DEVICE_TAB_PAGE"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryloadingbanner/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.life\\.popup\\.get/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://d\\.socdm\\.com/adsv/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https?://m\\.client\\.10010\\.com/mobileService/customer/accountListData\\.htm"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{\"imgIndex\":\"0\",\"adv\":{\"startup_adv\":{\"advCntList\":[],\"buttonList\":[]}},\"respCode\":\"0000\"}"
+  - match: "(?i)^https?://cmds\\.omesoft\\.com/HypnotistWS\\.asmx"
+    actions:
+      - response_body:
+          regex: "<GetADResult>\\.\\*\\?</GetADResult>"
+          replacement: "<GetADResult>{\"ret\":0,\"msg\":\"正常\",\"err_code\":0,\"data\":{\"ad\":[]}}</GetADResult>"
+  - match: "(?i)^https?://api\\.fenxianglife\\.com/njia/index/popup/v2"
+    actions:
+      - response_body:
+          jq: ".data.list=[]"
+mitm:
+  hostnames:
+    includes:
+      - "api.zcool.com.cn"
+      - "acs.m.goofish.com"
+      - "acs.m.taobao.com"
+      - "api-access.pangolin-sdk-toutiao*.com"
+      - "api-access.pangolin-sdk-toutiao.com"
+      - "api-mifit*.huami.com"
+      - "api-mifit-cn2.huami.com"
+      - "api-mifit.huami.com"
+      - "api-overmind.youdao.com"
+      - "api.ahmobile.cn"
+      - "api.angkeduo.com"
+      - "api.jr.mi.com"
+      - "api.m.mi.com"
+      - "api.pinduoduo.com"
+      - "api.wfdata.club"
+      - "apiwz.midukanshu.com"
+      - "app.zhoudamozi.com"
+      - "cdke.youdao.com"
+      - "conf-darwin.xycdn.com"
+      - "dict.youdao.com"
+      - "ecard.shenzhentong.com"
+      - "ether-pack.pangolin-sdk-toutiao.com"
+      - "gromore.pangolin-sdk-toutiao.com"
+      - "gw.alicdn.com"
+      - "gw.chuangkit.com"
+      - "hfapp-service.qweather.net"
+      - "home.mi.com"
+      - "home.umetrip.com"
+      - "img.allahall.com"
+      - "img.dailmo.com"
+      - "iyes.youku.com"
+      - "lfd?-analytics.bytescm.com"
+      - "lfd?-cdn-tos.bytescm.com"
+      - "m.qianbao.qq.com"
+      - "mercury-gateway.ixiaochuan.cn"
+      - "mob.mddcloud.com.cn"
+      - "mobads-pre-config.cdn.bcebos.com"
+      - "p0.pipi.cn"
+      - "qiye.gaoding.com"
+      - "sdk1xyajs.data.kuiniuca.com"
+      - "sfd?-fe-tos.pglstatp-toutiao.com"
+      - "sfo.mddcloud.com.cn"
+      - "shopapi.io.mi.com"
+      - "shealthyapi.senssun.com"
+      - "t-dsp.pinduoduo.com"
+      - "toblog.ctobsnssdk.com"
+      - "tower.ubixioe.com"
+      - "umerp.umetrip.com"
+      - "us.l.qq.com"
+      - "lanfanapp.com"
+      - "api.xiachufang.com"
+      - "api.xiangji.qq.com"
+      - "video-dsp.pddpic.com"
+      - "images.pinduoduo.com"
+      - "client.app.coc.10086.cn"
+      - "cdn.cmgadx.com"
+      - "qadx.qinlinad.com"
+      - "watch.iot.mi.com"
+      - "cdn.web.chelaile.net.cn"
+      - "d.socdm.com"
+      - "m.client.10010.com"
+      - "cmds.omesoft.com"
+      - "api.fenxianglife.com"
