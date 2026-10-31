@@ -45,7 +45,7 @@ rewrites:
   actions:
   - response_script:
       name: 彩云天气去广告
-      url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=4abaa7843a14
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=a2043fb4e7d4
       timeout: 20
       body_required: true
 mitm:
@@ -56,8 +56,8 @@ mitm:
     - wrapper.cyapi.cn
     - api.caiyunapp.com
     - cdn-w.caiyunapp.com
-description: '更新时间：2026-11-01 07:28
+description: '更新时间：2026-11-01 07:29
 
   过滤首页推广、弹窗及部分页面广告。
 
-  同步状态：脚本镜像同步正常；最近检查：2026-11-01 07:28'
+  同步状态：脚本镜像同步正常；最近检查：2026-11-01 07:29'

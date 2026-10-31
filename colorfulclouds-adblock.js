@@ -42,6 +42,5 @@ if (url.includes("/api.caiyunapp.com/v1/activity")) {
   }
 }
 $done({ body: JSON.stringify(obj) });
-
 } catch (_) { $done({}); }
 })($done);
