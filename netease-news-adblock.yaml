@@ -1,0 +1,27 @@
+name: 网易新闻去开屏广告©️
+description: |-
+  清空开屏广告响应，不含信息流和热搜清理。
+  更新时间：2026-10-31 20:24
+open_url: https://apps.apple.com/app/id425349261
+author: Crazy-Z7[https://github.com/Crazy-Z7/AdGuard]
+homepage: https://github.com/Crazy-Z7/AdGuard
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/NeteaseNews.png
+
+# 参考公开脚本的空广告响应结构，改为内联返回，无远程 JS/jq 依赖。
+# 来源：https://github.com/Crazy-Z7/AdGuard/blob/main/ad/wyxwad.js
+# 来源规则：https://github.com/Crazy-Z7/AdGuard/blob/main/Ad.conf
+# 仅处理 nex.163.com/q，不替代完整网易新闻净化模块。
+# 手动维护，未配置上游定时同步；新版 App 效果需实机验证。
+dns: {}
+rewrites:
+  - match: '(?i)^https?://nex\.163\.com/q'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{"result":0,"ads":[],"store":""}'
+mitm:
+  hostnames:
+    includes:
+      - nex.163.com
