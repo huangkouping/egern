@@ -1,0 +1,55 @@
+name: 贝壳找房去广告©️
+description: |-
+  去除开屏、弹窗及部分推广内容。
+  更新时间：2026-10-31 19:50
+open_url: https://apps.apple.com/app/id1347663353
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Beike.png
+
+# 基于用户提供的完整配置整理；无远程 JavaScript 依赖。
+# 保留原过滤范围，合并 userCenter/info 的两条响应处理。
+# 手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: '(?i)^https://apps\.api\.ke\.com/platform/shellapp/homepage/initData/mini\?'
+    actions:
+      - response_body:
+          jq: 'delpaths([["data","bootpage"],["data","bottom_bar_activity"]])'
+  - match: '(?i)^https://apps\.api\.ke\.com/config/config/bootpage\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://apps\.api\.ke\.com/platform/shellapp/userCenter/feed\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://apps\.api\.ke\.com/platform/shellapp/userCenter/info\?'
+    actions:
+      - response_body:
+          jq: 'del(.data.islandModule) | del(.data.mainIcons.list[]? | select(.indexKey == "coupon"))'
+  - match: '(?i)^https://apps\.api\.ke\.com/platform/shellapp/myhome/pagedetail\?'
+    actions:
+      - response_body:
+          jq: '.data.moduleList |= map(select(.tab != "myHomeDecorV4"))'
+  - match: '(?i)^https://apps\.api\.ke\.com/config/config/getactivityconfig\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://apps\.api\.ke\.com/platform/shellapp/homepage/feed\?'
+    actions:
+      - response_body:
+          jq: '.data.list |= map(select(.cardType == "houseContainer" or .cardType == "houseV2" or .cardType == "houseV3" or .cardType == "rentHouseDiscount" or .cardType == "decorationCase"))'
+mitm:
+  hostnames:
+    includes:
+      - apps.api.ke.com
