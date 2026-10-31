@@ -1,0 +1,79 @@
+name: 盒马去广告©️
+description: |-
+  去除广告及购物推荐，精简底栏和我的页面。
+  更新时间：2026-10-31 20:09
+open_url: https://apps.apple.com/app/id1063183999
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MrHema.png
+
+# 基于用户提供的完整配置备份，保留原规则及匹配顺序。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.querysinglepage/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.sg\\.queryinnerpage/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.lbs\\.address\\.getshopinfolist/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.queryindexpage/"
+    actions:
+      - response_body:
+          jq: "if .data.pageType == \"1\" then .data.scenes |= map(select(.bizCode == \"three_row_circle\")) else . end"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.querytabfeedstream/"
+    actions:
+      - response_body:
+          jq: "if .data.pageType == \"5\" then .data.scenes |= map(select(.sceneType == \"100028\")) else . end"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.wdk\\.render\\.querychannelpage|mtop\\.wdk\\.render\\.querysinglepage)/"
+    actions:
+      - response_body:
+          jq: "if .data.pageType == \"216\" then .data.scenes |= map(select(.bizCode == \"shop_walk_top_picture\" or .bizCode == \"shop_walk_shop_util\" or .bizCode == \"shop_walk_bistro\")) else . end"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.querysearchpage/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.sg\\.querysinglescene/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.melon\\.collocation/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.fc\\.recommend\\.feedscommondservice/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.querymypage/"
+    actions:
+      - response_body:
+          jq: ".data.scenes |= map(select(.sceneType | IN(\"400029\", \"400005\", \"400010\", \"400002\", \"400004\", \"400015\")))"
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.wdk\\.lbs\\.location\\.shopdecideapi\\.decideformain|mtop\\.wdk\\.lbs\\.location\\.shopdecideapi\\.decidebygeocode)/"
+    actions:
+      - response_body:
+          jq: ".data.groupList |= map(.ext.tabConfig |= (.normalTabList = (.normalTabList | map(select(.code as $c | [\"HOME\", \"CLASSIFY\", \"CART\", \"MY\"] | any(. == $c)))) | .normalTabListB = (.normalTabListB | map(select(.code as $c | [\"HOME\", \"CLASSIFY\", \"CART\", \"MY\"] | any(. == $c))))))"
+mitm:
+  hostnames:
+    includes:
+      - acs-m.freshippo.com
