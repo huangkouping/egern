@@ -35,7 +35,7 @@ rewrites:
   actions:
   - response_script:
       name: 移除阿里云盘广告
-      url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js?v=374fda26e689
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js?v=9c3cae5bacbf
       timeout: 20
       body_required: true
 - name: 移除阿里云盘广告
@@ -43,7 +43,7 @@ rewrites:
   actions:
   - response_script:
       name: 移除阿里云盘广告
-      url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js?v=374fda26e689
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js?v=9c3cae5bacbf
       timeout: 20
       body_required: true
 mitm:

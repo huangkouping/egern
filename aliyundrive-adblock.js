@@ -49,6 +49,5 @@ if (url.includes("/v1/users/onboard_list")) {
 }
 
 $done({ body: JSON.stringify(obj) });
-
 } catch (_) { $done({}); }
 })($done);

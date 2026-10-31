@@ -5,7 +5,7 @@
   "last_updated": "2026-11-01 07:43",
   "source_url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/AliYunDrive_remove_ads/kelee_AliYunDrive_remove_ads.js",
   "source_version": "2024-07-15",
-  "source_sha256": "c587bc833f498e4cb9287eb2d3e75c14b89b6b2fe21f6c7865150b51b91d85cb",
-  "script_sha256": "374fda26e689176d056fbd9f82191595ce38fae9c4172792521b47c03a97a550",
+  "source_sha256": "4909ecde19541ad5e83be296e87eab83e62ede4e710fceee3d59dc4cf11f3e38",
+  "script_sha256": "9c3cae5bacbf9ceb8c463325c7204d660cbf74c6420bd88ab6efe87975691ad8",
   "scope": "Sync the public JavaScript mirror; local module rules are maintained separately."
 }
