@@ -1,0 +1,88 @@
+{
+  "name": "小桔充电去广告🅥",
+  "description": "",
+  "open_url": "https://apps.apple.com/app/id1670782986",
+  "author": "可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]",
+  "homepage": "https://github.com/huangkouping/egern",
+  "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/XiaojukejiCharge.png",
+  "compat_arguments_desc": "使用说明：启用 HTTPS 解密并信任证书，更新后重新打开小桔充电。保留原模块四条广告/推荐接口规则；我的页面通过完整 JS 资源替换实现，该文件不是代理执行脚本。整包公开镜像约1.7MB，依赖客户端页面结构，版本变化后可能需要关闭对应替换规则。未验证当前 App 页面效果。每6小时检查公开整包JS镜像，大小、结构和语法检查失败则保留上次有效版本；模块规则单独维护。",
+  "dns": {},
+  "rewrites": [
+    {
+      "match": "(?i)^https://energy\\.xiaojukeji\\.com/energy/hummer/api/resource/display($|\\?)",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https://energy\\.xiaojukeji\\.com/lego/api/orderSprint/stair/info($|\\?)",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https://energy\\.xiaojukeji\\.com/station-api/search/preWords$",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https://energy\\.xiaojukeji\\.com/am/marketing/api/member/facade/charge/personal/center\\?",
+      "actions": [
+        {
+          "response_body": {
+            "jq": "del(.data)"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https://am\\.didistatic\\.com/static/am/cf-terminal/epower/epower-thanos-app/\\d+\\.\\d+\\.\\d+/pages/people/index\\.js$",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/javascript; charset=utf-8"
+            },
+            "body": {
+              "url": "SOURCE_SCRIPT"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "mitm": {
+    "hostnames": {
+      "includes": [
+        "energy.xiaojukeji.com",
+        "am.didistatic.com"
+      ]
+    }
+  }
+}
