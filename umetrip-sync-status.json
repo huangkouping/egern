@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "last_checked": "2026-11-01 07:45",
+  "last_success": "2026-11-01 07:45",
+  "last_updated": "2026-11-01 07:45",
+  "source_url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/Umetrip_remove_ads/kelee_Umetrip_remove_ads.js",
+  "source_version": "V1.0.1",
+  "source_sha256": "23517eaaaedb2a73195131ae182fc9801996a9819712e96d37569cb9a437dc26",
+  "script_sha256": "0270cb7db4431334767f28d28c68052b95ca8f2e47ef561f747ef57a78dddeef",
+  "scope": "Sync the public JavaScript mirror; local module rules are maintained separately."
+}
