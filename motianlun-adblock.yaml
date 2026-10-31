@@ -1,0 +1,52 @@
+name: 摩天轮去广告©️
+description: |-
+  拦截开屏、横幅及部分搜索推荐。
+  更新时间：2026-10-31 20:15
+open_url: https://apps.apple.com/app/id1054861613
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/FerrisWheel.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: "(?i)^https://appapi\\.motianlun\\.cn/showapi/pub/site/\\d+/app/loading\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://appapi\\.motianlun\\.cn/showapi/pub/site/\\d+/banner/app\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://appapi\\.motianlun\\.cn/userdataapi/pub/v\\d/top/keywords\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://appapi\\.motianlun\\.cn/buyerapi/buyer/v\\d/search/index\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://appapi\\.motianlun\\.cn/showapi/site/\\d+/transfer/recentShows\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+mitm:
+  hostnames:
+    includes:
+      - appapi.motianlun.cn
