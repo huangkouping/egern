@@ -1,10 +1,11 @@
-name: Sync Amap public JQ mirrors
+name: Sync Amap and ColorfulClouds public mirrors
 on:
   workflow_dispatch:
   push:
     paths:
       - .github/workflows/sync-amap.yml
       - scripts/sync-amap.py
+      - scripts/sync-colorfulclouds.py
       - scripts/amap-base.yaml
       - tests/test-amap-sync.py
   schedule:
@@ -22,6 +23,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - run: pip install PyYAML==6.0.2
       - name: Ensure jq is available
         run: |
@@ -35,16 +39,20 @@ jobs:
         id: sync
         continue-on-error: true
         run: python scripts/sync-amap.py
+      - name: Synchronize ColorfulClouds public script mirror
+        id: colorfulclouds
+        continue-on-error: true
+        run: python scripts/sync-colorfulclouds.py
       - name: Commit valid rules or failure status
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json
+          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Sync Amap public JQ mirrors and status'
             git pull --rebase
             git push
           fi
       - name: Report failed synchronization
-        if: steps.sync.outcome == 'failure'
+        if: steps.sync.outcome == 'failure' || steps.colorfulclouds.outcome == 'failure'
         run: exit 1
