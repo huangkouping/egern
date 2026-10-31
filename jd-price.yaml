@@ -1,9 +1,9 @@
 name: 京东比价©️
 description: |-
-  在京东商品详情页显示慢慢买历史价格表。
+  在京东商品详情页显示慢慢买历史价格表，采用京东红表头和圆角卡片。
   首次使用：安装慢慢买，进入“我的”，收到参数已保存通知后重新打开京东商品详情；未显示时点击商品“详情”。
   参数只保存在本机，查询时发送至慢慢买。查询失败会显示原因；价格仅供参考。
-  更新时间：2026-10-31 22:29
+  更新时间：2026-10-31 22:35
 author: wf021325[https://github.com/wf021325], githubdulong[https://github.com/githubdulong], mw418[https://github.com/mw418], huangkouping
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id414245413
@@ -14,14 +14,14 @@ scriptings:
 - http_request:
     name: 捕获慢慢买参数
     match: '(?i)^https?://apapia-sqk-weblogic\.manmanbuy\.com/baoliao/center/menu(?:\?|$)'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.js?v=20261031-1
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.js?v=20261031-2
     body_required: true
     timeout: 10
     update_interval: 3600
 - http_response:
     name: 京东历史比价
     match: '(?i)^https?://in\.m\.jd\.com/product/graphext/\d+\.html(?:\?|$)'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.js?v=20261031-1
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.js?v=20261031-2
     body_required: true
     timeout: 30
     update_interval: 3600
