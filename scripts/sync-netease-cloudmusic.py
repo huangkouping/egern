@@ -34,11 +34,6 @@ def adapt(source):
         if source.count(old) != 1:
             raise ValueError('Upstream structure changed: adapter review required')
         source = source.replace(old, new, 1)
-    # Only the batch handler can reach oe() under module matching; keep account data intact.
-    start, end = source.index('function oe(f){'), source.index('try{if(s===null)')
-    if end <= start:
-        raise ValueError('Unexpected account helper structure')
-    source = source[:start] + 'function oe(f){}' + source[end:]
     if any(token in source for token in ['404: Not Found', '<html', '$httpClient', '$task.fetch', 'eval(', 'import(']):
         raise ValueError('Unexpected upstream content or network dependency')
     result = (ROOT / 'scripts/netease-cloudmusic-adapter.js').read_text()
