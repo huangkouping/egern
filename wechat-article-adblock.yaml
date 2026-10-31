@@ -1,0 +1,35 @@
+name: 微信公众号去广告©️
+description: |-
+  过滤公众号广告及部分相关推荐。
+  更新时间：2026-10-31 20:52
+open_url: https://apps.apple.com/app/id414478124
+author: RuCu6[https://github.com/RuCu6]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rules:
+  - domain_suffix:
+      match: wxs.qq.com
+      policy: REJECT
+rewrites:
+  - match: '(?i)^https://mp\.weixin\.qq\.com/mp/(cps_product_info|getappmsgad|jsmonitor|masonryfeed|relatedarticle)\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://mp\.weixin\.qq\.com/mp/relatedsearchword'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+mitm:
+  hostnames:
+    includes:
+      - mp.weixin.qq.com
