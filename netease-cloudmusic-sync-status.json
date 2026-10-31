@@ -6,6 +6,6 @@
   "source_url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/NeteaseCloudMusic_remove_ads/kelee_NeteaseCloudMusic_remove_ads.js",
   "source_version": "2025-02-19",
   "source_sha256": "20c13c7c598b8e59058493e2143d5c62d27ce6ac2917d04c400fa16caa092528",
-  "script_sha256": "e615a80613404df98a6039bd8b9478a833683b3b807cee0de14de96b8cff5207",
+  "script_sha256": "c4c7ab3a91098531091a9b3aa1469334c220876fabceb2e6c2f6430f315e4c99",
   "scope": "Sync the public JavaScript mirror; local module rules are maintained separately."
 }
