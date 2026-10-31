@@ -1,0 +1,184 @@
+name: 知乎去广告🅥
+description: |-
+  移除HTTPDNS和QUIC传输配置，移除开屏广告、信息流广告、回答页广告，移除回答页下的相关回答、专栏卡片及圈子卡片，移除直答页面推荐知识库和提问推荐，移除评论区评论氛围满意度调查，精简首页顶部标签及我的页面。
+  更新时间：2026-10-31 22:04
+open_url: https://apps.apple.com/app/id432274380
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Zhihu.png
+# 基于用户提供的配置备份；无远程 JS/jq 依赖，手动维护。
+dns: {}
+rewrites:
+- match: (?i)^https://m-cloud\.zhihu\.com/api/cloud/zhihu/config/all\?
+  actions:
+  - response_body:
+      jq: 'def drop_keys: {"km_httpdns_new_config_tars":true,"preFetchHttpDns":true,"httpdns_detector_use_concurrent":true,"httpdns_use_memory_cache":true,"httpdns_new_config_tars":true,"coreNetworkConf_useTars":true,"km_coreNetworkConf_useTars":true,"sugarQuicConfig":true,"quic_dns_detect_enable":true,"quicMixAB":true,"quic_downgrade_enable":true,"quic_priority_strategy":true,"quic_check_health_enable":true,"tquic_configuration":true,"networkExprimentList":true,"tars_ab_list":true,"zaSetExtraRequestHeader":true}; .data.configs |= map(select((drop_keys[.configKey] // false) | not) | if (.configValue | type) == "object" then del(.configValue.delayHttpdns, .configValue.dnsParser, .configValue.HTTPDNS) else . end)'
+- match: (?i)^https://api\.zhihu\.com/ad-style-service/request$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/commercial_api/
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/root/tab/v\d(?:\?.+)?$
+  actions:
+  - response_body:
+      jq: .tab_list |= map(select(.tab_type == "follow" or .tab_type == "recommend" or .tab_type == "hot" or .tab_type == "ring_tab"))
+- match: (?i)^https://api\.zhihu\.com/topstory/recommend\?
+  actions:
+  - response_body:
+      jq: .data |= map(select(.type == "ComponentCard"))
+- match: (?i)^https://api\.zhihu\.com/commercial_api/banners_v\d/app_float_corner\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/questions/\d+/feeds\?
+  actions:
+  - response_body:
+      jq: delpaths([["ad_info"]])
+- match: (?i)^https://api\.zhihu\.com/next-render\?id=\d+&type=answer
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/comment_v\d/(answers|pins)/\d+/root_comment\?
+  actions:
+  - response_body:
+      jq: delpaths([["atmosphere_voting_config"]])
+- match: (?i)^https://(api|page-info)(?:\.zhihu)?\.com/answers/v\d/\d+(?:\?.*)?$
+  actions:
+  - response_body:
+      jq: delpaths([["third_business"],["float_search_word"]])
+- match: (?i)^https://(api|page-info)(?:\.zhihu)?\.com/answers/v\d/\d+(?:\?.*)?$
+  actions:
+  - response_body:
+      jq: .structured_content.segments |= map(select(.type != "card"))
+- match: (?i)^https://api\.zhihu\.com/topstory/recommend\?
+  actions:
+  - response_body:
+      jq: .data[]?.children |= (if type == "array" then map(select(.id != "ring")) else . end)
+- match: (?i)^https://api\.zhihu\.com/(articles|answers|pins)/v\d/\d+\?
+  actions:
+  - response_body:
+      jq: delpaths([["third_business"],["ring_info"],["interaction_bar_plugins"]])
+- match: (?i)^https://api\.zhihu\.com/comment_v\d/answers/\d+/list-headers$
+  actions:
+  - response_body:
+      jq: delpaths([["continuous_consumption_module"]])
+- match: (?i)^https://api\.zhihu\.com/commercial_api/answer/\d+/bottom-v\d$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/related_recommend/feed/waterfall\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/podcasts/hub/v\d$
+  actions:
+  - response_body:
+      jq: delpaths([["banners"]])
+- match: (?i)^https://api\.zhihu\.com/search/preset_words\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/search/related_queries/question/\d+$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/search/recommend_query/v\d\?
+  actions:
+  - response_body:
+      jq: .recommend_queries.queries |= map(select(.type == "normal"))
+- match: (?i)^https://api\.zhihu\.com/search_v\d\?
+  actions:
+  - response_body:
+      jq: delpaths([["pendant"]])
+- match: (?i)^https://api\.zhihu\.com/search/tabs\?
+  actions:
+  - response_body:
+      jq: .data |= map(select(.t | IN("general", "ai_zhida", "recent", "people", "zvideo", "ring", "topic", "podcast", "column", "pin", "favlist")))
+- match: (?i)^https://zhida\.zhihu\.com/ai_ingress/knowledge/square/categories/feeds\?categoryId=1%7D$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://zhida\.zhihu\.com/ai_ingress/ai_chat/guidance$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/content-distribution-core/bubble/common/show$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://www\.zhihu\.com/api/v\d/members/homepage_card$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/people/homepage_entry_v\d$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/kvip/right/my_card\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.zhihu\.com/people/self$
+  actions:
+  - response_body:
+      jq: delpaths([["vip_info","entrance_new","right_button"],["vip_info","entrance_v2"]])
+- match: (?i)^https://api\.zhihu\.com/unlimited/go/my_card/v\d\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+mitm:
+  hostnames:
+    includes:
+    - m-cloud.zhihu.com
+    - api.zhihu.com
+    - www.zhihu.com
+    - page-info.zhihu.com
+    - zhida.zhihu.com
