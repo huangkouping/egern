@@ -1,0 +1,41 @@
+{
+  "name": "航旅纵横去广告🅥",
+  "description": "",
+  "open_url": "https://apps.apple.com/app/id480161784",
+  "author": "佚名",
+  "homepage": "https://github.com/huangkouping/egern",
+  "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Umetrip.png",
+  "compat_arguments_desc": "使用说明：启用模块并重新打开航旅纵横；HTTPS 请求需启用解密并信任证书。拦截 discardrp/startup 的指定接口；首页响应依据请求头 rpid 包含 1000002 或 1000019 返回 404，其他请求放行。源脚本 V1.0.1，已增加异常透传。模块匹配修正原域名分组并覆盖 HTTP/HTTPS。每 6 小时检查公开 JS 镜像，失败保留上次有效规则；模块匹配规则单独维护。当前 App 实际效果待实机验证。",
+  "dns": {},
+  "rules": [
+    {
+      "url_regex": {
+        "match": "^https?://(?:discardrp|startup)\\.umetrip\\.com/gateway/api/umetrip/native(?:\\?|$)",
+        "policy": "REJECT"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "name": "移除首页广告",
+      "match": "(?i)^https?://(?:114\\.115\\.217\\.129|home\\.umetrip\\.com)/gateway/api/umetrip/native(?:\\?|$)",
+      "actions": [
+        {
+          "response_script": {
+            "name": "移除首页广告",
+            "url": "SOURCE_SCRIPT",
+            "timeout": 20
+          }
+        }
+      ]
+    }
+  ],
+  "mitm": {
+    "hostnames": {
+      "includes": [
+        "114.115.217.129",
+        "home.umetrip.com"
+      ]
+    }
+  }
+}
