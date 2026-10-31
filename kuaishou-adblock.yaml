@@ -1,0 +1,67 @@
+name: 快手去广告©️
+description: |-
+  去除广告、悬浮推广及底栏皮肤，精简我的页面。
+  更新时间：2026-10-31 20:11
+open_url: https://apps.apple.com/app/id440948110
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/KuaiShou.png
+
+# 基于用户提供的完整配置备份，合并 startup 的两条响应处理。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/system/startup\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"reskinConfig\"],[\"sidebarExSquareStyle\",\"moreList\"],[\"sidebarExSquareStyle\",\"topList\"]]) | .sidebarExSquareStyle.commonlyUsedList |= map(select(.title == \"设置\" or .title == \"历史记录\" or .title == \"草稿箱\" or .title == \"我的钱包\" or .title == \"小程序\" or .title == \"未成年人模式\" or .title == \"官方客服\" or .title == \"内容偏好\" or .title == \"离线模式\" or .title == \"稍后再看\" or .title == \"举报中心\" or .title == \"挂件\"))"
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/n/nearby/widget/info\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(apissl|az\\d-live|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/n/live/feed/square/refresh\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"banners\"]])"
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/n/taskCenter/task/report\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/n/ad/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/n/feed/(selection|selectionFast)\\?"
+    actions:
+      - response_body:
+          jq: "if (.feeds | type) == \"array\" then .feeds |= map(select(.ad | not)) else . end"
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/n/live/feed/info/simplelive/card\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/n/user/profile/v2\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"postRecommends\"]])"
+  - match: "(?i)^https://(apissl|az\\d-api(-js|-idc)?)\\.(gifshow|ksapisrv)\\.com/rest/im/wd/top/navigation/getRecommendedSession\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"operationRecommendationList\"]])"
+mitm:
+  hostnames:
+    includes:
+      - 'az*-api.ksapisrv.com'
+      - az4-api-idc.ksapisrv.com
+      - 'az*-api-idc.ksapisrv.com'
+      - apissl.gifshow.com
+      - apissl.ksapisrv.com
+      - 'az*-api-js.gifshow.com'
+      - 'az*-live.ksapisrv.com'
