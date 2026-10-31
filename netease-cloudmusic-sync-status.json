@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "last_checked": "2026-11-01 07:54",
+  "last_success": "2026-11-01 07:54",
+  "last_updated": "2026-11-01 07:54",
+  "source_url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/NeteaseCloudMusic_remove_ads/kelee_NeteaseCloudMusic_remove_ads.js",
+  "source_version": "2025-02-19",
+  "source_sha256": "20c13c7c598b8e59058493e2143d5c62d27ce6ac2917d04c400fa16caa092528",
+  "script_sha256": "e615a80613404df98a6039bd8b9478a833683b3b807cee0de14de96b8cff5207",
+  "scope": "Sync the public JavaScript mirror; local module rules are maintained separately."
+}
