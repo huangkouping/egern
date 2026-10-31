@@ -1,0 +1,32 @@
+name: 阿里云盘去广告©️
+description: |-
+  过滤部分横幅、顶部奖励、推广消息和首页组件。
+  脚本源版本：2024-07-15；当前 App 效果待实测。
+  更新时间：2026-10-31 22:22
+author: RuCu6[https://github.com/RuCu6]
+homepage: https://github.com/AEtso/Loon/blob/master/Scripts/adrive.js
+open_url: https://apps.apple.com/app/id1494661473
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png
+# 使用可读取的 AEtso/Loon 脚本镜像；已备份，无可莉远程脚本依赖。
+# 手动维护，未设置上游自动同步。
+scriptings:
+- http_response:
+    name: 阿里云盘首页推广过滤
+    match: '^https://(biz)?api\.alipan\.com/apps/v\d/users?/home/(?:news|widgets)'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js
+    body_required: true
+    timeout: 20
+    update_interval: 3600
+- http_response:
+    name: 阿里云盘横幅过滤
+    match: '^https://member\.alipan\.com/v1/users/onboard_list'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js
+    body_required: true
+    timeout: 20
+    update_interval: 3600
+mitm:
+  hostnames:
+    includes:
+    - api.alipan.com
+    - bizapi.alipan.com
+    - member.alipan.com
