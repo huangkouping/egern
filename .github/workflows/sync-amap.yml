@@ -14,6 +14,8 @@ on:
       - scripts/aliyundrive-base.yaml
       - scripts/sync-umetrip.py
       - scripts/umetrip-base.yaml
+      - scripts/sync-railway12306.py
+      - scripts/railway12306-base.yaml
       - scripts/amap-base.yaml
       - tests/test-amap-sync.py
   schedule:
@@ -67,16 +69,20 @@ jobs:
         id: umetrip
         continue-on-error: true
         run: python scripts/sync-umetrip.py
+      - name: Synchronize 12306 public script mirror
+        id: railway12306
+        continue-on-error: true
+        run: python scripts/sync-railway12306.py
       - name: Commit valid rules or failure status
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json netease-news-kelee.yaml netease-news-kelee.js netease-news-sync-status.json aliyundrive-adblock.yaml aliyundrive-adblock.js aliyundrive-sync-status.json umetrip-adblock.yaml umetrip-adblock.js umetrip-sync-status.json
+          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json netease-news-kelee.yaml netease-news-kelee.js netease-news-sync-status.json aliyundrive-adblock.yaml aliyundrive-adblock.js aliyundrive-sync-status.json umetrip-adblock.yaml umetrip-adblock.js umetrip-sync-status.json railway12306-adblock.yaml railway12306-adblock.js railway12306-sync-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Sync Amap public JQ mirrors and status'
             git pull --rebase
             git push
           fi
       - name: Report failed synchronization
-        if: steps.sync.outcome == 'failure' || steps.colorfulclouds.outcome == 'failure' || steps.pinduoduo.outcome == 'failure' || steps.neteasenews.outcome == 'failure' || steps.aliyundrive.outcome == 'failure' || steps.umetrip.outcome == 'failure'
+        if: steps.sync.outcome == 'failure' || steps.colorfulclouds.outcome == 'failure' || steps.pinduoduo.outcome == 'failure' || steps.neteasenews.outcome == 'failure' || steps.aliyundrive.outcome == 'failure' || steps.umetrip.outcome == 'failure' || steps.railway12306.outcome == 'failure'
         run: exit 1
