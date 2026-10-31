@@ -1,0 +1,157 @@
+name: 喜马拉雅去广告©️
+description: |-
+  去除广告及推荐，精简频道和我的页面。
+  更新时间：2026-10-31 20:59
+open_url: https://apps.apple.com/app/id876336838
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Himalaya.png
+
+# 基于用户提供的完整配置备份，合并 homePage 的两条响应处理。
+# 补充直播订阅规则使用但原 MITM 遗漏的 live、livewsa 主机。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rules:
+  - domain:
+      match: adse.ximalaya.com
+      policy: REJECT
+  - domain:
+      match: adsehera.ximalaya.com
+      policy: REJECT
+  - domain:
+      match: adse.wsa.ximalaya.com
+      policy: REJECT
+  - domain:
+      match: adbehavior.ximalaya.com
+      policy: REJECT
+  - domain:
+      match: adbehavior.wsa.ximalaya.com
+      policy: REJECT
+rewrites:
+  - match: "(?i)^https://(search|searchwsa)\\.ximalaya\\.com/hub/(guideWord|hotWord)V\\d/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/discovery-feed/v\\d/mix/"
+    actions:
+      - response_body:
+          jq: ".heData |= map(select(.item.list[].bizType != \"SceneListenCard\"))"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/discovery-feed/v\\d/scene/listen/refresh\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(m|mwsa)\\.ximalaya\\.com/x-web-activity/signIn/getHomePageSignInInfo/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/discovery-category/customCategories/"
+    actions:
+      - response_body:
+          jq: ".categoryList |= map(.itemList |= map(select(.title | test(\"直播|123狂欢节|SVIP\"; \"i\") | not))) | .customCategoryList |= map(select(.title | test(\"直播|123狂欢节|SVIP\"; \"i\") | not))"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/football-portal/diff2/batch\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"json\",\"ad\"],[\"json\",\"toc\"]])"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/nexus-web/v\\d/tabs/customTabs\\?"
+    actions:
+      - response_body:
+          jq: ".data.feedTabs |= map(select(.name != \"大赛\"))"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/subscribe/v\\d/subscribe/tagAlbumList$"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/track-feed/v\\d/chase/recommend/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/social-web/follow-stream/category/\\d+$"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(m|mwsa)\\.ximalaya\\.com/community/square/v\\d/stream\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{\"data\":{\"cards\":[{\"content\":{},\"type\":\"RECOMMENDS\"}]},\"ret\":0}"
+  - match: "(?i)^https://mobwsa\\.ximalaya\\.com/mobile-playpage/playpage/tabs/v2/"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"playpage\",\"resourceMap\",\"defaultResource\"],[\"data\",\"playpage\",\"resourceMap\",\"playPageTip\"]])"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/mobile-playpage/playpage/recommendContentV\\d/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/mobile-playpage/playpage/recommend/resource/allocation/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/firework-portal/v\\d+/sync\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/business-sale-promotion-guide-mobile-web/popup/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/app-skin-service/skin/setting/info/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/mobile-user/v\\d/homePage/"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"freeListenV2\"]]) | .data.serviceModule.entrances |= map(select(.name == \"全部服务\"))"
+  - match: "(?i)^https://(live|livewsa)\\.ximalaya\\.com/lamia/v1/subscribe/status$"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/subscribe/v\\d/subscribe/recommend\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://(mobile|mobilehera|mobwsa)\\.ximalaya\\.com/mobile-user/v\\d/purchased/recommend/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+mitm:
+  hostnames:
+    includes:
+      - gslbali.ximalaya.com
+      - search.ximalaya.com
+      - searchwsa.ximalaya.com
+      - mobile.ximalaya.com
+      - mobilehera.ximalaya.com
+      - mobwsa.ximalaya.com
+      - m.ximalaya.com
+      - mwsa.ximalaya.com
+      - live.ximalaya.com
+      - livewsa.ximalaya.com
