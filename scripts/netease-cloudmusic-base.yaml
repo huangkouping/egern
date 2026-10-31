@@ -1,0 +1,327 @@
+{
+  "name": "网易云音乐去广告🅥",
+  "description": "",
+  "open_url": "https://apps.apple.com/app/id590338362",
+  "author": "RuCu6[https://github.com/RuCu6], Keywos[https://github.com/Keywos]",
+  "homepage": "https://github.com/huangkouping/egern",
+  "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/NeteaseCloudMusic.png",
+  "compat_arguments_desc": "使用说明：开启HTTPS解密并信任证书，更新后重启网易云音乐。界面隐藏开关在模块环境变量中设置，默认均关闭。基于2025-02-19公开脚本镜像，已适配Egern二进制加解密与gzip处理，异常返回原始响应；移除会员显示修改，不提供会员或付费内容解锁。关注列表提示沿用源逻辑。接口与加密协议变化可能导致失效，当前App效果需实测。每6小时检查公开JS镜像，结构变化或语法校验失败时保留可用版本；模块匹配规则单独维护。",
+  "env_schema": {
+    "MY": {
+      "name": "隐藏底栏漫游",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "DT": {
+      "name": "隐藏底栏笔记",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "FX": {
+      "name": "隐藏底栏发现",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRGG": {
+      "name": "隐藏首页问候语",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRRK": {
+      "name": "隐藏首页排行榜",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRDRD": {
+      "name": "隐藏首页每日推荐",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRSCVPT": {
+      "name": "隐藏首页推荐歌单",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRST": {
+      "name": "隐藏首页最近常听",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRRR": {
+      "name": "隐藏首页雷达歌单",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "HMPR": {
+      "name": "隐藏首页音乐合伙人",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRMST": {
+      "name": "隐藏首页推荐专属歌单",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    },
+    "PRCN": {
+      "name": "隐藏首页你的专属歌单",
+      "default_value": "false",
+      "options": [
+        "true",
+        "false"
+      ]
+    }
+  },
+  "dns": {},
+  "rules": [
+    {
+      "domain": {
+        "match": "iadmat.nosdn.127.net",
+        "policy": "REJECT"
+      }
+    },
+    {
+      "domain": {
+        "match": "iadmatapk.nosdn.127.net",
+        "policy": "REJECT"
+      }
+    },
+    {
+      "domain": {
+        "match": "iadmusicmat.music.126.net",
+        "policy": "REJECT"
+      }
+    },
+    {
+      "domain": {
+        "match": "iadmusicmatvideo.music.126.net",
+        "policy": "REJECT"
+      }
+    },
+    {
+      "domain": {
+        "match": "ipv4.music.163.com",
+        "policy": "REJECT"
+      }
+    },
+    {
+      "domain": {
+        "match": "ipv6.music.163.com",
+        "policy": "REJECT"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/e?api/(ocpc/)?ad/",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "text/plain"
+            },
+            "body": ""
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/w?e?api/search/default",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "text/plain"
+            },
+            "body": ""
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/(?:delivery/(batch-)?deliver|moment/tab/info/|side-bar/mini-program/music-service/account|yunbei/account/entrance/)",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/(?:community/friends/fans-group/artist/group/|mine/applet/redpoint|music/songshare/text/recommend/|resniche/position/play/new/|resniche/tspopup/show|resource/comments?/musiciansaid/|user/sub/artist)",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/(?:ios/version|mlivestream/entrance/playpage/|link/position/show/strategy|link/scene/show/resource|v1/content/exposure/comment/banner/)",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/w?eapi/(?:activity/bonus/playpage/time/query|resource-exposure/|search/(?:chart/|rcmd/keyword/|specialkeyword/))",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/my/podcast/tab/recommend",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    }
+  ],
+  "scriptings": [
+    {
+      "http_response": {
+        "name": "评论区及歌曲推广提示",
+        "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/(?:batch|v2/resource/comment/floor/get)",
+        "script_url": "SOURCE_SCRIPT",
+        "timeout": 20,
+        "body_required": true,
+        "binary_body": true,
+        "max_size": 5242880,
+        "update_interval": 3600
+      }
+    },
+    {
+      "http_response": {
+        "name": "首页推荐",
+        "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/(?:homepage/block/page|link/page/rcmd/(?:block/resource/multi/refresh|resource/show))",
+        "script_url": "SOURCE_SCRIPT",
+        "timeout": 20,
+        "body_required": true,
+        "binary_body": true,
+        "max_size": 5242880,
+        "update_interval": 3600
+      }
+    },
+    {
+      "http_response": {
+        "name": "底栏标签",
+        "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/link/home/framework/tab",
+        "script_url": "SOURCE_SCRIPT",
+        "timeout": 20,
+        "body_required": true,
+        "binary_body": true,
+        "max_size": 5242880,
+        "update_interval": 3600
+      }
+    },
+    {
+      "http_response": {
+        "name": "发现页",
+        "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/link/page/discovery/resource/show",
+        "script_url": "SOURCE_SCRIPT",
+        "timeout": 20,
+        "body_required": true,
+        "binary_body": true,
+        "max_size": 5242880,
+        "update_interval": 3600
+      }
+    },
+    {
+      "http_response": {
+        "name": "我的页面",
+        "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/link/position/show/resource",
+        "script_url": "SOURCE_SCRIPT",
+        "timeout": 20,
+        "body_required": true,
+        "binary_body": true,
+        "max_size": 5242880,
+        "update_interval": 3600
+      }
+    },
+    {
+      "http_response": {
+        "name": "关注列表提示",
+        "match": "(?i)^https?://interface\\d?\\.music\\.163\\.com/eapi/user/follow/users/mixed/get",
+        "script_url": "SOURCE_SCRIPT",
+        "timeout": 20,
+        "body_required": true,
+        "binary_body": true,
+        "max_size": 5242880,
+        "update_interval": 3600
+      }
+    }
+  ],
+  "mitm": {
+    "hostnames": {
+      "includes": [
+        "interface*.music.163.com"
+      ]
+    }
+  }
+}
