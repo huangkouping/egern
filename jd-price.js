@@ -92,12 +92,31 @@
       const wanted = new Set(['当前到手价','历史最低价','618价格','双11价格','30天最低价','60天最低价','180天最低价']);
       const rows = Array.isArray(list) ? list.filter(row => row && wanted.has(row.Name)) : [];
       if (!rows.length) throw new Error('该商品暂无可显示的比价记录');
+      // 统一比较基准：该行价格减去“当前到手价”，以分计算避免浮点误差。
+      const priceCents = value => {
+        if (value == null) return null;
+        const text = String(value).trim().replace(/^[¥￥]\s*/, '').replace(/元$/, '').trim();
+        if (!/^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,2})?$/.test(text)) return null;
+        const parts = text.replace(/,/g, '').split('.');
+        const cents = Number(parts[0]) * 100 + Number((parts[1] || '').padEnd(2, '0'));
+        return Number.isSafeInteger(cents) ? cents : null;
+      };
+      const current = rows.find(row => row.Name === '当前到手价');
+      const currentCents = current ? priceCents(current.Price) : null;
       const cells = rows.map(row => {
-        const difference = String(row.Difference || '—');
-        const color = difference.includes('↑') ? 'hkp-up' : difference.includes('↓') ? 'hkp-down' : '';
+        const cents = priceCents(row.Price);
+        let difference = '—', color = '';
+        if (row.Name === '当前到手价') {
+          difference = '基准价';
+        } else if (currentCents !== null && cents !== null) {
+          const delta = cents - currentCents;
+          const amount = (Math.abs(delta) / 100).toFixed(2).replace(/\.?0+$/, '');
+          difference = delta === 0 ? '0' : (delta > 0 ? '+' : '-') + amount;
+          color = delta > 0 ? 'hkp-up' : delta < 0 ? 'hkp-down' : '';
+        }
         return '<tr>' + [row.Name, row.Date || '—', row.Price == null ? '—' : row.Price, difference].map((value, index) => '<td' + (index === 3 && color ? ' class="' + color + '"' : '') + '>' + escapeHTML(value) + '</td>').join('') + '</tr>';
       }).join('');
-      const table = '<table class="hkp-price-table" aria-label="京东历史比价"><colgroup><col style="width:30%"><col style="width:30%"><col style="width:20%"><col style="width:20%"></colgroup><thead><tr><th>类型</th><th>日期</th><th>价格</th><th>差价</th></tr></thead><tbody>' + cells + '</tbody></table><div class="hkp-source">慢慢买历史价格 · 仅供参考</div>';
+      const table = '<table class="hkp-price-table" aria-label="京东历史比价"><colgroup><col style="width:30%"><col style="width:30%"><col style="width:20%"><col style="width:20%"></colgroup><thead><tr><th>类型</th><th>日期</th><th>价格</th><th>差价</th></tr></thead><tbody>' + cells + '</tbody></table><div class="hkp-source">差价＝该行价格－当前到手价；绿色更低，红色更高。<br>慢慢买历史价格 · 仅供参考</div>';
       return finish({body:insert(panel(table))});
     } catch (error) {
       return finish({body:insert(panel('历史比价暂不可用：' + escapeHTML(error.message || '查询失败') + '。可打开慢慢买检查，或重新捕获参数。'))});
