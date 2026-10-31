@@ -1,0 +1,69 @@
+name: 有道翻译官去广告©️
+description: |-
+  去除开屏、横幅推广，精简首页。
+  更新时间：2026-10-31 21:01
+open_url: https://apps.apple.com/app/id576337924
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YoudaoTrans.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: "(?i)^https://gorgon\\.youdao\\.com/gorgon/v2/request\\.s"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://gorgon\\.youdao\\.com/gorgon/brand/prefetch\\.s"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://gorgon\\.youdao\\.com/gorgon/request\\.s"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://fanyiguan-server\\.youdao\\.com/server/banner\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://dict\\.youdao\\.com/vip/activity/fanyiguan/sevendayfree/imei\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://dict\\.youdao\\.com/wordbook/recommend\\?all=false"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: "(?i)^https://api-overmind\\.youdao\\.com/openapi/get/luna/dict/trans_abtest/online/iOS\\?"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+mitm:
+  hostnames:
+    includes:
+      - gorgon.youdao.com
+      - fanyiguan-server.youdao.com
+      - api-overmind.youdao.com
+      - dict.youdao.com
