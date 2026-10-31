@@ -1,0 +1,86 @@
+{
+  "name": "阿里云盘去广告🅥",
+  "description": "",
+  "open_url": "https://apps.apple.com/app/id1494661473",
+  "author": "RuCu6[https://github.com/RuCu6]",
+  "homepage": "https://github.com/huangkouping/egern",
+  "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png",
+  "compat_arguments_desc": "使用说明：启用 HTTPS 解密并信任证书，更新后重新打开阿里云盘。脚本备份自公开镜像，每 6 小时检查更新；同步失败保留上次有效规则。镜像源版本为 2024-07-15，不能保证当前 App 所有页面均生效。保留源脚本中的相册、功能图标及签到入口。规则含 203.107.1.0/24 HTTPDNS 拦截，覆盖该网段。同步的是公开脚本镜像，模块匹配规则单独维护。",
+  "dns": {},
+  "rules": [
+    {
+      "ip_cidr": {
+        "match": "203.107.1.0/24",
+        "policy": "REJECT",
+        "no_resolve": true
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "match": "(?i)^https://member\\.alipan\\.com/v2/activity/sign_in_luckyBottle",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "match": "(?i)^https://api\\.alipan\\.com/adrive/v1/file/getTopFolders",
+      "actions": [
+        {
+          "respond": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "移除阿里云盘广告",
+      "match": "(?i)^https://(biz)?api\\.alipan\\.com/apps/v\\d/users?/home/(news|widgets)",
+      "actions": [
+        {
+          "response_script": {
+            "name": "移除阿里云盘广告",
+            "url": "SOURCE_SCRIPT",
+            "timeout": 20,
+            "body_required": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "移除阿里云盘广告",
+      "match": "(?i)^https://member\\.alipan\\.com/v1/users/onboard_list",
+      "actions": [
+        {
+          "response_script": {
+            "name": "移除阿里云盘广告",
+            "url": "SOURCE_SCRIPT",
+            "timeout": 20,
+            "body_required": true
+          }
+        }
+      ]
+    }
+  ],
+  "mitm": {
+    "hostnames": {
+      "includes": [
+        "api.alipan.com",
+        "member.alipan.com",
+        "bizapi.alipan.com"
+      ]
+    }
+  }
+}
