@@ -1,0 +1,122 @@
+name: 凤凰新闻去广告©️
+description: |-
+  去除广告及部分推荐，精简频道、底栏和我的页面。
+  更新时间：2026-10-31 21:10
+open_url: https://apps.apple.com/app/id395133418
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ifengNews.png
+
+# 基于用户提供的完整配置备份，合并 cow、channel 两组重复接口处理。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: "(?i)^https://nine\\.ifeng\\.com/adPreload\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://nine\\.ifeng\\.com/startUpAdPrestrainList\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://nine\\.ifeng\\.com/startUpAddAd\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://config\\.nine\\.ifeng\\.com/news/cow\\?"
+    actions:
+      - response_body:
+          jq: ".bottomNav|=map(select(.NavId==\"bottomNavNews\" or .NavId==\"bottomNavMine\")) | delpaths([[\"zip_url\"]])"
+  - match: "(?i)^https://config\\.nine\\.ifeng\\.com/news/h5prepublish\\?"
+    actions:
+      - respond:
+          status: 404
+  - match: "(?i)^https://nine\\.ifeng\\.com/searchhotwordsrollv\\d\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://nine\\.ifeng\\.com/searchvideohotwordsroll\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://nine\\.ifeng\\.com/searchHotwordsReact\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://user\\.iclient\\.ifeng\\.com/active_task/channel\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://config\\.nine\\.ifeng\\.com/news/channel\\?"
+    actions:
+      - response_body:
+          jq: ".defaultChannel |= map(select(.id == \"commenterch\" or .id == \"sy\" or .id == \"vipchannel\" or .id == \"rank_hot_merge\" or .id == \"rtnews\" or .id == \"sp\" or .id == \"mil\" or .id == \"finance\" or .id == \"history\" or .id == \"momentsnew\" or .id == \"taihai\" or .id == \"focusnews\" or .id == \"rcmd\" or .id == \"tw\" or .id == \"HK\" or .id == \"dawanqu1\")) | delpaths([[\"more\"],[\"youngChannel\"]])"
+  - match: "(?i)^https://nine\\.ifeng\\.com/headline\\?"
+    actions:
+      - response_body:
+          jq: "walk(if type == \"object\" and has(\"item\") and (.item | type == \"array\") then .item |= map(select(.type == \"phvideo\" or .type == \"doc\" or .type == \"phreclist\")) else . end)"
+  - match: "(?i)^https://nine\\.ifeng\\.com/getNewsDocs\\?"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"body\",\"showAdvert\"],[\"body\",\"adData\"]])"
+  - match: "(?i)^https://nine\\.ifeng\\.com/newRelatedDocs\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://nine\\.ifeng\\.com/getdocbackinfo\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://user\\.iclient\\.ifeng\\.com/event_protal/list_lite\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://nine\\.ifeng\\.com/phoenixTvChannel\\?"
+    actions:
+      - response_body:
+          jq: "map(if has(\"item\") then .item|=map(select(.type==\"columnfastmessagescroll\" or .type==\"phvideo\" or .type==\"videoseriesrecommendmarquee\" or .type==\"short\")) else . end)"
+  - match: "(?i)^https://nine\\.ifeng\\.com/adVideoImmersionWindow\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://nine\\.ifeng\\.com/videoimmersionlistv\\d\\?"
+    actions:
+      - response_body:
+          jq: "map(if has(\"item\") then .item|=map(select(.type==\"miniVideo\" or .type==\"phvideo\")) else . end)"
+  - match: "(?i)^https://nine\\.ifeng\\.com/shortList\\?"
+    actions:
+      - response_body:
+          jq: "map(.item|=map(select(.type==\"short\")))"
+  - match: "(?i)^https://comment\\.ifeng\\.com/v\\d/get/commentlist\\?"
+    actions:
+      - response_body:
+          jq: "del(.comments[] | select(.type == \"advert\"))"
+mitm:
+  hostnames:
+    includes:
+      - nine.ifeng.com
+      - config.nine.ifeng.com
+      - user.iclient.ifeng.com
+      - comment.ifeng.com
