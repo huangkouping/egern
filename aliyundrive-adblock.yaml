@@ -1,32 +1,54 @@
-name: 阿里云盘去广告©️
-description: |-
-  过滤部分横幅、顶部奖励、推广消息和首页组件。
-  脚本源版本：2024-07-15；当前 App 效果待实测。
-  更新时间：2026-10-31 22:22
-author: RuCu6[https://github.com/RuCu6]
-homepage: https://github.com/AEtso/Loon/blob/master/Scripts/adrive.js
+name: 阿里云盘去广告🅥
+description: '更新时间：2026-11-01 07:43
+
+  移除首页广告横幅、弹窗和顶部奖励。
+
+  同步状态：脚本镜像同步正常；最近检查：2026-11-01 07:43'
 open_url: https://apps.apple.com/app/id1494661473
+author: RuCu6[https://github.com/RuCu6]
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png
-# 使用可读取的 AEtso/Loon 脚本镜像；已备份，无可莉远程脚本依赖。
-# 手动维护，未设置上游自动同步。
-scriptings:
-- http_response:
-    name: 阿里云盘首页推广过滤
-    match: '^https://(biz)?api\.alipan\.com/apps/v\d/users?/home/(?:news|widgets)'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js
-    body_required: true
-    timeout: 20
-    update_interval: 3600
-- http_response:
-    name: 阿里云盘横幅过滤
-    match: '^https://member\.alipan\.com/v1/users/onboard_list'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js
-    body_required: true
-    timeout: 20
-    update_interval: 3600
+compat_arguments_desc: 使用说明：启用 HTTPS 解密并信任证书，更新后重新打开阿里云盘。脚本备份自公开镜像，每 6 小时检查更新；同步失败保留上次有效规则。镜像源版本为 2024-07-15，不能保证当前 App 所有页面均生效。保留源脚本中的相册、功能图标及签到入口。规则含 203.107.1.0/24 HTTPDNS 拦截，覆盖该网段。同步的是公开脚本镜像，模块匹配规则单独维护。
+dns: {}
+rules:
+- ip_cidr:
+    match: 203.107.1.0/24
+    policy: REJECT
+    no_resolve: true
+rewrites:
+- match: (?i)^https://member\.alipan\.com/v2/activity/sign_in_luckyBottle
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.alipan\.com/adrive/v1/file/getTopFolders
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- name: 移除阿里云盘广告
+  match: (?i)^https://(biz)?api\.alipan\.com/apps/v\d/users?/home/(news|widgets)
+  actions:
+  - response_script:
+      name: 移除阿里云盘广告
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js?v=374fda26e689
+      timeout: 20
+      body_required: true
+- name: 移除阿里云盘广告
+  match: (?i)^https://member\.alipan\.com/v1/users/onboard_list
+  actions:
+  - response_script:
+      name: 移除阿里云盘广告
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.js?v=374fda26e689
+      timeout: 20
+      body_required: true
 mitm:
   hostnames:
     includes:
     - api.alipan.com
-    - bizapi.alipan.com
     - member.alipan.com
+    - bizapi.alipan.com
