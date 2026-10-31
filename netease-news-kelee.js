@@ -45,6 +45,5 @@ if (url.includes("/feed/dynamic/headline-list")) {
 }
 
 $done({ body: JSON.stringify(obj) });
-
 } catch (_) { $done({}); }
 })($done);
