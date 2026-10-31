@@ -1,0 +1,78 @@
+name: 得物去广告©️
+description: |-
+  去除开屏及推广，精简搜索、消息和我的页面。
+  更新时间：2026-10-31 19:56
+open_url: https://apps.apple.com/app/id1012871328
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Dewu.png
+
+# 基于用户提供的完整配置备份，仅删除重复的 background_words 规则。
+# 无远程 JavaScript 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: '(?i)^https://app\.dewu\.com/api/v1/app/advertisement/'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://app\.dewu\.com/hacking-newbie/v1/app/coupon/module\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://app\.dewu\.com/api/v1/app/search/lexicon/v3/background_words\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://app\.dewu\.com/api/v1/app/search/lexicon/v1/rank_words\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://app\.dewu\.com/api/v1/app/biz-aggregate/me/user-index\?'
+    actions:
+      - response_body:
+          jq: '.data.modules |= map(if .key == "wallet" then .data.menus |= map(select(.key == "coupon" or .key == "allowance" or .key == "gift" or .key == "balance")) else . end) | .data.modules |= map(select(.key != "merchant" and .key != "discountCoupon"))'
+  - match: '(?i)^https://app\.dewu\.com/api/v1/app/account/wallet/page/entrance\?'
+    actions:
+      - response_body:
+          jq: '.data.groupInfoDTOS |= map(.moduleInfoDTO = {assetModule: .moduleInfoDTO.assetModule}) | .data.moduleNames = [.data.moduleNames[] | select(. == "assetModule")] | . as $full | $full | .data.groupNames |= (map(select(. == "MAIN" or . == "ASYNC_COMMON" or . == "ASYNC_GOODS_FEEDS")))'
+  - match: '(?i)^https://app\.dewu\.com/identify-discovery/v1/discovery/index\?'
+    actions:
+      - response_body:
+          jq: '.data.groups |= map(.items |= map(select(.title == "消息中心")))'
+  - match: '(?i)^https://app\.dewu\.com/sns-rec/v1/attention/feed\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://app\.dewu\.com/sns-rec/v1/search/word-skip/new-list\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://app\.dewu\.com/sns-rec/v1/search/hotword-list\?'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+mitm:
+  hostnames:
+    includes:
+      - app.dewu.com
