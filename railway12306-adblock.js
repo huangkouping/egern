@@ -68,7 +68,6 @@ if (url.includes("/mobile.12306.cn/otsmobile/app/mgs/")) {
   $done({});
 }
 
-
 })();
 if (blocked) return ctx.abort();
 } catch (_) { return; }

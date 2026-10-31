@@ -5,7 +5,7 @@
   "last_updated": "2026-11-01 07:48",
   "source_url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/12306_remove_ads/kelee_12306_remove_ads.js",
   "source_version": "2024-11-24",
-  "source_sha256": "e5423b887aaac52865f19e001d4790411d7270c55a5828d4923f5e2a893eba36",
-  "script_sha256": "31c756291a6d8b420f31e85260613e450fae1e946963f1f0cca1911b8f9ed2f0",
+  "source_sha256": "22a825d8149d952dd9c6c1c5c96fa3f830a0ebba975f8fc402f55ad1f40d4a8a",
+  "script_sha256": "afc5dddec143ff10ff71be1e515f279cd82a55f72cbbc50760eac1d686df2e3b",
   "scope": "Sync the public JavaScript mirror; local module rules are maintained separately."
 }
