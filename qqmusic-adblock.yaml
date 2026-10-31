@@ -1,0 +1,47 @@
+name: QQ音乐去广告©️
+description: |-
+  拦截 QQ 音乐广告及广告统计域名。
+  更新时间：2026-10-31 21:08
+open_url: https://apps.apple.com/app/id414603431
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QQMusic.png
+
+# 基于用户提供的完整配置备份，保留原规则。
+# 纯域名拦截，无远程 JS/jq 依赖，无需 MITM。
+# 手动维护，未配置上游定时同步。
+dns: {}
+rules:
+  - domain:
+      match: adstats.tencentmusic.com
+      policy: REJECT
+  - domain:
+      match: ad.tencentmusic.com
+      policy: REJECT
+  - domain:
+      match: adcdn.tencentmusic.com
+      policy: REJECT
+  - domain:
+      match: adcdn6.tencentmusic.com
+      policy: REJECT
+  - domain:
+      match: adexpo.tencentmusic.com
+      policy: REJECT
+  - domain:
+      match: adclick.tencentmusic.com
+      policy: REJECT
+  - domain:
+      match: mc.tencentmusic.com
+      policy: REJECT
+  - domain:
+      match: monitor.music.qq.com
+      policy: REJECT
+  - domain:
+      match: tmead.y.qq.com
+      policy: REJECT
+  - domain:
+      match: tmeadbak.y.qq.com
+      policy: REJECT
+  - domain:
+      match: tmeadquic.y.qq.com
+      policy: REJECT
