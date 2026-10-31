@@ -1,0 +1,89 @@
+name: Keep去广告©️
+description: |-
+  去除广告及推荐，精简底栏和首页标签。
+  更新时间：2026-10-31 21:04
+open_url: https://apps.apple.com/app/id952694580
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Keep.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rules:
+  - domain:
+      match: kad.gotokeep.com
+      policy: REJECT
+rewrites:
+  - match: "(?i)^https://api\\.gotokeep\\.com/op-engine-webapp/v1/configs$"
+    actions:
+      - response_body:
+          jq: "delpaths([[\"data\",\"adTimeoutReport\"],[\"data\",\"spotShowReport\"],[\"data\",\"adSupplementIntervalMinutes\"],[\"data\",\"adSupplementSwitch\"],[\"data\",\"hotFeedSpotAdRequestMoment\"],[\"data\",\"activityBrandFeedSpotAdRequestMoment\"],[\"data\",\"searchFeedSpotAdRequestMoment\"],[\"data\",\"feedDetailSpotAdRequestMoment\"],[\"data\",\"homePageFeedSpotAdRequestMoment\"],[\"data\",\"followFeedSpotAdRequestMoment\"],[\"data\",\"hotFeedRecommendSpotAdRequestMoment\"],[\"data\",\"activityFeedSpotAdRequestMoment\"],[\"data\",\"hotFeedFindSpotAdRequestMoment\"],[\"data\",\"hotFeedSpotFixedPositionSecond\"],[\"data\",\"searchFeedSpotFixedPositionSecond\"],[\"data\",\"followFeedSpotFixedPositionSecond\"],[\"data\",\"activityFeedSpotFixedPositionSecond\"],[\"data\",\"searchFeedSpotFixedPositionThird\"],[\"data\",\"hotFeedFindSpotFixedPositionSecond\"],[\"data\",\"hotFeedFindSpotFixedPositionThird\"],[\"data\",\"activityFeedSpotFixedPositionInitial\"],[\"data\",\"activityFeedSpotFixedPositionThird\"],[\"data\",\"hotFeedDynamicSpotPosition\"],[\"data\",\"feedDetailDynamicSpotPosition\"],[\"data\",\"hotFeedRecommendDynamicSpotPosition\"],[\"data\",\"hotFeedFindDynamicSpotPosition\"],[\"data\",\"homePageFeedDynamicSpotPosition\"],[\"data\",\"followFeedDynamicSpotPosition\"],[\"data\",\"searchFeedSpotPositionDynamic\"],[\"data\",\"activityFeedSpotPositionDynamic\"],[\"data\",\"activityBrandFeedSpotPositionDynamic\"],[\"data\",\"splashAdLoadTimeLimit\"],[\"data\",\"courseAdLoadTimeLimit\"],[\"data\",\"feedAdLoadTimeLimit\"],[\"data\",\"aliHCSpotConfig\"],[\"data\",\"gdtSpotConfig\"],[\"data\",\"pugcThresholdPercent\"],[\"data\",\"pugcStepMinSeconds\"],[\"data\",\"pugcStepMaxSeconds\"],[\"data\",\"pugcPreLoadEarlySeconds\"],[\"data\",\"pugcLoadPostPreRolls\"],[\"data\",\"closeConfirmButtonText\"]])"
+  - match: "(?i)^https://api\\.gotokeep\\.com/op-engine-webapp/v1/ad/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/search/v6/default/keyword/list\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/twins/v4/feed/followPage\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/twins/union/feed/union_feed_all$"
+    actions:
+      - response_body:
+          jq: ".data.modules |= map(select(.code == \"unionFeedEntry\"))"
+  - match: "(?i)^https://api\\.gotokeep\\.com/twins/union/feed/function\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/twins/v4/feed/entryDetail\\?"
+    actions:
+      - response_body:
+          jq: "setpath([\"data\"]; \"{}\")"
+  - match: "(?i)^https://api\\.gotokeep\\.com/guide-webapp/v1/popup/getPopUp\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/config/v3/basic\\?"
+    actions:
+      - response_body:
+          jq: ".data.bottomBarControl.tabs |= map(select(.tabType | . == \"home\" or . == \"schedule\" or . == \"dynamic_sports\" or . == \"personal\")) | .data.homeTabs |= map(select(.type | . == \"socialTab\" or . == \"union_feed_all\" or . == \"homeRecommend\" or . == \"suitTab\" or . == \"union_feed_route\"))"
+  - match: "(?i)^https://api\\.gotokeep\\.com/search/v5/hotCourse/list$"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/search/v4/hotHashtag/list$"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/search/v4/hotword/list\\?"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+  - match: "(?i)^https://api\\.gotokeep\\.com/pencil-webapp/play/v1/games\\?"
+    actions:
+      - response_body:
+          jq: ".data.games[].microGames[] |= if .leftIcon? and .leftIcon.type == \"aiMode\" then del(.leftIcon) else . end"
+mitm:
+  hostnames:
+    includes:
+      - api.gotokeep.com
