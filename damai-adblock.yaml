@@ -1,0 +1,43 @@
+name: 大麦去广告©️
+description: |-
+  去除开屏、弹窗及部分推广内容。
+  更新时间：2026-10-31 19:55
+open_url: https://apps.apple.com/app/id513829338
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Damai.png
+
+# 基于用户提供的完整配置备份，保留原处理逻辑。
+# 无远程 JavaScript 依赖；手动维护，未配置上游定时同步。
+dns: {}
+rewrites:
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome/'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.mec\.popup\.get/'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.user\.my\.content\.get/'
+    actions:
+      - response_body:
+          jq: 'delpaths([["data","banner"],["data","performFilmVip","userProfitList"]])'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.mypage\.feed/'
+    actions:
+      - response_body:
+          jq: 'delpaths([["data","feedCard"]])'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.mec\.aristotle\.get/'
+    actions:
+      - response_body:
+          jq: 'delpaths([["data","data","top","keywords"]])'
+mitm:
+  hostnames:
+    includes:
+      - acs.m.taobao.com
