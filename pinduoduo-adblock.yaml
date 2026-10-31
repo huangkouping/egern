@@ -1,215 +1,274 @@
 name: 拼多多去广告🅥
-description: |-
-  去除广告及推广，精简首页和个人中心；不含扫码取件页去广告。
-  更新时间：2026-10-31 21:16
+description: '更新时间：2026-11-01 07:32
+
+  去除广告及推广，精简页面，含扫码取件页清理。
+
+  同步状态：扫码脚本镜像同步正常；最近检查：2026-11-01 07:32'
 open_url: https://apps.apple.com/app/id1044283059
 author: ZenmoFeiShi[https://github.com/ZenmoFeiShi], 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://hub.kelee.one
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png
-
-# 基于用户提供的配置备份；按用户要求省略无法读取的扫码取件页脚本。
-# 合并首页 hub 的重复匹配，删除重复 titan 域名及重复 delpaths 路径。
-# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
 dns: {}
 rules:
-  - and:
-      match: [{"url_regex":{"match":"^http://((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/d(\\d)?"}},{"user_agent":{"match":"*com.xunmeng.pinduoduo*"}}]
-      policy: "REJECT"
-  - and:
-      match: [{"url_regex":{"match":"^http://\\[[0-9a-fA-F:]+\\]/d(\\d)?\\?"}},{"user_agent":{"match":"*com.xunmeng.pinduoduo*"}}]
-      policy: "REJECT"
-  - and:
-      match: [{"domain":{"match":"api.pinduoduo.com"}},{"protocol":{"match":"QUIC"}}]
-      policy: "REJECT"
-  - domain:
-      match: "titan.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "xg.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "cdl-1.pddpic.com"
-      policy: "REJECT"
-  - domain:
-      match: "cdl-p2.pddpic.com"
-      policy: "REJECT"
-  - domain:
-      match: "cd-1.pddpic.com"
-      policy: "REJECT"
-  - domain:
-      match: "apm.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "th-b.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "ta.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "th.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "th-a.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "ta-a.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "meta.pinduoduo.com"
-      policy: "REJECT"
-  - domain:
-      match: "apm-a.pinduoduo.com"
-      policy: "REJECT"
+- and:
+    match:
+    - url_regex:
+        match: ^http://((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/d(\d)?
+    - user_agent:
+        match: '*com.xunmeng.pinduoduo*'
+    policy: REJECT
+- and:
+    match:
+    - url_regex:
+        match: ^http://\[[0-9a-fA-F:]+\]/d(\d)?\?
+    - user_agent:
+        match: '*com.xunmeng.pinduoduo*'
+    policy: REJECT
+- and:
+    match:
+    - domain:
+        match: api.pinduoduo.com
+    - protocol:
+        match: QUIC
+    policy: REJECT
+- domain:
+    match: titan.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: xg.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: cdl-1.pddpic.com
+    policy: REJECT
+- domain:
+    match: cdl-p2.pddpic.com
+    policy: REJECT
+- domain:
+    match: cd-1.pddpic.com
+    policy: REJECT
+- domain:
+    match: apm.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: th-b.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: ta.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: th.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: th-a.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: ta-a.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: meta.pinduoduo.com
+    policy: REJECT
+- domain:
+    match: apm-a.pinduoduo.com
+    policy: REJECT
 rewrites:
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/aristotle/unrated_order_for_unreceived_tab\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/aristotle/query_order_list_tabs_element\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/aquarius/hungary/global/homepage\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/caterham/v3/query/order_express_group\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/search_hotquery\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/zaire_biz/chat/resource/get_list_data\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/caterham/v3/query/new_chat_group\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/alexa/goods/back_up\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/caterham/v3/query/personal\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/brand-olay/goods_detail/bybt_guide\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/engels/reviews/require/append\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/caterham/v3/query/my_order_group\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/caterham/v3/query/likes\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/phantom/gbdbpdv/extra\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/manufacturer/cross/shortcut/list\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/dunkirk/liveactivity/push/create/url/report\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/growth/nagato/app/index/gather\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/engels/wait/receive/review\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/buffon/nasus/recommend\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/caterham/v2/query/goods_detail_with_tags\\?"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/alexa/homepage/hub\\?"
-    actions:
-      - response_body:
-          jq: "delpaths([[\"result\",\"dy_module\",\"irregular_banner_dy\"],[\"result\",\"icon_set\"],[\"result\",\"search_bar_hot_query\"]]) | .result.bottom_tabs? |= map(select(.link | IN(\"index.html\", \"chat_list.html\", \"personal.html\"))) | .result.buffer_bottom_tabs? |= map(select(.link | IN(\"index.html\", \"chat_list.html\", \"personal.html\"))) | .result.all_top_opts |= map(del(.selected_image, .image, .height, .width))"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/search\\?"
-    actions:
-      - response_body:
-          jq: "delpaths([[\"expansion\"]])"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/philo/personal/hub\\?"
-    actions:
-      - response_body:
-          jq: "delpaths([[\"monthly_card_entrance\"],[\"personal_center_style_v2_vo\"],[\"icon_set\",\"icons\"],[\"icon_set\",\"top_personal_icons\"],[\"personal_banner\"]])"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/oak/integration/render\\?"
-    actions:
-      - response_body:
-          jq: "delpaths([[\"bottom_section_list\"],[\"ui\",\"bottom_section\"],[\"ui\",\"live_section\",\"float_info\"]])"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/caterham/v3/query/order_detail_group\\?"
-    actions:
-      - response_body:
-          jq: "delpaths([[\"data\",\"goods_list\"]])"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/order/"
-    actions:
-      - response_body:
-          jq: "delpaths([[\"marketing_banner_vo\"],[\"shipping\",\"banner_above_recommend\"]])"
-  - match: "(?i)^https://api\\.pinduoduo\\.com/api/aristotle/order_list_v4\\?"
-    actions:
-      - response_body:
-          jq: ".orders |= map(.order_buttons |= map(del(.order_growth_tip)))"
+- match: (?i)^https://api\.pinduoduo\.com/api/aristotle/unrated_order_for_unreceived_tab\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/aristotle/query_order_list_tabs_element\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/aquarius/hungary/global/homepage\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/caterham/v3/query/order_express_group\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/search_hotquery\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/zaire_biz/chat/resource/get_list_data\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/caterham/v3/query/new_chat_group\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/alexa/goods/back_up\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/caterham/v3/query/personal\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/brand-olay/goods_detail/bybt_guide\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/engels/reviews/require/append\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/caterham/v3/query/my_order_group\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/caterham/v3/query/likes\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/phantom/gbdbpdv/extra\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/manufacturer/cross/shortcut/list\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/dunkirk/liveactivity/push/create/url/report\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/growth/nagato/app/index/gather\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/engels/wait/receive/review\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/buffon/nasus/recommend\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/caterham/v2/query/goods_detail_with_tags\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.pinduoduo\.com/api/alexa/homepage/hub\?
+  actions:
+  - response_body:
+      jq: delpaths([["result","dy_module","irregular_banner_dy"],["result","icon_set"],["result","search_bar_hot_query"]]) | .result.bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.buffer_bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.all_top_opts |= map(del(.selected_image, .image, .height, .width))
+- match: (?i)^https://api\.pinduoduo\.com/search\?
+  actions:
+  - response_body:
+      jq: delpaths([["expansion"]])
+- match: (?i)^https://api\.pinduoduo\.com/api/philo/personal/hub\?
+  actions:
+  - response_body:
+      jq: delpaths([["monthly_card_entrance"],["personal_center_style_v2_vo"],["icon_set","icons"],["icon_set","top_personal_icons"],["personal_banner"]])
+- match: (?i)^https://api\.pinduoduo\.com/api/oak/integration/render\?
+  actions:
+  - response_body:
+      jq: delpaths([["bottom_section_list"],["ui","bottom_section"],["ui","live_section","float_info"]])
+- match: (?i)^https://api\.pinduoduo\.com/api/caterham/v3/query/order_detail_group\?
+  actions:
+  - response_body:
+      jq: delpaths([["data","goods_list"]])
+- match: (?i)^https://api\.pinduoduo\.com/order/
+  actions:
+  - response_body:
+      jq: delpaths([["marketing_banner_vo"],["shipping","banner_above_recommend"]])
+- match: (?i)^https://api\.pinduoduo\.com/api/aristotle/order_list_v4\?
+  actions:
+  - response_body:
+      jq: .orders |= map(.order_buttons |= map(del(.order_growth_tip)))
+- name: 扫码取件页清理
+  match: (?i)^https://m\.pinduoduo\.net/mdkd/package\?from_app_scan
+  actions:
+  - response_script:
+      name: 扫码取件页清理
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/pinduoduo-pickup.js?v=338f3e8dcf21
+      timeout: 20
+      body_required: true
+- name: 扫码取件页组件替换
+  match: ^https://pfile\.pddpic\.com/mdkd/mdkd/_next/static/chunks/9410-b8806e870a26db7d\.js(?:\?|$)
+  actions:
+  - response_script:
+      name: 扫码取件页组件替换
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/pinduoduo-pickup.js?v=338f3e8dcf21
+      timeout: 20
+      body_required: true
 mitm:
   hostnames:
     includes:
-      - api.pinduoduo.com
+    - api.pinduoduo.com
+    - m.pinduoduo.net
+    - pfile.pddpic.com
+compat_arguments_desc: '【使用说明】
+
+  启用后重新打开拼多多；扫码取件页需重新扫码或刷新。请关闭其他同类拼多多模块。
+
+  原有应用内规则保持不变，补全扫码取件页 HTML 清理和页面组件替换。
+
+  两个依赖已合并备份到本仓库，不再访问可莉脚本地址。
+
+  每 6 小时检查两个公开镜像；失败保留上次有效版本。
+
+  镜像源码标注 2026-07-11，未必与可莉服务器当前版本一致，App 效果待实测。'
