@@ -5,6 +5,7 @@ from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import yaml
+from youtube_parameter_ui import apply_ui,UI_VERSION
 ROOT=Path(__file__).resolve().parents[1]
 UPSTREAM='https://github.com/DualSubs/YouTube/releases/latest/download/DualSubs.YouTube.yaml'
 MODULE=ROOT/'youtube-subtitles-translation.yaml'
@@ -50,7 +51,7 @@ def validate_dependency(item):
     else:
         value=json.loads(text)
         if not isinstance(value,(dict,list)):raise ValueError('Invalid preference pane resource')
-    return {'url':url,'resolved_url':resolved,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}
+    return {'url':url,'resolved_url':resolved,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'content_text':text}
 def download_dependency(url):
     data,resolved=fetch(url,8000000)
     return validate_dependency((url,data,resolved))
@@ -73,16 +74,26 @@ def main():
             match=re.search(r'/DualSubs/YouTube/releases/download/(v[^/]+)/',json.dumps(module))
         if not match:raise ValueError('Official release version missing')
         version=match.group(1);sha=hashlib.sha256(data).hexdigest()
+        sources={item['url']:item['content_text'] for item in dependencies}
+        ui_outputs,ui_sources=apply_ui(module,sources,'subtitles')
+        for item in dependencies:item.pop('content_text',None)
+        with tempfile.TemporaryDirectory() as stage:
+            for name,code in ui_outputs.items():
+                file=Path(stage)/name;file.write_text(code)
+                if subprocess.run(['node','--check',str(file)],capture_output=True,timeout=20).returncode:raise ValueError('Parameter adapter syntax failed')
+            subprocess.run(['node',str(ROOT/'tests/test-youtube-parameter-runtime.mjs'),'subtitles',stage],check=True,capture_output=True,timeout=20)
+        subprocess.run(['node',str(ROOT/'tests/test-youtube-parameter-ui.mjs'),str(ROOT/'scripts/youtube-parameter-wrapper.js')],check=True,capture_output=True,timeout=20)
         previous_dependencies={d['url']:d['sha256'] for d in old.get('dependencies',[])}
-        changed=old.get('upstream_sha256')!=sha or old.get('mode')!='official-release-yaml' or previous_dependencies!={d['url']:d['sha256'] for d in dependencies}
+        changed=old.get('ui_sources')!=ui_sources or old.get('upstream_sha256')!=sha or old.get('mode')!='official-release-yaml' or previous_dependencies!={d['url']:d['sha256'] for d in dependencies}
         meta={'status':'ok','mode':'official-release-yaml','last_checked':checked,'last_success':checked,
               'last_updated':checked if changed else old.get('last_updated',checked),'upstream_url':UPSTREAM,
               'resolved_url':resolved,'upstream_version':version,'upstream_sha256':sha,'dependencies':dependencies,
               'upstream_description':module.get('description',''),
-              'scope':'Mirror official release rules, parameters and script URLs; only local title/description metadata added.'}
+              'ui_version':UI_VERSION,'ui_sources':ui_sources,'scope':'Official release rules and original script bodies retained; Chinese native parameter UI and priority selection added.'}
         module['name']='YouTube双语翻译©️'
         module['description']=description(meta,meta['upstream_description'])
-        # Official rules, compatibility arguments, preference UI and script URLs remain unchanged.
+        # Official rules and original script bodies retained; local Chinese controls are wired by the wrapper.
+        for name,code in ui_outputs.items():(ROOT/name).write_text(code)
         MODULE.write_text(yaml.safe_dump(module,allow_unicode=True,sort_keys=False,width=1000))
         META.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
         print(f'Official DualSubs {version}: YAML and {len(dependencies)} remote dependencies verified')
