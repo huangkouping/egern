@@ -1,0 +1,257 @@
+name: 美团去广告
+author: ZenmoFeiShi[https://github.com/ZenmoFeiShi/Qx]
+homepage: https://github.com/huangkouping/egern
+compat_arguments_desc: '【使用说明】
+
+  启用模块，确认 MitM 已开启且证书受信任，然后重新打开美团。
+
+  关闭其他美团去广告模块，避免重复处理。
+
+  规则与脚本镜像自 ZenmoFeiShi/Qx（MT.snippet / MT.js），上游标注适用 美团App 12.67.403；JS 已备份到本仓库，每 6 小时自动检查上游更新，失败时保留上次有效版本。
+
+  拦截层包含 shark 广告域名、美团 HTTPDNS 域名及上游维护的广告服务器 IP 名单；若美团出现加载慢、定位异常，先停用本模块验证是否为 HTTPDNS 拦截所致。
+
+  QX 的 host-wildcard（mquic-*）与两条 url reject 已等价转换为 url_regex 规则；当前效果待实机验证。'
+dns: {}
+rules:
+- domain:
+    match: shark-mt.meituan.com
+    policy: REJECT
+- domain:
+    match: shark-default.meituan.com
+    policy: REJECT
+- domain:
+    match: shark-dp.meituan.com
+    policy: REJECT
+- domain:
+    match: shark-ps.meituan.com
+    policy: REJECT
+- domain:
+    match: shark-wm.sankuai.com
+    policy: REJECT
+- domain:
+    match: shark.dianping.com
+    policy: REJECT
+- domain:
+    match: httpdnsmultiapi.meituan.com
+    policy: REJECT
+- domain:
+    match: httpdnsmultiapivip.meituan.com
+    policy: REJECT
+- domain:
+    match: httpdns.meituan.com
+    policy: REJECT
+- domain:
+    match: httpdnsvip.meituan.com
+    policy: REJECT
+- domain:
+    match: dnspod.meituan.httpdns.qcloud.com
+    policy: REJECT
+- domain:
+    match: dnspod.meituan.httpdns.start.qcloud.com
+    policy: REJECT
+- ip_cidr:
+    match: 202.90.108.13/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.110.46/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.108.69/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.110.45/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.108.68/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.110.48/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.108.67/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.110.36/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.108.54/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 202.90.108.55/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 203.76.217.51/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 203.76.217.53/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 203.76.217.241/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 203.76.217.243/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 103.202.146.30/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 103.202.146.49/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 101.50.8.64/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 103.63.160.64/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 103.63.160.69/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 103.37.155.77/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 103.37.155.60/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 111.230.0.200/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 139.9.47.231/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 121.37.4.167/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 119.29.126.219/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 106.55.217.56/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 103.37.152.224/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 119.29.48.215/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 42.193.128.160/32
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 2405:1480:3000:303b::303b/128
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 2405:1480:1000:3::1e/128
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 2405:1480:1000:4::15/128
+    policy: REJECT
+    no_resolve: true
+- ip_cidr:
+    match: 2402:4e00:40:40::2:373/128
+    policy: REJECT
+    no_resolve: true
+- url_regex:
+    match: ^https?://mquic\-[^./]+\.meituan\.com(?:[:/]|$)
+    policy: REJECT
+- url_regex:
+    match: ^https?://(httpdns|httpdnsvip|httpdnsmultiapi|httpdnsmultiapivip)\.meituan\.com/
+    policy: REJECT
+- url_regex:
+    match: ^http://103\.37\.155\.60/fetch
+    policy: REJECT
+scriptings:
+- http_response:
+    name: 美团首页Tab过滤
+    match: ^https?://apimobile\.meituan\.com/aggroup/indexTab
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 美团信息流过滤
+    match: ^https?://feedguess\.meituan\.com/lycoris/scene/(gwc_feed1_2265|personalcenter_2154)(\?|$)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 美团个人中心过滤
+    match: ^https?://mt-personalcenter\.meituan\.com/usercenter/display
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 美团搜索默认词过滤
+    match: ^https?://apimobile\.meituan\.com/group/v1/deal/searchpage/defaultword
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 美团热搜推荐过滤
+    match: ^https?://apimobile\.meituan\.com/group/v1/deal/searchpage/hotword/city/divide/hotrecommend/
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 美团小喇叭通知过滤
+    match: ^https?://assistify\.meituan\.com/assistant/getAppClientHornConfig
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 美团购物车入口过滤
+    match: ^https?://mop\.meituan\.com/mop/entry/shoppingCartEntry
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 美团开屏图过滤
+    match: ^https?://mop\.meituan\.com/api/entryModule/startupPicture
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.js?v=44a5b552c90b
+    body_required: true
+    timeout: 20
+mitm:
+  hostnames:
+    includes:
+    - apimobile.meituan.com
+    - feedguess.meituan.com
+    - mop.meituan.com
+    - mt-personalcenter.meituan.com
+    - assistify.meituan.com
+    - httpdns.meituan.com
+    - httpdnsmultiapi.meituan.com
+description: '更新时间：2026-11-01 12:07
+
+  去除美团开屏、首页Tab、搜索热词、个人中心等广告与推广。
+
+  同步状态：上游同步正常；最近检查：2026-11-01 12:07'

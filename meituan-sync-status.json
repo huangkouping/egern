@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "last_checked": "2026-11-01 12:07",
+  "last_success": "2026-11-01 12:07",
+  "last_updated": "2026-11-01 12:07",
+  "source_snippet": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/refs/heads/main/MT.snippet",
+  "source_script": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/refs/heads/main/MT.js",
+  "source_update": "2026.10.25",
+  "source_name": "美团App 12.67.403",
+  "source_sha256": "9a48981f5d1cdac2d7c72c8f1164752ce712113eaf687aeeba2829e78c66308a",
+  "script_sha256": "44a5b552c90b09b289de24b0856ff6b217859b79a800392b0d24077ece86104a",
+  "counts": {
+    "domains": 12,
+    "ip_cidr": 33,
+    "url_regex": 3,
+    "scriptings": 8
+  },
+  "scope": "Mirror ZenmoFeiShi/Qx MT.snippet rules (converted to Egern rules) and MT.js; auto-sync every 6h via Muse cron; last-good retained on failure."
+}
