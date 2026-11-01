@@ -29,9 +29,7 @@ on:
       - scripts/bilibili-adapter.js
       - tests/test-bilibili.mjs
       - scripts/sync-youtube-subtitles.py
-      - scripts/youtube-subtitles-base.yaml
-      - scripts/youtube-subtitles-adapter.js
-      - tests/test-youtube-subtitles.mjs
+      - tests/test-youtube-official-sync.py
       - scripts/amap-base.yaml
       - tests/test-amap-sync.py
   schedule:
@@ -105,15 +103,17 @@ jobs:
         id: bilibili
         continue-on-error: true
         run: python scripts/sync-bilibili.py
-      - name: Synchronize YouTube subtitle scripts after functional checks
+      - name: Synchronize official DualSubs YouTube release
         id: youtubesubtitles
         continue-on-error: true
-        run: python scripts/sync-youtube-subtitles.py
+        run: |
+          python tests/test-youtube-official-sync.py
+          python scripts/sync-youtube-subtitles.py
       - name: Commit valid rules or failure status
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json netease-news-kelee.yaml netease-news-kelee.js netease-news-sync-status.json aliyundrive-adblock.yaml aliyundrive-adblock.js aliyundrive-sync-status.json umetrip-adblock.yaml umetrip-adblock.js umetrip-sync-status.json railway12306-adblock.yaml railway12306-adblock.js railway12306-sync-status.json xiaojukeji-charge-adblock.yaml xiaojukeji-charge-adblock.js xiaojukeji-charge-sync-status.json netease-cloudmusic-adblock.yaml netease-cloudmusic-adblock.js netease-cloudmusic-sync-status.json weixin-mini-programs-adblock.yaml weixin-mini-programs-adblock.js weixin-mini-programs-cyys1.jpg weixin-mini-programs-sync-status.json bilibili-adblock.yaml bilibili-request.js bilibili-response.js bilibili-json.js bilibili-tab.jq bilibili-mine.jq bilibili-sync-status.json youtube-subtitles-translation.yaml youtube-subtitles-request.js youtube-subtitles-response.js youtube-subtitles-composite.js youtube-subtitles-translate.js youtube-subtitles-sync-status.json
+          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json netease-news-kelee.yaml netease-news-kelee.js netease-news-sync-status.json aliyundrive-adblock.yaml aliyundrive-adblock.js aliyundrive-sync-status.json umetrip-adblock.yaml umetrip-adblock.js umetrip-sync-status.json railway12306-adblock.yaml railway12306-adblock.js railway12306-sync-status.json xiaojukeji-charge-adblock.yaml xiaojukeji-charge-adblock.js xiaojukeji-charge-sync-status.json netease-cloudmusic-adblock.yaml netease-cloudmusic-adblock.js netease-cloudmusic-sync-status.json weixin-mini-programs-adblock.yaml weixin-mini-programs-adblock.js weixin-mini-programs-cyys1.jpg weixin-mini-programs-sync-status.json bilibili-adblock.yaml bilibili-request.js bilibili-response.js bilibili-json.js bilibili-tab.jq bilibili-mine.jq bilibili-sync-status.json youtube-subtitles-translation.yaml youtube-subtitles-sync-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Sync Amap public JQ mirrors and status'
             git pull --rebase
