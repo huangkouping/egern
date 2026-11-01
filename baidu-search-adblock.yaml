@@ -1,4 +1,4 @@
-name: 搜索去广告&自动翻页🅗
+name: 搜索去广告&自动翻页©️
 author: limbopro[https://github.com/limbopro/Adblock4limbo]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
@@ -89,8 +89,8 @@ mitm:
     - g.cn
     - www.g.cn
     - limbopro.com
-description: '更新时间：2026-11-01 14:07
+description: '更新时间：2026-11-01 16:33
 
   去除百度、Bing、Google 的搜索广告（limbo 毒奶脚本的搜索引擎部分），三家结果页均带自动翻页。
 
-  同步状态：上游同步正常；最近检查：2026-11-01 14:07'
+  同步状态：上游同步正常；最近检查：2026-11-01 16:33'
