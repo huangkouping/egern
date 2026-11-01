@@ -1,8 +1,9 @@
 name: 搜索去广告🅗
 description: |-
-  更新时间：2026-11-01 22:12
+  |-
   保留百度、Bing、Google 搜索去广告及 Google 中国域名重定向
   去广告上游同步机制保留。
+  更新时间：2026-11-01 22:12
 author: limbopro[https://github.com/limbopro/Adblock4limbo]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
