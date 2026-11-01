@@ -69,7 +69,7 @@ for name, url in SOURCES.items():
 
 now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
 lines = [
-    "# 国内 DNS 规则集©️",
+    "# 国内 DNS 规则集🅗",
     "# 自动同步生成；供 Egern DNS forward 的 proxy_rule_set 使用",
     f"# 规则内容更新时间（北京时间）：{now}",
     "# 原始正则已转为 DOMAIN-SUFFIX，主域名及子域名均匹配",
