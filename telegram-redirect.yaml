@@ -1,6 +1,6 @@
 # Version: 1.1.0
 # Updated: 2026-10-06 09:31
-name: Telegram跳转©️
+name: Telegram跳转🅗
 description: |-
   跳转到指定 Telegram 客户端。
   更新时间：2026-10-06 09:31
@@ -23,7 +23,7 @@ env_schema:
 
 scriptings:
   - http_request:
-      name: Telegram 链接跳转©️
+      name: Telegram 链接跳转🅗
       match: ^https?://(t\.me|telegram\.me)/.+
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.js
       timeout: 10
