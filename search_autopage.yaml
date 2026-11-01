@@ -1,5 +1,10 @@
-name: 百度 & Google 搜索自动翻页©️
-description: 百度与 Google 移动端搜索结果滚动自动加载，独立于去广告模块
+name: 百度与Google搜索自动翻页©️
+description: |-
+  百度与 Google 移动端搜索结果自动翻页，独立于搜索去广告模块。
+  更新时间：2026-11-01
+
+author: huangkouping
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
 
 mitm:
   hostnames:
