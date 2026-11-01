@@ -1,24 +1,24 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-01 08:22",
-  "last_success": "2026-11-01 08:22",
-  "last_updated": "2026-11-01 08:22",
+  "last_checked": "2026-11-01 08:23",
+  "last_success": "2026-11-01 08:23",
+  "last_updated": "2026-11-01 08:23",
   "sources": {
     "request": {
       "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Subtitles_request.js",
-      "sha256": "6e1eded3ca558a9983ee7eabcc15c918a27b77851d0d4408b99c532b09f6911e"
+      "sha256": "069cb5f3158c7777a8c0dbac926d3ce0ca605587d3123c386dc65a15d51fabc8"
     },
     "response": {
       "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Subtitles_response.js",
-      "sha256": "2f4c801074d8dcc569460ec4b24432c1c5cd419b8db7d906c57c9f186e4d3fd9"
+      "sha256": "624bec4a6b3162971a458e2ccb097efd20a906016b82293c341d344152edc09c"
     },
     "composite": {
       "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Composite_Subtitles_response.js",
-      "sha256": "807df047aba395e84bb8482b47ba85b9b8c62ebe585a0f8e9a715df6d0e88f92"
+      "sha256": "01283e2c53e347382bd697f1fc7cb1b04cdc93baf33aa58d149e604a18054ad4"
     },
     "translate": {
       "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Subtitles_Translate_response.js",
-      "sha256": "56c46aa1775e7a3dd17ebc319f9db4d2949c70aedbc2f089088e25a7225ba155"
+      "sha256": "08ce488d49732ea1e74e53a05310f28e0f44eb1c65b5873118dc4ca07e3a7364"
     }
   },
   "scope": "Sync 4 complete public JS mirrors; adapter and module rules separately maintained.",
