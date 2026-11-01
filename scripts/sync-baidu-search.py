@@ -36,6 +36,8 @@ RAW_BASE = 'https://raw.githubusercontent.com/huangkouping/egern/main/'
 FUNCTION_JS_PATTERN = r'(?i)^https?://[^/]+/Adguard/Adblock4limbo\.function\.js'
 BING_MATCH = r'^https?://(www|cn)\.bing\.com/search\?'
 GOOGLE_MATCH = r'^https?://www\.google\.com(\.hk)?/search'
+GOOGLE_CN_PATTERN = r'^https?://(www\.)?(g|google)\.cn(/.*)?$'
+GOOGLE_CN_LOCATION = 'https://www.google.com$3'
 
 RULE_NAMES = [
     ('zhidao', '百度知道去广告'),
@@ -189,13 +191,17 @@ def build(version, patterns, pager_version):
             '注入器镜像自 limbopro 原仓库，每 6 小时自动检查上游更新，失败时保留上次有效版本；页面脚本与分域名 CSS 运行时由 limbopro.com 加载（作者分发方式）。\n'
             '已按作者在脚本头注明的官方方法，拦截 Adblock4limbo.function.js：右下角导航按钮、导航面板及其附带功能（沉浸式翻译、划词搜索等）全部禁用，只保留纯去广告。\n'
             '自动翻页为自维护脚本（与 limbopro 上游无关，不受其更新影响）：百度已按实测结构验证；Bing 分页变体生效，若页面是官方渐进加载变体则自动不干预；Google 为通用实现，待实机验证。\n'
+            '另含谷歌域名重定向（源 DivineEngine）：google.cn / g.cn 自动跳转 google.com，并保留路径与搜索词。NobyDa 的人机验证增强依赖 Surge/QX 的代理策略 API，Egern 不支持，未并入。\n'
             '若某个搜索页面异常，先停用本模块排查。'),
         'dns': {},
         'scriptings': scriptings,
-        'url_rewrites': [{'match': FUNCTION_JS_PATTERN, 'location': 'http://reject-dict/'}],
+        'url_rewrites': [{'match': FUNCTION_JS_PATTERN, 'location': 'http://reject-dict/'},
+                         {'match': GOOGLE_CN_PATTERN, 'location': GOOGLE_CN_LOCATION, 'status_code': 302}],
         'mitm': {'hostnames': {'includes': ['www.baidu.com', 'm.baidu.com', 'zhidao.baidu.com',
                                             'www.bing.com', 'cn.bing.com',
-                                            'www.google.com', 'www.google.com.hk', 'limbopro.com']}}}
+                                            'www.google.com', 'www.google.com.hk',
+                                            'google.cn', 'www.google.cn', 'g.cn', 'www.g.cn',
+                                            'limbopro.com']}}}
 
 
 def main():
@@ -221,8 +227,8 @@ def main():
                 'source_conf': CONF_URL, 'source_injector': INJECTOR_URL,
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
                 'pager_sha256': pager_sha,
-                'counts': {'scriptings': len(module['scriptings']), 'url_rewrites': 1},
-                'scope': 'Search-engine slice of limbopro/Adblock4limbo: Baidu 3 response rules + mirrored injector, plus Bing/Google injector rules running the userscript built-in search-engine logic; Adblock4limbo.function.js rejected to disable the navigation panel per the author-documented switch; plus a local hand-maintained multi-engine auto-pager (baidu-autopager.js, referenced by hash, never overwritten by sync); auto-sync every 6h via Muse cron; last-good retained on failure.'}
+                'counts': {'scriptings': len(module['scriptings']), 'url_rewrites': 2},
+                'scope': 'Search-engine slice of limbopro/Adblock4limbo: Baidu 3 response rules + mirrored injector, plus Bing/Google injector rules running the userscript built-in search-engine logic; Adblock4limbo.function.js rejected to disable the navigation panel per the author-documented switch; plus a local hand-maintained multi-engine auto-pager (baidu-autopager.js, referenced by hash, never overwritten by sync); plus a DivineEngine google.cn/g.cn -> google.com 302 redirect preserving path and query; auto-sync every 6h via Muse cron; last-good retained on failure.'}
         module['description'] = description(meta)
         SCRIPT.write_text(script)
         MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))

@@ -14,6 +14,8 @@ compat_arguments_desc: '【使用说明】
 
   自动翻页为自维护脚本（与 limbopro 上游无关，不受其更新影响）：百度已按实测结构验证；Bing 分页变体生效，若页面是官方渐进加载变体则自动不干预；Google 为通用实现，待实机验证。
 
+  另含谷歌域名重定向（源 DivineEngine）：google.cn / g.cn 自动跳转 google.com，并保留路径与搜索词。NobyDa 的人机验证增强依赖 Surge/QX 的代理策略 API，Egern 不支持，未并入。
+
   若某个搜索页面异常，先停用本模块排查。'
 dns: {}
 scriptings:
@@ -68,6 +70,9 @@ scriptings:
 url_rewrites:
 - match: (?i)^https?://[^/]+/Adguard/Adblock4limbo\.function\.js
   location: http://reject-dict/
+- match: ^https?://(www\.)?(g|google)\.cn(/.*)?$
+  location: https://www.google.com$3
+  status_code: 302
 mitm:
   hostnames:
     includes:
@@ -78,9 +83,13 @@ mitm:
     - cn.bing.com
     - www.google.com
     - www.google.com.hk
+    - google.cn
+    - www.google.cn
+    - g.cn
+    - www.g.cn
     - limbopro.com
-description: '更新时间：2026-11-01 13:35
+description: '更新时间：2026-11-01 14:02
 
   去除百度、Bing、Google 的搜索广告（limbo 毒奶脚本的搜索引擎部分），三家结果页均带自动翻页。
 
-  同步状态：上游同步正常；最近检查：2026-11-01 13:35'
+  同步状态：上游同步正常；最近检查：2026-11-01 14:02'
