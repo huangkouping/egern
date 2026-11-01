@@ -1,4 +1,5 @@
 name: Sync public adblock mirrors
+# Migration permission check; existing schedules and jobs unchanged.
 on:
   workflow_dispatch:
   push:
