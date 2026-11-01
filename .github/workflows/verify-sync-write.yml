@@ -1,0 +1,31 @@
+name: Verify GitHub Actions write access
+on:
+  push:
+    paths:
+      - .github/workflows/verify-sync-write.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: verify-sync-write
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verify automated repository commit and push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          printf 'GitHub Actions repository write verification passed.\n' > .sync-write-verification.txt
+          git add .sync-write-verification.txt
+          if ! git diff --cached --quiet; then
+            git commit -m 'test: verify automated sync write permission'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
