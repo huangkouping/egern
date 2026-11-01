@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Sync a Baidu-Search-only module from limbopro/Adblock4limbo (original repo); retain last-good on failure.
+"""Sync the multi-engine search module (Baidu/Bing/Google) built on limbopro/Adblock4limbo (original repo); retain last-good on failure.
 
-Only the three Baidu rules are extracted from the upstream mega-conf:
+Only the three Baidu rules are extracted from the upstream mega-conf;
+Bing/Google get static injector rules (the userscript's own @match list
+covers their search pages) plus the local multi-engine auto-pager:
 zhidao search, Baidu homepage, Baidu results. The mirrored injector
 (Adguard/Adblock4limbo.js) loads limbopro's runtime assets; the module
 additionally rejects Adblock4limbo.function.js, which is the author's own
@@ -32,6 +34,8 @@ PAGER = ROOT / 'baidu-autopager.js'
 META = ROOT / 'baidu-search-sync-status.json'
 RAW_BASE = 'https://raw.githubusercontent.com/huangkouping/egern/main/'
 FUNCTION_JS_PATTERN = r'(?i)^https?://[^/]+/Adguard/Adblock4limbo\.function\.js'
+BING_MATCH = r'^https?://(www|cn)\.bing\.com/search\?'
+GOOGLE_MATCH = r'^https?://www\.google\.com(\.hk)?/search'
 
 RULE_NAMES = [
     ('zhidao', '百度知道去广告'),
@@ -114,15 +118,16 @@ console.log("smoke ok");
 def description(meta):
     state = '上游同步正常' if meta['status'] == 'ok' else '上游同步失败，保留上次有效规则'
     return (f"更新时间：{meta.get('last_updated', '未知')}\n"
-            '去除百度搜索首页、搜索结果页及百度知道的广告（limbo 毒奶脚本，仅百度部分）。\n'
+            '去除百度、Bing、Google 的搜索广告（limbo 毒奶脚本的搜索引擎部分），三家结果页均带自动翻页。\n'
             f"同步状态：{state}；最近检查：{meta['last_checked']}")
 
 
 def validate_pager(text):
     """The auto-pager is a local hand-maintained file (not synced from upstream);
     the sync only references it by hash. Verify it parses and injects correctly."""
-    if 'baiduAutoPagerPage' not in text or 'new-nextpage-only' not in text:
-        raise ValueError('Auto-pager signature missing')
+    for marker in ['searchAutoPagerPage', 'new-nextpage-only', 'sb_pagN', 'pnnext']:
+        if marker not in text:
+            raise ValueError('Auto-pager signature missing: ' + marker)
     with tempfile.NamedTemporaryFile(suffix='.js', mode='w', delete=False) as handle:
         handle.write(text)
         path = handle.name
@@ -137,7 +142,7 @@ global.$response = { headers: { "Content-Type": "text/html; charset=utf-8" }, bo
 let out = null;
 global.$done = v => { out = v; };
 eval(src);
-if (!out || typeof out.body !== "string" || !out.body.includes("__bdAutopager")) throw new Error("pager not injected");
+if (!out || typeof out.body !== "string" || !out.body.includes("__searchAutopager")) throw new Error("pager not injected");
 console.log("pager smoke ok");
 '''
     with tempfile.NamedTemporaryFile(suffix='.js', mode='w', delete=False) as handle:
@@ -165,21 +170,32 @@ def build(version, patterns, pager_version):
         'name': '百度搜索结果自动翻页', 'match': results_pattern,
         'script_url': RAW_BASE + 'baidu-autopager.js?v=' + pager_version,
         'body_required': True, 'timeout': 20}})
+    injector_url = RAW_BASE + 'baidu-search-adblock.js?v=' + version
+    pager_url = RAW_BASE + 'baidu-autopager.js?v=' + pager_version
+    for name, match in [('必应搜索去广告', BING_MATCH), ('谷歌搜索去广告', GOOGLE_MATCH)]:
+        scriptings.append({'http_response': {
+            'name': name, 'match': match, 'script_url': injector_url,
+            'body_required': True, 'timeout': 20}})
+        scriptings.append({'http_response': {
+            'name': name.replace('去广告', '自动翻页'), 'match': match, 'script_url': pager_url,
+            'body_required': True, 'timeout': 20}})
     return {
-        'name': '百度搜索去广告',
+        'name': '搜索去广告&自动翻页',
         'author': 'limbopro[https://github.com/limbopro/Adblock4limbo]',
         'homepage': 'https://github.com/huangkouping/egern',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png',
-        'compat_arguments_desc': ('【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开浏览器访问百度。\n'
-            '本模块只摘取 limbopro/Adblock4limbo 合集中的百度部分（知道、搜索首页、搜索结果 3 条），不含其数百个其他站点规则。\n'
+        'compat_arguments_desc': ('【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开浏览器访问百度、Bing 或 Google。\n'
+            '本模块只摘取 limbopro/Adblock4limbo 合集中的搜索引擎部分，不含其数百个其他站点规则。百度走合集原规则（知道、搜索首页、搜索结果 3 条）；Bing、Google 用同一注入器运行 limbopro 用户脚本自带的搜索引擎逻辑（去广告与内容农场结果过滤，其脚本 @match 本就包含这两家）。\n'
             '注入器镜像自 limbopro 原仓库，每 6 小时自动检查上游更新，失败时保留上次有效版本；页面脚本与分域名 CSS 运行时由 limbopro.com 加载（作者分发方式）。\n'
             '已按作者在脚本头注明的官方方法，拦截 Adblock4limbo.function.js：右下角导航按钮、导航面板及其附带功能（沉浸式翻译、划词搜索等）全部禁用，只保留纯去广告。\n'
-            '另含自维护的搜索结果自动翻页（滚动接近页脚自动加载下一页并追加结果，仅结果页生效），与 limbopro 上游无关，不受其更新影响。\n'
-            '当前效果待实机验证；若百度页面异常，先停用本模块排查。'),
+            '自动翻页为自维护脚本（与 limbopro 上游无关，不受其更新影响）：百度已按实测结构验证；Bing 分页变体生效，若页面是官方渐进加载变体则自动不干预；Google 为通用实现，待实机验证。\n'
+            '若某个搜索页面异常，先停用本模块排查。'),
         'dns': {},
         'scriptings': scriptings,
         'url_rewrites': [{'match': FUNCTION_JS_PATTERN, 'location': 'http://reject-dict/'}],
-        'mitm': {'hostnames': {'includes': ['www.baidu.com', 'm.baidu.com', 'zhidao.baidu.com', 'limbopro.com']}}}
+        'mitm': {'hostnames': {'includes': ['www.baidu.com', 'm.baidu.com', 'zhidao.baidu.com',
+                                            'www.bing.com', 'cn.bing.com',
+                                            'www.google.com', 'www.google.com.hk', 'limbopro.com']}}}
 
 
 def main():
@@ -205,8 +221,8 @@ def main():
                 'source_conf': CONF_URL, 'source_injector': INJECTOR_URL,
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
                 'pager_sha256': pager_sha,
-                'counts': {'scriptings': len(patterns) + 1, 'url_rewrites': 1},
-                'scope': 'Baidu-only slice of limbopro/Adblock4limbo: 3 response rules + mirrored injector; Adblock4limbo.function.js rejected to disable the navigation panel per the author-documented switch; plus a local hand-maintained auto-pager scripting (baidu-autopager.js, referenced by hash, never overwritten by sync); auto-sync every 6h via Muse cron; last-good retained on failure.'}
+                'counts': {'scriptings': len(module['scriptings']), 'url_rewrites': 1},
+                'scope': 'Search-engine slice of limbopro/Adblock4limbo: Baidu 3 response rules + mirrored injector, plus Bing/Google injector rules running the userscript built-in search-engine logic; Adblock4limbo.function.js rejected to disable the navigation panel per the author-documented switch; plus a local hand-maintained multi-engine auto-pager (baidu-autopager.js, referenced by hash, never overwritten by sync); auto-sync every 6h via Muse cron; last-good retained on failure.'}
         module['description'] = description(meta)
         SCRIPT.write_text(script)
         MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
