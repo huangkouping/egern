@@ -24,6 +24,10 @@ on:
       - scripts/sync-weixin-mini-programs.py
       - scripts/weixin-mini-programs-base.yaml
       - scripts/weixin-mini-programs-manifest.json
+      - scripts/sync-bilibili.py
+      - scripts/bilibili-base.yaml
+      - scripts/bilibili-adapter.js
+      - tests/test-bilibili.mjs
       - scripts/amap-base.yaml
       - tests/test-amap-sync.py
   schedule:
@@ -93,16 +97,20 @@ jobs:
         id: weixinmini
         continue-on-error: true
         run: python scripts/sync-weixin-mini-programs.py
+      - name: Synchronize Bilibili scripts and JQ after functional checks
+        id: bilibili
+        continue-on-error: true
+        run: python scripts/sync-bilibili.py
       - name: Commit valid rules or failure status
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json netease-news-kelee.yaml netease-news-kelee.js netease-news-sync-status.json aliyundrive-adblock.yaml aliyundrive-adblock.js aliyundrive-sync-status.json umetrip-adblock.yaml umetrip-adblock.js umetrip-sync-status.json railway12306-adblock.yaml railway12306-adblock.js railway12306-sync-status.json xiaojukeji-charge-adblock.yaml xiaojukeji-charge-adblock.js xiaojukeji-charge-sync-status.json netease-cloudmusic-adblock.yaml netease-cloudmusic-adblock.js netease-cloudmusic-sync-status.json weixin-mini-programs-adblock.yaml weixin-mini-programs-adblock.js weixin-mini-programs-cyys1.jpg weixin-mini-programs-sync-status.json
+          git add amap-adblock.yaml amap-updatable.jq amap-search_poi_detail.jq amap-sync-status.json colorfulclouds-adblock.yaml colorfulclouds-adblock.js colorfulclouds-sync-status.json pinduoduo-adblock.yaml pinduoduo-pickup.js pinduoduo-sync-status.json netease-news-kelee.yaml netease-news-kelee.js netease-news-sync-status.json aliyundrive-adblock.yaml aliyundrive-adblock.js aliyundrive-sync-status.json umetrip-adblock.yaml umetrip-adblock.js umetrip-sync-status.json railway12306-adblock.yaml railway12306-adblock.js railway12306-sync-status.json xiaojukeji-charge-adblock.yaml xiaojukeji-charge-adblock.js xiaojukeji-charge-sync-status.json netease-cloudmusic-adblock.yaml netease-cloudmusic-adblock.js netease-cloudmusic-sync-status.json weixin-mini-programs-adblock.yaml weixin-mini-programs-adblock.js weixin-mini-programs-cyys1.jpg weixin-mini-programs-sync-status.json bilibili-adblock.yaml bilibili-request.js bilibili-response.js bilibili-json.js bilibili-tab.jq bilibili-mine.jq bilibili-sync-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Sync Amap public JQ mirrors and status'
             git pull --rebase
             git push
           fi
       - name: Report failed synchronization
-        if: steps.sync.outcome == 'failure' || steps.colorfulclouds.outcome == 'failure' || steps.pinduoduo.outcome == 'failure' || steps.neteasenews.outcome == 'failure' || steps.aliyundrive.outcome == 'failure' || steps.umetrip.outcome == 'failure' || steps.railway12306.outcome == 'failure' || steps.xiaojukejicharge.outcome == 'failure' || steps.neteasecloudmusic.outcome == 'failure' || steps.weixinmini.outcome == 'failure'
+        if: steps.sync.outcome == 'failure' || steps.colorfulclouds.outcome == 'failure' || steps.pinduoduo.outcome == 'failure' || steps.neteasenews.outcome == 'failure' || steps.aliyundrive.outcome == 'failure' || steps.umetrip.outcome == 'failure' || steps.railway12306.outcome == 'failure' || steps.xiaojukejicharge.outcome == 'failure' || steps.neteasecloudmusic.outcome == 'failure' || steps.weixinmini.outcome == 'failure' || steps.bilibili.outcome == 'failure'
         run: exit 1
