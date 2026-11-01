@@ -1,8 +1,8 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-01 13:07",
-  "last_success": "2026-11-01 13:07",
-  "last_updated": "2026-11-01 13:07",
+  "last_checked": "2026-11-01 13:35",
+  "last_success": "2026-11-01 13:35",
+  "last_updated": "2026-11-01 13:35",
   "source_conf": "https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adblock4limbo.conf",
   "source_injector": "https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js",
   "source_sha256": "57c39a847098d11a3185dd0f34edf0b2e1a48624c19d52a59109846cd51befc8",

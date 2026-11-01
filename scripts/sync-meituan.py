@@ -168,7 +168,7 @@ def build(version, parsed):
             'body_required': True, 'timeout': 20}})
     app = meta.get('name', '美团')
     return {
-        'name': '美团去广告',
+        'name': '美团去广告©️',
         'author': 'ZenmoFeiShi[https://github.com/ZenmoFeiShi/Qx]',
         'homepage': 'https://github.com/huangkouping/egern',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/1024px/%E7%BE%8E%E5%9B%A2.png',

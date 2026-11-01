@@ -180,7 +180,7 @@ def build(version, patterns, pager_version):
             'name': name.replace('去广告', '自动翻页'), 'match': match, 'script_url': pager_url,
             'body_required': True, 'timeout': 20}})
     return {
-        'name': '搜索去广告&自动翻页',
+        'name': '搜索去广告&自动翻页©️',
         'author': 'limbopro[https://github.com/limbopro/Adblock4limbo]',
         'homepage': 'https://github.com/huangkouping/egern',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png',
