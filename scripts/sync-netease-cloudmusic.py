@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Back up the readable NeteaseCloudMusic mirror; retain last-good output on failure."""
+"""Sync the NeteaseCloudMusic source script (Keywos wyres.js) directly; retain last-good output on failure."""
 import argparse
 import hashlib
 import json
@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-URL = 'https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/NeteaseCloudMusic_remove_ads/kelee_NeteaseCloudMusic_remove_ads.js'
+URL = 'https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js'
 MODULE = ROOT / 'netease-cloudmusic-adblock.yaml'
 SCRIPT = ROOT / 'netease-cloudmusic-adblock.js'
 META = ROOT / 'netease-cloudmusic-sync-status.json'
@@ -47,7 +47,7 @@ def adapt(source):
     return result
 
 def description(meta):
-    state = '脚本镜像同步正常' if meta['status'] == 'ok' else '脚本镜像同步失败，保留上次有效规则'
+    state = '源脚本同步正常' if meta['status'] == 'ok' else '源脚本同步失败，保留上次有效规则'
     return (f"更新时间：{meta.get('last_updated', '未知')}\n"
             '过滤开屏、页面推广及评论区广告，支持界面开关。\n'
             f"同步状态：{state}；最近检查：{meta['last_checked']}")
@@ -82,7 +82,7 @@ def main():
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_url': URL, 'source_version': '2025-02-19',
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
-                'scope': 'Sync the public JavaScript mirror; local module rules are maintained separately.'}
+                'scope': 'Sync the Keywos source JavaScript (wyres.js) directly, without the Kelee mirror; local module rules are maintained separately.'}
         module['description'] = description(meta)
         SCRIPT.write_text(script)
         MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))

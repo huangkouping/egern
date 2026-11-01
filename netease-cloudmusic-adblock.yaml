@@ -1,14 +1,14 @@
 name: 网易云音乐去广告🅥
-description: '更新时间：2026-11-01 08:50
+description: '更新时间：2026-11-01 10:50
 
   过滤开屏、页面推广及评论区广告，支持界面开关。
 
-  同步状态：脚本镜像同步正常；最近检查：2026-11-01 08:50'
+  同步状态：源脚本同步正常；最近检查：2026-11-01 10:50'
 open_url: https://apps.apple.com/app/id590338362
 author: RuCu6[https://github.com/RuCu6], Keywos[https://github.com/Keywos]
 homepage: https://github.com/huangkouping/egern
-icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/NeteaseCloudMusic.png
-compat_arguments_desc: 使用说明：开启HTTPS解密并信任证书，更新后重启网易云音乐。界面隐藏开关在模块环境变量中设置，默认均关闭。基于2025-02-19公开脚本镜像，已适配Egern二进制加解密与gzip处理，异常返回原始响应；保留源脚本会员等级等界面显示修改；服务端权益以实际账号为准。关注列表提示沿用源逻辑。接口与加密协议变化可能导致失效，当前App效果需实测。每6小时检查公开JS镜像，结构变化或语法校验失败时保留可用版本；模块匹配规则单独维护。
+icon: https://raw.githubusercontent.com/Keywos/rule/main/tv/app/144px/Netease.png
+compat_arguments_desc: 使用说明：开启HTTPS解密并信任证书，更新后重启网易云音乐。界面隐藏开关在模块环境变量中设置，默认均关闭。基于2025-02-19 Keywos源脚本wyres.js直连同步（不再经可莉Kelee镜像），已适配Egern二进制加解密与gzip处理，异常返回原始响应；保留源脚本会员等级等界面显示修改；服务端权益以实际账号为准。关注列表提示沿用源逻辑。接口与加密协议变化可能导致失效，当前App效果需实测。每6小时检查源JS，结构变化或语法校验失败时保留可用版本；模块匹配规则单独维护。
 env_schema:
   MY:
     name: 隐藏底栏漫游
@@ -156,7 +156,7 @@ scriptings:
 - http_response:
     name: 评论区及歌曲推广提示
     match: (?i)^https?://interface\d?\.music\.163\.com/eapi/(?:batch|v2/resource/comment/floor/get)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=c4c7ab3a9109
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=b05ef8391274
     timeout: 20
     body_required: true
     binary_body: true
@@ -165,7 +165,7 @@ scriptings:
 - http_response:
     name: 首页推荐
     match: (?i)^https?://interface\d?\.music\.163\.com/eapi/(?:homepage/block/page|link/page/rcmd/(?:block/resource/multi/refresh|resource/show))
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=c4c7ab3a9109
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=b05ef8391274
     timeout: 20
     body_required: true
     binary_body: true
@@ -174,7 +174,7 @@ scriptings:
 - http_response:
     name: 底栏标签
     match: (?i)^https?://interface\d?\.music\.163\.com/eapi/link/home/framework/tab
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=c4c7ab3a9109
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=b05ef8391274
     timeout: 20
     body_required: true
     binary_body: true
@@ -183,7 +183,7 @@ scriptings:
 - http_response:
     name: 发现页
     match: (?i)^https?://interface\d?\.music\.163\.com/eapi/link/page/discovery/resource/show
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=c4c7ab3a9109
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=b05ef8391274
     timeout: 20
     body_required: true
     binary_body: true
@@ -192,7 +192,7 @@ scriptings:
 - http_response:
     name: 我的页面
     match: (?i)^https?://interface\d?\.music\.163\.com/eapi/link/position/show/resource
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=c4c7ab3a9109
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=b05ef8391274
     timeout: 20
     body_required: true
     binary_body: true
@@ -201,7 +201,7 @@ scriptings:
 - http_response:
     name: 关注列表提示
     match: (?i)^https?://interface\d?\.music\.163\.com/eapi/user/follow/users/mixed/get
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=c4c7ab3a9109
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.js?v=b05ef8391274
     timeout: 20
     body_required: true
     binary_body: true
