@@ -15,20 +15,21 @@ function baiduInfiniteScroll() {
       return value !== null && /^\d+$/.test(value) ? Number(value) : 0;
     }
     function nextLink(root, base, current) {
-      var selectors = ['a.new-nextpage-only', '#page a.np', '#page-controller a[rel="next"]', '#page-controller a[href]', '#page a[href]'];
-      for (var i = 0; i < selectors.length; i++) {
-        var links = root.querySelectorAll(selectors[i]);
-        for (var j = 0; j < links.length; j++) {
-          var a = links[j], href = a.getAttribute('href');
-          if (!href) continue;
-          var label = ((a.textContent || '') + ' ' + (a.getAttribute('aria-label') || '')).trim();
-          if (!a.matches('a.new-nextpage-only, #page a.np, a[rel="next"]') && !/下一页|下页|next|›|»/i.test(label)) continue;
-          var url;
-          try { url = new URL(href, base); } catch (_) { continue; }
-          if (url.hostname !== location.hostname || !/^https?:$/.test(url.protocol)) continue;
-          if (pageNumber(url) <= current) continue;
-          return url;
-        }
+      // Mobile Baidu frequently renders its next button outside #page.
+      // Read real anchors across the document; never manufacture a pn value.
+      var links = root.querySelectorAll('a[href], a[data-href], [rel="next"][href]');
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i];
+        var href = a.getAttribute('href') || a.getAttribute('data-href');
+        if (!href || /^javascript:|^#/.test(href)) continue;
+        var label = ((a.textContent || '') + ' ' + (a.getAttribute('aria-label') || '') + ' ' + (a.getAttribute('title') || '')).replace(/\\s+/g, ' ').trim();
+        if (!/下一页|下页|next|›|»/i.test(label) && a.getAttribute('rel') !== 'next' && !a.matches('.new-nextpage-only, .np')) continue;
+        var url;
+        try { url = new URL(href, base); } catch (_) { continue; }
+        if (url.hostname !== location.hostname || !/^https?:$/.test(url.protocol)) continue;
+        if (!/^\\/s$/.test(url.pathname) && !/^\\/from=/.test(url.pathname)) continue;
+        if (pageNumber(url) <= current) continue;
+        return url;
       }
       return null;
     }
@@ -106,7 +107,7 @@ function baiduInfiniteScroll() {
         seenPages.add(requestedPage);
         count++;
         next = following;
-        if (!next) stop('已到达最后一页或无法识别下一页');
+        if (!next) stop('未识别后续分页，请使用下方百度原生“下一页”');
         else marker.textContent = '继续下滑，加载下一页';
       }).catch(function () {
         marker.textContent = '加载失败，继续下滑可重试';
