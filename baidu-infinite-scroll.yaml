@@ -1,0 +1,18 @@
+name: 百度搜索自动翻页©️
+author: 青柠互娱
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
+description: "更新时间：2026-11-01；独立百度搜索自动翻页模块；滚动至底部按真实下一页链接逐页追加，重复或结构异常时停止。"
+compat_arguments_desc: "仅用于百度网页搜索，不含去广告功能。启用 MitM 并信任证书；与搜索去广告模块可分别开关。仅支持可解析的 HTML 分页页面，动态页面不保证生效。"
+scriptings:
+- http_response:
+    name: 百度搜索自动翻页
+    match: ^https?://(www|m)\\.baidu\\.com/(s\\?|from=)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-infinite-scroll.js?v=20261101a
+    body_required: true
+    timeout: 20
+mitm:
+  hostnames:
+    includes:
+    - www.baidu.com
+    - m.baidu.com
