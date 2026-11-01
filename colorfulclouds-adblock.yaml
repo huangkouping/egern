@@ -56,7 +56,8 @@ mitm:
     - wrapper.cyapi.cn
     - api.caiyunapp.com
     - cdn-w.caiyunapp.com
-description: '更新时间：2026-11-01 11:04
+description: |-
+  更新时间：2026-11-01 11:04
 
   过滤首页推广、弹窗及部分页面广告。
 
