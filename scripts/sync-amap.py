@@ -59,7 +59,7 @@ def dump_yaml(data):
 
 def build(base, sources):
     module = yaml.safe_load(base)
-    if len(module['rewrites']) != 23:
+    if len(module['rewrites']) != 27:
         raise ValueError('Unexpected base rule count')
     replacements = set()
     for rule in module['rewrites']:

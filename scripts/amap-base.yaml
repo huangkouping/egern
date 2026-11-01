@@ -10,7 +10,7 @@ compat_arguments_desc: |-
   【使用说明】
   启用模块，确认 MitM 已开启且证书受信任，然后重新打开高德地图。
   请关闭其他高德去广告模块，避免重复修改同一接口。
-  保留用户提供的 23 条处理规则；两个 jq 依赖从公开镜像同步并内嵌，无可莉服务器运行依赖。
+  本地维护 27 条重写与 1 条网址重写（原 23 条，另于 2026-11-01 嫁接墨鱼 AmapAds 独有的 5 条纯拦截：路线规划广告、广告归因、天气推广、开屏 aos 路径与 uploadimg 动图）；两个 jq 依赖从公开镜像同步并内嵌，无可莉服务器运行依赖。
   每 6 小时检查一次公开镜像；同步失败时保留上次有效规则，并更新同步状态。
   公开镜像未必与可莉服务器当前版本一致，实际效果以 App 测试为准。
 dns: {}
@@ -103,6 +103,21 @@ rewrites:
 - match: (?i)^https://m5\.amap\.com/ws/shield/search_business/process/marketingOperationStructured\?
   actions:
   - respond: {status: 200, headers: {Content-Type: application/json}, body: '{}'}
+- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/card-service-route-plan\?
+  actions:
+  - respond: {status: 200, headers: {Content-Type: application/json}, body: '{}'}
+- match: (?i)^https://m5\.amap\.com/ws/asa/ads_attribution
+  actions:
+  - respond: {status: 200, headers: {Content-Type: application/json}, body: '{}'}
+- match: (?i)^https://m5\.amap\.com/ws/valueadded/weather\?
+  actions:
+  - respond: {status: 200, headers: {Content-Type: application/json}, body: '{}'}
+- match: (?i)^https://m5\.amap\.com/ws/aos/alimama/splash_screen\?
+  actions:
+  - respond: {status: 200, headers: {Content-Type: application/json}, body: '{}'}
+url_rewrites:
+- match: (?i)^https?://[a-z0-9-]+\.amap\.com/uploadimg/\w+\.gif
+  location: http://reject-img/
 mitm:
   hostnames:
     includes:

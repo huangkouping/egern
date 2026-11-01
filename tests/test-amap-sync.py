@@ -25,7 +25,7 @@ class AmapSyncTest(unittest.TestCase):
                     capture_output=True, text=True)
             self.assertEqual(run().returncode, 0)
             good = yaml.safe_load((root / 'amap-adblock.yaml').read_text())
-            self.assertEqual(len(good['rewrites']), 23)
+            self.assertEqual(len(good['rewrites']), 27)
             self.assertEqual(good['mitm']['hostnames']['includes'],
                 yaml.safe_load((root / 'scripts/amap-base.yaml').read_text())['mitm']['hostnames']['includes'])
             for rule in good['rewrites']:
