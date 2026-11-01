@@ -9,11 +9,11 @@ compat_arguments_desc: '【使用说明】
 
   关闭其他彩云去广告模块，避免重复处理。
 
-  JS 已备份到本仓库，每 6 小时检查公开镜像；失败时保留上次有效版本。
+  JS 已备份到本仓库，每 6 小时检查可莉官方脚本；失败时保留上次有效版本。
 
-  原规则为用户提供的可莉配置，JS 来自 ifflagged/Romeo 公开镜像，标注版本 2024-09-05。
+  原规则为用户提供的可莉配置，JS 直连可莉官方分发（Moli-X/Tool），标注版本 2024-09-05；活动推广处理逻辑源自 RuCu6。不采用 RuCu6 原版：原版是会员破解脚本，会注入他人账号 token 并伪造 SVIP，与去广告无关且有安全风险。
 
-  保留源处理逻辑，仅增加异常透传；不保证与可莉服务器现版一致，当前 App 效果待实测。'
+  保留源处理逻辑，仅增加异常透传；当前 App 效果待实测。'
 dns: {}
 rules:
 - domain:
@@ -45,7 +45,7 @@ rewrites:
   actions:
   - response_script:
       name: 彩云天气去广告
-      url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=a2043fb4e7d4
+      url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=a016f7331a4c
       timeout: 20
       body_required: true
 mitm:
@@ -56,8 +56,8 @@ mitm:
     - wrapper.cyapi.cn
     - api.caiyunapp.com
     - cdn-w.caiyunapp.com
-description: '更新时间：2026-11-01 07:29
+description: '更新时间：2026-11-01 11:04
 
   过滤首页推广、弹窗及部分页面广告。
 
-  同步状态：脚本镜像同步正常；最近检查：2026-11-01 10:53'
+  同步状态：官方脚本同步正常；最近检查：2026-11-01 11:04'

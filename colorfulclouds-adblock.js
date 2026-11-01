@@ -1,5 +1,5 @@
-/* RuCu6 / 可莉公开镜像备份；源逻辑保持，补充异常透传与单次完成。
- * Source: https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/ColorfulClouds_remove_ads/kelee_ColorfulClouds_remove_ads.js
+/* 可莉官方脚本备份（活动推广逻辑源自 RuCu6）；源逻辑保持，补充异常透传与单次完成。
+ * Source: https://raw.githubusercontent.com/Moli-X/Tool/X/Loon/Plugin/Kelee/Script/ColorfulClouds_remove_ads.js
  */
 (function (complete) {
 let finished = false;

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Back up the readable ColorfulClouds mirror; retain last-good output on failure."""
+"""Sync the ColorfulClouds script from Kelee official distribution (Moli-X/Tool); retain last-good output on failure."""
 import argparse
 import hashlib
 import json
@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-URL = 'https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/ColorfulClouds_remove_ads/kelee_ColorfulClouds_remove_ads.js'
+URL = 'https://raw.githubusercontent.com/Moli-X/Tool/X/Loon/Plugin/Kelee/Script/ColorfulClouds_remove_ads.js'
 MODULE = ROOT / 'colorfulclouds-adblock.yaml'
 SCRIPT = ROOT / 'colorfulclouds-adblock.js'
 META = ROOT / 'colorfulclouds-sync-status.json'
@@ -25,7 +25,7 @@ def adapt(source):
         raise ValueError('Source signature missing')
     if any(token in source for token in ['<html', '<!DOCTYPE', '404: Not Found', 'eval(', '$httpClient', '$task.fetch', 'import(']):
         raise ValueError('Unexpected upstream content or network code')
-    result = ('/* RuCu6 / 可莉公开镜像备份；源逻辑保持，补充异常透传与单次完成。\n'
+    result = ('/* 可莉官方脚本备份（活动推广逻辑源自 RuCu6）；源逻辑保持，补充异常透传与单次完成。\n'
               ' * Source: ' + URL + '\n */\n'
               '(function (complete) {\nlet finished = false;\n'
               'const $done = value => { if (!finished) { finished = true; complete(value); } };\n'
@@ -40,7 +40,7 @@ def adapt(source):
     return result
 
 def description(meta):
-    state = '脚本镜像同步正常' if meta['status'] == 'ok' else '脚本镜像同步失败，保留上次有效规则'
+    state = '官方脚本同步正常' if meta['status'] == 'ok' else '官方脚本同步失败，保留上次有效规则'
     return (f"更新时间：{meta.get('last_updated', '未知')}\n"
             '过滤首页推广、弹窗及部分页面广告。\n'
             f"同步状态：{state}；最近检查：{meta['last_checked']}")
@@ -52,7 +52,7 @@ def build(version):
         'homepage': 'https://github.com/huangkouping/egern',
         'open_url': 'https://apps.apple.com/app/id847764912',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png',
-        'compat_arguments_desc': '【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开彩云天气。\n关闭其他彩云去广告模块，避免重复处理。\nJS 已备份到本仓库，每 6 小时检查公开镜像；失败时保留上次有效版本。\n原规则为用户提供的可莉配置，JS 来自 ifflagged/Romeo 公开镜像，标注版本 2024-09-05。\n保留源处理逻辑，仅增加异常透传；不保证与可莉服务器现版一致，当前 App 效果待实测。',
+        'compat_arguments_desc': '【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开彩云天气。\n关闭其他彩云去广告模块，避免重复处理。\nJS 已备份到本仓库，每 6 小时检查可莉官方脚本；失败时保留上次有效版本。\n原规则为用户提供的可莉配置，JS 直连可莉官方分发（Moli-X/Tool），标注版本 2024-09-05；活动推广处理逻辑源自 RuCu6。不采用 RuCu6 原版：原版是会员破解脚本，会注入他人账号 token 并伪造 SVIP，与去广告无关且有安全风险。\n保留源处理逻辑，仅增加异常透传；当前 App 效果待实测。',
         'dns': {},
         'rules': [{'domain': {'match': domain, 'policy': 'REJECT'}} for domain in
                   ['abyss.cyapi.cn', 'ad.cyapi.cn', 'gather.colorfulclouds.net']],
@@ -94,7 +94,7 @@ def main():
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_url': URL, 'source_version': '2024-09-05',
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
-                'scope': 'Sync the public JavaScript mirror; local module rules are maintained separately.'}
+                'scope': 'Sync the Kelee official JavaScript (Moli-X/Tool) directly, without the ifflagged mirror; local module rules are maintained separately.'}
         module['description'] = description(meta)
         SCRIPT.write_text(script)
         MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
