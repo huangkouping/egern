@@ -2,6 +2,7 @@ name: 京东去广告🅗
 description: |-
   全量去广告：开屏、首页推广楼层、我的/订单/物流页广告楼层与弹窗。
   适配京东 15.9.50+ 新协议（响应体 base64 化）：脚本解码后按内容特征清洗再按原格式回写，无可清内容原样放行。
+  更新时间：2026-11-01 16:52
 open_url: https://apps.apple.com/app/id414245413
 author: zbsdsb[https://github.com/zbsdsb]
 homepage: https://github.com/zbsdsb/loon-adblock-plugins
