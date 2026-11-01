@@ -2,7 +2,7 @@
 
 本仓库收录 Egern 分流规则、去广告模块、自动签到和链接跳转模块。提供分流规则、DNS 规则、去广告及功能模块，并配有上游同步和更新检查任务。
 
-模块保留来源标识：可莉改版使用 **🅥**，自行维护使用 **🅗**。下面的「订阅」和「安装」链接均为 Raw 文件地址，可复制到 Egern 中使用；「源码」用于查看配置。
+模块保留来源标识：可莉改版使用 **🅥**，自行维护使用 **🅗**。下方模块索引中的名称与 Egern 安装后显示的 `name` 保持一致；下面的「订阅」和「安装」链接均为 Raw 文件地址，可复制到 Egern 中使用；「源码」用于查看配置。
 
 ## 目录
 
@@ -25,73 +25,73 @@
 
 | 模块 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- |
-| 搜索去广告与自动翻页 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-search-adblock.yaml) |
-| 美团 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/meituan-adblock.yaml) |
-| 淘宝 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/taobao-adblock.yaml) |
+| 搜索去广告&自动翻页🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-search-adblock.yaml) |
+| 美团去广告🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/meituan-adblock.yaml) |
+| 淘宝去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/taobao-adblock.yaml) |
 
 ### 辅助与功能模块
 
 | 模块 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- |
-| PingMe 签到 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/pingme.yaml) |
-| Telegram 跳转 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/telegram-redirect.yaml) |
-| wechat external links | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-external-links.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/wechat-external-links.yaml) |
-| weixin mini programs | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/weixin-mini-programs-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/weixin-mini-programs-adblock.yaml) |
+| PingMe签到🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/pingme.yaml) |
+| Telegram跳转🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/telegram-redirect.yaml) |
+| 微信外部链接解锁🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-external-links.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/wechat-external-links.yaml) |
+| 微信小程序去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/weixin-mini-programs-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/weixin-mini-programs-adblock.yaml) |
 
 ### 广告过滤及其他模块
 
 | 模块 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- |
-| ad platform blocker | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/ad-platform-blocker.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/ad-platform-blocker.yaml) |
-| aliyundrive | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/aliyundrive-adblock.yaml) |
-| amap | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/amap-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/amap-adblock.yaml) |
-| 小羞片网站去广告 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
-| baidu netdisk | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-netdisk-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-netdisk-adblock.yaml) |
-| baidu translate | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-translate-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-translate-adblock.yaml) |
-| beike | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/beike-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/beike-adblock.yaml) |
-| bilibili | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/bilibili-adblock.yaml) |
-| china unicom | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/china-unicom-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/china-unicom-adblock.yaml) |
-| colorfulclouds | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/colorfulclouds-adblock.yaml) |
-| 大麦 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/damai-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/damai-adblock.yaml) |
-| dewu | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/dewu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/dewu-adblock.yaml) |
-| didi | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/didi-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/didi-adblock.yaml) |
-| dingdong | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/dingdong-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/dingdong-adblock.yaml) |
-| echarge | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/echarge-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/echarge-adblock.yaml) |
-| goofish | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/goofish-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/goofish-adblock.yaml) |
-| hema | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/hema-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/hema-adblock.yaml) |
-| httpdns blocker | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/httpdns-blocker.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/httpdns-blocker.yaml) |
-| ifeng news | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/ifeng-news-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/ifeng-news-adblock.yaml) |
-| jd | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
-| 京东比价 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/jd-price.yaml) |
-| keep | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/keep-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/keep-adblock.yaml) |
-| kelee adfilter | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/kelee-adfilter.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/kelee-adfilter.yaml) |
-| kuaishou | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/kuaishou-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/kuaishou-adblock.yaml) |
-| mailmaster | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/mailmaster-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/mailmaster-adblock.yaml) |
-| meitu | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meitu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/meitu-adblock.yaml) |
-| mgtv | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/mgtv-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/mgtv-adblock.yaml) |
-| motianlun | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/motianlun-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/motianlun-adblock.yaml) |
-| netease cloudmusic | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/netease-cloudmusic-adblock.yaml) |
-| netease news kelee | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/netease-news-kelee.yaml) |
-| pinduoduo | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pinduoduo-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/pinduoduo-adblock.yaml) |
-| qqmusic | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/qqmusic-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/qqmusic-adblock.yaml) |
-| railway12306 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/railway12306-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/railway12306-adblock.yaml) |
-| soda music | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/soda-music-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/soda-music-adblock.yaml) |
-| soda music ddgksf2013 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/soda-music-ddgksf2013.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/soda-music-ddgksf2013.yaml) |
-| 航旅纵横 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/umetrip-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/umetrip-adblock.yaml) |
-| wechat article | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-article-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/wechat-article-adblock.yaml) |
-| weifeng | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/weifeng-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/weifeng-adblock.yaml) |
-| 小红书去直播广告 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
-| xiaojukeji charge | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaojukeji-charge-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaojukeji-charge-adblock.yaml) |
-| xiaomi speaker | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaomi-speaker-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaomi-speaker-adblock.yaml) |
-| xiaoyuzhou | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaoyuzhou-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaoyuzhou-adblock.yaml) |
-| ximalaya | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/ximalaya-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/ximalaya-adblock.yaml) |
-| youdao dict | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youdao-dict-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youdao-dict-adblock.yaml) |
-| youdao trans | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youdao-trans-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youdao-trans-adblock.yaml) |
-| youku | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youku-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youku-adblock.yaml) |
-| youtube enhance | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-enhance.yaml) |
-| youtube subtitles translation | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-translation.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-subtitles-translation.yaml) |
-| zhihu | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhihu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhihu-adblock.yaml) |
-| zhwnl | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhwnl-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhwnl-adblock.yaml) |
+| 广告平台拦截器🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/ad-platform-blocker.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/ad-platform-blocker.yaml) |
+| 阿里云盘去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/aliyundrive-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/aliyundrive-adblock.yaml) |
+| 高德地图去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/amap-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/amap-adblock.yaml) |
+| 小羞片网站去广告🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
+| 百度网盘去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-netdisk-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-netdisk-adblock.yaml) |
+| 百度翻译去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-translate-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-translate-adblock.yaml) |
+| 贝壳找房去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/beike-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/beike-adblock.yaml) |
+| 哔哩哔哩去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/bilibili-adblock.yaml) |
+| 中国联通去开屏广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/china-unicom-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/china-unicom-adblock.yaml) |
+| 彩云天气去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/colorfulclouds-adblock.yaml) |
+| 大麦去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/damai-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/damai-adblock.yaml) |
+| 得物去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/dewu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/dewu-adblock.yaml) |
+| 滴滴去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/didi-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/didi-adblock.yaml) |
+| 叮咚买菜去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/dingdong-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/dingdong-adblock.yaml) |
+| e充电去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/echarge-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/echarge-adblock.yaml) |
+| 闲鱼去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/goofish-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/goofish-adblock.yaml) |
+| 盒马去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/hema-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/hema-adblock.yaml) |
+| HTTPDNS拦截器🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/httpdns-blocker.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/httpdns-blocker.yaml) |
+| 凤凰新闻去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/ifeng-news-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/ifeng-news-adblock.yaml) |
+| 京东去广告🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
+| 京东比价🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/jd-price.yaml) |
+| Keep去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/keep-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/keep-adblock.yaml) |
+| 可莉广告过滤器🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/kelee-adfilter.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/kelee-adfilter.yaml) |
+| 快手去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/kuaishou-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/kuaishou-adblock.yaml) |
+| 网易邮箱大师去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/mailmaster-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/mailmaster-adblock.yaml) |
+| 美图秀秀去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meitu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/meitu-adblock.yaml) |
+| 芒果TV去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/mgtv-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/mgtv-adblock.yaml) |
+| 摩天轮去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/motianlun-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/motianlun-adblock.yaml) |
+| 网易云音乐去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/netease-cloudmusic-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/netease-cloudmusic-adblock.yaml) |
+| 网易新闻去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/netease-news-kelee.yaml) |
+| 拼多多去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pinduoduo-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/pinduoduo-adblock.yaml) |
+| QQ音乐去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/qqmusic-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/qqmusic-adblock.yaml) |
+| 12306去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/railway12306-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/railway12306-adblock.yaml) |
+| 汽水音乐去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/soda-music-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/soda-music-adblock.yaml) |
+| 汽水音乐净化·墨鱼版🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/soda-music-ddgksf2013.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/soda-music-ddgksf2013.yaml) |
+| 航旅纵横去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/umetrip-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/umetrip-adblock.yaml) |
+| 微信公众号去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-article-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/wechat-article-adblock.yaml) |
+| 威锋去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/weifeng-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/weifeng-adblock.yaml) |
+| 小红书去直播广告🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
+| 小桔充电去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaojukeji-charge-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaojukeji-charge-adblock.yaml) |
+| 小米音箱去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaomi-speaker-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaomi-speaker-adblock.yaml) |
+| 小宇宙去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaoyuzhou-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaoyuzhou-adblock.yaml) |
+| 喜马拉雅去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/ximalaya-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/ximalaya-adblock.yaml) |
+| 网易有道词典去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youdao-dict-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youdao-dict-adblock.yaml) |
+| 有道翻译官去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youdao-trans-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youdao-trans-adblock.yaml) |
+| 优酷视频去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youku-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youku-adblock.yaml) |
+| YouTube去广告🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-enhance.yaml) |
+| YouTube双语翻译🅗 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-translation.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-subtitles-translation.yaml) |
+| 知乎去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhihu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhihu-adblock.yaml) |
+| 中华万年历去广告🅥 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhwnl-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhwnl-adblock.yaml) |
 
 ### DNS 规则与策略规则
 
@@ -137,7 +137,7 @@
 | --- | --- | --- | --- |
 | 小红书去直播广告🅗 | 过滤开屏、首页「发现」商业广告、直播卡片，以及作者正在直播的普通笔记；支持疑似医美推广过滤。 | 各功能可独立开关；保留未命中过滤条件的普通图文、视频及商品笔记。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
 | 小羞片网站去广告🅗 | 合并指定网站的网页广告清理、CMS 视频播放列表插播过滤，以及 Pornhub 网页过滤与广告接口处理。 | 包含自编网页脚本及同步适配的上游脚本；仅处理配置中匹配的网址或播放资源。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
-| 京东去开屏广告🅗 | 仅拦截开屏广告及启动广告物料接口。 | 不处理首页浮窗、我的推荐或消息抽屉；无脚本、HTTPDNS 或 QUIC 拦截。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
+| 京东去广告🅗 | 采用上游 v2 响应脚本清理开屏、首页、我的、订单及物流页广告。 | 保留额外开屏请求拦截及本地异常保护；实际效果取决于 App 版本。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
 
 ### 小红书去直播广告🅗
 
@@ -172,13 +172,9 @@
 
 此项为 **2026-10-24 手动适配快照，未加入定时同步**，现有 CMS / Pornhub 同步任务不负责更新它。已完成离线注入和部分浏览器 API 模拟测试，未实站验证；网页 CSP 可能阻止注入，不会为此移除或放宽安全策略。实际效果请以设备测试为准。
 
-### 京东去开屏广告🅗
+### 京东去广告🅗
 
-仅保留开屏入口 `start`、启动广告物料入口 `queryMaterialAdverts` 的 URL 拦截，返回空 JSON 对象。不以 `start` 前缀匹配 `startup` 设备配置。
-
-首页浮窗、我的“为你推荐／潮流好货”、消息推荐抽屉等净化均已删除；同时移除 HTTPDNS、IP、QUIC、广告域名拦截和配套响应脚本。模块仅保留 api.m.jd.com 的 MITM 配置，实际开屏效果取决于客户端版本与广告缓存。
-
-安装地址保持不变；更新原模块即可，无需单独安装脚本。本模块手动维护，无上游定时同步任务。
+基于 zbsdsb 的京东去广告 v2 脚本适配 Egern，覆盖开屏、首页、我的、订单及物流页的部分推广内容，并保留启动广告物料接口拦截。上游脚本通过 GitHub Actions 每 6 小时检查更新；更新失败时保留现有脚本。实际过滤效果以 Egern 日志和 App 页面为准。
 
 ## 签到模块
 
@@ -207,7 +203,7 @@
 3. **HTTPS 处理：** 网页和 App 的 HTTPS 改写需要相关主机进入 MITM 范围，并安装、信任 Egern 证书。签到的定时任务与参数抓取是不同环节。
 4. **更新：** 更新远程模块或规则集后，再检查实际配置及日志；配套脚本由模块自动引用，无需逐个安装。
 
-仓库内容删除不会自动卸载手机中的已安装模块；需在 Egern 中手动删除。京东模块现仅保留去开屏，配套净化脚本已移除。
+仓库内容删除不会自动卸载手机中的已安装模块；需在 Egern 中手动删除。
 
 ## 定时更新与同步状态
 
@@ -221,6 +217,7 @@
 | PingMe签到 | 同步上游模块，保留本仓库的标题、简介和默认参数定制。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-pingme.yml) |
 | 小羞片网站去广告 | 检查 CMS 插件、CMS 脚本与 Pornhub 脚本，合并规则并记录同步状态。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-cms-adblock.yml) |
 | 美团、搜索去广告与自动翻页、淘宝 | GitHub 每 6 小时自动拉取上游、转换、校验并提交；2026-11-01 已完成首次正式运行。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/validate-muse-migration.yml) |
+| 京东去广告🅗 | 每 6 小时检查上游 v2 脚本并保留本地适配。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-jd-adblock.yml) |
 | luestr 脚本检查 | GitHub 检查上游更新；不自动覆盖模块。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/check-luestr-updates.yml) |
 | 京东比价、大麦 | Muse 检查上游变化并通知，不自动改动仓库。 | [京东比价](https://github.com/huangkouping/egern/blob/main/jd-price.yaml) · [大麦](https://github.com/huangkouping/egern/blob/main/damai-adblock.yaml) |
 | 小红书去直播广告、Telegram跳转、京东去开屏广告 | 手动维护，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
