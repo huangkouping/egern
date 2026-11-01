@@ -1,0 +1,50 @@
+name: 百度搜索去广告
+author: limbopro[https://github.com/limbopro/Adblock4limbo]
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
+compat_arguments_desc: '【使用说明】
+
+  启用模块，确认 MitM 已开启且证书受信任，然后重新打开浏览器访问百度。
+
+  本模块只摘取 limbopro/Adblock4limbo 合集中的百度部分（知道、搜索首页、搜索结果 3 条），不含其数百个其他站点规则。
+
+  注入器镜像自 limbopro 原仓库，每 6 小时自动检查上游更新，失败时保留上次有效版本；页面脚本与分域名 CSS 运行时由 limbopro.com 加载（作者分发方式）。
+
+  已按作者在脚本头注明的官方方法，拦截 Adblock4limbo.function.js：右下角导航按钮、导航面板及其附带功能（沉浸式翻译、划词搜索等）全部禁用，只保留纯去广告。
+
+  当前效果待实机验证；若百度页面异常，先停用本模块排查。'
+dns: {}
+scriptings:
+- http_response:
+    name: 百度知道去广告
+    match: ^https?://(zhidao)\.baidu\.com/(question|index|\?fr|\?word)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.js?v=4f85ea6f8f09
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 百度搜索首页去广告
+    match: https?://(www|m)\.baidu\.com(/$|/\?ref.*)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.js?v=4f85ea6f8f09
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 百度搜索结果去广告
+    match: https?://(www|m)\.baidu\.com/(from=|s\?)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.js?v=4f85ea6f8f09
+    body_required: true
+    timeout: 20
+url_rewrites:
+- match: (?i)^https?://[^/]+/Adguard/Adblock4limbo\.function\.js
+  location: http://reject-dict/
+mitm:
+  hostnames:
+    includes:
+    - www.baidu.com
+    - m.baidu.com
+    - zhidao.baidu.com
+    - limbopro.com
+description: '更新时间：2026-11-01 12:44
+
+  去除百度搜索首页、搜索结果页及百度知道的广告（limbo 毒奶脚本，仅百度部分）。
+
+  同步状态：上游同步正常；最近检查：2026-11-01 12:44'
