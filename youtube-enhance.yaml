@@ -1,0 +1,52 @@
+name: YouTube去广告©️
+description: '更新时间：2026-11-01 08:33
+
+  同步Maasea原版，过滤YouTube及Music广告并保留原功能。
+
+  同步状态：Maasea原版同步正常；最近检查：2026-11-01 08:33'
+author: Maasea[https://github.com/Maasea]
+homepage: https://github.com/Maasea/sgmodule/blob/master/YouTube.Enhance.sgmodule
+open_url: https://apps.apple.com/app/id544007664
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YouTube.png
+compat_arguments:
+  屏蔽上传按钮: 'true'
+  屏蔽选段按钮: 'true'
+  屏蔽Shorts按钮: 'false'
+  字幕翻译语言: 'off'
+  启用调试模式: 'false'
+compat_arguments_desc: "- 屏蔽参数：[true, false] \n- 翻译参数：[语言代码, off] \n\n1. 语言代码遵循 Google Translate Languages Codes, 当填入 off 时关闭翻译\n2. 开启调试模式用于输出更多日志\n\n使用说明：开启HTTPS解密并信任证书，确保HTTP/2可解密及QUIC回退。放在YouTube双语字幕模块之前，避免两边重复启用字幕/歌词翻译；原版captionLang默认off。原作者脚本还包含画中画、后台播放、界面及播放配置处理，保留原逻辑。initplayback按原版使用init-stream.maasea.workers.dev，依赖原作者服务。每6小时跟随原仓库，固定到同一提交校验配置与两个JS，脚本内容不修改；任一检查失败保留上次有效配置。兼容性与实际效果需实机验证。"
+dns: {}
+scriptings:
+- http_response:
+    name: youtube.response
+    match: ^https:\/\/youtubei\.googleapis\.com\/(youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch|log_event|config))(\?(.*))?$
+    script_url: https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.response.js
+    body_required: true
+    binary_body: true
+    max_size: -1
+    update_interval: 21600
+    env:
+      _compat.$argument: '{"captionLang":"{{{字幕翻译语言}}}","blockUpload":{{{屏蔽上传按钮}}},"blockImmersive":{{{屏蔽选段按钮}}},"blockShorts":{{{屏蔽Shorts按钮}}},"debug":{{{启用调试模式}}}}'
+- http_request:
+    name: youtube.request.init
+    match: ^https?:\/\/[\w-]+\.googlevideo\.com\/initplayback.+&ack.*
+    script_url: https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.request.js
+    body_required: true
+    binary_body: true
+    max_size: -1
+    update_interval: 21600
+    env:
+      _compat.$argument: '{"captionLang":"{{{字幕翻译语言}}}"}'
+- http_request:
+    name: youtube.request.log_event
+    match: ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/log_event
+    script_url: https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.request.js
+    body_required: true
+    binary_body: true
+    max_size: -1
+    update_interval: 21600
+mitm:
+  hostnames:
+    includes:
+    - '*.googlevideo.com'
+    - youtubei.googleapis.com
