@@ -28,6 +28,7 @@ CONF_URL = 'https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adbloc
 INJECTOR_URL = 'https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js'
 MODULE = ROOT / 'baidu-search-adblock.yaml'
 SCRIPT = ROOT / 'baidu-search-adblock.js'
+PAGER = ROOT / 'baidu-autopager.js'
 META = ROOT / 'baidu-search-sync-status.json'
 RAW_BASE = 'https://raw.githubusercontent.com/huangkouping/egern/main/'
 FUNCTION_JS_PATTERN = r'(?i)^https?://[^/]+/Adguard/Adblock4limbo\.function\.js'
@@ -117,14 +118,53 @@ def description(meta):
             f"同步状态：{state}；最近检查：{meta['last_checked']}")
 
 
-def build(version, patterns):
+def validate_pager(text):
+    """The auto-pager is a local hand-maintained file (not synced from upstream);
+    the sync only references it by hash. Verify it parses and injects correctly."""
+    if 'baiduAutoPagerPage' not in text or 'new-nextpage-only' not in text:
+        raise ValueError('Auto-pager signature missing')
+    with tempfile.NamedTemporaryFile(suffix='.js', mode='w', delete=False) as handle:
+        handle.write(text)
+        path = handle.name
+    check = subprocess.run(['node', '--check', path], capture_output=True, text=True, timeout=15)
+    if check.returncode:
+        raise ValueError('Auto-pager syntax check failed')
+    smoke = r'''
+const fs = require("fs");
+const src = fs.readFileSync(process.argv[2], "utf8");
+global.$request = { url: "https://www.baidu.com/s?wd=test", headers: {} };
+global.$response = { headers: { "Content-Type": "text/html; charset=utf-8" }, body: "<html><body><div id=\"results\"></div></body></html>" };
+let out = null;
+global.$done = v => { out = v; };
+eval(src);
+if (!out || typeof out.body !== "string" || !out.body.includes("__bdAutopager")) throw new Error("pager not injected");
+console.log("pager smoke ok");
+'''
+    with tempfile.NamedTemporaryFile(suffix='.js', mode='w', delete=False) as handle:
+        handle.write(smoke)
+        smoke_path = handle.name
+    run = subprocess.run(['node', smoke_path, path], capture_output=True, text=True, timeout=15)
+    if run.returncode or 'pager smoke ok' not in run.stdout:
+        raise ValueError('Auto-pager smoke test failed: ' + (run.stderr or run.stdout)[:200])
+
+
+def build(version, patterns, pager_version):
     scriptings = []
+    results_pattern = None
     for pattern in patterns:
         name = next((n for key, n in RULE_NAMES if key in pattern), '百度搜索去广告')
+        if 'from=' in pattern:
+            results_pattern = pattern
         scriptings.append({'http_response': {
             'name': name, 'match': pattern,
             'script_url': RAW_BASE + 'baidu-search-adblock.js?v=' + version,
             'body_required': True, 'timeout': 20}})
+    if results_pattern is None:
+        raise ValueError('Results pattern missing; cannot attach auto-pager')
+    scriptings.append({'http_response': {
+        'name': '百度搜索结果自动翻页', 'match': results_pattern,
+        'script_url': RAW_BASE + 'baidu-autopager.js?v=' + pager_version,
+        'body_required': True, 'timeout': 20}})
     return {
         'name': '百度搜索去广告',
         'author': 'limbopro[https://github.com/limbopro/Adblock4limbo]',
@@ -134,6 +174,7 @@ def build(version, patterns):
             '本模块只摘取 limbopro/Adblock4limbo 合集中的百度部分（知道、搜索首页、搜索结果 3 条），不含其数百个其他站点规则。\n'
             '注入器镜像自 limbopro 原仓库，每 6 小时自动检查上游更新，失败时保留上次有效版本；页面脚本与分域名 CSS 运行时由 limbopro.com 加载（作者分发方式）。\n'
             '已按作者在脚本头注明的官方方法，拦截 Adblock4limbo.function.js：右下角导航按钮、导航面板及其附带功能（沉浸式翻译、划词搜索等）全部禁用，只保留纯去广告。\n'
+            '另含自维护的搜索结果自动翻页（滚动接近页脚自动加载下一页并追加结果，仅结果页生效），与 limbopro 上游无关，不受其更新影响。\n'
             '当前效果待实机验证；若百度页面异常，先停用本模块排查。'),
         'dns': {},
         'scriptings': scriptings,
@@ -149,8 +190,11 @@ def main():
         source = fetch(INJECTOR_URL)
         patterns = parse_conf(conf)
         script = adapt(source)
+        pager_text = PAGER.read_text()
+        validate_pager(pager_text)
+        pager_sha = hashlib.sha256(pager_text.encode()).hexdigest()
         sha = hashlib.sha256(script.encode()).hexdigest()
-        module = build(sha[:12], patterns)
+        module = build(sha[:12], patterns, pager_sha[:12])
         changed = not SCRIPT.exists() or SCRIPT.read_text() != script
         if MODULE.exists():
             previous = yaml.safe_load(MODULE.read_text())
@@ -160,8 +204,9 @@ def main():
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_conf': CONF_URL, 'source_injector': INJECTOR_URL,
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
-                'counts': {'scriptings': len(patterns), 'url_rewrites': 1},
-                'scope': 'Baidu-only slice of limbopro/Adblock4limbo: 3 response rules + mirrored injector; Adblock4limbo.function.js rejected to disable the navigation panel per the author-documented switch; auto-sync every 6h via Muse cron; last-good retained on failure.'}
+                'pager_sha256': pager_sha,
+                'counts': {'scriptings': len(patterns) + 1, 'url_rewrites': 1},
+                'scope': 'Baidu-only slice of limbopro/Adblock4limbo: 3 response rules + mirrored injector; Adblock4limbo.function.js rejected to disable the navigation panel per the author-documented switch; plus a local hand-maintained auto-pager scripting (baidu-autopager.js, referenced by hash, never overwritten by sync); auto-sync every 6h via Muse cron; last-good retained on failure.'}
         module['description'] = description(meta)
         SCRIPT.write_text(script)
         MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))

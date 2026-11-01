@@ -12,6 +12,8 @@ compat_arguments_desc: '【使用说明】
 
   已按作者在脚本头注明的官方方法，拦截 Adblock4limbo.function.js：右下角导航按钮、导航面板及其附带功能（沉浸式翻译、划词搜索等）全部禁用，只保留纯去广告。
 
+  另含自维护的搜索结果自动翻页（滚动接近页脚自动加载下一页并追加结果，仅结果页生效），与 limbopro 上游无关，不受其更新影响。
+
   当前效果待实机验证；若百度页面异常，先停用本模块排查。'
 dns: {}
 scriptings:
@@ -33,6 +35,12 @@ scriptings:
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.js?v=4f85ea6f8f09
     body_required: true
     timeout: 20
+- http_response:
+    name: 百度搜索结果自动翻页
+    match: https?://(www|m)\.baidu\.com/(from=|s\?)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=8b632edbd322
+    body_required: true
+    timeout: 20
 url_rewrites:
 - match: (?i)^https?://[^/]+/Adguard/Adblock4limbo\.function\.js
   location: http://reject-dict/
@@ -43,8 +51,8 @@ mitm:
     - m.baidu.com
     - zhidao.baidu.com
     - limbopro.com
-description: '更新时间：2026-11-01 12:44
+description: '更新时间：2026-11-01 12:59
 
   去除百度搜索首页、搜索结果页及百度知道的广告（limbo 毒奶脚本，仅百度部分）。
 
-  同步状态：上游同步正常；最近检查：2026-11-01 12:44'
+  同步状态：上游同步正常；最近检查：2026-11-01 12:59'
