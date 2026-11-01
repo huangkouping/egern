@@ -1,74 +1,98 @@
 #!/usr/bin/env python3
-"""Validate and back up all four DualSubs scripts; preserve a complete last-good set."""
-import argparse,hashlib,json,os,subprocess,sys,tempfile,urllib.request
+"""Mirror the official DualSubs YouTube release YAML without adapting upstream scripts."""
+import argparse,concurrent.futures,hashlib,json,re,subprocess,sys,tempfile,urllib.request
+from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from pathlib import Path
 import yaml
 ROOT=Path(__file__).resolve().parents[1]
-PREFIX='https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_'
-NAMES={'request':'YouTube_Subtitles_request.js','response':'YouTube_Subtitles_response.js','composite':'YouTube_Composite_Subtitles_response.js','translate':'YouTube_Subtitles_Translate_response.js'}
+UPSTREAM='https://github.com/DualSubs/YouTube/releases/latest/download/DualSubs.YouTube.yaml'
 MODULE=ROOT/'youtube-subtitles-translation.yaml'
 META=ROOT/'youtube-subtitles-sync-status.json'
-def replace(source,old,new,count):
-    if source.count(old)!=count:raise ValueError('Adapter signature changed; review required')
-    return source.replace(old,new)
-def adapt(source,kind):
-    if not 10000<len(source)<1500000 or 'Database=' not in source or '$done' not in source:
-        raise ValueError('Invalid public source')
-    if any(t in source[:1000] for t in ['404: Not Found','<!DOCTYPE','<html']):raise ValueError('Invalid public source')
-    if kind=='request':
-        source=replace(source,'a.set(URL,"query.subtype","Translate")','xe.searchParams.set("subtype","Translate")',1)
-        source=replace(source,'a.set(URL,"query.subtype","External")','xe.searchParams.set("subtype","External")',1)
-        source=replace(source,'o?.playbackContext&&','n.AutoCC&&o?.playbackContext&&',2)
-    wrapper=(ROOT/'scripts/youtube-subtitles-adapter.js').read_text()
-    result=wrapper.replace('SCRIPT_KIND',json.dumps(kind)).replace('SOURCE_CODE',source)
-    with tempfile.NamedTemporaryFile(suffix='.mjs',mode='w') as f:
-        f.write(result);f.flush()
-        p=subprocess.run(['node','--check',f.name],capture_output=True,timeout=20)
-        if p.returncode:raise ValueError('Invalid JavaScript syntax')
-    return result
-def desc(meta):
-    state='全部4个字幕脚本同步正常' if meta['status']=='ok' else '同步失败，保留上次完整版本'
-    return f"更新时间：{meta.get('last_updated','未知')}\n字幕增强、双语合成及YouTube Music歌词翻译。\n同步状态：{state}；最近检查：{meta['last_checked']}"
+def fetch(url,limit):
+    req=urllib.request.Request(url,headers={'User-Agent':'Egern-Official-Release-Sync/1.0','Accept':'*/*'})
+    with urllib.request.urlopen(req,timeout=40) as response:
+        data=response.read(limit+1);resolved=response.geturl()
+    if len(data)>limit:raise ValueError('Upstream resource exceeds size limit')
+    return data,resolved
+def validate_module(text):
+    obj=yaml.safe_load(text)
+    if not isinstance(obj,dict) or not isinstance(obj.get('compat_arguments'),dict):raise ValueError('Invalid official module')
+    rows=obj.get('scriptings',[])
+    if len(rows)<7 or not obj.get('mitm'):raise ValueError('Incomplete official module')
+    urls=set();types=set()
+    for row in rows:
+        if not isinstance(row,dict) or len(row)!=1:raise ValueError('Invalid scripting entry')
+        kind,s=next(iter(row.items()));types.add(kind)
+        if not isinstance(s,dict):raise ValueError('Invalid scripting configuration')
+        re.compile(s['match'])
+        url=s['script_url']
+        if not url.startswith('https://github.com/'):raise ValueError('Unexpected official script host')
+        urls.add(url)
+    if not {'http_request','http_response'}.issubset(types):raise ValueError('Missing request/response hooks')
+    for row in obj.get('map_locals',[]):
+        re.compile(row['match'])
+        if not row['to'].startswith('https://github.com/'):raise ValueError('Unexpected settings resource')
+        urls.add(row['to'])
+    for row in obj.get('rules',[]):
+        if 'url_regex' in row:re.compile(row['url_regex']['match'])
+    return obj,sorted(urls)
+def validate_dependency(item):
+    url,data,resolved=item
+    if not data or data.lstrip().startswith((b'<!DOCTYPE',b'<html',b'404: Not Found')):raise ValueError('Unreadable official dependency')
+    text=data.decode('utf-8')
+    if url.split('?')[0].endswith('.js'):
+        if len(text)<100:raise ValueError('Unexpected script size')
+        with tempfile.NamedTemporaryFile(suffix='.mjs',mode='w') as f:
+            f.write(text);f.flush()
+            p=subprocess.run(['node','--check',f.name],capture_output=True,timeout=20)
+            if p.returncode:raise ValueError('Official script syntax check failed')
+    else:
+        value=json.loads(text)
+        if not isinstance(value,(dict,list)):raise ValueError('Invalid preference pane resource')
+    return {'url':url,'resolved_url':resolved,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}
+def download_dependency(url):
+    data,resolved=fetch(url,8000000)
+    return validate_dependency((url,data,resolved))
+def description(meta,upstream_description):
+    status='官方发布版同步正常' if meta['status']=='ok' else '官方同步失败，保留上次有效版本'
+    return f"官方版本：{meta.get('upstream_version','未知')}；更新时间：{meta.get('last_updated','未知')}\n{upstream_description}\n同步状态：{status}；最近检查：{meta['last_checked']}"
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--source-dir',type=Path);args=parser.parse_args()
-    old=json.loads(META.read_text()) if META.exists() else {}
+    parser=argparse.ArgumentParser();parser.add_argument('--source-file',type=Path);parser.add_argument('--skip-download',action='store_true',help='Offline structural validation only; never writes output');args=parser.parse_args()
     checked=datetime.now(ZoneInfo('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M')
+    old=json.loads(META.read_text()) if META.exists() else {}
     try:
-        sources={};outputs={}
-        for kind,name in NAMES.items():
-            if args.source_dir:source=(args.source_dir/name).read_text()
-            else:
-                req=urllib.request.Request(PREFIX+name,headers={'User-Agent':'Egern-Public-Mirror-Sync/1.0'})
-                with urllib.request.urlopen(req,timeout=30) as response:source=response.read(1500001).decode('utf-8')
-            sources[kind]=source;outputs['youtube-subtitles-'+kind+'.js']=adapt(source,kind)
-        with tempfile.TemporaryDirectory() as stage:
-            for name,text in outputs.items():(Path(stage)/name).write_text(text)
-            test=subprocess.run(['node',str(ROOT/'tests/test-youtube-subtitles.mjs')],env=dict(os.environ,YT_SUBTITLES_DIR=stage),capture_output=True,text=True,timeout=40)
-            if test.returncode:raise ValueError('Subtitle functional validation failed')
-        template=(ROOT/'scripts/youtube-subtitles-base.yaml').read_text()
-        for kind in NAMES:
-            filename='youtube-subtitles-'+kind+'.js';sha=hashlib.sha256(outputs[filename].encode()).hexdigest()
-            template=template.replace('SOURCE_'+kind.upper(),'https://raw.githubusercontent.com/huangkouping/egern/main/'+filename+'?v='+sha[:12])
-        module=yaml.safe_load(template)
-        changed=any(not (ROOT/name).exists() or (ROOT/name).read_text()!=text for name,text in outputs.items())
-        if MODULE.exists():
-            previous=yaml.safe_load(MODULE.read_text());previous.pop('description',None);changed=changed or previous!=module
-        meta={'status':'ok','last_checked':checked,'last_success':checked,'last_updated':checked if changed else old.get('last_updated',checked),
-              'sources':{k:{'url':PREFIX+NAMES[k],'sha256':hashlib.sha256(v.encode()).hexdigest()} for k,v in sources.items()},
-              'scope':'Sync 4 complete public JS mirrors; adapter and module rules separately maintained.',
-              'services':'YouTube official subtitles; translation provider from DualSubs settings (Google by default).'}
-        module['description']=desc(meta)
-        # Publish only after all sources compile and functional checks pass.
-        for name,text in outputs.items():(ROOT/name).write_text(text)
-        MODULE.write_text(yaml.safe_dump(module,allow_unicode=True,sort_keys=False,width=1000));META.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
-        print('YouTube subtitles: all four scripts synchronized and verified')
+        if args.source_file:data=args.source_file.read_bytes();resolved=UPSTREAM
+        else:data,resolved=fetch(UPSTREAM,1000000)
+        module,urls=validate_module(data.decode('utf-8'))
+        if args.skip_download:
+            print(f'Official YAML structure valid: {len(module["scriptings"])} hooks, {len(urls)} dependencies');return 0
+        with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:dependencies=list(pool.map(download_dependency,urls))
+        match=re.search(r'/releases/download/(v[^/]+)/DualSubs.YouTube.yaml',resolved)
+        if not match:
+            match=re.search(r'/DualSubs/YouTube/releases/download/(v[^/]+)/',json.dumps(module))
+        if not match:raise ValueError('Official release version missing')
+        version=match.group(1);sha=hashlib.sha256(data).hexdigest()
+        previous_dependencies={d['url']:d['sha256'] for d in old.get('dependencies',[])}
+        changed=old.get('upstream_sha256')!=sha or old.get('mode')!='official-release-yaml' or previous_dependencies!={d['url']:d['sha256'] for d in dependencies}
+        meta={'status':'ok','mode':'official-release-yaml','last_checked':checked,'last_success':checked,
+              'last_updated':checked if changed else old.get('last_updated',checked),'upstream_url':UPSTREAM,
+              'resolved_url':resolved,'upstream_version':version,'upstream_sha256':sha,'dependencies':dependencies,
+              'upstream_description':module.get('description',''),
+              'scope':'Mirror official release rules, parameters and script URLs; only local title/description metadata added.'}
+        module['name']='YouTube双语翻译©️'
+        module['description']=description(meta,meta['upstream_description'])
+        # Official rules, compatibility arguments, preference UI and script URLs remain unchanged.
+        MODULE.write_text(yaml.safe_dump(module,allow_unicode=True,sort_keys=False,width=1000))
+        META.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
+        print(f'Official DualSubs {version}: YAML and {len(dependencies)} remote dependencies verified')
         return 0
     except Exception as error:
         if MODULE.exists():
             meta=dict(old,status='failed',last_checked=checked,error=type(error).__name__)
-            module=yaml.safe_load(MODULE.read_text());module['description']=desc(meta)
-            MODULE.write_text(yaml.safe_dump(module,allow_unicode=True,sort_keys=False,width=1000));META.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
-        print('YouTube subtitle sync failed; last complete set retained:',str(error),file=sys.stderr);return 1
+            module=yaml.safe_load(MODULE.read_text())
+            module['description']=description(meta,old.get('upstream_description','YouTube 字幕及歌词翻译'))
+            MODULE.write_text(yaml.safe_dump(module,allow_unicode=True,sort_keys=False,width=1000))
+            META.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
+        print('Official subtitle sync failed; last good module retained:',str(error),file=sys.stderr);return 1
 if __name__=='__main__':sys.exit(main())
