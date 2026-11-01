@@ -1,0 +1,139 @@
+name: 淘宝去广告🅥
+description: |-
+  过滤淘宝开屏广告（图片/视频/活动弹窗）与广告下发接口，含闲鱼欢迎页与开屏。
+  纯规则加一个开屏处理脚本，脚本仅把开屏素材清空、等待时长归零，不改其他数据。
+open_url: https://apps.apple.com/app/id387682726
+author: RuCu6[https://github.com/RuCu6]
+homepage: https://hub.kelee.one
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png
+
+# 以可莉分发的 RuCu6 官方插件（2026-10-02）为底本地转换：6 条域名拦截、11 条接口空回应、开屏脚本镜像至本仓库。
+# 2026-11-01 嫁接 Thelongdarkorg 插件独有项：闲鱼开屏、菜鸟广告两条接口空回应，及 3 条广告图直链 reject；其 AMDC 拦截未加。
+# 手动维护，未配置上游定时同步（可莉官方站拦截自动化抓取）。
+dns: {}
+rules:
+- domain:
+    match: adashx.m.taobao.com
+    policy: REJECT
+- domain:
+    match: ossgw.alicdn.com
+    policy: REJECT
+- domain:
+    match: ems.youku.com
+    policy: REJECT
+- domain:
+    match: hudong.alicdn.com
+    policy: REJECT
+- domain:
+    match: h-adashx.ut.taobao.com
+    policy: REJECT
+- domain:
+    match: ut.taobao.com
+    policy: REJECT
+rewrites:
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.fliggy\\.crm\\.screen\\.(?:allresource|predict)"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alibaba\\.advertisementservice\\.getadv"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alimama\\.etao\\.config\\.query\\/.+?etao_advertise"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alimusic\\.common\\.mobileservice\\.startinit"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query\\/.+tao_splash"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.film\\.mtopadvertiseapi\\.queryadvertise"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.o2o\\.ad\\.gateway\\.get"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.idle\\.home\\.welcome"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.trip\\.activity\\.querytmsresources"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://(?:gw|heic)\\.alicdn\\.com/imgextra/i\\d/\\d*/?[\\w!]+-\\d-(?:octopus|tps)-(?:1080|1125)-\\d{4}\\.(?:jpg|png)_(?:1\\d{3}|9\\d{2})x(?:\\d|1\\d{3}|9\\d{2})q[59]0"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.(?:volvo\\.secondfloor\\.getconfig|wireless\\.home\\.newface\\.awesome\\.get)"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.idlecommerce\\.splash\\.ads"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+- match: "(?i)^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.cainiao\\.adx\\.flyad\\.getad"
+  actions:
+  - respond:
+      status: 200
+      headers: {"Content-Type":"application/json"}
+      body: "{}"
+url_rewrites:
+- match: "(?i)^https://heic\\.alicdn\\.com/imgextra/i\\d/[A-Za-z0-9_!]+-\\d+-tps-\\d+-\\d+\\.png_\\d+x\\d+q\\d+\\.jpg_\\.heic$"
+  location: http://reject-dict/
+- match: "(?i)^https://heic\\.alicdn\\.com/imgextra/i\\d/[A-Za-z0-9_!]+-\\d+-tps-\\d+-\\d+\\.jpg_\\d+x\\d+q\\d+\\.jpg_\\.heic$"
+  location: http://reject-dict/
+- match: "(?i)^https://gw\\.alicdn\\.com/imgextra/i\\d+/[^/]+_!!\\d+-\\d+-tps-(?:720-1280|1080-1920|1125-1602|1242-2208)\\.(?:jpg|png|jpeg)_[^/]+\\.webp"
+  location: http://reject-dict/
+scriptings:
+- http_response:
+    name: 淘宝开屏视频与开屏图处理
+    match: "(?i)^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.(?:cloudvideo\\.video\\.query|wireless\\.home\\.splash\\.awesome\\.get)"
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.js?v=3ccb209368
+    body_required: true
+    timeout: 20
+- http_response:
+    name: 淘宝开屏活动弹窗处理
+    match: "(?i)^https://poplayer\\.template\\.alibaba\\.com/\\w+\\.json"
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.js?v=3ccb209368
+    body_required: true
+    timeout: 20
+mitm:
+  hostnames:
+    includes:
+    - acs.m.taobao.com
+    - guide-acs.m.taobao.com
+    - heic.alicdn.com
+    - gw.alicdn.com
+    - poplayer.template.alibaba.com
