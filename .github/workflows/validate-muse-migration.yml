@@ -1,0 +1,37 @@
+name: Validate Muse sync migration
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install PyYAML==6.0.2
+      - name: Validate in isolated workspace (no repository writes)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/muse-validation/scripts
+          cp scripts/sync-meituan.py scripts/sync-baidu-search.py scripts/sync-taobao.py /tmp/muse-validation/scripts/
+          cp meituan-adblock.yaml meituan-adblock.js meituan-sync-status.json /tmp/muse-validation/
+          cp baidu-search-adblock.yaml baidu-search-adblock.js baidu-autopager.js baidu-search-sync-status.json /tmp/muse-validation/
+          cp taobao-adblock.yaml taobao-adblock.js taobao-sync-status.json /tmp/muse-validation/
+          cd /tmp/muse-validation
+          python scripts/sync-meituan.py
+          python scripts/sync-baidu-search.py
+          python scripts/sync-taobao.py
+          test -s meituan-adblock.yaml
+          test -s baidu-search-adblock.yaml
+          test -s taobao-adblock.yaml
+          python - <<'PY'
+          import yaml
+          for name in ('meituan', 'baidu-search', 'taobao'):
+              with open(f'{name}-adblock.yaml') as f:
+                  data = yaml.safe_load(f)
+              assert isinstance(data, dict) and data.get('name'), name
+          PY
