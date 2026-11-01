@@ -1,10 +1,10 @@
 {
-  "status": "failed",
-  "last_checked": "2026-11-01 10:53",
-  "last_success": "2026-11-01 08:50",
+  "status": "ok",
+  "last_checked": "2026-11-01 11:12",
+  "last_success": "2026-11-01 11:12",
   "last_updated": "2026-11-01 07:25",
   "upstream_repository": "ifflagged/Romeo",
-  "upstream_commit": "6ee0561d3102705ed43b1101fb2843d31c9cde0e",
+  "upstream_commit": "af682d97f456e8e6998bb70705c07115645b78fb",
   "source_paths": {
     "updatable.jq": "Modules/JavaScript/Kelee/Amap_remove_ads/kelee_updatable.jq",
     "search_poi_detail.jq": "Modules/JavaScript/Kelee/Amap_remove_ads/kelee_search_poi_detail.jq"
@@ -14,6 +14,5 @@
     "search_poi_detail.jq": "7def102b752835f8cbe63167b75dbe19997cb532f7e35d8283de4eeb5f2d4eb6"
   },
   "base_sha256": "9f38ae0a66af33e7200cf0bf5579e9b15ce2421fd46b4adf2b73fe0a8596af53",
-  "scope": "Only the two public JQ mirror dependencies; base rules are maintained locally.",
-  "error": "HTTPError: HTTP Error 403: rate limit exceeded"
+  "scope": "Only the two public JQ mirror dependencies; base rules are maintained locally."
 }
