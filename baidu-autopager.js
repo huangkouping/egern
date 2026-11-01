@@ -64,7 +64,7 @@ function searchAutoPagerPage() {
       };
       /* 官方渐进加载变体：有占位符且无分页链接时不干预 */
       if (qs('#progContPlaceHolder') && !engine.next(document)) return;
-    } else if (/(^|\.)google\.com(\.hk)?$/.test(host)) {
+    } else if (/(^|\.)google\.com(\.hk|\.tw)?$/.test(host)) {
       engine = {
         box: function (doc) { return qs('#rso', doc) || qs('#search', doc); },
         next: function (doc) {

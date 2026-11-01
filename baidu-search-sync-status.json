@@ -1,13 +1,13 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-01 14:02",
-  "last_success": "2026-11-01 14:02",
-  "last_updated": "2026-11-01 14:02",
+  "last_checked": "2026-11-01 14:07",
+  "last_success": "2026-11-01 14:07",
+  "last_updated": "2026-11-01 14:07",
   "source_conf": "https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adblock4limbo.conf",
   "source_injector": "https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js",
   "source_sha256": "57c39a847098d11a3185dd0f34edf0b2e1a48624c19d52a59109846cd51befc8",
   "script_sha256": "4f85ea6f8f09d16674b8838cb6f99b3dc77126a979cb898440141232434c7662",
-  "pager_sha256": "5297d430c569526f3e287f2c572099fc494d90b35279bf78553795d982e99d99",
+  "pager_sha256": "a98fc80ec9e87d0f3622d93f05e2376c62e35f24ef59844e42ce7404a0de0422",
   "counts": {
     "scriptings": 8,
     "url_rewrites": 2

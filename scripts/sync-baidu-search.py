@@ -35,7 +35,7 @@ META = ROOT / 'baidu-search-sync-status.json'
 RAW_BASE = 'https://raw.githubusercontent.com/huangkouping/egern/main/'
 FUNCTION_JS_PATTERN = r'(?i)^https?://[^/]+/Adguard/Adblock4limbo\.function\.js'
 BING_MATCH = r'^https?://(www|cn)\.bing\.com/search\?'
-GOOGLE_MATCH = r'^https?://www\.google\.com(\.hk)?/search'
+GOOGLE_MATCH = r'^https?://www\.google\.com(\.hk|\.tw)?/search'
 GOOGLE_CN_PATTERN = r'^https?://(www\.)?(g|google)\.cn(/.*)?$'
 GOOGLE_CN_LOCATION = 'https://www.google.com$3'
 
@@ -199,7 +199,7 @@ def build(version, patterns, pager_version):
                          {'match': GOOGLE_CN_PATTERN, 'location': GOOGLE_CN_LOCATION, 'status_code': 302}],
         'mitm': {'hostnames': {'includes': ['www.baidu.com', 'm.baidu.com', 'zhidao.baidu.com',
                                             'www.bing.com', 'cn.bing.com',
-                                            'www.google.com', 'www.google.com.hk',
+                                            'www.google.com', 'www.google.com.hk', 'www.google.com.tw',
                                             'google.cn', 'www.google.cn', 'g.cn', 'www.g.cn',
                                             'limbopro.com']}}}
 

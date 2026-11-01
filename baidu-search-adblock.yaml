@@ -40,7 +40,7 @@ scriptings:
 - http_response:
     name: 百度搜索结果自动翻页
     match: https?://(www|m)\.baidu\.com/(from=|s\?)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=5297d430c569
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=a98fc80ec9e8
     body_required: true
     timeout: 20
 - http_response:
@@ -52,19 +52,19 @@ scriptings:
 - http_response:
     name: 必应搜索自动翻页
     match: ^https?://(www|cn)\.bing\.com/search\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=5297d430c569
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=a98fc80ec9e8
     body_required: true
     timeout: 20
 - http_response:
     name: 谷歌搜索去广告
-    match: ^https?://www\.google\.com(\.hk)?/search
+    match: ^https?://www\.google\.com(\.hk|\.tw)?/search
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.js?v=4f85ea6f8f09
     body_required: true
     timeout: 20
 - http_response:
     name: 谷歌搜索自动翻页
-    match: ^https?://www\.google\.com(\.hk)?/search
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=5297d430c569
+    match: ^https?://www\.google\.com(\.hk|\.tw)?/search
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=a98fc80ec9e8
     body_required: true
     timeout: 20
 url_rewrites:
@@ -83,13 +83,14 @@ mitm:
     - cn.bing.com
     - www.google.com
     - www.google.com.hk
+    - www.google.com.tw
     - google.cn
     - www.google.cn
     - g.cn
     - www.g.cn
     - limbopro.com
-description: '更新时间：2026-11-01 14:02
+description: '更新时间：2026-11-01 14:07
 
   去除百度、Bing、Google 的搜索广告（limbo 毒奶脚本的搜索引擎部分），三家结果页均带自动翻页。
 
-  同步状态：上游同步正常；最近检查：2026-11-01 14:02'
+  同步状态：上游同步正常；最近检查：2026-11-01 14:07'
