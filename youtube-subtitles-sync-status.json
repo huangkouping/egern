@@ -1,0 +1,26 @@
+{
+  "status": "ok",
+  "last_checked": "2026-11-01 08:22",
+  "last_success": "2026-11-01 08:22",
+  "last_updated": "2026-11-01 08:22",
+  "sources": {
+    "request": {
+      "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Subtitles_request.js",
+      "sha256": "6e1eded3ca558a9983ee7eabcc15c918a27b77851d0d4408b99c532b09f6911e"
+    },
+    "response": {
+      "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Subtitles_response.js",
+      "sha256": "2f4c801074d8dcc569460ec4b24432c1c5cd419b8db7d906c57c9f186e4d3fd9"
+    },
+    "composite": {
+      "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Composite_Subtitles_response.js",
+      "sha256": "807df047aba395e84bb8482b47ba85b9b8c62ebe585a0f8e9a715df6d0e88f92"
+    },
+    "translate": {
+      "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/YouTubeSubtitlesTranslation/kelee_YouTube_Subtitles_Translate_response.js",
+      "sha256": "56c46aa1775e7a3dd17ebc319f9db4d2949c70aedbc2f089088e25a7225ba155"
+    }
+  },
+  "scope": "Sync 4 complete public JS mirrors; adapter and module rules separately maintained.",
+  "services": "YouTube official subtitles; translation provider from DualSubs settings (Google by default)."
+}
