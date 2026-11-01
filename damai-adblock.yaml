@@ -1,7 +1,7 @@
 name: 大麦去广告🅥
 description: |-
   去除开屏、弹窗及部分推广内容。
-  更新时间：2026-10-31 21:16
+  更新时间：2026-11-01 13:45
 open_url: https://apps.apple.com/app/id513829338
 author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://hub.kelee.one
@@ -9,6 +9,9 @@ icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/
 
 # 基于用户提供的完整配置备份，保留原处理逻辑。
 # 无远程 JavaScript 依赖；手动维护，未配置上游定时同步。
+# 2026-11-01 嫁接 ddgksf2013 大麦净化 V1.0.5：aristotle 与 my.content 两条换为深版 JQ，
+# 新增 appglobalconfig、home.float、预加载广告、抽奖动画、publish.check、search.tips、
+# search.pioneer.page、ai.pageconfig 共 8 条；未引入其 AMDC 远程脚本。
 dns: {}
 rewrites:
   - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.welcome/'
@@ -28,7 +31,7 @@ rewrites:
   - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.user\.my\.content\.get/'
     actions:
       - response_body:
-          jq: 'delpaths([["data","banner"],["data","performFilmVip","userProfitList"]])'
+          jq: '.data.banner=[] | .data.dynamicMenu.itemList=((.data.dynamicMenu.itemList // []) | map(select(.title != "周边商城" and .title != "观演团" and .title != "电影包场" and .title != "公益三小时" and .title != "大麦VIP卡" and .title != "特惠专区"))) | .data.performFilmVip={} | .data.showVip=false | .data.vipCardInfo={}'
   - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.mypage\.feed/'
     actions:
       - response_body:
@@ -36,7 +39,39 @@ rewrites:
   - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.mec\.aristotle\.get/'
     actions:
       - response_body:
-          jq: 'delpaths([["data","data","top","keywords"]])'
+          jq: '.data.data.top.keywords=[] | .data.data.top.aiUrl="" | .data.data.top.aiLottieUrl="" | .data.data.top.aiLottieAmbientUrl="" | .data.data.top.arScan={} | .data.nodes=((.data.nodes // []) | map(select(((.nodes[0].data.componentId // "") != "dm_home_supper_banner"))) | map(if ((.nodes[0].data.componentId // "") == "dm_pioneer_function_area_with_city_rank") then .nodes[0].nodes=((.nodes[0].nodes // []) | map(select(.data.title != "天天抽奖"))) else . end) | map(if ((.nodes[0].data.componentId // "") == "dm_pioneer_home_feed") then .nodes[0].nodes=((.nodes[0].nodes // []) | map(if (.nodes? != null) then .nodes=((.nodes // []) | map(select(.data.cardType != "15" and .data.cardType != "21"))) else . end)) else . end))'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.appglobalconfig/'
+    actions:
+      - response_body:
+          jq: '.data.pop={} | .data.searchTip={} | .data.searchTips=[] | .data.headLottie={} | .data.headStyle={}'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.home\.float/'
+    actions:
+      - response_body:
+          jq: '.data={}'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.film\.independentadvertiseapi\.querypreloadadvlist/'
+    actions:
+      - response_body:
+          jq: '.data.adList=[]'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.film\.mtopmindapi\.loadwantshowlotteryanimationurl/'
+    actions:
+      - response_body:
+          jq: '.data.returnValue={}'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.discovery\.publish\.check/'
+    actions:
+      - response_body:
+          jq: '.data.appPublishHint=""'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.search\.tips\.get/'
+    actions:
+      - response_body:
+          jq: '.data.result=[]'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.search\.pioneer\.page\.get/'
+    actions:
+      - response_body:
+          jq: '.data.rankInfo.localSearchRankingList=[] | .data.rankInfo.searchFilmRankingList=[] | .data.rankInfo.searchRankingList=[] | .data.rankInfo.description="" | .data.rankInfo.name=""'
+  - match: '(?i)^https://acs\.m\.taobao\.com/gw/mtop\.damai\.wireless\.ai\.pageconfig/'
+    actions:
+      - response_body:
+          jq: '.data.enable="false" | .data.aiLottieUrl=""'
 mitm:
   hostnames:
     includes:
