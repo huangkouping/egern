@@ -1,5 +1,5 @@
-/* RuCu6 淘宝去广告脚本备份（经可莉分发，脚本头注引用 RuCu6/QuanX myBlockAds.js，2024-01-12）；源逻辑保持，仅补充单次完成与异常透传包装。
- * Source: https://kelee.one/Resource/JavaScript/Taobao/Taobao_remove_ads.js（官方分发站拦截自动化抓取，内容经可莉官方镜像 Moli-X/Tool 核对）
+/* RuCu6 淘宝去广告脚本（经可莉分发，脚本头注引用 RuCu6/QuanX myBlockAds.js，2024-01-12）；由 scripts/sync-taobao.py 自可莉官方 GitHub 分发仓 Moli-X/Tool 同步，源逻辑保持，仅补充单次完成与异常透传包装。
+ * Source: https://raw.githubusercontent.com/Moli-X/Tool/main/Loon/Plugin/Kelee/Script/Taobao_remove_ads.js
  * 处理：开屏视频（时长归零/资源清空）、开屏图（等待归零/时间推至 2090 年/素材清空）、开屏活动弹窗（素材清空/停用）。
  */
 (function (complete) {

@@ -1,0 +1,19 @@
+{
+  "module": "taobao-adblock",
+  "upstream": {
+    "plugin_url": "https://raw.githubusercontent.com/Moli-X/Tool/main/Loon/Plugin/Kelee/Taobao_remove_ads.plugin",
+    "js_url": "https://raw.githubusercontent.com/Moli-X/Tool/main/Loon/Plugin/Kelee/Script/Taobao_remove_ads.js",
+    "upstream_date": "2026-10-02 13:57:49",
+    "plugin_sha256": "2181cd96dbf5531f33f7c04b806fe914481c52f9ab4e557985b54bf550435cb6",
+    "js_sha256": "3ccb2093683d84a0085a24506fb04d3ac87713e8e1bade764711816e8908d903"
+  },
+  "counts": {
+    "rules": 6,
+    "rewrites": 13,
+    "grafted_rewrites": 2,
+    "url_rewrites": 3,
+    "scriptings": 2
+  },
+  "synced_at": "2026-11-01 16:14:57 CST",
+  "error": null
+}

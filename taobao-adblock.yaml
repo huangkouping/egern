@@ -7,9 +7,9 @@ author: RuCu6[https://github.com/RuCu6]
 homepage: https://hub.kelee.one
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png
 
-# 以可莉分发的 RuCu6 官方插件（2026-10-02）为底本地转换：6 条域名拦截、11 条接口空回应、开屏脚本镜像至本仓库。
-# 2026-11-01 嫁接 Thelongdarkorg 插件独有项：闲鱼开屏、菜鸟广告两条接口空回应，及 3 条广告图直链 reject；其 AMDC 拦截未加。
-# 手动维护，未配置上游定时同步（可莉官方站拦截自动化抓取）。
+# 同步自可莉官方 GitHub 分发仓 Moli-X/Tool 的 RuCu6 淘宝插件，由 scripts/sync-taobao.py 每 6 小时自动转换；开屏脚本镜像至本仓库。
+# 本地嫁接（Thelongdarkorg 插件独有，同步时保留）：闲鱼开屏、菜鸟广告两条接口空回应，及 3 条广告图直链 reject，并为其补 gw.alicdn.com 的 MITM。
+# AMDC 调度拦截不加：通用配置通道，有误伤可能（用户 2026-11-01 确认跳过）。
 dns: {}
 rules:
 - domain:
@@ -31,7 +31,7 @@ rules:
     match: ut.taobao.com
     policy: REJECT
 rewrites:
-- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.fliggy\\.crm\\.screen\\.(?:allresource|predict)"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.fliggy\\.crm\\.screen\\.(allresource|predict)"
   actions:
   - respond:
       status: 200
@@ -43,7 +43,7 @@ rewrites:
       status: 200
       headers: {"Content-Type":"application/json"}
       body: "{}"
-- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alimama\\.etao\\.config\\.query\\/.+?etao_advertise"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.alimama\\.etao\\.config\\.query/.+?etao_advertise"
   actions:
   - respond:
       status: 200
@@ -55,7 +55,7 @@ rewrites:
       status: 200
       headers: {"Content-Type":"application/json"}
       body: "{}"
-- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query\\/.+tao_splash"
+- match: "(?i)^https://acs\\.m\\.taobao\\.com/gw/mtop\\.etao\\.noah\\.query/.+tao_splash"
   actions:
   - respond:
       status: 200
@@ -91,7 +91,7 @@ rewrites:
       status: 200
       headers: {"Content-Type":"application/json"}
       body: "{}"
-- match: "(?i)^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.(?:volvo\\.secondfloor\\.getconfig|wireless\\.home\\.newface\\.awesome\\.get)"
+- match: "(?i)^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.(volvo\\.secondfloor\\.getconfig|wireless\\.home\\.newface\\.awesome\\.get)"
   actions:
   - respond:
       status: 200
@@ -119,7 +119,7 @@ url_rewrites:
 scriptings:
 - http_response:
     name: 淘宝开屏视频与开屏图处理
-    match: "(?i)^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.(?:cloudvideo\\.video\\.query|wireless\\.home\\.splash\\.awesome\\.get)"
+    match: "(?i)^https://guide-acs\\.m\\.taobao\\.com/gw/mtop\\.taobao\\.(cloudvideo\\.video\\.query|wireless\\.home\\.splash\\.awesome\\.get)"
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.js?v=3ccb209368
     body_required: true
     timeout: 20
@@ -133,7 +133,7 @@ mitm:
   hostnames:
     includes:
     - acs.m.taobao.com
-    - guide-acs.m.taobao.com
     - heic.alicdn.com
-    - gw.alicdn.com
+    - guide-acs.m.taobao.com
     - poplayer.template.alibaba.com
+    - gw.alicdn.com
