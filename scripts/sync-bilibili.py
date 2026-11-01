@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Back up three Sparkle JS mirrors and two JQ dependencies as a validated set."""
-import argparse,hashlib,json,os,subprocess,sys,tempfile,urllib.request
+"""Sync three Sparkle JS builds (adapter identifiers auto-derived per build) and two JQ dependencies as a validated set."""
+import argparse,hashlib,json,os,re,subprocess,sys,tempfile,urllib.request
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -15,17 +15,33 @@ META=ROOT/'bilibili-sync-status.json'
 def replace_once(source,old,new):
     if source.count(old)!=1:raise ValueError('Upstream adapter signature changed')
     return source.replace(old,new,1)
+IDENT=r'[A-Za-z_$][\w$]*'
+def derive(source):
+    # Minified identifiers change on every upstream rebuild; recover them from
+    # stable structural anchors instead of hardcoding per-build names. Any
+    # anchor that is missing or ambiguous aborts the sync (last good retained).
+    def one(pattern,label):
+        found=re.findall(pattern,source)
+        if len(found)!=1:raise ValueError('Cannot auto-derive '+label+' ('+str(len(found))+' candidates)')
+        return found[0]
+    parent=one(r'return new ('+IDENT+r')\}request;response;state=','platform class')
+    inst,base,compose=one(r'let ('+IDENT+r')=('+IDENT+r')\.createInstance\(\);('+IDENT+r')\(this\.middleware\)','script engine')
+    runner=one(r'var ('+IDENT+r')=new '+IDENT+r';\1\.use\(','app runner')
+    logger=one(r'('+IDENT+r')=class\{static level=\d+;static setLevel','logger class')
+    gz=re.findall(r'function ('+IDENT+r')\(('+IDENT+r')\)\{return \$utils\.ungzip\(\2\)\}',source)
+    if len(gz)>1:raise ValueError('Cannot auto-derive gunzip helper')
+    gunzip,arg=gz[0] if gz else (None,None)
+    return parent,inst,base,compose,runner,logger,gunzip,arg
 def adapt(source,kind):
     if not 1000<len(source)<500000 or 'createInstance' not in source:raise ValueError('Invalid JS mirror')
     if any(t in source[:1000] for t in ['404: Not Found','<html']):raise ValueError('Invalid JS mirror')
-    config={'request':('G','F','_','Ht','M','s'),'response':('Y','v','J','_n','Te','a'),'json':('v','m','_','P',None,None)}
-    parent,base,compose,runner,gunzip,arg=config[kind]
+    parent,inst,base,compose,runner,logger,gunzip,arg=derive(source)
     source=replace_once(source,'return new '+parent+'}','return new EgernAdapter}')
-    source=replace_once(source,'let e='+base+'.createInstance();'+compose+'(this.middleware)','let e='+base+'.createInstance();return '+compose+'(this.middleware)')
+    source=replace_once(source,'let '+inst+'='+base+'.createInstance();'+compose+'(this.middleware)','let '+inst+'='+base+'.createInstance();return '+compose+'(this.middleware)')
     if gunzip:
         source=replace_once(source,'function '+gunzip+'('+arg+'){return $utils.ungzip('+arg+')}','async function '+gunzip+'('+arg+'){const bytes=await ctx.compress.gunzip('+arg+');if(!bytes)throw new Error("gzip failed");return bytes}')
         count=source.count('?'+gunzip+'(')
-        if count!={'request':3,'response':1}[kind]:raise ValueError('gRPC framing code changed')
+        if count<1:raise ValueError('gRPC framing code changed')
         source=source.replace('?'+gunzip+'(','?await '+gunzip+'(')
     native='''
 class EgernAdapter extends PARENT {
@@ -41,7 +57,6 @@ class EgernAdapter extends PARENT {
 '''.replace('PARENT',parent)
     # The JSON SponsorBlock API needs text, while gRPC redispatch needs raw bytes.
     native=native.replace('opts["binary-mode"]===false','!(opts.body instanceof Uint8Array)')
-    logger={'request':'I','response':'U','json':'a'}[kind]
     source=replace_once(source,runner+'.run();',native+'\n'+logger+'.setLevel(String(ctx.env?.logLevel||"off"));await '+runner+'.run();')
     wrapper=(ROOT/'scripts/bilibili-adapter.js').read_text()
     result=wrapper.replace('SCRIPT_KIND',json.dumps(kind)).replace('SOURCE_CODE',source)
