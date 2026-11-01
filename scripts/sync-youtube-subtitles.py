@@ -90,7 +90,7 @@ def main():
               'resolved_url':resolved,'upstream_version':version,'upstream_sha256':sha,'dependencies':dependencies,
               'upstream_description':module.get('description',''),
               'ui_version':UI_VERSION,'ui_sources':ui_sources,'scope':'Official release rules and original script bodies retained; Chinese native parameter UI and priority selection added.'}
-        module['name']='YouTube双语翻译©️'
+        module['name']='YouTube双语翻译🅗'
         module['description']=description(meta,meta['upstream_description'])
         # Official rules and original script bodies retained; local Chinese controls are wired by the wrapper.
         for name,code in ui_outputs.items():(ROOT/name).write_text(code)
