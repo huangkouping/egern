@@ -25,7 +25,7 @@
 
 | 模块名称 | 功能说明 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- | --- |
-| 搜索去广告&自动翻页🅗 | 过滤搜索结果广告，并提供自动翻页功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-search-adblock.yaml) |
+| 搜索去广告🅗 | 过滤百度、Bing、Google 搜索广告，保留 Google 域名重定向。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-search-adblock.yaml) |
 | 美团去广告🅗 | 清理美团 App 内匹配的广告及推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/meituan-adblock.yaml) |
 | 淘宝去广告🅥 | 过滤淘宝 App 的部分广告与推广入口。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/taobao-adblock.yaml) |
 
@@ -216,7 +216,7 @@
 | Ai&US规则集 | 合并可莉 AI、DDGKSF AI、Google Voice 及自定义规则，按规则文本去重。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/update-ai.yml) |
 | PingMe签到 | 同步上游模块，保留本仓库的标题、简介和默认参数定制。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-pingme.yml) |
 | 小羞片网站去广告 | 检查 CMS 插件、CMS 脚本与 Pornhub 脚本，合并规则并记录同步状态。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-cms-adblock.yml) |
-| 美团、搜索去广告与自动翻页、淘宝 | GitHub 每 6 小时自动拉取上游、转换、校验并提交；2026-11-01 已完成首次正式运行。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/validate-muse-migration.yml) |
+| 美团、搜索去广告、淘宝 | GitHub 每 6 小时自动拉取上游、转换、校验并提交；2026-11-01 已完成首次正式运行。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/validate-muse-migration.yml) |
 | 京东去广告🅗 | 每 6 小时检查上游 v2 脚本并保留本地适配。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-jd-adblock.yml) |
 | luestr 脚本检查 | GitHub 检查上游更新；不自动覆盖模块。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/check-luestr-updates.yml) |
 | 京东比价、大麦 | Muse 检查上游变化并通知，不自动改动仓库。 | [京东比价](https://github.com/huangkouping/egern/blob/main/jd-price.yaml) · [大麦](https://github.com/huangkouping/egern/blob/main/damai-adblock.yaml) |
