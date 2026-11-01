@@ -1,4 +1,4 @@
-name: 搜索去广告&自动翻页©️
+name: 搜索去广告&自动翻页🅗
 author: limbopro[https://github.com/limbopro/Adblock4limbo]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
@@ -12,7 +12,7 @@ compat_arguments_desc: '【使用说明】
 
   已按作者在脚本头注明的官方方法，拦截 Adblock4limbo.function.js：右下角导航按钮、导航面板及其附带功能（沉浸式翻译、划词搜索等）全部禁用，只保留纯去广告。
 
-  自动翻页为自维护脚本（与 limbopro 上游无关，不受其更新影响）：百度已按实测结构验证；Bing 分页变体生效，若页面是官方渐进加载变体则自动不干预；Google 为通用实现，待实机验证。
+  自动翻页为自维护脚本（与 limbopro 上游无关，不受其更新影响）：百度、Bing、Google 独立识别下一页链接，严格检查页码与结果去重；页面结构不符时停止，不猜测下一页地址。
 
   另含谷歌域名重定向（源 DivineEngine）：google.cn / g.cn 自动跳转 google.com，并保留路径与搜索词。NobyDa 的人机验证增强依赖 Surge/QX 的代理策略 API，Egern 不支持，未并入。
 
@@ -40,7 +40,7 @@ scriptings:
 - http_response:
     name: 百度搜索结果自动翻页
     match: https?://(www|m)\.baidu\.com/(from=|s\?)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=9427fc4677
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=ace2b9c7eafa
     body_required: true
     timeout: 20
 - http_response:
@@ -52,7 +52,7 @@ scriptings:
 - http_response:
     name: 必应搜索自动翻页
     match: ^https?://(www|cn)\.bing\.com/search\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=9427fc4677
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=ace2b9c7eafa
     body_required: true
     timeout: 20
 - http_response:
@@ -64,7 +64,7 @@ scriptings:
 - http_response:
     name: 谷歌搜索自动翻页
     match: ^https?://www\.google\.com(\.hk|\.tw)?/search
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=9427fc4677
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=ace2b9c7eafa
     body_required: true
     timeout: 20
 url_rewrites:
