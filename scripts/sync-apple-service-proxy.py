@@ -98,7 +98,7 @@ def main() -> None:
 
     updated_at = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
     output = [
-        "# 苹果服务规则©️",
+        "# 苹果服务规则🅗",
         "# 本文件由 GitHub Actions 自动同步生成，请勿直接编辑生成内容",
         f"{UPDATED_PREFIX}{updated_at}",
         f"# 上游来源：{SOURCE}",
