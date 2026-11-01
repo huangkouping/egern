@@ -7,7 +7,9 @@ from pathlib import Path
 import yaml
 ROOT=Path(__file__).resolve().parents[1]
 URL='https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/Bilibili_remove_ads/kelee_'
+SPARKLE='https://raw.githubusercontent.com/kokoryh/Sparkle/master/dist/'
 NAMES={'request':'Bilibili_proto_request_kokoryh.js','response':'Bilibili_proto_response_kokoryh.js','json':'Bilibili_json_kokoryh.js','tab':'tab_Bilibili_remove_ads.jq','mine':'mine_Bilibili_remove_ads.jq'}
+URLS={'request':SPARKLE+'bilibili.protobuf.request.js','response':SPARKLE+'bilibili.protobuf.response.js','json':SPARKLE+'bilibili.json.js','tab':URL+NAMES['tab'],'mine':URL+NAMES['mine']}
 MODULE=ROOT/'bilibili-adblock.yaml'
 META=ROOT/'bilibili-sync-status.json'
 def replace_once(source,old,new):
@@ -16,14 +18,14 @@ def replace_once(source,old,new):
 def adapt(source,kind):
     if not 1000<len(source)<500000 or 'createInstance' not in source:raise ValueError('Invalid JS mirror')
     if any(t in source[:1000] for t in ['404: Not Found','<html']):raise ValueError('Invalid JS mirror')
-    config={'request':('j','F','C','nt','W','s'),'response':('G','D','_','mn','be','a'),'json':('v','m','_','P',None,None)}
+    config={'request':('G','F','_','Ht','M','s'),'response':('Y','v','J','_n','Te','a'),'json':('v','m','_','P',None,None)}
     parent,base,compose,runner,gunzip,arg=config[kind]
     source=replace_once(source,'return new '+parent+'}','return new EgernAdapter}')
     source=replace_once(source,'let e='+base+'.createInstance();'+compose+'(this.middleware)','let e='+base+'.createInstance();return '+compose+'(this.middleware)')
     if gunzip:
         source=replace_once(source,'function '+gunzip+'('+arg+'){return $utils.ungzip('+arg+')}','async function '+gunzip+'('+arg+'){const bytes=await ctx.compress.gunzip('+arg+');if(!bytes)throw new Error("gzip failed");return bytes}')
         count=source.count('?'+gunzip+'(')
-        if count!=(2 if kind=='request' else 1):raise ValueError('gRPC framing code changed')
+        if count!={'request':3,'response':1}[kind]:raise ValueError('gRPC framing code changed')
         source=source.replace('?'+gunzip+'(','?await '+gunzip+'(')
     native='''
 class EgernAdapter extends PARENT {
@@ -39,7 +41,7 @@ class EgernAdapter extends PARENT {
 '''.replace('PARENT',parent)
     # The JSON SponsorBlock API needs text, while gRPC redispatch needs raw bytes.
     native=native.replace('opts["binary-mode"]===false','!(opts.body instanceof Uint8Array)')
-    logger={'request':'B','response':'T','json':'a'}[kind]
+    logger={'request':'I','response':'U','json':'a'}[kind]
     source=replace_once(source,runner+'.run();',native+'\n'+logger+'.setLevel(String(ctx.env?.logLevel||"off"));await '+runner+'.run();')
     wrapper=(ROOT/'scripts/bilibili-adapter.js').read_text()
     result=wrapper.replace('SCRIPT_KIND',json.dumps(kind)).replace('SOURCE_CODE',source)
@@ -59,7 +61,7 @@ def main():
         for key,name in NAMES.items():
             if args.source_dir:text=(args.source_dir/name).read_text()
             else:
-                req=urllib.request.Request(URL+name,headers={'User-Agent':'Egern-Public-Mirror-Sync/1.0'})
+                req=urllib.request.Request(URLS[key],headers={'User-Agent':'Egern-Public-Mirror-Sync/1.0'})
                 with urllib.request.urlopen(req,timeout=30) as response:text=response.read(500001).decode('utf-8')
             sources[key]=text
         outputs={}
@@ -92,8 +94,8 @@ def main():
         if MODULE.exists():
             previous=yaml.safe_load(MODULE.read_text());previous.pop('description',None);changed=changed or previous!=module
         meta={'status':'ok','last_checked':checked,'last_success':checked,'last_updated':checked if changed else old.get('last_updated',checked),
-              'sources':{k:{'url':URL+NAMES[k],'sha256':hashlib.sha256(v.encode()).hexdigest()} for k,v in sources.items()},
-              'scope':'Sync 3 public JS mirrors and 2 JQ mirrors; module rules and native adapter separately maintained.',
+              'sources':{k:{'url':URLS[k],'sha256':hashlib.sha256(v.encode()).hexdigest()} for k,v in sources.items()},
+              'scope':'Sync 3 JS from kokoryh/Sparkle dist (original author) and 2 JQ mirrors; module rules and native adapter separately maintained.',
               'external_services':['https://bsbsb.top','https://github.com/kokoryh/chronos']}
         module['description']=desc(meta)
         for name,text in outputs.items():(ROOT/name).write_text(text)

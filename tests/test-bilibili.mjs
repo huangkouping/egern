@@ -9,14 +9,14 @@ const map=new Map(),storage={get:k=>map.get(k)??null,set:(k,v)=>map.set(k,v)};
 const compress={gunzip:async b=>new Uint8Array(zlib.gunzipSync(b))};
 const buffer=b=>b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength);
 function frame(b,gz=false){const data=gz?zlib.gzipSync(b):b;const out=Buffer.alloc(5+data.length);out[0]=gz?1:0;out.writeUInt32BE(data.length,1);data.copy(out,5);return out;}
-let out=await json({request:{method:"GET",url:"https://api.live.bilibili.com/xlive/app-interface/v2/index/feed?x=1",headers:new Headers()},response:{status:200,headers:new Headers(),text:async()=>JSON.stringify({code:0,data:{card_list:[{card_type:"banner_v2"},{card_type:"normal"}]}})},storage});
+let out=await json({request:{method:"GET",url:"https://api.live.bilibili.com/xlive/app-interface/v2/index/feed?x=1",headers:new Headers()},response:{status:200,headers:{"bili-status-code":"0"},text:async()=>JSON.stringify({code:0,data:{card_list:[{card_type:"banner_v2"},{card_type:"normal"}]}})},storage});
 assert.deepEqual(JSON.parse(out.body).data.card_list,[{card_type:"normal"}]);
 const unknown=Buffer.from([0x98,0x06,0x01]);
 for(const endpoint of ["bilibili.community.service.dm.v1.DM/DmView","bilibili.main.community.reply.v1.Reply/MainList","bilibili.app.view.v1.View/ViewProgress"])for(const gz of [false,true]){
  let body=unknown;
  if(endpoint.endsWith("/DmView"))body=Buffer.concat([Buffer.from([0x92,0x01,0x02,0x61,0x64]),unknown]); // activity_meta advertisement
  const b=frame(body,gz);
- const r=await response({request:{method:"POST",url:"https://grpc.biliapi.net/"+endpoint,headers:new Headers({"x-bili-moss-engine-type":"1"})},response:{status:200,headers:new Headers({"content-type":"application/grpc"}),arrayBuffer:async()=>buffer(b)},storage,compress,env:{logLevel:"off",sponsorBlock:"false"}});
+ const r=await response({request:{method:"POST",url:"https://grpc.biliapi.net/"+endpoint,headers:new Headers({"x-bili-moss-engine-type":"1","te":"trailers"})},response:{status:200,headers:new Headers({"content-type":"application/grpc"}),arrayBuffer:async()=>buffer(b)},storage,compress,env:{logLevel:"off",sponsorBlock:"false"}});
  assert.equal(r.body[0],0);assert.equal(Buffer.from(r.body).readUInt32BE(1),r.body.length-5);
  assert.equal(r.headers["grpc-status"],"0");assert.deepEqual(Buffer.from(r.body).subarray(5),unknown);
 }

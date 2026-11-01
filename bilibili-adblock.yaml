@@ -1,9 +1,9 @@
 name: 哔哩哔哩去广告🅥
-description: '更新时间：2026-11-01 11:12
+description: '更新时间：2026-11-01 11:21
 
   过滤广告、精简页面，保留可选空降助手等原功能。
 
-  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-01 11:12'
+  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-01 11:21'
 open_url: https://apps.apple.com/app/id736536022
 author: kokoryh[https://github.com/kokoryh]
 homepage: https://github.com/huangkouping/egern
@@ -197,7 +197,7 @@ scriptings:
 - http_request:
     name: 空降助手
     match: (?i)^https://(?:grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(?:community\.service\.dm\.v1\.DM/DmSegMobile|app\.viewunite\.v1\.View/View|main\.community\.reply\.v1\.Reply/MainList)$
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-request.js?v=ccd1e39f2f83
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-request.js?v=cdf86fc672c7
     body_required: true
     binary_body: true
     timeout: 20
@@ -206,7 +206,7 @@ scriptings:
 - http_response:
     name: ProtoBuf处理
     match: (?i)^https://(grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(app\.(show\.v1\.Popular/Index|dynamic\.v2\.Dynamic/DynAll|view(unite)?\.v1\.View/(View|ViewProgress|RelatesFeed|AIRelateAsync)|playurl\.v1\.PlayURL/PlayView|playerunite\.v1\.Player/PlayViewUnite)|polymer\.app\.search\.v1\.Search/SearchAll|community\.service\.dm\.v1\.DM/DmView|main\.community\.reply\.v1\.Reply/MainList|pgc\.gateway\.player\.v2\.PlayURL/PlayView)$
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-response.js?v=6fe18b98946f
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-response.js?v=94cd33d21149
     body_required: true
     binary_body: true
     timeout: 20
@@ -215,7 +215,7 @@ scriptings:
 - http_response:
     name: 移除直播间广告
     match: (?i)^https://api\.live\.bilibili\.com/xlive/(?:app-interface/v2/index/feed|app-room/v1/index/getInfoBy(?:Room|User))\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-json.js?v=0ff2e1708150
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-json.js?v=fff85afa42df
     body_required: true
     binary_body: false
     timeout: 20
