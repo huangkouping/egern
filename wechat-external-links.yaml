@@ -1,7 +1,8 @@
 name: 微信外部链接解锁🅗
 description: |-
-  更新时间：2026-10-31 22:53
+  |-
   外链确认页自动跳转，支持支付宝通知跳转及可选网页存档。
+  更新时间：2026-10-31 22:53
 author: zZPiglet[https://github.com/zZPiglet], huangkouping
 homepage: https://github.com/zZPiglet/Task/blob/master/asset/UnblockURLinWeChat.js
 open_url: https://apps.apple.com/app/id414478124
