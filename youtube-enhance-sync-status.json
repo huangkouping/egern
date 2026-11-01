@@ -1,6 +1,6 @@
 {
-  "status": "ok",
-  "last_checked": "2026-11-01 08:51",
+  "status": "failed",
+  "last_checked": "2026-11-01 10:53",
   "last_success": "2026-11-01 08:51",
   "last_updated": "2026-11-01 08:51",
   "upstream_url": "https://raw.githubusercontent.com/Maasea/sgmodule/master/YouTube.Enhance.sgmodule",
@@ -29,5 +29,6 @@
       "script_sha256": "00a05d480e4300c6ffcc4ddf0a587ab0c8840111aa76774f2b80eede0b9c623e"
     }
   },
-  "scope": "Chinese native parameter UI wraps original code unchanged; sync the same verified original commit."
+  "scope": "Chinese native parameter UI wraps original code unchanged; sync the same verified original commit.",
+  "error": "HTTPError"
 }

@@ -1,8 +1,8 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-01 08:50",
-  "last_success": "2026-11-01 08:50",
-  "last_updated": "2026-11-01 08:50",
+  "last_checked": "2026-11-01 10:53",
+  "last_success": "2026-11-01 10:53",
+  "last_updated": "2026-11-01 10:53",
   "source_urls": [
     "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/PinDuoDuo_remove_ads/kelee_PinDuoDuo_remove_ads.js",
     "https://raw.githubusercontent.com/darkings/lat3ncy-proxy-configs/main/loon/vendor/pinduoduo/9410-b8806e870a26db7d.js"
