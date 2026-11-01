@@ -44,7 +44,6 @@ class EgernAdapter extends j {
 }
 
 B.setLevel(String(ctx.env?.logLevel||"off"));await nt.run();
-
  if(result?.abort)return ctx.abort();
  const normalize = obj => {
    const out={};
