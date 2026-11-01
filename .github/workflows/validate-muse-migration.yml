@@ -1,6 +1,9 @@
 name: 定时同步美团搜索淘宝
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/validate-muse-migration.yml'
   schedule:
     - cron: '17 */6 * * *'
 permissions:
