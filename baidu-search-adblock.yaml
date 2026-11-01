@@ -69,4 +69,4 @@ mitm:
     - g.cn
     - www.g.cn
     - limbopro.com
-description: "更新时间：2026-11-01；已暂时关闭不稳定的自动翻页，保留百度、Bing、Google 搜索去广告；上游同步机制保留。"
+description: "更新时间：2026-11-01；保留百度、Bing、Google 搜索去广告及 Google 中国域名重定向；已移除自动翻页；去广告上游同步机制保留。"
