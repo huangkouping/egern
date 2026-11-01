@@ -1,9 +1,9 @@
 name: YouTube双语翻译©️
-description: '官方版本：v1.6.0；更新时间：2026-11-01 08:27
+description: '官方版本：v1.6.0；更新时间：2026-11-01 08:51
 
   YouTube 增强及双语字幕(歌词)
 
-  同步状态：官方发布版同步正常；最近检查：2026-11-01 08:34'
+  同步状态：官方发布版同步正常；最近检查：2026-11-01 08:51'
 compat_arguments:
   Type: Official
   Types: Translate
@@ -11,9 +11,9 @@ compat_arguments:
   Position: Forward
   Vendor: Google
   ShowOnly: 'false'
-  Storage: PersistentStore
+  Storage: Argument
   LogLevel: WARN
-compat_arguments_desc: "Type: [字幕] 启用类型\n    ├ Official: 官方字幕（合成器）\n    └ Translate: 翻译字幕（翻译器）\n请选择要使用的字幕，双语字幕将使用您选择类型呈现。\n\nTypes: [歌词] 启用类型\n    └ Translate: 翻译歌词（翻译器）\n请选择要添加的歌词选项，如果为多选，则会自动决定提供的歌词类型。\n\nAutoCC: [字幕] 自动显示\n是否总是自动开启字幕显示。\n\nPosition: [字幕] 主语言（源语言）字幕位置\n    ├ Forward: 上面（第一行）\n    └ Reverse: 下面（第二行）\n主语言（源语言）字幕的显示位置。\n\nVendor: [翻译器] 服务商API\n    ├ Google: Google Translate\n    └ Microsoft: Microsoft Translator（需填写API）\n请选择翻译器所使用的服务商API，更多翻译选项请使用BoxJs。\n\nShowOnly: [翻译器] 只显示“自动翻译”字幕\n是否仅显示“自动翻译”字幕，不显示源语言字幕。\n\nStorage: [储存] 配置类型\n    ├ Argument: 插件配置优先\n    ├ PersistentStore: 持久化存储优先\n    └ database: 仅使用默认配置\n默认优先使用设置面板或 BoxJS 保存的配置，其次使用插件配置，最后使用脚本默认配置。\n\nLogLevel: [调试] 日志等级\n    ├ OFF: 关闭\n    ├ ERROR: ❌ 错误\n    ├ WARN: ⚠️ 警告\n    ├ INFO: ℹ️ 信息\n    ├ DEBUG: \U0001F171️ 调试\n    └ ALL: 全部\n选择脚本日志的输出等级，低于所选等级的日志将全部输出。\n"
+compat_arguments_desc: "Type: [字幕] 启用类型\n    ├ Official: 官方字幕（合成器）\n    └ Translate: 翻译字幕（翻译器）\n请选择要使用的字幕，双语字幕将使用您选择类型呈现。\n\nTypes: [歌词] 启用类型\n    └ Translate: 翻译歌词（翻译器）\n请选择要添加的歌词选项，如果为多选，则会自动决定提供的歌词类型。\n\nAutoCC: [字幕] 自动显示\n是否总是自动开启字幕显示。\n\nPosition: [字幕] 主语言（源语言）字幕位置\n    ├ Forward: 上面（第一行）\n    └ Reverse: 下面（第二行）\n主语言（源语言）字幕的显示位置。\n\nVendor: [翻译器] 服务商API\n    ├ Google: Google Translate\n    └ Microsoft: Microsoft Translator（需填写API）\n请选择翻译器所使用的服务商API，更多翻译选项请使用BoxJs。\n\nShowOnly: [翻译器] 只显示“自动翻译”字幕\n是否仅显示“自动翻译”字幕，不显示源语言字幕。\n\nStorage: [储存] 配置类型\n    ├ Argument: 插件配置优先\n    ├ PersistentStore: 持久化存储优先\n    └ database: 仅使用默认配置\n默认优先使用设置面板或 BoxJS 保存的配置，其次使用插件配置，最后使用脚本默认配置。\n\nLogLevel: [调试] 日志等级\n    ├ OFF: 关闭\n    ├ ERROR: ❌ 错误\n    ├ WARN: ⚠️ 警告\n    ├ INFO: ℹ️ 信息\n    ├ DEBUG: \U0001F171️ 调试\n    └ ALL: 全部\n选择脚本日志的输出等级，低于所选等级的日志将全部输出。\n\n\n中文参数界面：在 Egern 模块环境变量中使用上面的开关和选择器。未主动设置的项目沿用显示的默认值。双语模块默认“模块设置优先”，仍保留官方在线设置入口；切换优先级后同名配置按所选来源生效。原作者脚本主体保持原样，参数适配与上游更新分开维护。"
 open_url: https://dualsubs.github.io/preferences/
 author: VirgilClyne[https://github.com/VirgilClyne]
 homepage: https://DualSubs.github.io/guide/youtube
@@ -41,91 +41,103 @@ scriptings:
 - http_request:
     name: 🍿️ DualSubs.YouTube.Player.request.json
     match: ^https?:\/\/(www|m|tv)\.youtube\.com\/youtubei\/v1\/player(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/request.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-request.js?v=95191481559c
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
+    update_interval: 21600
 - http_response:
     name: 🍿️ DualSubs.YouTube.Player.response.json
     match: ^https?:\/\/(www|m|tv)\.youtube\.com\/youtubei\/v1\/player(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/response.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-response.js?v=2ae6c9a55070
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
+    update_interval: 21600
 - http_request:
     name: 🍿️ DualSubs.YouTube.Player.request.proto
     match: ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/player(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/request.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-request.js?v=95191481559c
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
     binary_body: true
+    update_interval: 21600
 - http_response:
     name: 🍿️ DualSubs.YouTube.Player.response.proto
     match: ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/player(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/response.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-response.js?v=2ae6c9a55070
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
     binary_body: true
+    update_interval: 21600
 - http_response:
     name: 🍿️ DualSubs.YouTube.GetWatch.response.proto
     match: ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/get_watch(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/response.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-response.js?v=2ae6c9a55070
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
     binary_body: true
+    update_interval: 21600
 - http_request:
     name: 🍿️ DualSubs.YouTube.TimedText.request
     match: ^https?:\/\/(www|m)\.youtube\.com\/api\/timedtext(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/request.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-request.js?v=95191481559c
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
+    update_interval: 21600
 - http_response:
     name: 🍿️ DualSubs.YouTube.Composite.TimedText.response
     match: ^https?:\/\/(www|m)\.youtube\.com\/api\/timedtext\?(.*)subtype=(Official|External)
-    script_url: https://github.com/DualSubs/Universal/releases/latest/download/Composite.Subtitles.response.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-composite.js?v=e337a7d4d87b
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
+    update_interval: 21600
 - http_response:
     name: 🍿️ DualSubs.YouTube.Translate.TimedText.response
     match: ^https?:\/\/(www|m)\.youtube\.com\/api\/timedtext\?(.*)subtype=Translate
-    script_url: https://github.com/DualSubs/Universal/releases/latest/download/Translate.response.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=f065d9854c0a
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
+    update_interval: 21600
 - http_request:
     name: 🍿️ DualSubs.YouTubeMusic.Browse.request.json
     match: ^https?:\/\/music\.youtube\.com\/youtubei\/v1\/browse(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/request.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-request.js?v=95191481559c
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
+    update_interval: 21600
 - http_request:
     name: 🍿️ DualSubs.YouTube.Browse.request.proto
     match: ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/browse(\?.+)?$
-    script_url: https://github.com/DualSubs/YouTube/releases/download/v1.6.0/request.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-request.js?v=95191481559c
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
     binary_body: true
+    update_interval: 21600
 - http_response:
     name: 🍿️ DualSubs.YouTubeMusic.Translate.Lyrics.response.json
     match: ^https?:\/\/music\.youtube\.com\/youtubei\/v1\/browse\?(.*)subtype=Translate
-    script_url: https://github.com/DualSubs/Universal/releases/latest/download/Translate.response.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=f065d9854c0a
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
+    update_interval: 21600
 - http_response:
     name: 🍿️ DualSubs.YouTubeMusic.Translate.Lyrics.response.proto
     match: ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/browse\?(.*)subtype=Translate
-    script_url: https://github.com/DualSubs/Universal/releases/latest/download/Translate.response.bundle.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=f065d9854c0a
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
     binary_body: true
+    update_interval: 21600
 mitm:
   hostnames:
     includes:
@@ -138,3 +150,58 @@ mitm:
     - '*.googlevideo.com'
     excludes:
     - redirector*.googlevideo.com
+env_schema:
+  Type:
+    name: '[字幕] 处理方式'
+    description: 官方字幕使用 YouTube 翻译轨道；翻译引擎模式另外调用翻译服务。
+    default_value: 官方字幕（双语合成）
+    options:
+    - 官方字幕（双语合成）
+    - 翻译字幕（翻译引擎）
+  AutoCC:
+    name: '[字幕] 自动显示'
+    description: 开启后自动显示字幕；关闭后不强制开启，沿用App自己的选择。视频仍需提供字幕轨道。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  ShowOnly:
+    name: '[字幕] 仅显示译文'
+    description: 关闭为“原文＋译文”；开启后仅显示译文。
+    default_value: 'false'
+    options:
+    - 'true'
+    - 'false'
+  Position:
+    name: '[字幕] 原文位置'
+    description: 仅在双语显示时区分原文与译文的上下顺序。
+    default_value: 原文在上（第一行）
+    options:
+    - 原文在上（第一行）
+    - 原文在下（第二行）
+  Vendor:
+    name: '[翻译] 服务商'
+    description: Google 通常无需密钥；Microsoft 的 API 信息在官方在线设置中填写。
+    default_value: Google（免配置）
+    options:
+    - Google（免配置）
+    - Microsoft（需 API）
+  Storage:
+    name: '[设置] 优先使用哪处设置'
+    description: 默认使用本页设置；选“在线设置优先”后，官方设置面板或 BoxJS 保存的同名参数可覆盖本页。
+    default_value: 模块设置优先
+    options:
+    - 模块设置优先
+    - 官方在线设置优先
+    - 仅使用脚本默认值
+  LogLevel:
+    name: '[调试] 日志等级'
+    description: 正常使用选“警告”或“关闭”；排查异常时再开启调试。
+    default_value: 警告
+    options:
+    - 关闭
+    - 仅错误
+    - 警告
+    - 信息
+    - 调试
+    - 全部

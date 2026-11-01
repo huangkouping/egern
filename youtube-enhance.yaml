@@ -1,9 +1,9 @@
 name: YouTube去广告©️
-description: '更新时间：2026-11-01 08:33
+description: '更新时间：2026-11-01 08:51
 
   同步Maasea原版，过滤YouTube及Music广告并保留原功能。
 
-  同步状态：Maasea原版同步正常；最近检查：2026-11-01 08:49'
+  同步状态：Maasea原版同步正常；最近检查：2026-11-01 08:51'
 author: Maasea[https://github.com/Maasea]
 homepage: https://github.com/Maasea/sgmodule/blob/master/YouTube.Enhance.sgmodule
 open_url: https://apps.apple.com/app/id544007664
@@ -14,13 +14,13 @@ compat_arguments:
   屏蔽Shorts按钮: 'false'
   字幕翻译语言: 'off'
   启用调试模式: 'false'
-compat_arguments_desc: "- 屏蔽参数：[true, false] \n- 翻译参数：[语言代码, off] \n\n1. 语言代码遵循 Google Translate Languages Codes, 当填入 off 时关闭翻译\n2. 开启调试模式用于输出更多日志\n\n使用说明：开启HTTPS解密并信任证书，确保HTTP/2可解密及QUIC回退。放在YouTube双语字幕模块之前，避免两边重复启用字幕/歌词翻译；原版captionLang默认off。原作者脚本还包含画中画、后台播放、界面及播放配置处理，保留原逻辑。initplayback按原版使用init-stream.maasea.workers.dev，依赖原作者服务。每6小时跟随原仓库，固定到同一提交校验配置与两个JS，脚本内容不修改；任一检查失败保留上次有效配置。兼容性与实际效果需实机验证。"
+compat_arguments_desc: "- 屏蔽参数：[true, false] \n- 翻译参数：[语言代码, off] \n\n1. 语言代码遵循 Google Translate Languages Codes, 当填入 off 时关闭翻译\n2. 开启调试模式用于输出更多日志\n\n使用说明：开启HTTPS解密并信任证书，确保HTTP/2可解密及QUIC回退。放在YouTube双语字幕模块之前，避免两边重复启用字幕/歌词翻译；原版captionLang默认off。原作者脚本还包含画中画、后台播放、界面及播放配置处理，保留原逻辑。initplayback按原版使用init-stream.maasea.workers.dev，依赖原作者服务。每6小时跟随原仓库，固定到同一提交校验配置与两个JS，原脚本主体不修改，外层仅适配中文参数；任一检查失败保留上次有效配置。兼容性与实际效果需实机验证。\n\n中文参数界面：在 Egern 模块环境变量中使用上面的开关和选择器。未主动设置的项目沿用显示的默认值。双语模块默认“模块设置优先”，仍保留官方在线设置入口；切换优先级后同名配置按所选来源生效。原作者脚本主体保持原样，参数适配与上游更新分开维护。"
 dns: {}
 scriptings:
 - http_response:
     name: youtube.response
     match: ^https:\/\/youtubei\.googleapis\.com\/(youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch|log_event|config))(\?(.*))?$
-    script_url: https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.response.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance-ui-response.js?v=dd07bc617fe4
     body_required: true
     binary_body: true
     max_size: -1
@@ -30,7 +30,7 @@ scriptings:
 - http_request:
     name: youtube.request.init
     match: ^https?:\/\/[\w-]+\.googlevideo\.com\/initplayback.+&ack.*
-    script_url: https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.request.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance-ui-request.js?v=00a05d480e43
     body_required: true
     binary_body: true
     max_size: -1
@@ -40,7 +40,7 @@ scriptings:
 - http_request:
     name: youtube.request.log_event
     match: ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/log_event
-    script_url: https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.request.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance-ui-request.js?v=00a05d480e43
     body_required: true
     binary_body: true
     max_size: -1
@@ -50,3 +50,43 @@ mitm:
     includes:
     - '*.googlevideo.com'
     - youtubei.googleapis.com
+env_schema:
+  blockUpload:
+    name: '[底栏] 隐藏上传按钮'
+    description: 隐藏 YouTube 底栏的上传入口。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  blockShorts:
+    name: '[底栏] 隐藏 Shorts 按钮'
+    description: 只控制底栏按钮，不承诺移除所有 Shorts 内容。
+    default_value: 'false'
+    options:
+    - 'true'
+    - 'false'
+  blockImmersive:
+    name: '[Music] 隐藏选段按钮'
+    description: 隐藏 YouTube Music 底栏的选段入口。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  captionLang:
+    name: '[翻译] 字幕语言'
+    description: 同时使用双语翻译模块时建议选“关闭”，避免重复处理。
+    default_value: 关闭
+    options:
+    - 关闭
+    - 简体中文
+    - 繁體中文
+    - 日语
+    - 韩语
+    - 英语
+  debug:
+    name: '[调试] 输出日志'
+    description: 仅在排查异常时开启，正常使用可关闭。
+    default_value: 'false'
+    options:
+    - 'true'
+    - 'false'

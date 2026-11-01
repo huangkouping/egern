@@ -1,51 +1,74 @@
 {
   "status": "ok",
   "mode": "official-release-yaml",
-  "last_checked": "2026-11-01 08:34",
-  "last_success": "2026-11-01 08:34",
-  "last_updated": "2026-11-01 08:27",
+  "last_checked": "2026-11-01 08:51",
+  "last_success": "2026-11-01 08:51",
+  "last_updated": "2026-11-01 08:51",
   "upstream_url": "https://github.com/DualSubs/YouTube/releases/latest/download/DualSubs.YouTube.yaml",
-  "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/f6521a41-25a2-4975-8d63-d647bfefb8e0?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A20%3A20Z&rscd=attachment%3B+filename%3DDualSubs.YouTube.yaml&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A19%3A42Z&ske=2026-11-01T01%3A20%3A20Z&sks=b&skv=2018-11-09&sig=wh%2BAsAwbQAi4kPsKwRuRRoJNY9TJkDL2vzaY2L%2ByAcw%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5MzU5OCwibmJmIjoxNzkzNDkzMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ._bm53hUM3Af32uWtq1wKVvMQqO_z0lhBgmKalZ11cHA&response-content-disposition=attachment%3B%20filename%3DDualSubs.YouTube.yaml&response-content-type=application%2Foctet-stream",
+  "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/f6521a41-25a2-4975-8d63-d647bfefb8e0?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A38%3A07Z&rscd=attachment%3B+filename%3DDualSubs.YouTube.yaml&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A37%3A37Z&ske=2026-11-01T01%3A38%3A07Z&sks=b&skv=2018-11-09&sig=jofcKKJm0j1n9dWr7UjR3D6SctuVcJTRliEWQeyfsYg%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5NDU2OCwibmJmIjoxNzkzNDk0MjY4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.w5cPNDyx6YaLT2RIccLLej0M7IpH8jWAnHUmYPJ1ST4&response-content-disposition=attachment%3B%20filename%3DDualSubs.YouTube.yaml&response-content-type=application%2Foctet-stream",
   "upstream_version": "v1.6.0",
   "upstream_sha256": "d0baf8d7742505af18a2a51650e18948dc8d1b2b30ed605a922943b3c8da39a9",
   "dependencies": [
     {
       "url": "https://github.com/DualSubs/Universal/releases/latest/download/Composite.Subtitles.response.bundle.js",
-      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/464462478/47989827-9ea6-4293-b2b9-b330bc7ac9d9?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A14%3A41Z&rscd=attachment%3B+filename%3DComposite.Subtitles.response.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A13%3A49Z&ske=2026-11-01T01%3A14%3A41Z&sks=b&skv=2018-11-09&sig=fmzdAJBEzKR1a8iF9dzgW9xq5ipPQxXnc3hYbIInNT8%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5MzU5OSwibmJmIjoxNzkzNDkzMjk5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.XVnuuGqI20tw3WbDTrBZz_qWsnMS6-cSX23uEW-wjmw&response-content-disposition=attachment%3B%20filename%3DComposite.Subtitles.response.bundle.js&response-content-type=application%2Foctet-stream",
+      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/464462478/47989827-9ea6-4293-b2b9-b330bc7ac9d9?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A27%3A03Z&rscd=attachment%3B+filename%3DComposite.Subtitles.response.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A26%3A19Z&ske=2026-11-01T01%3A27%3A03Z&sks=b&skv=2018-11-09&sig=OMqe4TbvSX7gpCHgidfr2%2Fmco5izceU06PUXZTpYGLs%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5NDU2OSwibmJmIjoxNzkzNDk0MjY5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Hq_FcxHaabHw4boSC4_gG4xUoqMnLcoAMfEQXe6psU4&response-content-disposition=attachment%3B%20filename%3DComposite.Subtitles.response.bundle.js&response-content-type=application%2Foctet-stream",
       "sha256": "695ef3e205a54209520f3577c6bd0ba59ef096dacaeb077d148b4b9db3a9edab",
       "bytes": 65201
     },
     {
       "url": "https://github.com/DualSubs/Universal/releases/latest/download/Translate.response.bundle.js",
-      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/464462478/eaba9bd4-408e-40e2-bee4-041fc0286087?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A15%3A03Z&rscd=attachment%3B+filename%3DTranslate.response.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A14%3A30Z&ske=2026-11-01T01%3A15%3A03Z&sks=b&skv=2018-11-09&sig=lLmt4yPrj82Fty%2FLZMP%2FWyy%2BgeH6KJ5dMdCx4f40ZWo%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5MzU5OCwibmJmIjoxNzkzNDkzMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ._bm53hUM3Af32uWtq1wKVvMQqO_z0lhBgmKalZ11cHA&response-content-disposition=attachment%3B%20filename%3DTranslate.response.bundle.js&response-content-type=application%2Foctet-stream",
+      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/464462478/eaba9bd4-408e-40e2-bee4-041fc0286087?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A34%3A01Z&rscd=attachment%3B+filename%3DTranslate.response.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A33%3A18Z&ske=2026-11-01T01%3A34%3A01Z&sks=b&skv=2018-11-09&sig=l2a9GGLhxPqUMGAY92ocA6GJmB3T3Oozo2z6Dcm0OTk%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5NDU2OSwibmJmIjoxNzkzNDk0MjY5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Hq_FcxHaabHw4boSC4_gG4xUoqMnLcoAMfEQXe6psU4&response-content-disposition=attachment%3B%20filename%3DTranslate.response.bundle.js&response-content-type=application%2Foctet-stream",
       "sha256": "d15c36bc2563f6cf961b08efdba02faa4fe1ae4f184780c5a76246571b2923c5",
       "bytes": 125387
     },
     {
       "url": "https://github.com/DualSubs/YouTube/releases/download/v1.6.0/DualSubs.YouTube.PreferencePanes.json",
-      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/c7ab1bf5-0e32-4049-b381-722aeaa643d0?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A19%3A40Z&rscd=attachment%3B+filename%3DDualSubs.YouTube.PreferencePanes.json&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A19%3A06Z&ske=2026-11-01T01%3A19%3A40Z&sks=b&skv=2018-11-09&sig=CbBvgjAE3ykblVlUcBJnWPiSnep4ERU4SwVmafYqd6o%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5MzU5OCwibmJmIjoxNzkzNDkzMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ._bm53hUM3Af32uWtq1wKVvMQqO_z0lhBgmKalZ11cHA&response-content-disposition=attachment%3B%20filename%3DDualSubs.YouTube.PreferencePanes.json&response-content-type=application%2Foctet-stream",
+      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/c7ab1bf5-0e32-4049-b381-722aeaa643d0?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A26%3A16Z&rscd=attachment%3B+filename%3DDualSubs.YouTube.PreferencePanes.json&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A25%3A37Z&ske=2026-11-01T01%3A26%3A16Z&sks=b&skv=2018-11-09&sig=ESyV%2Fyao8%2BBla66wKfB4eXe1ytn8LVS4i03jeQ73cbY%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5NDU2OSwibmJmIjoxNzkzNDk0MjY5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Hq_FcxHaabHw4boSC4_gG4xUoqMnLcoAMfEQXe6psU4&response-content-disposition=attachment%3B%20filename%3DDualSubs.YouTube.PreferencePanes.json&response-content-type=application%2Foctet-stream",
       "sha256": "f0fd4167c7c9f23efdf189a30674f02daf29ba085a7afce2d74ea244b1780967",
       "bytes": 1953
     },
     {
       "url": "https://github.com/DualSubs/YouTube/releases/download/v1.6.0/request.bundle.js",
-      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/a5137ec7-72f9-4f24-8f3d-b9aaab764f24?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A32%3A59Z&rscd=attachment%3B+filename%3Drequest.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A32%3A15Z&ske=2026-11-01T01%3A32%3A59Z&sks=b&skv=2018-11-09&sig=VHzynUT%2FwfEX8FREU%2FhIGScDsa6ti1LdKJ3M6FhuPew%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5MzU5OCwibmJmIjoxNzkzNDkzMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ._bm53hUM3Af32uWtq1wKVvMQqO_z0lhBgmKalZ11cHA&response-content-disposition=attachment%3B%20filename%3Drequest.bundle.js&response-content-type=application%2Foctet-stream",
+      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/a5137ec7-72f9-4f24-8f3d-b9aaab764f24?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A37%3A00Z&rscd=attachment%3B+filename%3Drequest.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A36%3A29Z&ske=2026-11-01T01%3A37%3A00Z&sks=b&skv=2018-11-09&sig=2Fx6YHDEvu4b2VmMdUhd%2BiyZh9daQ916WXcWbiaH14Y%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5NDU2OSwibmJmIjoxNzkzNDk0MjY5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Hq_FcxHaabHw4boSC4_gG4xUoqMnLcoAMfEQXe6psU4&response-content-disposition=attachment%3B%20filename%3Drequest.bundle.js&response-content-type=application%2Foctet-stream",
       "sha256": "9950e808cb22b612d363d636d4ed45f3fc96e81f9ba7cf94518bd77b327bb592",
       "bytes": 82611
     },
     {
       "url": "https://github.com/DualSubs/YouTube/releases/download/v1.6.0/response.bundle.js",
-      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/69bd9bc0-ba86-4f64-89c3-c62a723d7753?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A12%3A12Z&rscd=attachment%3B+filename%3Dresponse.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A11%3A54Z&ske=2026-11-01T01%3A12%3A12Z&sks=b&skv=2018-11-09&sig=roUhliGVDr3dFQAqfs4ACBvX8oHgEnVhANlWzEsiykM%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5MzU5OCwibmJmIjoxNzkzNDkzMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ._bm53hUM3Af32uWtq1wKVvMQqO_z0lhBgmKalZ11cHA&response-content-disposition=attachment%3B%20filename%3Dresponse.bundle.js&response-content-type=application%2Foctet-stream",
+      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/600942223/69bd9bc0-ba86-4f64-89c3-c62a723d7753?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A51%3A51Z&rscd=attachment%3B+filename%3Dresponse.bundle.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A50%3A53Z&ske=2026-11-01T01%3A51%3A51Z&sks=b&skv=2018-11-09&sig=44cWZLhLceqrqK9ICx%2B10OvtJHikUtcSbfvJjPNSF8Y%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5NDU2OSwibmJmIjoxNzkzNDk0MjY5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Hq_FcxHaabHw4boSC4_gG4xUoqMnLcoAMfEQXe6psU4&response-content-disposition=attachment%3B%20filename%3Dresponse.bundle.js&response-content-type=application%2Foctet-stream",
       "sha256": "fb720a3828fcb80ca716fe38ab75c08292fe73e8c166653e56263f3eb5614502",
       "bytes": 71255
     },
     {
       "url": "https://github.com/NSNanoCat/PreferencePanes/releases/download/v1.3.1/api.js",
-      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/1359292699/c7cb4335-f420-43a2-af51-2fef7ab17884?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A26%3A18Z&rscd=attachment%3B+filename%3Dapi.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A25%3A45Z&ske=2026-11-01T01%3A26%3A18Z&sks=b&skv=2018-11-09&sig=7%2Btp0kW1L5NOUVhQbAp1yN6XFnt4FvON5CKD7vag%2FQU%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5MzU5OCwibmJmIjoxNzkzNDkzMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ._bm53hUM3Af32uWtq1wKVvMQqO_z0lhBgmKalZ11cHA&response-content-disposition=attachment%3B%20filename%3Dapi.js&response-content-type=application%2Foctet-stream",
+      "resolved_url": "https://release-assets.githubusercontent.com/github-production-release-asset/1359292699/c7cb4335-f420-43a2-af51-2fef7ab17884?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-01T01%3A34%3A33Z&rscd=attachment%3B+filename%3Dapi.js&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-01T00%3A34%3A04Z&ske=2026-11-01T01%3A34%3A33Z&sks=b&skv=2018-11-09&sig=kbU0Er4yV0eCbK9WDF6MbHYVCAG99nHy%2FFj04ign8mA%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzQ5NDU2OSwibmJmIjoxNzkzNDk0MjY5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Hq_FcxHaabHw4boSC4_gG4xUoqMnLcoAMfEQXe6psU4&response-content-disposition=attachment%3B%20filename%3Dapi.js&response-content-type=application%2Foctet-stream",
       "sha256": "2892d3dbc2544207faf73a6f46f11b6247d6f0ac994a79a6159a993eb57db13e",
       "bytes": 56479
     }
   ],
   "upstream_description": "YouTube 增强及双语字幕(歌词)",
-  "scope": "Mirror official release rules, parameters and script URLs; only local title/description metadata added."
+  "ui_version": "20261101-1",
+  "ui_sources": {
+    "youtube-subtitles-ui-request.js": {
+      "upstream_url": "https://github.com/DualSubs/YouTube/releases/download/v1.6.0/request.bundle.js",
+      "source_sha256": "9950e808cb22b612d363d636d4ed45f3fc96e81f9ba7cf94518bd77b327bb592",
+      "script_sha256": "95191481559cdd2e4797c2f6ebe68c2207f952b804b4e3db54f348bfc13934ca"
+    },
+    "youtube-subtitles-ui-response.js": {
+      "upstream_url": "https://github.com/DualSubs/YouTube/releases/download/v1.6.0/response.bundle.js",
+      "source_sha256": "fb720a3828fcb80ca716fe38ab75c08292fe73e8c166653e56263f3eb5614502",
+      "script_sha256": "2ae6c9a550701ea4fac032116826a458a31813d304a8ed627a28b7993f34e854"
+    },
+    "youtube-subtitles-ui-composite.js": {
+      "upstream_url": "https://github.com/DualSubs/Universal/releases/latest/download/Composite.Subtitles.response.bundle.js",
+      "source_sha256": "695ef3e205a54209520f3577c6bd0ba59ef096dacaeb077d148b4b9db3a9edab",
+      "script_sha256": "e337a7d4d87b1e07cf33b402082cf688466368bf44687da8a635aba8b7911c41"
+    },
+    "youtube-subtitles-ui-translate.js": {
+      "upstream_url": "https://github.com/DualSubs/Universal/releases/latest/download/Translate.response.bundle.js",
+      "source_sha256": "d15c36bc2563f6cf961b08efdba02faa4fe1ae4f184780c5a76246571b2923c5",
+      "script_sha256": "f065d9854c0ae50ce63fefa524e55e257f0223c7c53498d9ce28bf0b6775aad6"
+    }
+  },
+  "scope": "Official release rules and original script bodies retained; Chinese native parameter UI and priority selection added."
 }
