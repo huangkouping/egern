@@ -1,0 +1,19 @@
+name: 百度移动端搜索自动翻页
+description: 拦截移动端百度搜索响应，注入客户端无限瀑布流翻页脚本
+
+mitm:
+  hostnames:
+    - m.baidu.com
+    - www.baidu.com
+
+scriptings:
+  - http_response:
+      name: BaiduMobileAutoPage
+      # 匹配移动端主搜索页路径
+      match: ^https?:\/\/(m|www)\.baidu\.com\/(s|from=)?
+      # 如果脚本托管在 GitHub / Gist，填入 raw 地址；如果放在 Egern 本地 Scripts 目录，使用相对文件名
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu_mobile_autopage.js
+      # 必须开启 body 传输才能修改 HTML
+      body_required: true
+      # 限制只在主框架 HTML 请求时运行，避免污染静态资源
+      max_size: 524288
