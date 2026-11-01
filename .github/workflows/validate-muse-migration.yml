@@ -1,10 +1,13 @@
-name: Validate Muse sync migration
+name: 定时同步美团搜索淘宝
 on:
   workflow_dispatch:
   schedule:
     - cron: '17 */6 * * *'
 permissions:
   contents: write
+concurrency:
+  group: sync-muse-migrated
+  cancel-in-progress: false
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -14,7 +17,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install PyYAML==6.0.2
-      - name: Validate in isolated workspace (no repository writes)
+      - name: Sync upstream and validate in isolated workspace
         shell: bash
         run: |
           set -euo pipefail
