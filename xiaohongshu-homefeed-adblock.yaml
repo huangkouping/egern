@@ -1,105 +1,117 @@
 name: 小红书去直播广告©️
-description: |-
-  屏蔽开屏、首页直播和广告，支持笔记及评论区保存去水印。
-  更新时间：2026-10-31 21:41
+description: '屏蔽开屏、首页直播和广告，支持笔记、评论图片、视频及实况保存去水印。
+
+  更新时间：2026-11-01 08:08'
 author: huangkouping / Codex
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
-
 env_schema:
   BLOCK_HOME_ADS:
     name: 屏蔽首页广告
     description: 关闭后恢复首页“发现”信息流中的商业投放广告。
-    default_value: "true"
+    default_value: 'true'
     options:
-      - "true"
-      - "false"
+    - 'true'
+    - 'false'
   BLOCK_HOME_LIVE:
     name: 屏蔽首页直播
     description: 屏蔽直播卡片及作者正在直播的普通笔记。
-    default_value: "true"
+    default_value: 'true'
     options:
-      - "true"
-      - "false"
+    - 'true'
+    - 'false'
   BLOCK_MEDICAL_PROMOTION:
     name: 屏蔽疑似医美推广
     description: 根据账号和内容特征组合识别，可能误删，可随时关闭。
-    default_value: "true"
+    default_value: 'true'
     options:
-      - "true"
-      - "false"
+    - 'true'
+    - 'false'
   BLOCK_SPLASH_ADS:
     name: 屏蔽开屏广告
     description: 清空开屏候选素材并取消开屏广告投放决策。
-    default_value: "true"
+    default_value: 'true'
     options:
-      - "true"
-      - "false"
+    - 'true'
+    - 'false'
   BLOCK_AD_RESOURCES:
     name: 屏蔽广告素材库
     description: 清空广告素材库接口下发的图片和视频链接。
-    default_value: "true"
+    default_value: 'true'
     options:
-      - "true"
-      - "false"
+    - 'true'
+    - 'false'
   BLOCK_AD_ENGAGE:
     name: 屏蔽广告互动内容
     description: 清空广告互动接口下发的默认图片和跳转信息。
-    default_value: "true"
+    default_value: 'true'
     options:
-      - "true"
-      - "false"
-
+    - 'true'
+    - 'false'
+  REMOVE_MEDIA_WATERMARK:
+    name: 媒体保存去水印
+    description: 处理水印开关、封面标记及原始媒体地址；关闭后不处理笔记去水印。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  ENABLE_MEDIA_SAVE:
+    name: 完善保存入口与限制处理
+    description: 开启保存配置并补充视频下载入口；仅有明确匹配缓存时补全保存响应。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  REMOVE_COMMENT_WATERMARK:
+    name: 评论区图片与实况去水印
+    description: 处理评论及楼中楼身份标记、表情图片原地址和实况视频；受媒体去水印总开关控制。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
 scriptings:
-  - http_response:
-      name: 小红书首页广告与直播过滤
-      match: '^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/homefeed|web/v\d+/homefeed)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
-  - http_response:
-      name: 小红书开屏广告过滤
-      match: '^https://edith\.xiaohongshu\.com/api/sns/v2/system_service/(?:splash_config|splash_online_decision|splash_async_optimization)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
-  - http_response:
-      name: 小红书广告素材与互动内容过滤
-      match: '^https://(?:edith|www)\.xiaohongshu\.com/api/sns/v1/(?:ads/resource|tag/ads_engage)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
-  # 保存去水印补充，与原有广告/直播脚本使用不同接口。
-  - http_response:
-      name: 小红书保存去水印
-      match: '^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/(?:tabfeed|redtube|videofeed|feed|imagefeed|video/save|live_photo/save)|system_service/config)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261031-2
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
-  - http_response:
-      name: 小红书评论区保存去水印
-      match: '^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/comment/(?:list|sub_comments)|interaction/comment/video/download)(?:\?|$)'
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261031-2
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
+- http_response:
+    name: 小红书首页广告与直播过滤
+    match: ^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/homefeed|web/v\d+/homefeed)(?:\?|$)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 小红书开屏广告过滤
+    match: ^https://edith\.xiaohongshu\.com/api/sns/v2/system_service/(?:splash_config|splash_online_decision|splash_async_optimization)(?:\?|$)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 小红书广告素材与互动内容过滤
+    match: ^https://(?:edith|www)\.xiaohongshu\.com/api/sns/v1/(?:ads/resource|tag/ads_engage)(?:\?|$)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 小红书保存去水印
+    match: ^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/(?:tabfeed|redtube|videofeed|feed|imagefeed|video/save|live_photo/save)|system_service/config)(?:\?|$)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261101-1
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 小红书评论区保存去水印
+    match: ^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/comment/(?:list|sub_comments)|interaction/comment/video/download)(?:\?|$)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261101-1
+    body_required: true
+    timeout: 10
+    update_interval: 3600
 url_rewrites:
-  # 评论图片水印素材：使用 Egern 原生透明图片响应。
-  - match: '(?i)^https://ci\.xiaohongshu\.com/system_config/watermark'
-    location: http://reject-img/
-
+- match: (?i)^https://ci\.xiaohongshu\.com/system_config/watermark
+  location: http://reject-img/
 mitm:
   hostnames:
     includes:
-      - ci.xiaohongshu.com
-      - rec.xiaohongshu.com
-      - www.xiaohongshu.com
-      - edith.xiaohongshu.com
+    - ci.xiaohongshu.com
+    - rec.xiaohongshu.com
+    - www.xiaohongshu.com
+    - edith.xiaohongshu.com
+compat_arguments_desc: 使用说明：启用HTTPS解密并信任证书；更新模块后重新打开小红书。去水印建议先清除App媒体缓存，再进入笔记及评论区加载媒体，最后保存，旧相册图片不会自动改变。三个新增开关分别控制媒体去水印、保存入口/限制处理、评论区去水印，默认开启。原始视频和实况地址须先从详情/评论接口取得；本地最多缓存各300项、有效7天，不发起外部请求。只用明确匹配的笔记/文件/视频ID替换保存地址，未取得原始地址时保留响应。普通图片若水印已写入原图像素，接口规则无法直接擦除。现有广告、直播和疑似医美过滤开关保持原逻辑。本模块自行维护，不受可莉镜像同步任务覆盖。
