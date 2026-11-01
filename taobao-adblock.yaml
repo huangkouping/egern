@@ -2,6 +2,7 @@ name: 淘宝去广告🅥
 description: |-
   过滤淘宝开屏广告（图片/视频/活动弹窗）与广告下发接口，含闲鱼欢迎页与开屏。
   纯规则加一个开屏处理脚本，脚本仅把开屏素材清空、等待时长归零，不改其他数据。
+  更新时间：2026-11-01 16:15
 open_url: https://apps.apple.com/app/id387682726
 author: RuCu6[https://github.com/RuCu6]
 homepage: https://hub.kelee.one
