@@ -1,4 +1,4 @@
-name: Sync Tencent Video upstream
+name: Sync and convert Tencent Video upstream
 on:
   workflow_dispatch:
   schedule:
@@ -10,23 +10,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download and validate upstream
+      - name: Download upstream QX module and JS
         shell: bash
         run: |
           set -euo pipefail
+          curl -fLsS --retry 3 --max-time 40 'https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/TxvideoAD.snippet' -o /tmp/txvideo.snippet
           curl -fLsS --retry 3 --max-time 40 'https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Txvideoad.js' -o /tmp/txvideo.js
+          test "$(wc -c </tmp/txvideo.snippet)" -gt 100
           test "$(wc -c </tmp/txvideo.js)" -gt 1000
           node --check /tmp/txvideo.js
           grep -q '\$done' /tmp/txvideo.js
-          cp /tmp/txvideo.js txvideo-adblock.js
-      - name: Commit only when upstream changes
+      - name: Convert original rules to Egern
         shell: bash
         run: |
           set -euo pipefail
-          if ! git diff --quiet -- txvideo-adblock.js; then
+          python3 scripts/convert-txvideo.py /tmp/txvideo.snippet /tmp/txvideo.yaml
+          python3 - <<'PY'
+          import yaml
+          with open('/tmp/txvideo.yaml', encoding='utf-8') as f:
+              data = yaml.safe_load(f)
+          assert data['scriptings'] and data['mitm']['hostnames']['includes']
+          PY
+          cp /tmp/txvideo.yaml txvideo-adblock.yaml
+          cp /tmp/txvideo.js txvideo-adblock.js
+      - name: Commit changes only
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- txvideo-adblock.yaml txvideo-adblock.js; then
             git config user.name github-actions[bot]
             git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-            git add txvideo-adblock.js
-            git commit -m 'Sync Tencent Video upstream script'
+            git add txvideo-adblock.yaml txvideo-adblock.js
+            git commit -m 'Sync and convert Tencent Video upstream'
             git push
           fi
