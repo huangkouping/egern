@@ -4,6 +4,10 @@
 
 模块保留来源标识：可莉改版使用 **🅥**，自行维护使用 **🅗**。下方模块索引中的名称与 Egern 安装后显示的 `name` 保持一致；下面的「订阅」和「安装」链接均为 Raw 文件地址，可复制到 Egern 中使用；「源码」用于查看配置。
 
+## 模块说明统一规范
+
+所有 Egern 模块说明均采用「功能简介 → 同步状态及必要补充 → 更新时间」的顺序，**更新时间必须在说明最后一行**，格式为 `YYYY-MM-DD HH:mm`（精确到分钟，采用仓库维护时区）。上游自动同步脚本生成模块时也必须遵守此规范；更新时间应为实际文件更新或同步时间，不得仅在未发生更新时伪造更新时间。模块标识统一使用 🅗（自行维护）或 🅥（可莉改版）。
+
 ## 目录
 
 - [完整文件索引](#完整文件索引按用途)
@@ -33,6 +37,7 @@
 
 | 模块名称 | 功能说明 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- | --- |
+| 百度&Google搜索自动翻页🅗 | 百度与 Google 移动端搜索结果滚动自动加载；与搜索去广告模块独立使用。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/search_autopage.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/search_autopage.yaml) |
 | PingMe签到🅗 | 定时签到，并支持签到参数抓取与设置。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/pingme.yaml) |
 | Telegram跳转🅗 | 将 Telegram 网页链接转换为指定第三方客户端链接。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/telegram-redirect.yaml) |
 | 微信外部链接解锁🅗 | 优化微信内外部链接的打开与跳转限制。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-external-links.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/wechat-external-links.yaml) |
