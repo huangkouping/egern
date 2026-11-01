@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Convert the original Maasea module to Egern, keeping original scripts untouched."""
+"""Convert the original Maasea module to Egern, keeping original script bodies untouched."""
 import argparse,hashlib,json,os,re,subprocess,sys,tempfile,urllib.request
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
 import yaml
+from youtube_parameter_ui import apply_ui,UI_VERSION
 ROOT=Path(__file__).resolve().parents[1]
 REPO='Maasea/sgmodule'
 MODULE_PATH='YouTube.Enhance.sgmodule'
@@ -47,7 +48,7 @@ def convert(text,revision):
     hosts=[v.strip() for v in mitm[1].split(',')]
     original_desc=re.search(r'^#!arguments-desc=(.*)$',text,re.M)
     instructions=(original_desc[1].replace('\\n','\n') if original_desc else '')
-    instructions+='\n\n使用说明：开启HTTPS解密并信任证书，确保HTTP/2可解密及QUIC回退。放在YouTube双语字幕模块之前，避免两边重复启用字幕/歌词翻译；原版captionLang默认off。原作者脚本还包含画中画、后台播放、界面及播放配置处理，保留原逻辑。initplayback按原版使用init-stream.maasea.workers.dev，依赖原作者服务。每6小时跟随原仓库，固定到同一提交校验配置与两个JS，脚本内容不修改；任一检查失败保留上次有效配置。兼容性与实际效果需实机验证。'
+    instructions+='\n\n使用说明：开启HTTPS解密并信任证书，确保HTTP/2可解密及QUIC回退。放在YouTube双语字幕模块之前，避免两边重复启用字幕/歌词翻译；原版captionLang默认off。原作者脚本还包含画中画、后台播放、界面及播放配置处理，保留原逻辑。initplayback按原版使用init-stream.maasea.workers.dev，依赖原作者服务。每6小时跟随原仓库，固定到同一提交校验配置与两个JS，原脚本主体不修改，外层仅适配中文参数；任一检查失败保留上次有效配置。兼容性与实际效果需实机验证。'
     return {'name':'YouTube去广告©️','description':'','author':'Maasea[https://github.com/Maasea]',
             'homepage':'https://github.com/Maasea/sgmodule/blob/master/YouTube.Enhance.sgmodule',
             'open_url':'https://apps.apple.com/app/id544007664',
@@ -78,15 +79,24 @@ def main():
                 if p.returncode:raise ValueError('Original JS syntax check failed')
             test=subprocess.run(['node',str(ROOT/'tests/test-youtube-enhance.mjs')],env=dict(os.environ,YOUTUBE_ENHANCE_DIR=stage),capture_output=True,text=True,timeout=20)
             if test.returncode:raise ValueError('Original script regression failed')
-        changed=old.get('upstream_commit')!=revision
+        source_map={prefix+path:scripts[Path(path).name] for path in SCRIPTS}
+        ui_outputs,ui_sources=apply_ui(module,source_map,'enhance')
+        with tempfile.TemporaryDirectory() as stage:
+            for name,code in ui_outputs.items():
+                file=Path(stage)/name;file.write_text(code)
+                if subprocess.run(['node','--check',str(file)],capture_output=True,timeout=20).returncode:raise ValueError('Parameter adapter syntax failed')
+            subprocess.run(['node',str(ROOT/'tests/test-youtube-parameter-runtime.mjs'),'enhance',stage],check=True,capture_output=True,timeout=20)
+        subprocess.run(['node',str(ROOT/'tests/test-youtube-parameter-ui.mjs'),str(ROOT/'scripts/youtube-parameter-wrapper.js')],check=True,capture_output=True,timeout=20)
+        changed=old.get('upstream_commit')!=revision or old.get('ui_sources')!=ui_sources
         if MODULE.exists():
             previous=yaml.safe_load(MODULE.read_text());previous.pop('description',None)
             candidate=dict(module);candidate.pop('description',None);changed=changed or previous!=candidate
         meta={'status':'ok','last_checked':checked,'last_success':checked,'last_updated':checked if changed else old.get('last_updated',checked),
               'upstream_url':SOURCE_URL,'upstream_commit':revision,'config_sha256':hashlib.sha256(source.encode()).hexdigest(),
               'scripts':{path:{'url':prefix+path,'sha256':hashlib.sha256(scripts[Path(path).name].encode()).hexdigest()} for path in SCRIPTS},
-              'scope':'Original configuration converted to Egern compatibility format; script URLs point directly to original code at the same verified commit.'}
+              'ui_version':UI_VERSION,'ui_sources':ui_sources,'scope':'Chinese native parameter UI wraps original code unchanged; sync the same verified original commit.'}
         module['description']=desc(meta)
+        for name,code in ui_outputs.items():(ROOT/name).write_text(code)
         MODULE.write_text(yaml.safe_dump(module,allow_unicode=True,sort_keys=False,width=1000));META.write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
         print('YouTube Enhance: original module and 2 unmodified scripts verified at '+revision[:12]);return 0
     except Exception as error:
