@@ -18,31 +18,31 @@ rules:
 scriptings:
   - http_request:
       name: 腾讯视频请求净化
-      match: '^https?://i\\.video\\.qq\\.com/(?:\\?.*)?$'
+      match: '^https?://i\.video\.qq\.com/(?:\?.*)?$'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/txvideo-adblock.js
       body_required: true
       timeout: 20
   - http_response:
       name: 腾讯视频响应净化
-      match: '^https?://i\\.video\\.qq\\.com/(?:\\?.*)?$'
+      match: '^https?://i\.video\.qq\.com/(?:\?.*)?$'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/txvideo-adblock.js
       body_required: true
       timeout: 20
   - http_response:
       name: 腾讯视频JCE净化
-      match: '^https?://iacc\\.qq\\.com/(?:\\?.*)?$'
+      match: '^https?://iacc\.qq\.com/(?:\?.*)?$'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/txvideo-adblock.js
       body_required: true
       timeout: 20
   - http_response:
       name: 腾讯视频Tab配置
-      match: '^https?://config\\.ab\\.qq\\.com/tab/GetTabRemoteConfig(?:\\?.*)?$'
+      match: '^https?://config\.ab\.qq\.com/tab/GetTabRemoteConfig(?:\?.*)?$'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/txvideo-adblock.js
       body_required: true
       timeout: 20
   - http_response:
       name: 腾讯视频页面配置
-      match: '^https://rdelivery\\.qq\\.com/v1/sdkconfig/get(?:\\?.*)?$'
+      match: '^https://rdelivery\.qq\.com/v1/sdkconfig/get(?:\?.*)?$'
       script_url: https://raw.githubusercontent.com/huangkouping/egern/main/txvideo-adblock.js
       body_required: true
       timeout: 20
