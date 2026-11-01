@@ -1,0 +1,18 @@
+name: 百度 & Google 搜索自动翻页©️
+description: 百度与 Google 移动端搜索结果滚动自动加载，独立于去广告模块
+
+mitm:
+  hostnames:
+    - m.baidu.com
+    - www.baidu.com
+    - www.google.com
+    - www.google.com.*
+    - www.google.co.*
+
+scriptings:
+  - http_response:
+      name: SearchAutoPage
+      match: ^https?:\/\/((m|www)\.baidu\.com\/(s|from=)|www\.google\.(com|[a-z]{2,3}|com\.[a-z]{2}|co\.[a-z]{2})\/search\?)
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/search_autopage.js
+      body_required: true
+      max_size: 524288
