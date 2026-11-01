@@ -26,6 +26,7 @@
 | 模块名称 | 功能说明 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- | --- |
 | 搜索去广告🅗 | 过滤百度、Bing、Google 搜索广告，保留 Google 域名重定向。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-search-adblock.yaml) |
+| 百度搜索自动翻页©️ | 独立百度搜索连续翻页，滚动到底部加载下一页；不含去广告。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-infinite-scroll.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/baidu-infinite-scroll.yaml) |
 | 美团去广告🅗 | 清理美团 App 内匹配的广告及推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/meituan-adblock.yaml) |
 | 淘宝去广告🅥 | 过滤淘宝 App 的部分广告与推广入口。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/taobao-adblock.yaml) |
 
