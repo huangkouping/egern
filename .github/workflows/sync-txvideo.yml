@@ -25,12 +25,8 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/convert-txvideo.py /tmp/txvideo.snippet /tmp/txvideo.yaml
-          python3 - <<'PY'
-          import yaml
-          with open('/tmp/txvideo.yaml', encoding='utf-8') as f:
-              data = yaml.safe_load(f)
-          assert data['scriptings'] and data['mitm']['hostnames']['includes']
-          PY
+          python3 -m pip install --quiet --break-system-packages pyyaml
+          python3 -c "import yaml; d=yaml.safe_load(open('/tmp/txvideo.yaml')); assert d['scriptings'] and d['mitm']['hostnames']['includes']"
           cp /tmp/txvideo.yaml txvideo-adblock.yaml
           cp /tmp/txvideo.js txvideo-adblock.js
       - name: Commit changes only
