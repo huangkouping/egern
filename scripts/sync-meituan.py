@@ -171,6 +171,7 @@ def build(version, parsed):
         'name': '美团去广告',
         'author': 'ZenmoFeiShi[https://github.com/ZenmoFeiShi/Qx]',
         'homepage': 'https://github.com/huangkouping/egern',
+        'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/1024px/%E7%BE%8E%E5%9B%A2.png',
         'compat_arguments_desc': ('【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开美团。\n关闭其他美团去广告模块，避免重复处理。\n'
             f'规则与脚本镜像自 ZenmoFeiShi/Qx（MT.snippet / MT.js），上游标注适用 {app}；JS 已备份到本仓库，每 6 小时自动检查上游更新，失败时保留上次有效版本。\n'
             '拦截层包含 shark 广告域名、美团 HTTPDNS 域名及上游维护的广告服务器 IP 名单；若美团出现加载慢、定位异常，先停用本模块验证是否为 HTTPDNS 拦截所致。\n'
