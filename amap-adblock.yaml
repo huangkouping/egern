@@ -1,9 +1,9 @@
 name: 高德地图去广告🅥
-description: '更新时间：2026-11-01 12:18
+description: '更新时间：2026-11-01 12:22
 
   开屏、首页及地点推广过滤，精简页面。
 
-  同步状态：JQ镜像同步正常；最近检查：2026-11-01 12:18'
+  同步状态：JQ镜像同步正常；最近检查：2026-11-01 12:22'
 author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id461703208
@@ -14,7 +14,7 @@ compat_arguments_desc: '【使用说明】
 
   请关闭其他高德去广告模块，避免重复修改同一接口。
 
-  本地维护 27 条重写与 1 条网址重写（原 23 条，另于 2026-11-01 嫁接墨鱼 AmapAds 独有的 5 条纯拦截：路线规划广告、广告归因、天气推广、开屏 aos 路径与 uploadimg 动图）；两个 jq 依赖从公开镜像同步并内嵌，无可莉服务器运行依赖。
+  本地维护 27 条重写（原 23 条，另于 2026-11-01 嫁接墨鱼 AmapAds 独有的 4 条纯拦截：路线规划广告、广告归因、天气推广、开屏 aos 路径；其 uploadimg 动图拦截同日已撤下，因高德分类小图标同为 uploadimg 下的 gif，会被误伤）；两个 jq 依赖从公开镜像同步并内嵌，无可莉服务器运行依赖。
 
   每 6 小时检查一次公开镜像；同步失败时保留上次有效规则，并更新同步状态。
 
@@ -181,9 +181,6 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
-url_rewrites:
-- match: (?i)^https?://[a-z0-9-]+\.amap\.com/uploadimg/\w+\.gif
-  location: http://reject-img/
 mitm:
   hostnames:
     includes:
