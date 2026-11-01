@@ -1,8 +1,8 @@
-# Egern 规则与模块©️
+# Egern 规则与模块🅗
 
 本仓库收录 Egern 分流规则、去广告模块、自动签到和链接跳转模块。当前提供 **3 个规则集、5 个模块**，以及配套脚本与定时同步任务。
 
-模块名称统一使用 **©️** 标识。下面的「订阅」和「安装」链接均为 Raw 文件地址，可复制到 Egern 中使用；「源码」用于查看配置。
+模块名称统一使用 **🅗** 标识。下面的「订阅」和「安装」链接均为 Raw 文件地址，可复制到 Egern 中使用；「源码」用于查看配置。
 
 ## 目录
 
@@ -21,9 +21,9 @@
 
 | 名称 | 用途与范围 | 建议策略 | 链接 |
 | --- | --- | --- | --- |
-| 苹果服务规则©️ | Apple News、部分地区受限服务及指定 Apple 服务入口。排除 `icloud.com` 及其子域名，让这部分继续由直连规则处理。 | 苹果服务，或自行选择的代理策略组 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/apple-service-proxy.list) · [源码](https://github.com/huangkouping/egern/blob/main/apple-service-proxy.list) |
-| 直连规则集©️ | 微信、抖音、小红书的正常内容防误杀，以及 Apple 推送、账号、下载、CDN、iCloud 等基础服务直连。 | DIRECT | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/custom-direct.list) · [源码](https://github.com/huangkouping/egern/blob/main/custom-direct.list) |
-| Ai&US规则集©️ | 合并海外 AI 服务、Muse / Meta AI、自定义 AI 补充及 Google Voice 上游规则。包含 ChatGPT、Claude、Gemini、Copilot、Perplexity、Manus、Cue 等相关域名。 | 美国节点，或自己的 US 策略组 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/us.list) · [源码](https://github.com/huangkouping/egern/blob/main/us.list) |
+| 苹果服务规则🅗 | Apple News、部分地区受限服务及指定 Apple 服务入口。排除 `icloud.com` 及其子域名，让这部分继续由直连规则处理。 | 苹果服务，或自行选择的代理策略组 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/apple-service-proxy.list) · [源码](https://github.com/huangkouping/egern/blob/main/apple-service-proxy.list) |
+| 直连规则集🅗 | 微信、抖音、小红书的正常内容防误杀，以及 Apple 推送、账号、下载、CDN、iCloud 等基础服务直连。 | DIRECT | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/custom-direct.list) · [源码](https://github.com/huangkouping/egern/blob/main/custom-direct.list) |
+| Ai&US规则集🅗 | 合并海外 AI 服务、Muse / Meta AI、自定义 AI 补充及 Google Voice 上游规则。包含 ChatGPT、Claude、Gemini、Copilot、Perplexity、Manus、Cue 等相关域名。 | 美国节点，或自己的 US 策略组 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/us.list) · [源码](https://github.com/huangkouping/egern/blob/main/us.list) |
 
 ### 分流说明
 
@@ -36,11 +36,11 @@
 
 | 名称 | 功能 | 设置与范围 | 链接 |
 | --- | --- | --- | --- |
-| 小红书去直播广告©️ | 过滤开屏、首页「发现」商业广告、直播卡片，以及作者正在直播的普通笔记；支持疑似医美推广过滤。 | 各功能可独立开关；保留未命中过滤条件的普通图文、视频及商品笔记。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
-| 小羞片网站去广告©️ | 合并指定网站的网页广告清理、CMS 视频播放列表插播过滤，以及 Pornhub 网页过滤与广告接口处理。 | 包含自编网页脚本及同步适配的上游脚本；仅处理配置中匹配的网址或播放资源。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
-| 京东去开屏广告©️ | 仅拦截开屏广告及启动广告物料接口。 | 不处理首页浮窗、我的推荐或消息抽屉；无脚本、HTTPDNS 或 QUIC 拦截。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
+| 小红书去直播广告🅗 | 过滤开屏、首页「发现」商业广告、直播卡片，以及作者正在直播的普通笔记；支持疑似医美推广过滤。 | 各功能可独立开关；保留未命中过滤条件的普通图文、视频及商品笔记。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
+| 小羞片网站去广告🅗 | 合并指定网站的网页广告清理、CMS 视频播放列表插播过滤，以及 Pornhub 网页过滤与广告接口处理。 | 包含自编网页脚本及同步适配的上游脚本；仅处理配置中匹配的网址或播放资源。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
+| 京东去开屏广告🅗 | 仅拦截开屏广告及启动广告物料接口。 | 不处理首页浮窗、我的推荐或消息抽屉；无脚本、HTTPDNS 或 QUIC 拦截。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
 
-### 小红书去直播广告©️
+### 小红书去直播广告🅗
 
 模块内可设置以下开关，当前默认均为开启：
 
@@ -55,7 +55,7 @@
 
 适用范围为配置中匹配的 App 接口，并非所有页面或所有商业内容。查看脚本日志可了解单次请求的过滤数量。
 
-### 小羞片网站去广告©️
+### 小羞片网站去广告🅗
 
 **网页部分**覆盖 911 爆料网、黑料网等已收录入口及镜像：
 
@@ -73,7 +73,7 @@
 
 此项为 **2026-10-24 手动适配快照，未加入定时同步**，现有 CMS / Pornhub 同步任务不负责更新它。已完成离线注入和部分浏览器 API 模拟测试，未实站验证；网页 CSP 可能阻止注入，不会为此移除或放宽安全策略。实际效果请以设备测试为准。
 
-### 京东去开屏广告©️
+### 京东去开屏广告🅗
 
 仅保留开屏入口 `start`、启动广告物料入口 `queryMaterialAdverts` 的 URL 拦截，返回空 JSON 对象。不以 `start` 前缀匹配 `startup` 设备配置。
 
@@ -85,7 +85,7 @@
 
 | 名称 | 功能 | 默认设置 | 链接 |
 | --- | --- | --- | --- |
-| PingMe签到©️ | 定时执行 PingMe 签到，并支持抓取签到参数。 | 每 4 小时执行一次；代理策略为「美国节点」；抓取签到参数开启。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/pingme.yaml) |
+| PingMe签到🅗 | 定时执行 PingMe 签到，并支持抓取签到参数。 | 每 4 小时执行一次；代理策略为「美国节点」；抓取签到参数开启。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/pingme.yaml) |
 
 在模块设置中，将「代理策略」填写为主配置中实际存在的策略组名称，名称需要完全一致。签到时间可通过 Cron 表达式调整，默认是 `0 */4 * * *`。
 
@@ -95,7 +95,7 @@
 
 | 名称 | 功能 | 可选客户端 | 链接 |
 | --- | --- | --- | --- |
-| Telegram跳转©️ | 将经过 Egern HTTP 请求处理的 `t.me`、`telegram.me` 链接转换为所选客户端的深链接。 | Telegram、Nagram、Swiftgram、Turrit、iMe、Nicegram、Lingogram；默认 Nagram。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/telegram-redirect.yaml) |
+| Telegram跳转🅗 | 将经过 Egern HTTP 请求处理的 `t.me`、`telegram.me` 链接转换为所选客户端的深链接。 | Telegram、Nagram、Swiftgram、Turrit、iMe、Nicegram、Lingogram；默认 Nagram。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/telegram-redirect.yaml) |
 
 脚本包含公开用户名、帖子、邀请入群、贴纸、表情、主题、语言、分享及代理链接的转换逻辑。实际支持情况取决于所安装客户端。
 
