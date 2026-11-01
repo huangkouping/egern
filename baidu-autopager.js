@@ -10,6 +10,13 @@
  * Google：a#pnnext（start= 参数）+ #rso 容器，为通用实现，待实机验证。
  * 追加节点会套用页面已有的去广告样式；广告块（百度的 ec_* 壳、Bing 的
  * li.b_ad、Google 的 [data-text-ad] 块）与页尾区不搬运。
+ *
+ * 2026-11-01 修复“第二页之后全是第二页”：抓取页的分页控制器里提取到的
+ * 链接可能不是真正的下一页（第二页起控制器首个链接常是自引用/上一页，
+ * 且链接里的会话令牌每次都变，旧版按整串 URL 去重失效，无限重复抓第二页）。
+ * 现在按页码参数（百度 pn / Bing first / Google start）校验推进：候选链接
+ * 页码必须大于刚抓的页码，否则按步长在上一条真实链接上递增页码合成；
+ * 再按每页首条结果的签名去重，重复即停，杜绝任何形式的原地打转。
  */
 function searchAutoPagerPage() {
   try {
@@ -21,19 +28,34 @@ function searchAutoPagerPage() {
       var c = (el.className && el.className.toString()) || '';
       return (' ' + c + ' ').indexOf(' ' + name + ' ') >= 0;
     }
+    function abs(u) {
+      if (!u) return null;
+      try { return new URL(u, location.href).href; } catch (e) { return u; }
+    }
+    function getParam(u, name) {
+      if (!u) return null;
+      var m = new RegExp('[?&]' + name + '=(\\d+)').exec(u);
+      return m ? parseInt(m[1], 10) : null;
+    }
+    function setParam(u, name, value) {
+      var re = new RegExp('([?&]' + name + '=)\\d+');
+      if (re.test(u)) return u.replace(re, '$1' + value);
+      return u + (u.indexOf('?') >= 0 ? '&' : '?') + name + '=' + value;
+    }
     var engine = null;
     if (/(^|\.)baidu\.com$/.test(host)) {
       engine = {
+        param: 'pn',
         box: function (doc) { return qs('#results', doc) || qs('#content_left', doc); },
         next: function (doc) {
           var a = qs('a.new-nextpage-only', doc) || qs('#page-controller a[href]', doc) || qs('#page a.np', doc);
-          return a ? a.href : null;
+          return a ? abs(a.href) : null;
         },
         sentinel: function () { return qs('#page-controller') || qs('#page'); },
         anchor: function (box) { return qs('#results-after', box) || qs('.se-results-after', box) || qs('.results-after', box); },
         junk: function (el) {
           var c = (el.className && el.className.toString()) || '';
-          if (hasClass(el, 'results-after') || hasClass(el, 'se-results-after')) return true;
+          if ((el.id || '') === 'results-after' || hasClass(el, 'results-after') || hasClass(el, 'se-results-after')) return true;
           if ((el.id || '').indexOf('ec_r_') === 0 || c.indexOf('ec_r_') >= 0 || c.indexOf('ec_ad_results') >= 0 || c.indexOf('ec_wise_ad') >= 0) return true;
           return false;
         },
@@ -41,6 +63,7 @@ function searchAutoPagerPage() {
       };
     } else if (/(^|\.)bing\.com$/.test(host)) {
       engine = {
+        param: 'first',
         box: function (doc) { return qs('#b_results', doc); },
         next: function (doc) {
           var a = qs('a.sb_pagN_bp', doc) || qs('a.sb_pagN', doc) || qs('.sb_pager a[href*="first="]', doc);
@@ -51,7 +74,7 @@ function searchAutoPagerPage() {
               if (/下一页|Next page/i.test(t)) { a = links[i]; break; }
             }
           }
-          return a ? a.href : null;
+          return a ? abs(a.href) : null;
         },
         sentinel: function () { return qs('.sb_pager') || qs('#b_results'); },
         anchor: function (box) { return qs('#progContPlaceHolder', box) || qs('.b_fpage', box); },
@@ -66,10 +89,11 @@ function searchAutoPagerPage() {
       if (qs('#progContPlaceHolder') && !engine.next(document)) return;
     } else if (/(^|\.)google\.com(\.hk|\.tw)?$/.test(host)) {
       engine = {
+        param: 'start',
         box: function (doc) { return qs('#rso', doc) || qs('#search', doc); },
         next: function (doc) {
           var a = qs('a#pnnext', doc);
-          return a ? a.href : null;
+          return a ? abs(a.href) : null;
         },
         sentinel: function () { return qs('#pnnext') || qs('#botstuff') || qs('#footcnt') || qs('#search'); },
         anchor: function () { return null; },
@@ -85,20 +109,37 @@ function searchAutoPagerPage() {
     if (!engine) return;
     var MAX_PAGES = 50;
     var loaded = 0, loading = false, stopped = false;
-    var seen = {};
     var box = engine.box(document);
     var ctrl = engine.sentinel();
     if (!box || !ctrl) return;
     var nextUrl = engine.next(document);
     if (!nextUrl) return;
-    seen[nextUrl] = true;
+    var curPage = getParam(nextUrl, engine.param);
+    var step = null;
+    var seenPages = {};
+    var seenSigs = {};
+    if (curPage !== null) seenPages[curPage] = true;
+    function pageSig(srcBox) {
+      var kids = srcBox.children;
+      for (var i = 0; i < kids.length; i++) {
+        var el = kids[i];
+        if (el.tagName === 'SCRIPT' || engine.junk(el)) continue;
+        return (el.textContent || '').replace(/\s+/g, ' ').slice(0, 80);
+      }
+      return '';
+    }
     function load() {
       if (loading || stopped || !nextUrl || loaded >= MAX_PAGES) return;
       loading = true;
-      fetch(nextUrl, { credentials: 'include' }).then(function (r) { return r.text(); }).then(function (html) {
+      var fetchedUrl = nextUrl;
+      var fetchedPage = curPage;
+      fetch(fetchedUrl, { credentials: 'include' }).then(function (r) { return r.text(); }).then(function (html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');
         var src = engine.box(doc);
         if (!src) { stopped = true; return; }
+        var sig = pageSig(src);
+        if (sig && seenSigs[sig]) { stopped = true; nextUrl = null; return; }
+        if (sig) seenSigs[sig] = true;
         var anchor = engine.anchor(box);
         var moved = 0;
         Array.prototype.slice.call(src.children).forEach(function (el) {
@@ -112,12 +153,26 @@ function searchAutoPagerPage() {
         });
         if (!moved) { stopped = true; return; }
         loaded++;
+        /* 计算下一页：候选链接页码必须严格大于刚抓的页码，否则按步长合成 */
         var nu = engine.next(doc);
-        if (!nu || seen[nu]) { stopped = true; nextUrl = null; return; }
-        seen[nu] = true;
-        nextUrl = nu;
+        var nuPage = getParam(nu, engine.param);
+        if (nu && fetchedPage !== null && nuPage !== null && nuPage > fetchedPage) {
+          if (step === null && nuPage - fetchedPage > 0) step = nuPage - fetchedPage;
+          if (seenPages[nuPage]) { stopped = true; nextUrl = null; return; }
+          seenPages[nuPage] = true;
+          curPage = nuPage;
+          nextUrl = nu;
+        } else if (fetchedPage !== null) {
+          var np = fetchedPage + (step || 10);
+          if (seenPages[np]) { stopped = true; nextUrl = null; return; }
+          seenPages[np] = true;
+          curPage = np;
+          nextUrl = setParam(fetchedUrl, engine.param, np);
+        } else {
+          stopped = true; nextUrl = null; return;
+        }
         var a = engine.liveNext();
-        if (a) a.href = nu;
+        if (a) a.href = nextUrl;
       }).catch(function () { /* 网络抖动时不终止，下次滚动到页脚再试 */ }).then(function () {
         loading = false;
         if (!stopped && nearBottom()) load();

@@ -1,4 +1,4 @@
-name: 搜索去广告&自动翻页🅗
+name: 搜索去广告&自动翻页©️
 author: limbopro[https://github.com/limbopro/Adblock4limbo]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
@@ -40,7 +40,7 @@ scriptings:
 - http_response:
     name: 百度搜索结果自动翻页
     match: https?://(www|m)\.baidu\.com/(from=|s\?)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=a98fc80ec9e8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=d8f395534c
     body_required: true
     timeout: 20
 - http_response:
@@ -52,7 +52,7 @@ scriptings:
 - http_response:
     name: 必应搜索自动翻页
     match: ^https?://(www|cn)\.bing\.com/search\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=a98fc80ec9e8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=d8f395534c
     body_required: true
     timeout: 20
 - http_response:
@@ -64,7 +64,7 @@ scriptings:
 - http_response:
     name: 谷歌搜索自动翻页
     match: ^https?://www\.google\.com(\.hk|\.tw)?/search
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=a98fc80ec9e8
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=d8f395534c
     body_required: true
     timeout: 20
 url_rewrites:
@@ -89,8 +89,8 @@ mitm:
     - g.cn
     - www.g.cn
     - limbopro.com
-description: '更新时间：2026-11-01 16:33
+description: '更新时间：2026-11-01 14:07
 
   去除百度、Bing、Google 的搜索广告（limbo 毒奶脚本的搜索引擎部分），三家结果页均带自动翻页。
 
-  同步状态：上游同步正常；最近检查：2026-11-01 16:33'
+  同步状态：上游同步正常；最近检查：2026-11-01 14:07'
