@@ -1,7 +1,7 @@
 name: 网易邮箱大师去广告🅥
 description: |-
   去除开屏及任务提醒，精简侧栏和我的页面。
-  更新时间：2026-10-31 21:16
+  更新时间：2026-11-01 13:48
 open_url: https://apps.apple.com/app/id897003024
 author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://hub.kelee.one
@@ -9,6 +9,10 @@ icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/
 
 # 基于用户提供的完整配置备份，保留原处理逻辑。
 # 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
+# 2026-11-01 嫁接 ddgksf2013 网易邮箱大师净化 V1.0.2：page/conf 删除字段补 3 个
+# （masterLoginGuideList、masterOperatorList、extList），新增 mmad 广告请求、
+# getRegConfig 免费邮箱提醒、mail.163.com user/info 净化共 3 条；
+# 其 config/function.do 的整条 reject 未采用（会误伤功能，保留本模块的手术版）。
 dns: {}
 rewrites:
   - match: '(?i)^https://appconf\.mail\.163\.com/mailmaster/api/http/urlConfig\.do$'
@@ -21,7 +25,7 @@ rewrites:
   - match: '(?i)^https://appconf\.mail\.163\.com/mailmaster/api/page/v2/conf\.do$'
     actions:
       - response_body:
-          jq: 'delpaths([["data","functionOperatorInfoList"],["data","memberOperator"],["data","activityTabInfoList"]])'
+          jq: 'delpaths([["data","functionOperatorInfoList"],["data","memberOperator"],["data","activityTabInfoList"],["data","masterLoginGuideList"],["data","masterOperatorList"],["data","extList"]])'
   - match: '(?i)^https://appconf\.mail\.163\.com/mailmaster/api/config/function\.do$'
     actions:
       - response_body:
@@ -40,8 +44,27 @@ rewrites:
           headers:
             Content-Type: application/json
           body: '{}'
+  - match: '(?i)^https://appconf\.mail\.163\.com/mmad/master/get\.do$'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://appconf\.mail\.163\.com/mailmaster/getRegConfig\.do$'
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{}'
+  - match: '(?i)^https://mail\.163\.com/fgw/mailsrv-webrobot/.*user/info'
+    actions:
+      - response_body:
+          jq: '.result |= del(.assistantInfo, .quotaData)'
 mitm:
   hostnames:
     includes:
       - appconf.mail.163.com
       - dashi.163.com
+      - mail.163.com
