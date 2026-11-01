@@ -1,0 +1,219 @@
+name: 哔哩哔哩去广告🅥
+description: ''
+open_url: https://apps.apple.com/app/id736536022
+author: kokoryh[https://github.com/kokoryh]
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png
+compat_arguments:
+  SPONSOR_POLICY: DIRECT
+compat_arguments_desc: 使用说明：启用HTTPS解密并信任证书，需可解密HTTP/2/gRPC。保留原模块去广告、页面整理、交互弹幕、链接跟踪处理及附带显示/播放配置功能。5个环境开关沿用原默认值。空降助手默认关闭；开启后依赖第三方bsbsb.top及kokoryh/chronos公开资源，准确性和可用性以第三方为准。SPONSOR_POLICY默认DIRECT，可改为主配置实际存在的代理策略组名称以对应Loon的PROXY策略。所有JS备份并原生适配，2个jq内联，每6小时校验同步公开镜像；失败保留完整有效版本。当前客户端完整效果需实机验证。
+env_schema:
+  displayUpList:
+    name: 动态最常访问列表
+    default_value: show
+    options:
+    - show
+    - hide
+    - auto
+  purifyComment:
+    name: 移除评论区置顶广告
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  optimizeRequest:
+    name: 优化评论区加载异常
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  sponsorBlock:
+    name: 空降助手
+    default_value: 'false'
+    options:
+    - 'true'
+    - 'false'
+  logLevel:
+    name: 日志等级
+    default_value: 'off'
+    options:
+    - 'off'
+    - error
+    - warn
+    - info
+    - debug
+dns: {}
+rules:
+- domain:
+    match: bsbsb.top
+    policy: '{{{SPONSOR_POLICY}}}'
+- domain:
+    match: api.biliapi.com
+    policy: REJECT
+- domain:
+    match: app.biliapi.com
+    policy: REJECT
+- domain:
+    match: api.biliapi.net
+    policy: REJECT
+- domain:
+    match: app.biliapi.net
+    policy: REJECT
+- and:
+    match:
+    - domain_suffix:
+        match: chat.bilibili.com
+    - or:
+        match:
+        - domain_keyword:
+            match: stun
+        - domain_keyword:
+            match: tracker
+        - domain_keyword:
+            match: p2p
+    policy: REJECT
+rewrites:
+- match: (?i)^https://api\.bilibili\.com/x/pd-proxy/tracker\?
+  actions:
+  - response_body:
+      jq: .data[][]?="stun.chat.bilibili.com:3478"
+- match: (?i)^https://app\.bilibili\.com/x/v2/splash/(show|event/list2)\?
+  actions:
+  - response_body:
+      jq: .data |= with_entries(if .key | IN("show", "event_list") then .value = [] else . end)
+- match: (?i)^https://app\.bilibili\.com/x/v2/splash/list\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{"code":0,"message":"OK","ttl":1,"data":{"max_time":0,"min_interval":31536000,"pull_interval":31536000,"keep_ids":[],"show":[],"list":[{}],"splash_request_id":""}}'
+- match: (?i)^https://app\.bilibili\.com/x/resource/show/tab/v2\?
+  actions:
+  - response_body:
+      jq:
+        source_file: tab_Bilibili_remove_ads.jq
+- match: (?i)^https://app\.bilibili\.com/x/v2/feed/index\?
+  actions:
+  - response_body:
+      jq: if .data.items then .data.items |= map(select((.banner_item == null) and (.ad_info == null) and (.card_goto == "av") and (.card_type | IN("small_cover_v2", "large_cover_single_v9", "large_cover_v1")))) end
+- match: (?i)^https://api\.bilibili\.com/pgc/activity/deliver/material/receive\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{"code":0,"data":{"closeType":"close_win","container":[],"showTime":""},"message":"success"}'
+- match: (?i)^https://api\.bilibili\.com/pgc/view/v2/app/season\?
+  actions:
+  - response_body:
+      jq: del(.data.payment)
+- match: (?i)^https://api\.bilibili\.com/pgc/page/channel\?
+  actions:
+  - response_body:
+      jq: .data.modules |= map(select(.type != "TIP") | if .type == "BANNER" then .module_data.items |= map(select(.url | startswith("https://www.bilibili.com/blackboard/era/") | not)) else . end)
+- match: (?i)^https://app\.bilibili\.com/x/v2/feed/index/story\?
+  actions:
+  - response_body:
+      jq: if .data.items then .data.items |= map(select((.ad_info == null) and (.card_goto | IN("vertical_ad_av", "vertical_ad_live", "vertical_ad_picture") | not)) | del(.story_cart_icon, .free_flow_toast, .image_infos, .course_info, .game_info)) end
+- match: (?i)^https://ap[ip]\.bilibili\.com/x/(resource/(top/activity|patch/tab(/v2)?)|v2/search/square|vip/ads/materials)\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{"code":-404,"message":"-404","ttl":1,"data":null}'
+- match: (?i)^https://line3-h5-mobile-api\.biligame\.com/game/live/large_card_material\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.live\.bilibili\.com/xlive/e-commerce-interface/v1/ecommerce-user/get_shopping_info\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://api\.live\.bilibili\.com/xlive/open-interface/v2/tracker/conf\?
+  actions:
+  - response_body:
+      jq: .data.domains=["wss://tracker.chat.bilibili.com"]
+- match: (?i)^https://app\.bilibili\.com/x/resource/show/skin\?
+  actions:
+  - response_body:
+      jq: delpaths([["data", "common_equip"]])
+- match: (?i)^https://app\.bilibili\.com/x/v2/account/mine(/ipad)?\?
+  actions:
+  - response_body:
+      jq:
+        source_file: mine_Bilibili_remove_ads.jq
+- match: (?i)^https://app\.bilibili\.com/x/v2/account/myinfo\?
+  actions:
+  - response_body:
+      jq: '.data.vip |= if . != null and .status == 0 then . + { status: 1, type: 2, due_date: 9005270400000, role: 15 } else . end'
+- match: (?i)^https://grpc\.biliapi\.net/bilibili\.app\.interface\.v1\.Teenagers/ModeStatus$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/grpc
+        grpc-status: '0'
+      body:
+        base64: AAAAABMKEQgCEgl0ZWVuYWdlcnMgAioA
+- match: (?i)^https://grpc\.biliapi\.net/bilibili\.app\.interface\.v1\.Search/DefaultWords$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/grpc
+        grpc-status: '0'
+      body:
+        base64: AAAAACEaHeaQnOe0ouinhumikeOAgeeVquWJp+aIlnVw5Li7KAE=
+- match: (?i)^https://grpc\.biliapi\.net/bilibili\.app\.(view\.v1\.View/TFInfo|viewunite\.v1\.View/(PlayPause|ViewEndPage))$
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/grpc
+        grpc-status: '0'
+      body:
+        base64: AAAAAAA=
+scriptings:
+- http_request:
+    name: 空降助手
+    match: (?i)^https://(?:grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(?:community\.service\.dm\.v1\.DM/DmSegMobile|app\.viewunite\.v1\.View/View|main\.community\.reply\.v1\.Reply/MainList)$
+    script_url: SOURCE_REQUEST
+    body_required: true
+    binary_body: true
+    timeout: 20
+    max_size: 8388608
+    update_interval: 3600
+- http_response:
+    name: ProtoBuf处理
+    match: (?i)^https://(grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(app\.(show\.v1\.Popular/Index|dynamic\.v2\.Dynamic/DynAll|view(unite)?\.v1\.View/(View|ViewProgress|RelatesFeed|AIRelateAsync)|playurl\.v1\.PlayURL/PlayView|playerunite\.v1\.Player/PlayViewUnite)|polymer\.app\.search\.v1\.Search/SearchAll|community\.service\.dm\.v1\.DM/DmView|main\.community\.reply\.v1\.Reply/MainList|pgc\.gateway\.player\.v2\.PlayURL/PlayView)$
+    script_url: SOURCE_RESPONSE
+    body_required: true
+    binary_body: true
+    timeout: 20
+    max_size: 8388608
+    update_interval: 3600
+- http_response:
+    name: 移除直播间广告
+    match: (?i)^https://api\.live\.bilibili\.com/xlive/(?:app-interface/v2/index/feed|app-room/v1/index/getInfoBy(?:Room|User))\?
+    script_url: SOURCE_JSON
+    body_required: true
+    binary_body: false
+    timeout: 20
+    max_size: 8388608
+    update_interval: 3600
+mitm:
+  hostnames:
+    includes:
+    - grpc.biliapi.net
+    - app.bilibili.com
+    - api.bilibili.com
+    - api.live.bilibili.com
+    - line3-h5-mobile-api.biligame.com
