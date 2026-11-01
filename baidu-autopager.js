@@ -17,6 +17,9 @@
  * 现在按页码参数（百度 pn / Bing first / Google start）校验推进：候选链接
  * 页码必须大于刚抓的页码，否则按步长在上一条真实链接上递增页码合成；
  * 再按每页首条结果的签名去重，重复即停，杜绝任何形式的原地打转。
+ * 触发方式（同日晚间按用户要求调整）：以“当前已加载内容的真正末尾”
+ * （结果容器内的页尾锚点，追加内容会把它往下推）为触发点，浏览到末尾
+ * 才加载下一页、接在下面，逐页推进，不预加载、不一次性灌入全部页面。
  */
 function searchAutoPagerPage() {
   try {
@@ -173,18 +176,36 @@ function searchAutoPagerPage() {
         }
         var a = engine.liveNext();
         if (a) a.href = nextUrl;
+        armObserver();
       }).catch(function () { /* 网络抖动时不终止，下次滚动到页脚再试 */ }).then(function () {
         loading = false;
         if (!stopped && nearBottom()) load();
       });
     }
+    /* 当前已加载内容的真正末尾：页尾锚点（追加内容会把它往下推），
+       没有锚点时用结果容器的最后一个子元素，再不行才用分页控制器。 */
+    function bottomEl() {
+      var a = engine.anchor(box);
+      if (a) return a;
+      if (box.lastElementChild) return box.lastElementChild;
+      return ctrl;
+    }
     function nearBottom() {
-      var r = ctrl.getBoundingClientRect();
+      var el = bottomEl();
+      if (!el) return false;
+      var r = el.getBoundingClientRect();
       return r.top < window.innerHeight + 1000;
     }
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) { if (entries[0].isIntersecting) load(); }, { rootMargin: '1000px' }).observe(ctrl);
+    var io = null;
+    function armObserver() {
+      if (!('IntersectionObserver' in window)) return;
+      var el = bottomEl();
+      if (!el) return;
+      if (io) io.disconnect();
+      io = new IntersectionObserver(function (entries) { if (entries[0].isIntersecting) load(); }, { rootMargin: '1000px' });
+      io.observe(el);
     }
+    armObserver();
     window.addEventListener('scroll', function () { if (nearBottom()) load(); }, { passive: true });
     if (nearBottom()) load();
   } catch (e) { /* 结构不符时静默退出，不影响页面 */ }

@@ -40,7 +40,7 @@ scriptings:
 - http_response:
     name: 百度搜索结果自动翻页
     match: https?://(www|m)\.baidu\.com/(from=|s\?)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=d8f395534c
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=9427fc4677
     body_required: true
     timeout: 20
 - http_response:
@@ -52,7 +52,7 @@ scriptings:
 - http_response:
     name: 必应搜索自动翻页
     match: ^https?://(www|cn)\.bing\.com/search\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=d8f395534c
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=9427fc4677
     body_required: true
     timeout: 20
 - http_response:
@@ -64,7 +64,7 @@ scriptings:
 - http_response:
     name: 谷歌搜索自动翻页
     match: ^https?://www\.google\.com(\.hk|\.tw)?/search
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=d8f395534c
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/baidu-autopager.js?v=9427fc4677
     body_required: true
     timeout: 20
 url_rewrites:
