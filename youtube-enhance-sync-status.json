@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "last_checked": "2026-11-01 08:33",
+  "last_success": "2026-11-01 08:33",
+  "last_updated": "2026-11-01 08:33",
+  "upstream_url": "https://raw.githubusercontent.com/Maasea/sgmodule/master/YouTube.Enhance.sgmodule",
+  "upstream_commit": "65075cdb388fc5e3094afd7e7314c67b243f3525",
+  "config_sha256": "9c7464733c54417da36aff09482d1287cee5ecd531ad856842912704b5b3f64d",
+  "scripts": {
+    "Script/Youtube/youtube.response.js": {
+      "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.response.js",
+      "sha256": "f98483d5f5017514f82502253c0db5ce2d4ffb7839887aa2cadc22666f5a7f12"
+    },
+    "Script/Youtube/youtube.request.js": {
+      "url": "https://raw.githubusercontent.com/Maasea/sgmodule/65075cdb388fc5e3094afd7e7314c67b243f3525/Script/Youtube/youtube.request.js",
+      "sha256": "3ecca15e06e76a31720092c581180f648ef2c45e494644941ba985c878efbb26"
+    }
+  },
+  "scope": "Original configuration converted to Egern compatibility format; script URLs point directly to original code at the same verified commit."
+}
