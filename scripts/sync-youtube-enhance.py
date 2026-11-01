@@ -49,7 +49,7 @@ def convert(text,revision):
     original_desc=re.search(r'^#!arguments-desc=(.*)$',text,re.M)
     instructions=(original_desc[1].replace('\\n','\n') if original_desc else '')
     instructions+='\n\n使用说明：开启HTTPS解密并信任证书，确保HTTP/2可解密及QUIC回退。放在YouTube双语字幕模块之前，避免两边重复启用字幕/歌词翻译；原版captionLang默认off。原作者脚本还包含画中画、后台播放、界面及播放配置处理，保留原逻辑。initplayback按原版使用init-stream.maasea.workers.dev，依赖原作者服务。每6小时跟随原仓库，固定到同一提交校验配置与两个JS，原脚本主体不修改，外层仅适配中文参数；任一检查失败保留上次有效配置。兼容性与实际效果需实机验证。'
-    return {'name':'YouTube去广告©️','description':'','author':'Maasea[https://github.com/Maasea]',
+    return {'name':'YouTube去广告🅗','description':'','author':'Maasea[https://github.com/Maasea]',
             'homepage':'https://github.com/Maasea/sgmodule/blob/master/YouTube.Enhance.sgmodule',
             'open_url':'https://apps.apple.com/app/id544007664',
             'icon':'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YouTube.png',
