@@ -251,7 +251,8 @@ mitm:
     - assistify.meituan.com
     - httpdns.meituan.com
     - httpdnsmultiapi.meituan.com
-description: '更新时间：2026-11-01 16:33
+description: |-
+  更新时间：2026-11-01 16:33
 
   去除美团开屏、首页Tab、搜索热词、个人中心等广告与推广。
 
