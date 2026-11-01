@@ -1,0 +1,19 @@
+name: Check Xiaohongshu watermark module
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - xiaohongshu-watermark.js
+      - xiaohongshu-homefeed-adblock.yaml
+      - tests/test-xiaohongshu-watermark.mjs
+      - .github/workflows/check-xiaohongshu-watermark.yml
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify save, watermark and cache handling
+        run: node tests/test-xiaohongshu-watermark.mjs
