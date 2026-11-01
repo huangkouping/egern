@@ -73,7 +73,7 @@ for name, url in SOURCES:
     sections.append((name, rules))
 now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
 lines = [
-    "# 国外 DNS 规则集©️",
+    "# 国外 DNS 规则集🅗",
     "# GitHub Actions 自动同步生成；供 Egern DNS forward 的 proxy_rule_set 使用",
     f"# 规则内容更新时间（北京时间）：{now}",
     "# 已剔除代理策略字段、IP-CIDR/GEOIP 等非域名规则，按规则类型及内容排重",
