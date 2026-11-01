@@ -1,0 +1,150 @@
+name: YouTube双语翻译🅥
+description: ''
+open_url: https://apps.apple.com/app/id544007664
+author: VirgilClyne[https://github.com/VirgilClyne]
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YouTube.png
+compat_arguments_desc: 使用说明：启用HTTPS解密并信任证书；放在YouTube去广告模块之后，关闭其他模块重复的字幕/歌词翻译功能。支持YouTube字幕及YouTube Music歌词，不支持tvOS。保留原默认设置：Official、自动字幕开启、仅译文开启、原文Forward；希望双语时关闭ShowOnly。Translate模式需调用翻译服务，官方字幕模式也依赖可用字幕轨道；无字幕视频无法凭此凭空生成字幕。4个原脚本已备份并适配Egern，界面参数统一传入播放器与字幕处理脚本；未主动改变翻译提供商配置。每6小时检查公开镜像，全部脚本校验成功再更新，失败保留上次完整版本。实际客户端兼容性需实测。
+env_schema:
+  Type:
+    name: 字幕类型
+    default_value: Official
+    options:
+    - Official
+    - Translate
+  AutoCC:
+    name: 自动显示翻译字幕
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  ShowOnly:
+    name: 仅显示译文（关闭为双语）
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  Position:
+    name: 原文字幕位置
+    default_value: Forward
+    options:
+    - Forward
+    - Reverse
+dns: {}
+scriptings:
+- http_request:
+    name: JSON·YouTube播放器请求
+    match: (?i)^https?://(www|m|tv)\.youtube\.com/youtubei/v1/player\?(.*)
+    script_url: SOURCE_REQUEST
+    body_required: true
+    binary_body: false
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_response:
+    name: JSON·YouTube播放器响应
+    match: (?i)^https?://(www|m|tv)\.youtube\.com/youtubei/v1/player\?(.*)
+    script_url: SOURCE_RESPONSE
+    body_required: true
+    binary_body: false
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_request:
+    name: Proto·YouTube播放器请求
+    match: (?i)^https?://youtubei\.googleapis\.com/youtubei/v1/player\?(.*)
+    script_url: SOURCE_REQUEST
+    body_required: true
+    binary_body: true
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_response:
+    name: Proto·YouTube播放器响应.proto
+    match: (?i)^https?://youtubei\.googleapis\.com/youtubei/v1/player\?(.*)
+    script_url: SOURCE_RESPONSE
+    body_required: true
+    binary_body: true
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_response:
+    name: Proto·GetWatch响应
+    match: (?i)^https?://youtubei\.googleapis\.com/youtubei/v1/get_watch\?(.*)
+    script_url: SOURCE_RESPONSE
+    body_required: true
+    binary_body: true
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_request:
+    name: YouTube定时文本请求
+    match: (?i)^https?://(www|m)\.youtube\.com/api/timedtext\?(.*)
+    script_url: SOURCE_REQUEST
+    body_required: false
+    binary_body: false
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_response:
+    name: YouTube合成定时文本响应
+    match: (?i)^https?://(www|m)\.youtube\.com/api/timedtext\?(.*)subtype=(Official|External)
+    script_url: SOURCE_COMPOSITE
+    body_required: true
+    binary_body: false
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_response:
+    name: YouTube翻译定时文本响应
+    match: (?i)^https?://(www|m)\.youtube\.com/api/timedtext\?(.*)subtype=Translate
+    script_url: SOURCE_TRANSLATE
+    body_required: true
+    binary_body: false
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_request:
+    name: JSON·YouTube Music浏览请求
+    match: (?i)^https?://music\.youtube\.com/youtubei/v1/browse\?(.*)
+    script_url: SOURCE_REQUEST
+    body_required: true
+    binary_body: false
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_request:
+    name: Proto·YouTube Music浏览请求
+    match: (?i)^https?://youtubei\.googleapis\.com/youtubei/v1/browse\?(.*)
+    script_url: SOURCE_REQUEST
+    body_required: true
+    binary_body: true
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_response:
+    name: JSON·YouTube Music翻译歌词响应
+    match: (?i)^https?://music\.youtube\.com/youtubei/v1/browse\?(.*)subtype=Translate
+    script_url: SOURCE_TRANSLATE
+    body_required: true
+    binary_body: false
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+- http_response:
+    name: Proto·YouTube Music翻译歌词响应
+    match: (?i)^https?://youtubei\.googleapis\.com/youtubei/v1/browse\?(.*)subtype=Translate
+    script_url: SOURCE_TRANSLATE
+    body_required: true
+    binary_body: true
+    max_size: 8388608
+    timeout: 60
+    update_interval: 3600
+mitm:
+  hostnames:
+    includes:
+    - www.youtube.com
+    - m.youtube.com
+    - tv.youtube.com
+    - music.youtube.com
+    - youtubei.googleapis.com
