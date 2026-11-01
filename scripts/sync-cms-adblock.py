@@ -86,7 +86,7 @@ def build(plugin, source, updated):
     data['mitm']['hostnames']['includes'] = list(dict.fromkeys(own + hosts))
     data['url_rewrites'] = [r for r in data.get('url_rewrites', []) if r.get('match') not in [old.get('rewrite_match'), match]]
     data['url_rewrites'].append({'match': match, 'location': location, 'status_code': 302})
-    data['name'] = '小羞片网站去广告©️'
+    data['name'] = '小羞片网站去广告🅗'
     data['description'] = description(data, updated, 'CMS 同步正常')
     meta = {'plugin_url': PLUGIN, 'script_url': SCRIPT,
         'plugin_sha256': hashlib.sha256(plugin.encode()).hexdigest(),
