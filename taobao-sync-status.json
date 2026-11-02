@@ -9,11 +9,11 @@
   },
   "counts": {
     "rules": 6,
-    "rewrites": 13,
-    "grafted_rewrites": 2,
-    "url_rewrites": 3,
+    "rewrites": 16,
+    "grafted_respond": 2,
+    "grafted_images": 3,
     "scriptings": 2
   },
-  "synced_at": "2026-11-01 16:33:25 CST",
+  "synced_at": "2026-11-02 22:21:37 CST",
   "error": null
 }

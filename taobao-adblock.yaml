@@ -2,14 +2,13 @@ name: 淘宝去广告🅥
 description: |-
   过滤淘宝开屏广告（图片/视频/活动弹窗）与广告下发接口，含闲鱼欢迎页与开屏。
   纯规则加一个开屏处理脚本，脚本仅把开屏素材清空、等待时长归零，不改其他数据。
-  更新时间：2026-11-01 16:15
 open_url: https://apps.apple.com/app/id387682726
 author: RuCu6[https://github.com/RuCu6]
 homepage: https://hub.kelee.one
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png
 
 # 同步自可莉官方 GitHub 分发仓 Moli-X/Tool 的 RuCu6 淘宝插件，由 scripts/sync-taobao.py 每 6 小时自动转换；开屏脚本镜像至本仓库。
-# 本地嫁接（Thelongdarkorg 插件独有，同步时保留）：闲鱼开屏、菜鸟广告两条接口空回应，及 3 条广告图直链 reject，并为其补 gw.alicdn.com 的 MITM。
+# 本地嫁接（Thelongdarkorg 插件独有，同步时保留）：闲鱼开屏、菜鸟广告两条接口空回应，及 3 条广告图直链 204 截断，并为其补 gw.alicdn.com 与 *.m.taobao.com 的 MITM。
 # AMDC 调度拦截不加：通用配置通道，有误伤可能（用户 2026-11-01 确认跳过）。
 dns: {}
 rules:
@@ -110,13 +109,18 @@ rewrites:
       status: 200
       headers: {"Content-Type":"application/json"}
       body: "{}"
-url_rewrites:
 - match: "(?i)^https://heic\\.alicdn\\.com/imgextra/i\\d/[A-Za-z0-9_!]+-\\d+-tps-\\d+-\\d+\\.png_\\d+x\\d+q\\d+\\.jpg_\\.heic$"
-  location: http://reject-dict/
+  actions:
+  - respond:
+      status: 204
 - match: "(?i)^https://heic\\.alicdn\\.com/imgextra/i\\d/[A-Za-z0-9_!]+-\\d+-tps-\\d+-\\d+\\.jpg_\\d+x\\d+q\\d+\\.jpg_\\.heic$"
-  location: http://reject-dict/
+  actions:
+  - respond:
+      status: 204
 - match: "(?i)^https://gw\\.alicdn\\.com/imgextra/i\\d+/[^/]+_!!\\d+-\\d+-tps-(?:720-1280|1080-1920|1125-1602|1242-2208)\\.(?:jpg|png|jpeg)_[^/]+\\.webp"
-  location: http://reject-dict/
+  actions:
+  - respond:
+      status: 204
 scriptings:
 - http_response:
     name: 淘宝开屏视频与开屏图处理
@@ -138,3 +142,4 @@ mitm:
     - guide-acs.m.taobao.com
     - poplayer.template.alibaba.com
     - gw.alicdn.com
+    - '*.m.taobao.com'
