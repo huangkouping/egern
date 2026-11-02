@@ -85,7 +85,7 @@
 | 航旅纵横去广告🅥 | 过滤航旅纵横中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/umetrip-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/umetrip-adblock.yaml) |
 | 微信公众号去广告🅥 | 过滤微信公众号中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-article-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/wechat-article-adblock.yaml) |
 | 威锋去广告🅥 | 过滤威锋中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/weifeng-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/weifeng-adblock.yaml) |
-| 小红书去直播广告🅗 | 过滤小红书开屏、首页推广及直播卡片，可按需开关。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
+| 小红书去直播广告🅗 | 过滤小红书开屏、首页推广及直播卡片，支持媒体保存去水印，可按需开关。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
 | 小红书去直播广告(增强版)🅗 | 屏蔽开屏、首页直播、广告与热搜推荐，支持媒体保存去水印。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-enhanced.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-enhanced.yaml) |
 | 小桔充电去广告🅥 | 过滤小桔充电中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaojukeji-charge-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaojukeji-charge-adblock.yaml) |
 | 小米音箱去广告🅥 | 过滤小米音箱中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaomi-speaker-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaomi-speaker-adblock.yaml) |
@@ -142,23 +142,40 @@
 | 名称 | 功能 | 设置与范围 | 链接 |
 | --- | --- | --- | --- |
 | 小红书去直播广告🅗 | 过滤开屏、首页「发现」商业广告、直播卡片，以及作者正在直播的普通笔记；支持疑似医美推广过滤。 | 各功能可独立开关；保留未命中过滤条件的普通图文、视频及商品笔记。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
+| 小红书去直播广告(增强版)🅗 | 增加开屏预加载、热搜推荐与追踪拦截，支持媒体保存去水印。 | 与原版二选一启用；直接拦截规则不受脚本开关控制。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-enhanced.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-enhanced.yaml) |
 | 小羞片网站去广告🅗 | 合并指定网站的网页广告清理、CMS 视频播放列表插播过滤，以及 Pornhub 网页过滤与广告接口处理。 | 包含自编网页脚本及同步适配的上游脚本；仅处理配置中匹配的网址或播放资源。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/attract-adblock.yaml) |
 | 京东去广告🅗 | 采用上游 v2 响应脚本清理开屏、首页、我的、订单及物流页广告。 | 保留额外开屏请求拦截及本地异常保护；实际效果取决于 App 版本。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/jd-adblock.yaml) |
 
-### 小红书去直播广告🅗
+### 小红书去直播广告🅗 与增强版
 
-模块内可设置以下开关，当前默认均为开启：
+两个版本均保留，选择一个启用即可，避免重复处理同一接口。
+
+| 版本 | 功能与安装地址 |
+| --- | --- |
+| 小红书去直播广告🅗 | 原版：过滤开屏、首页广告与直播，支持疑似医美推广过滤，以及笔记、评论图片、视频和实况保存去水印。[安装原版](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) |
+| 小红书去直播广告(增强版)🅗 | 在原版基础上增加开屏预加载接口拦截、商业上报与热搜推荐清理、追踪域名及 HTTPDNS 网段拦截，并扩展评论接口匹配。[安装增强版](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-enhanced.yaml) |
+
+两个模块均自行维护。增强版已通过用户设备测试，正式文件名为 `xiaohongshu-enhanced.yaml`；原测试文件 `xiaohongshu-enhanced-test.yaml` 已删除。使用旧测试地址的用户需将模块地址换为上述增强版安装地址。
+
+两个版本提供以下开关，默认均为开启；已安装模块可能保留用户之前的设置：
 
 | 开关 | 作用 |
 | --- | --- |
 | 屏蔽首页广告 | 过滤首页「发现」信息流中的商业投放广告。 |
 | 屏蔽首页直播 | 过滤直播卡片，以及带作者直播状态的普通笔记。 |
 | 屏蔽疑似医美推广 | 组合账号与内容特征识别；可能误删，可关闭。 |
-| 屏蔽开屏广告 | 处理开屏素材与投放决策。 |
+| 屏蔽开屏广告 | 控制脚本处理的开屏素材与投放决策。 |
 | 屏蔽广告素材库 | 清理广告素材接口中的图片与视频链接。 |
 | 屏蔽广告互动内容 | 清理广告互动接口中的图片与跳转信息。 |
+| 媒体保存去水印 | 处理水印开关、封面标记及原始媒体地址。 |
+| 完善保存入口与限制处理 | 开启保存配置并补充下载入口；仅在明确匹配缓存时补全保存响应。 |
+| 评论区图片与实况去水印 | 处理评论媒体，受媒体去水印总开关控制。 |
 
-适用范围为配置中匹配的 App 接口，并非所有页面或所有商业内容。查看脚本日志可了解单次请求的过滤数量。
+增强版直接拦截的开屏预加载接口不受“屏蔽开屏广告”开关控制；热搜清理、域名和 IP 网段拦截也没有独立开关。HTTPDNS 网段规则为 `119.29.29.0/24`，作用范围不限于小红书。
+
+使用时启用 HTTPS 解密并信任证书，更新模块后重新打开小红书。去水印建议先清除 App 媒体缓存，再进入笔记或评论加载媒体后保存；旧相册图片不会自动改变，已写入原图像素的水印无法通过接口规则直接擦除。原始视频与实况地址需要先从详情或评论接口取得，未取得明确匹配地址时保留原响应。
+
+适用范围为配置中匹配的 App 接口，并非所有页面或所有商业内容。实际效果取决于 App 版本与接口响应。
 
 ### 小羞片网站去广告🅗
 
@@ -226,7 +243,7 @@
 | 京东去广告🅗 | 每 6 小时检查上游 v2 脚本并保留本地适配。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-jd-adblock.yml) |
 | luestr 脚本检查 | GitHub 检查上游更新；不自动覆盖模块。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/check-luestr-updates.yml) |
 | 京东比价、大麦 | Muse 检查上游变化并通知，不自动改动仓库。 | [京东比价](https://github.com/huangkouping/egern/blob/main/jd-price.yaml) · [大麦](https://github.com/huangkouping/egern/blob/main/damai-adblock.yaml) |
-| 小红书去直播广告、Telegram跳转、京东去开屏广告 | 手动维护，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
+| 小红书去直播广告（原版与增强版）、Telegram跳转、京东去开屏广告 | 手动维护，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
 
 ### 如何判断更新与同步
 
@@ -269,6 +286,7 @@
 | 文件 | 用途 |
 | --- | --- |
 | [xiaohongshu-homefeed-adblock.js](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.js) | 小红书接口过滤脚本。 |
+| [xiaohongshu-watermark.js](https://github.com/huangkouping/egern/blob/main/xiaohongshu-watermark.js) | 两个小红书模块共用的媒体保存与去水印脚本。 |
 | [movie555-adblock.js](https://github.com/huangkouping/egern/blob/main/movie555-adblock.js) | 555 电影网 userscript 的 Egern HTML 注入适配，内含源脚本及 MIT 授权。 |
 | [attract-adblock.js](https://github.com/huangkouping/egern/blob/main/attract-adblock.js) | 指定网站的网页广告清理脚本。 |
 | [cms-adblock.js](https://github.com/huangkouping/egern/blob/main/cms-adblock.js) | 从 CMS 上游同步适配的视频过滤脚本。 |
