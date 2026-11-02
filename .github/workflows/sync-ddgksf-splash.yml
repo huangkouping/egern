@@ -2,6 +2,7 @@ name: 墨鱼去开屏同步
 
 on:
   workflow_dispatch:
+  # 手动请求立即执行一次同步
   push:
     paths:
       - '.github/workflows/sync-ddgksf-splash.yml'
