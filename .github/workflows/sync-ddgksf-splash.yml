@@ -34,7 +34,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ddgksf2013-splash.yaml ddgksf2013-splash-sync-status.json
+          for file in ddgksf2013-splash.yaml ddgksf2013-splash-sync-status.json; do
+            if [ -f "$file" ]; then
+              git add "$file"
+            fi
+          done
           if ! git diff --cached --quiet; then
             git commit -m "自动同步墨鱼去开屏规则"
             git push
