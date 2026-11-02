@@ -112,7 +112,10 @@ def main():
                 'scope': 'Sync the Kelee official JavaScript (Moli-X/Tool) directly, without the ifflagged mirror; local module rules are maintained separately.'}
         module['description'] = description(meta)
         SCRIPT.write_text(script)
-        MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
+        # 核心修复点：将 safe_dump 自动转义的双反斜杠还原为单反斜杠
+        dumped_yaml = yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000)
+        clean_yaml = dumped_yaml.replace('\\\\', '\\')
+        MODULE.write_text(clean_yaml)
         META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
         print('ColorfulClouds script mirror sync OK')
         return 0
@@ -121,7 +124,8 @@ def main():
             meta = dict(old, status='failed', last_checked=checked, error=type(error).__name__)
             module = yaml.safe_load(MODULE.read_text())
             module['description'] = description(meta)
-            MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
+            dumped_yaml = yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000)
+            MODULE.write_text(dumped_yaml.replace('\\\\', '\\'))
             META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
         print('ColorfulClouds sync failed; last good rules retained:', type(error).__name__, file=sys.stderr)
         return 1
