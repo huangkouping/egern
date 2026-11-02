@@ -1,21 +1,50 @@
 name: 盒马去广告🅥（测试版）
 description: |-
-  去除广告及购物推荐，精简底栏和我的页面。
-  更新时间：2026-11-02 11:23
+  去除开屏、广告及购物推荐，精简底栏、购物车及我的页面瀑布流。
+  更新时间：2026-11-02 11:32
 open_url: https://apps.apple.com/app/id1063183999
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+homepage: https://hub.kelee.one
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MrHema.png
 
 dns: {}
 
 rewrites:
-  # 内部活动/弹窗页面置空
-  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.sg\\.queryinnerpage/"
+  # ---------------- 1. 开屏启动页与弹窗广告拦截 ----------------
+  # 阿里开屏广告拉取 & 盒马启动全屏页接口
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.alimm\\.munion\\.render\\.openad\\.get|mtop\\.wdk\\.render\\.querywelcomepage)/"
     actions:
       - respond:
           status: 200
           headers: {"Content-Type":"application/json"}
-          body: "{}"
+          body: '{"api":"","data":{},"ret":["SUCCESS::接口调用成功"]}'
 
+  # 内部浮层与弹窗活动置空
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.wdk\\.sg\\.queryinnerpage|mtop\\.wdk\\.sg\\.querysinglescene)/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: '{"api":"","data":{},"ret":["SUCCESS::接口调用成功"]}'
+
+  # ---------------- 2. 购物车与“我的”页面瀑布流推荐拦截 ----------------
+  # 拦截购物车底部猜你喜欢/常买推荐
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.wdk\\.cart\\.querycartrec|mtop\\.wdk\\.render\\.querycartfeedstream)/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: '{"api":"","data":{"scenes":[]},"ret":["SUCCESS::接口调用成功"]}'
+
+  # 拦截“我的”页面下方瀑布流推荐 & 搭配/通用推荐流
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.wdk\\.render\\.querymypagerecommend|mtop\\.wdk\\.fc\\.recommend\\.queryrecommendlist|mtop\\.wdk\\.fc\\.recommend\\.feedscommondservice|mtop\\.wdk\\.melon\\.collocation)/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: '{"api":"","data":{"scenes":[]},"ret":["SUCCESS::接口调用成功"]}'
+
+  # ---------------- 3. 页面模块精简与结构过滤 ----------------
   # 首页金刚区与推荐流精简
   - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.queryindexpage/"
     actions:
@@ -33,28 +62,6 @@ rewrites:
     actions:
       - response_body:
           jq: "if .data?.pageType == \"216\" and .data?.scenes? then .data.scenes |= map(select(.bizCode == \"shop_walk_top_picture\" or .bizCode == \"shop_walk_shop_util\" or .bizCode == \"shop_walk_bistro\")) else . end"
-
-  # 推荐浮层与搭配推荐阻断
-  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.sg\\.querysinglescene/"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-
-  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.melon\\.collocation/"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-
-  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.fc\\.recommend\\.feedscommondservice/"
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
 
   # “我的”页面模块精简：使用兼容性更好的正则白名单匹配，防止 JQ IN 函数报错
   - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.querymypage/"
