@@ -1,7 +1,7 @@
-name: 小红书去直播广告🅗 (精准修复版)
+name: 小红书去直播广告(增强版)🅗
 description: |-
   屏蔽开屏、首页直播、广告与热搜推荐，支持笔记、评论图片、视频及实况保存去水印。
-  更新时间：2026-11-02 15:23
+  更新时间：2026-11-02 15:31
 author: huangkouping / Codex, AI 精准校准版
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
@@ -175,4 +175,4 @@ compat_arguments_desc: |-
   只用明确匹配的笔记/文件/视频ID替换保存地址，未取得原始地址时保留响应。
   普通图片若水印已写入原图像素，接口规则无法直接擦除。
   现有广告、直播和疑似医美过滤开关保持原逻辑。
-  本模块自行维护，不受可莉镜像同步任务覆盖。
+  本模块自行维护。
