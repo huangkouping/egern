@@ -1,33 +1,57 @@
-name: 京东去广告🅗 (彻底精简与去底栏逛版)
+name: 京东去广告🅗 (直连IP封堵终极版)
 description: |-
-  全量去广告：开屏、首页大促楼层、悬浮红包、弹窗，移除底栏“逛”短视频菜单。
-  更新时间：2026-11-02 15:46
+  根据实测抓包封死京东 HTTPDNS 直连通道与数据打点，强行激活 MitM，移除底栏“逛”及首页大促。
+  更新时间：2026-11-02 16:01
 open_url: https://apps.apple.com/app/id414245413
-author: zbsdsb / Codex, 深度定制版
+author: zbsdsb / Codex, 抓包逆向优化版
 homepage: https://github.com/zbsdsb/loon-adblock-plugins
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
-# 本地 DNS 黑洞：切断京东自建 HTTPDNS 解析
-dns:
-  hosts:
-    "httpdns.jd.com": 0.0.0.0
-    "dns.jd.com": 0.0.0.0
-
 rules:
-  # 1. 彻底封死京东自研与第三方 HTTPDNS 调度（强制退回标准域名解析走代理解密）
-  - domain:
-      match: httpdns.jd.com
-      policy: REJECT
   - domain:
       match: dns.jd.com
+      policy: REJECT
+  - domain:
+      match: httpdns.jd.com
       policy: REJECT
   - domain_keyword:
       match: httpdns
       policy: REJECT
-
-  # 2. 拦截诊断测试与日志打点
-  - url_regex:
-      match: "^http://\\w{32}\\.jddebug\\.com/diagnose\\?"
+  - ip:
+      match: 120.52.83.22
+      policy: REJECT
+  - ip:
+      match: 39.156.62.242
+      policy: REJECT
+  - ip:
+      match: 36.110.181.150
+      policy: REJECT
+  - ip:
+      match: 111.202.8.189
+      policy: REJECT
+  - ip:
+      match: 106.39.169.89
+      policy: REJECT
+  - ip:
+      match: 111.13.29.201
+      policy: REJECT
+  - ip:
+      match: 101.124.19.122
+      policy: REJECT
+  - domain:
+      match: mars.jd.com
+      policy: REJECT
+  - domain:
+      match: mllog.jd.com
+      policy: REJECT
+  - domain:
+      match: anti-sdk-report.m.jd.com
+      policy: REJECT
+  - domain:
+      match: perf.m.jd.com
+      policy: REJECT
+  - domain:
+      match: sdkfp.jd.com
       policy: REJECT
   - domain:
       match: dlog.jd.com
@@ -40,6 +64,9 @@ rules:
       policy: REJECT
   - domain:
       match: janapi.jd.com
+      policy: REJECT
+  - domain_suffix:
+      match: jddebug.com
       policy: REJECT
 
 rewrites:
