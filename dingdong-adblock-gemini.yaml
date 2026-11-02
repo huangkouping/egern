@@ -1,13 +1,14 @@
-name: 叮咚买菜去广告🅥（Gemini新版）
+name: 叮咚买菜去广告🅥
 description: |-
   去除广告及推荐，精简我的页面和 AI 入口。
-  更新时间：2026-10-31 21:16
+  更新时间：2026-11-01
 open_url: https://apps.apple.com/app/id768082524
 author: zirawell[https://github.com/zirawell], 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], wish
 homepage: https://hub.kelee.one
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DingdongMaicai.png
 
 dns: {}
+
 rules:
   - domain:
       match: trackercollect.ddxq.mobi
@@ -20,92 +21,143 @@ rules:
       policy: REJECT
 
 rewrites:
-  - match: '(?i)^https?://119\.29\.29\.\d+/d'
+  # 拦截腾讯 HTTPDNS 探测
+  - match: "(?i)^https?://119\\.29\\.29\\.\\d+/d"
     actions:
       - respond:
           status: 200
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/advert/'
+
+  # 拦截开屏与通用弹窗广告
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/advert/"
     actions:
       - respond:
           status: 404
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/homeApi/getHomeAdPop'
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/getHomeAdPop"
     actions:
       - respond:
           status: 404
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/vip/getVipAd(/|\?|$)'
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/vip/getVipAd(/|\\?|$)"
     actions:
       - respond:
           status: 200
           headers:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/homeApi/marketingNotice(/|\?|$)'
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/marketingNotice(/|\\?|$)"
     actions:
       - respond:
           status: 200
           headers:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/search/(rollHotKeyword|rankingList|hotKeyword)(/|\?|$)'
+
+  # 拦截热搜词、排行榜滚动推荐
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/search/(rollHotKeyword|rankingList|hotKeyword)(/|\\?|$)"
     actions:
       - respond:
           status: 200
           headers:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/order/getRecommend$'
+
+  # 拦截猜你喜欢与下单后推荐
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/order/getRecommend$"
     actions:
       - respond:
           status: 200
           headers:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/homeApi/userLike(/|\?|$)'
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/userLike(/|\\?|$)"
     actions:
       - respond:
           status: 200
           headers:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/guide-service/userLike/flowData$'
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/guide-service/userLike/flowData$"
     actions:
       - respond:
           status: 200
           headers:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
-  # 注意：若 queryMyPage 导致客户端崩溃，请改用 response_body 过滤 banner 字段，切忌直接置空
-  - match: '(?i)^https?://user\.api\.ddxq\.mobi/userportal-service/api/v1/user/queryMyPage(/|\?|$)'
+
+  # 拦截底部浮动 AI 挂件/气泡
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/floatingEntry"
     actions:
       - respond:
           status: 200
           headers:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/homeApi/categoriesNewDetail(/|\?|$)'
+
+  # 精简“我的”页面接口
+  - match: "(?i)^https?://user\\.api\\.ddxq\\.mobi/userportal-service/api/v1/user/queryMyPage(/|\\?|$)"
+    actions:
+      - respond:
+          status: 200
+          headers:
+            Content-Type: application/json
+          body: '{"code":0,"data":{}}'
+
+  # 首页/分类/详情中的广告与 AI 字段剥离
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/categoriesNewDetail(/|\\?|$)"
     actions:
       - response_body:
-          jq: 'delpaths([["data","ad_info"]])'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/tool/getConfig(/|\?|$)'
+          jq: "delpaths([[\"data\",\"ad_info\"]])"
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/tool/getConfig(/|\\?|$)"
     actions:
       - response_body:
-          jq: 'delpaths([["data","ai_enter_config"]])'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/homeApi/newDetails(/|\?|$)'
+          jq: "delpaths([[\"data\",\"ai_enter_config\"]])"
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/newDetails(/|\\?|$)"
     actions:
       - response_body:
-          jq: 'delpaths([["data","top_advert_data"],["data","suspension"]]) | if .data.list? then .data.list |= map(select(has("capsule_freedom_zone") | not)) else . end'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/guide-service/productApi/productDetail/info(/|\?|$)'
+          jq: "delpaths([[\"data\",\"top_advert_data\"],[\"data\",\"suspension\"]]) | if .data.list? then .data.list |= map(select(has(\"capsule_freedom_zone\") | not)) else . end"
+
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/guide-service/productApi/productDetail/info(/|\\?|$)"
     actions:
       - response_body:
-          jq: 'delpaths([["data","detail","chatEntry"]])'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/homeApi/bottomNavi'
+          jq: "delpaths([[\"data\",\"detail\",\"chatEntry\"]])"
+
+  # 底部导航栏过滤：同时过滤广告、吃什么，以及带 AI/助手 相关标识的菜单栏入口
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/bottomNavi"
     actions:
       - response_body:
-          jq: 'del(.data.adId?) | if (.data.bottom_list? | length > 0) then .data.bottom_list |= map(select(.type != "eatwhat")) else . end'
-  - match: '(?i)^https?://maicai\.api\.ddxq\.mobi/homeApi/homeFlowDetail'
+          jq: >-
+            del(.data.adId?) | 
+            if (.data.bottom_list? | length > 0) then 
+              .data.bottom_list |= map(select(
+                (.type != "eatwhat") and 
+                ((.type // "" | ascii_downcase | test("ai|chat|recipe") | not)) and
+                ((.name // "" | test("AI|助手|大模型|做饭") | not))
+              )) 
+            else . end
+
+  # 备用：新版通用导航 Tab 过滤
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/tabNavi"
     actions:
       - response_body:
-          jq: 'walk(if type == "object" and has("list") then .list |= map(if type == "object" and has("multi_advertise_data_list") then del(.multi_advertise_data_list) else . end) else . end)'
+          jq: >-
+            if (.data.list? | length > 0) then 
+              .data.list |= map(select(
+                ((.type // "" | ascii_downcase | test("ai|chat|recipe") | not)) and
+                ((.name // "" | test("AI|助手|大模型|做饭") | not))
+              )) 
+            else . end
+
+  # 信息流广告剔除
+  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/homeFlowDetail"
+    actions:
+      - response_body:
+          jq: "walk(if type == \"object\" and has(\"list\") then .list |= map(if type == \"object\" and has(\"multi_advertise_data_list\") then del(.multi_advertise_data_list) else . end) else . end)"
 
 mitm:
   hostnames:
