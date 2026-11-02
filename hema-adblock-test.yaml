@@ -1,0 +1,84 @@
+name: 盒马去广告🅥（测试版）
+description: |-
+  去除广告及购物推荐，精简底栏和我的页面。
+  更新时间：2026-11-02 11:23
+open_url: https://apps.apple.com/app/id1063183999
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MrHema.png
+
+dns: {}
+
+rewrites:
+  # 内部活动/弹窗页面置空
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.sg\\.queryinnerpage/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+
+  # 首页金刚区与推荐流精简
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.queryindexpage/"
+    actions:
+      - response_body:
+          jq: "if .data?.pageType == \"1\" and .data?.scenes? then .data.scenes |= map(select(.bizCode == \"three_row_circle\")) else . end"
+
+  # Feed 流推荐精简
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.querytabfeedstream/"
+    actions:
+      - response_body:
+          jq: "if .data?.pageType == \"5\" and .data?.scenes? then .data.scenes |= map(select(.sceneType == \"100028\")) else . end"
+
+  # 频道与独立落地页广告剥离（合并解决先前的规则拦截冲突）
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.wdk\\.render\\.querychannelpage|mtop\\.wdk\\.render\\.querysinglepage)/"
+    actions:
+      - response_body:
+          jq: "if .data?.pageType == \"216\" and .data?.scenes? then .data.scenes |= map(select(.bizCode == \"shop_walk_top_picture\" or .bizCode == \"shop_walk_shop_util\" or .bizCode == \"shop_walk_bistro\")) else . end"
+
+  # 推荐浮层与搭配推荐阻断
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.sg\\.querysinglescene/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.melon\\.collocation/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.fc\\.recommend\\.feedscommondservice/"
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+
+  # “我的”页面模块精简：使用兼容性更好的正则白名单匹配，防止 JQ IN 函数报错
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/mtop\\.wdk\\.render\\.querymypage/"
+    actions:
+      - response_body:
+          jq: "if .data?.scenes? then .data.scenes |= map(select((.sceneType // \"\") | test(\"^(400029|400005|400010|400002|400004|400015)$\"))) else . end"
+
+  # 底栏白名单过滤：强制只保留 HOME、CLASSIFY、CART、MY 四个核心入口，并增加容错防护
+  - match: "(?i)^https://acs-m\\.freshippo\\.com/gw/(mtop\\.wdk\\.lbs\\.location\\.shopdecideapi\\.decideformain|mtop\\.wdk\\.lbs\\.location\\.shopdecideapi\\.decidebygeocode)/"
+    actions:
+      - response_body:
+          jq: >-
+            if .data?.groupList? then
+              .data.groupList |= map(
+                if .ext?.tabConfig? then
+                  .ext.tabConfig |= (
+                    (if .normalTabList? then .normalTabList |= map(select(.code as $c | ["HOME", "CLASSIFY", "CART", "MY"] | any(. == $c))) else . end) |
+                    (if .normalTabListB? then .normalTabListB |= map(select(.code as $c | ["HOME", "CLASSIFY", "CART", "MY"] | any(. == $c))) else . end)
+                  )
+                else . end
+              )
+            else . end
+
+mitm:
+  hostnames:
+    includes:
+      - acs-m.freshippo.com
