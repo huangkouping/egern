@@ -1,7 +1,7 @@
 name: 中华万年历去广告🅥（测试版）
 description: |-
-  过滤广告及推广，精简页面，剔除插屏与屏保。
-  更新时间：2026-11-02 14:47
+  过滤广告及推广，精简页面，剔除插屏与屏保（修复 JQ select 作用域 bug）。
+  更新时间：2026-11-02 14:49
 open_url: https://apps.apple.com/app/id505424979
 author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], 优化修正版
 homepage: https://hub.kelee.one
@@ -43,7 +43,7 @@ rewrites:
               ))
             else . end
 
-  # 广告池接口过滤：排除插屏、屏保广告，并增强 HTTP/HTTPS 容错
+  # 广告池接口过滤：修复 select 作用域问题，确保响应结构完好
   - match: "(?i)^https?://pc\\.suishenyun\\.net/peacock/api/adspool([/?]|$)"
     actions:
       - response_body:
@@ -60,10 +60,10 @@ rewrites:
                     .key_name == "星座Tab（黄历页）"
                   ))
                 else . end
-              ) | select((.layout? | length) > 0)
+              )
             else . end
 
-  # 杂项推广、卡片与推广卡片置空（返回标准结构）
+  # 杂项推广、卡片置空（返回标准包装格式）
   - match: "(?i)^https?://client-lz\\.rili\\.cn/lizhi/api/(fortune/question_spots/panel|jujia/flow|album/hl_card|fortune/overview)([/?]|$)"
     actions:
       - respond:
