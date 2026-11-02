@@ -1,11 +1,10 @@
-name: 叮咚买菜去广告🅥
+name: 叮咚买菜去广告完美版🅗
 description: |-
-  去除广告及推荐，精简我的页面和 AI 入口。
-  更新时间：2026-11-01
+  完美适配叮咚买菜去广告，去除底部Ai菜单，精简我的页面。
+  更新时间：2026-11-02 11:12
 open_url: https://apps.apple.com/app/id768082524
-author: zirawell[https://github.com/zirawell], 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], wish
-homepage: https://hub.kelee.one
-icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DingdongMaicai.png
+author: huangkouping
+homepage: https://github.com/huangkouping/egern
 
 dns: {}
 
