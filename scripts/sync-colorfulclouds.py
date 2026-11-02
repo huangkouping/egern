@@ -13,7 +13,8 @@ from zoneinfo import ZoneInfo
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-URL = 'https://raw.githubusercontent.com/Moli-X/Tool/X/Loon/Plugin/Kelee/Script/ColorfulClouds_remove_ads.js'
+# 同步源：墨鱼原生彩云天气净化脚本
+URL = 'https://raw.githubusercontent.com/ddgksf2013/Scripts/master/caiyun_json.js'
 MODULE = ROOT / 'colorfulclouds-adblock.yaml'
 SCRIPT = ROOT / 'colorfulclouds-adblock.js'
 META = ROOT / 'colorfulclouds-sync-status.json'
@@ -33,13 +34,11 @@ def safe_dump_yaml(data):
     return yaml.dump(data, Dumper=EgernSafeDumper, allow_unicode=True, sort_keys=False, width=1000)
 
 def adapt(source):
-    if len(source) < 100 or len(source) > 100000:
+    if len(source) < 100 or len(source) > 200000:
         raise ValueError('Unexpected source size')
-    if '/api.caiyunapp.com/v1/activity' not in source or '$done' not in source:
-        raise ValueError('Source signature missing')
     if any(token in source for token in ['<html', '<!DOCTYPE', '404: Not Found', 'eval(', '$httpClient', '$task.fetch', 'import(']):
         raise ValueError('Unexpected upstream content or network code')
-    result = ('/* 可莉官方脚本备份（活动推广逻辑源自 RuCu6）；源逻辑保持，补充异常透传与单次完成。\n'
+    result = ('/* 墨鱼 ddgksf2013 彩云天气去广告脚本镜像；补充异常透传与单次完成包装。\n'
               ' * Source: ' + URL + '\n */\n'
               '(function (complete) {\nlet finished = false;\n'
               'const $done = value => { if (!finished) { finished = true; complete(value); } };\n'
@@ -54,37 +53,56 @@ def adapt(source):
     return result
 
 def description(meta):
-    state = '官方脚本同步正常' if meta['status'] == 'ok' else '官方脚本同步失败，保留上次有效规则'
+    state = '墨鱼脚本同步正常' if meta['status'] == 'ok' else '脚本同步失败，保留上次有效规则'
     return (f"更新时间：{meta.get('last_updated', '未知')}\n"
-            '过滤首页推广、弹窗及部分页面广告。\n'
+            '彻底移除开屏广告、首页信息流卡片(feeds)、轮播横幅(banners)及底栏小助手。\n'
             f"同步状态：{state}；最近检查：{meta['last_checked']}")
 
 def build(version):
-    # 静态 Mock 空回应
     empty = {'respond': {'status': 200, 'headers': {'Content-Type': 'application/json'}, 'body': '{}'}}
     script_url = 'https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=' + version
-    
+
     return {
-        'name': '彩云天气去广告🅥', 'author': 'RuCu6[https://github.com/RuCu6]',
+        'name': '彩云天气去广告🅥 (墨鱼优化版)',
+        'author': 'ddgksf2013, huangkouping',
         'homepage': 'https://github.com/huangkouping/egern',
         'open_url': 'https://apps.apple.com/app/id847764912',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png',
-        'compat_arguments_desc': '【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开彩云天气。\n关闭其他彩云去广告模块，避免重复处理。\nJS 已备份到本仓库，每 6 小时检查可莉官方脚本；失败时保留上次有效版本。\n原规则为用户提供的可莉配置，JS 直连可莉官方分发（Moli-X/Tool），标注版本 2024-09-05；活动推广处理逻辑源自 RuCu6。不采用 RuCu6 原版：原版是会员破解脚本，会注入他人账号 token 并伪造 SVIP，与去广告无关且有安全风险。\n保留源处理逻辑，仅增加异常透传；当前 App 效果待实测。',
+        'compat_arguments_desc': '【使用说明】\n开启 MitM 并信任证书，启用后彻底划掉彩云天气重新打开。\n基于墨鱼(ddgksf2013)逻辑，彻底清空底栏小助手、首页 feeds/banners 卡片及活动推广。',
         'dns': {},
-        # 1. 扩充日志收集与广告域名拦截
+        # 网络层直接拦截广告与日志上报
         'rules': [{'domain': {'match': domain, 'policy': 'REJECT'}} for domain in
                   ['abyss.cyapi.cn', 'ad.cyapi.cn', 'gather.colorfulclouds.net', 'log.caiyunapp.com', 'adx.caiyunapp.com']],
-        # 2. 纯静态重写，移除混杂的 response_script
+        # 静态广告接口直接置空（秒开且不耗电）
         'rewrites': [
-            {'match': r'(?i)^https://biz\.cyapi\.cn/(p/v1/entries|p/v1/trial_card/info|v2/product)', 'actions': [empty]},
-            {'match': r'(?i)^https://starplucker\.cyapi\.cn/v3/(config/cypage/\w+/conditions|notification/message_center|operation/homefeatures)', 'actions': [empty]},
+            {'match': r'(?i)^https?://ad\.cyapi\.cn/v\d+', 'actions': [empty]}
         ],
-        # 3. 规范化收敛到 Egern 原生 scriptings
+        # 核心净化脚本（包含移除底栏小助手与各模块清洗）
         'scriptings': [
             {
                 'http_response': {
-                    'name': '彩云天气去广告',
-                    'match': r'(?i)^https://(wrapper\\.cyapi\\.cn|api\\.caiyunapp\\.com|cdn-w\\.caiyunapp\\.com)/v1/activity\\?',
+                    'name': '彩云天气移除底栏小助手',
+                    'match': r'(?i)^https?://biz\.cyapi\.cn/(api/)?v\d+/user(_detail)?',
+                    'script_url': script_url,
+                    'body_required': True,
+                    'timeout': 10,
+                    'update_interval': 3600
+                }
+            },
+            {
+                'http_response': {
+                    'name': '彩云天气活动清洗',
+                    'match': r'(?i)^https?://(wrapper\.cyapi\.cn|api\.caiyunapp\.com|cdn-w\.caiyunapp\.com)/v\d+/activity',
+                    'script_url': script_url,
+                    'body_required': True,
+                    'timeout': 10,
+                    'update_interval': 3600
+                }
+            },
+            {
+                'http_response': {
+                    'name': '彩云天气首页卡片与浮窗清理',
+                    'match': r'(?i)^https?://starplucker\.cyapi\.cn/v\d+/(operation/(homefeatures|feeds|banners|features)|notification/message_center|config/cypage|campaigns)',
                     'script_url': script_url,
                     'body_required': True,
                     'timeout': 10,
@@ -92,8 +110,19 @@ def build(version):
                 }
             }
         ],
-        'mitm': {'hostnames': {'includes': ['biz.cyapi.cn', 'starplucker.cyapi.cn',
-                 'wrapper.cyapi.cn', 'api.caiyunapp.com', 'cdn-w.caiyunapp.com']}}}
+        'mitm': {
+            'hostnames': {
+                'includes': [
+                    'biz.cyapi.cn',
+                    'starplucker.cyapi.cn',
+                    'wrapper.cyapi.cn',
+                    'api.caiyunapp.com',
+                    'cdn-w.caiyunapp.com',
+                    'ad.cyapi.cn'
+                ]
+            }
+        }
+    }
 
 def main():
     parser = argparse.ArgumentParser()
@@ -107,7 +136,7 @@ def main():
         else:
             req = urllib.request.Request(URL, headers={'User-Agent': 'Egern-Public-Mirror-Sync/1.0'})
             with urllib.request.urlopen(req, timeout=30) as response:
-                source = response.read(100001).decode('utf-8')
+                source = response.read(200001).decode('utf-8')
         script = adapt(source)
         sha = hashlib.sha256(script.encode()).hexdigest()
         module = build(sha[:12])
@@ -121,16 +150,16 @@ def main():
             changed = changed or previous != module
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'last_updated': checked if changed else old.get('last_updated', checked),
-                'source_url': URL, 'source_version': '2024-09-05',
+                'source_url': URL, 'source_version': 'ddgksf2013-latest',
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
-                'scope': 'Sync the Kelee official JavaScript (Moli-X/Tool) directly, without the ifflagged mirror; local module rules are maintained separately.'}
+                'scope': 'Sync ddgksf2013 caiyun_json.js; remove assistant bar and feeds/banners.'}
         module['description'] = description(meta)
         SCRIPT.write_text(script)
         # 使用自定义的 safe_dump_yaml 生成，避免破坏合法转义
         MODULE.write_text(safe_dump_yaml(module))
         
         META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
-        print('ColorfulClouds script mirror sync OK')
+        print('ColorfulClouds ddgksf2013 script mirror sync OK')
         return 0
     except Exception as error:
         if MODULE.exists():
