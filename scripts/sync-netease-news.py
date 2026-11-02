@@ -39,11 +39,14 @@ def adapt(source):
             raise ValueError('JavaScript syntax check failed')
     return result
 
-def description(meta):
-    state = '脚本镜像同步正常' if meta['status'] == 'ok' else '脚本镜像同步失败，保留上次有效规则'
-    return (f"更新时间：{meta.get('last_updated', '未知')}\n"
-            '清理开屏广告、置顶条目及搜索推荐。\n'
-            f"同步状态：{state}；最近检查：{meta['last_checked']}")
+def description(meta, existing=''):
+    import re
+    base = re.sub(r'(?m)^\\s*(?:同步状态：|更新时间：).*\\n?', '', existing).strip()
+    if not base:
+        base = '清理网易新闻开屏广告、置顶内容、信息流推广及搜索推荐。'
+    state = '同步成功' if meta.get('status') == 'ok' else '同步失败'
+    checked = meta.get('last_checked', '未知')
+    return f'{base}\\n更新时间：{checked}（{state}）'
 
 def build(version):
     template = (ROOT / 'scripts/netease-news-base.yaml').read_text()
@@ -65,7 +68,11 @@ def main():
                 source = response.read(100001).decode('utf-8')
         script = adapt(source)
         sha = hashlib.sha256(script.encode()).hexdigest()
-        module = build(sha[:12])
+        module = yaml.safe_load(MODULE.read_text()) if MODULE.exists() else build(sha[:12])
+        # 只更新镜像脚本地址，不用基础模板覆盖本地定制规则
+        for item in module.get('scriptings', []):
+            if isinstance(item, dict) and isinstance(item.get('http_response'), dict):
+                item['http_response']['script_url'] = 'https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=' + sha[:12]
         changed = not SCRIPT.exists() or SCRIPT.read_text() != script
         if MODULE.exists():
             previous = yaml.safe_load(MODULE.read_text())
@@ -76,7 +83,7 @@ def main():
                 'source_url': URL, 'source_version': '2024-01-12',
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
                 'scope': 'Sync the public JavaScript mirror; local module rules are maintained separately.'}
-        module['description'] = description(meta)
+        module['description'] = description(meta, module.get('description', ''))
         SCRIPT.write_text(script)
         MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
         META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
@@ -86,7 +93,7 @@ def main():
         if MODULE.exists():
             meta = dict(old, status='failed', last_checked=checked, error=type(error).__name__)
             module = yaml.safe_load(MODULE.read_text())
-            module['description'] = description(meta)
+            module['description'] = description(meta, module.get('description', ''))
             MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
             META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
         print('NeteaseNews sync failed; last good rules retained:', type(error).__name__, file=sys.stderr)
