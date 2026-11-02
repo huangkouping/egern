@@ -1,9 +1,9 @@
-name: 京东去广告🅗 (协议修复全量版)
+name: 京东去广告🅗 (彻底精简与去底栏逛版)
 description: |-
   全量去广告：开屏、首页大促楼层、悬浮红包、弹窗，移除底栏“逛”短视频菜单。
-  更新时间：2026-11-02 15:44
+  更新时间：2026-11-02 15:46
 open_url: https://apps.apple.com/app/id414245413
-author: zbsdsb / Codex, 协议修复版
+author: zbsdsb / Codex, 深度定制版
 homepage: https://github.com/zbsdsb/loon-adblock-plugins
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
@@ -43,7 +43,7 @@ rules:
       policy: REJECT
 
 rewrites:
-  # 1. 开屏物料阻断（兼容 URL Query 与路径无参形式）
+  # 1. 开屏启动物料拦截
   - match: '^https?://api\.m\.jd\.(com|hk)/client\.action\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
     actions:
       - respond:
@@ -51,8 +51,27 @@ rewrites:
           headers: {"Content-Type":"application/json"}
           body: "{}"
 
-  # 2. 阻断节日/大促动态换肤（避免双11全红皮和挂件底栏）
-  - match: '^https?://api\.m\.jd\.(com|hk)/client\.action\?(?:[^&]+&)*functionId=(?:skin|querySkin)(?:&|$)'
+  # 2. 彻底移除底栏【逛】菜单（原生 JQ 过滤，不依赖外部 JS 脚本）
+  - match: '^https?://api\.m\.jd\.com/client\.action\?(?:[^&]+&)*functionId=(?:queryNavigation|getNavigationInfo|queryTabList)(?:&|$)'
+    actions:
+      - response_body:
+          jq: >-
+            if .data?.navigationList? then
+              .data.navigationList |= map(select((.functionId // "" | test("guang|video|faxian|find") | not) and (.name // "" | test("逛|短视频|直播") | not)))
+            elif .data?.tabList? then
+              .data.tabList |= map(select((.functionId // "" | test("guang|video|faxian|find") | not) and (.name // "" | test("逛|短视频|直播") | not)))
+            else . end
+
+  # 3. 拦截首页大促悬浮挂件、红包弹窗与营销浮层
+  - match: '^https?://api\.m\.jd\.com/client\.action\?(?:[^&]+&)*functionId=(?:floatLayer|popup|queryFloatLayer|queryFloatingLayer|queryPopups|bannerNotice)(?:&|$)'
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: '{"code":"0","data":{}}'
+
+  # 4. 阻断节日/大促动态换肤（去掉双11大红底栏和挂件皮）
+  - match: '^https?://api\.m\.jd\.com/client\.action\?(?:[^&]+&)*functionId=(?:skin|querySkin|getSkinInfo)(?:&|$)'
     actions:
       - respond:
           status: 200
@@ -61,9 +80,9 @@ rewrites:
 
 scriptings:
 - http_response:
-    name: 京东全量去广告与精简（脚本清洗）
-    # 核心修正：取消 URL 参数严格过滤，全面接管 client.action（防止 POST Body 传参导致漏网）
-    match: '^https?://api\.m\.jd\.(com|hk)/client\.action'
+    name: 京东全量去广告（脚本清洗）
+    # 仅放行 api.m.jd.com，确保无参数 client.action 与常规业务接口被脚本正确接管
+    match: '^https?://api\.m\.jd\.com/client\.action'
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=8e5059b594
     body_required: true
     timeout: 10
@@ -72,4 +91,3 @@ mitm:
   hostnames:
     includes:
       - api.m.jd.com
-      - api.m.jd.hk
