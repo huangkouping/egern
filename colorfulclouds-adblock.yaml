@@ -32,14 +32,14 @@ rules:
     match: adx.caiyunapp.com
     policy: REJECT
 rewrites:
-- match: (?i)^https://biz\.cyapi\.cn/(p/v1/entries|p/v1/trial_card/info|v2/product)
+- match: '(?i)^https://biz\.cyapi\.cn/(p/v1/entries|p/v1/trial_card/info|v2/product)'
   actions:
   - respond:
       status: 200
       headers:
         Content-Type: application/json
       body: '{}'
-- match: (?i)^https://starplucker\.cyapi\.cn/v3/(config/cypage/\w+/conditions|notification/message_center|operation/homefeatures)
+- match: '(?i)^https://starplucker\.cyapi\.cn/v3/(config/cypage/\w+/conditions|notification/message_center|operation/homefeatures)'
   actions:
   - respond:
       status: 200
@@ -49,7 +49,7 @@ rewrites:
 scriptings:
 - http_response:
     name: 彩云天气去广告
-    match: (?i)^https://(wrapper\.cyapi\.cn|api\.caiyunapp\.com|cdn-w\.caiyunapp\.com)/v1/activity\?
+    match: '(?i)^https://(wrapper\\.cyapi\\.cn|api\\.caiyunapp\\.com|cdn-w\\.caiyunapp\\.com)/v1/activity\\?'
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=a016f7331a4c
     body_required: true
     timeout: 10
@@ -62,8 +62,8 @@ mitm:
     - wrapper.cyapi.cn
     - api.caiyunapp.com
     - cdn-w.caiyunapp.com
-description: '更新时间：2026-11-02 23:32
+description: '更新时间：2026-11-02 23:40
 
   过滤首页推广、弹窗及部分页面广告。
 
-  同步状态：官方脚本同步正常；最近检查：2026-11-02 23:39'
+  同步状态：官方脚本同步正常；最近检查：2026-11-02 23:40'
