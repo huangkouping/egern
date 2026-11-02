@@ -21,13 +21,11 @@ rules:
       policy: REJECT
 
 rewrites:
-  # 拦截腾讯 HTTPDNS 探测
   - match: "(?i)^https?://119\\.29\\.29\\.\\d+/d"
     actions:
       - respond:
           status: 200
 
-  # 拦截开屏与通用弹窗广告
   - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/advert/"
     actions:
       - respond:
@@ -54,7 +52,6 @@ rewrites:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
 
-  # 拦截热搜词、排行榜滚动推荐
   - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/search/(rollHotKeyword|rankingList|hotKeyword)(/|\\?|$)"
     actions:
       - respond:
@@ -63,7 +60,6 @@ rewrites:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
 
-  # 拦截猜你喜欢与下单后推荐
   - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/order/getRecommend$"
     actions:
       - respond:
@@ -88,7 +84,6 @@ rewrites:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
 
-  # 拦截底部浮动 AI 挂件/气泡
   - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/floatingEntry"
     actions:
       - respond:
@@ -97,7 +92,6 @@ rewrites:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
 
-  # 精简“我的”页面接口
   - match: "(?i)^https?://user\\.api\\.ddxq\\.mobi/userportal-service/api/v1/user/queryMyPage(/|\\?|$)"
     actions:
       - respond:
@@ -106,7 +100,6 @@ rewrites:
             Content-Type: application/json
           body: '{"code":0,"data":{}}'
 
-  # 首页/分类/详情中的广告与 AI 字段剥离
   - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/categoriesNewDetail(/|\\?|$)"
     actions:
       - response_body:
@@ -127,33 +120,23 @@ rewrites:
       - response_body:
           jq: "delpaths([[\"data\",\"detail\",\"chatEntry\"]])"
 
-  # 底部导航栏过滤：同时过滤广告、吃什么，以及带 AI/助手 相关标识的菜单栏入口
+  # 底部导航栏：确保保留四大基础功能，仅删掉 AI/菜谱 和中置凸起按钮
   - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/bottomNavi"
     actions:
       - response_body:
           jq: >-
-            del(.data.adId?) | 
-            if (.data.bottom_list? | length > 0) then 
+            del(.data.adId?, .data.middle_button?, .data.center_icon?, .data.floating_layer?) |
+            if (.data.bottom_list? | length > 0) then
               .data.bottom_list |= map(select(
-                (.type != "eatwhat") and 
-                ((.type // "" | ascii_downcase | test("ai|chat|recipe") | not)) and
-                ((.name // "" | test("AI|助手|大模型|做饭") | not))
-              )) 
+                ((.name // "") | test("首页|分类|购物车|我的|Home|Category|Cart|Mine")) or
+                (
+                  (.type != "eatwhat") and
+                  ((.type // "" | ascii_downcase | test("ai|recipe|chat") | not)) and
+                  ((.name // "" | test("AI|助手|做饭|菜谱|吃什么") | not))
+                )
+              ))
             else . end
 
-  # 备用：新版通用导航 Tab 过滤
-  - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/tabNavi"
-    actions:
-      - response_body:
-          jq: >-
-            if (.data.list? | length > 0) then 
-              .data.list |= map(select(
-                ((.type // "" | ascii_downcase | test("ai|chat|recipe") | not)) and
-                ((.name // "" | test("AI|助手|大模型|做饭") | not))
-              )) 
-            else . end
-
-  # 信息流广告剔除
   - match: "(?i)^https?://maicai\\.api\\.ddxq\\.mobi/homeApi/homeFlowDetail"
     actions:
       - response_body:
