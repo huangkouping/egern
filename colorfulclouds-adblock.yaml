@@ -1,19 +1,13 @@
-name: 彩云天气去广告🅥
-author: RuCu6[https://github.com/RuCu6]
+name: 彩云天气去广告🅥 (墨鱼优化版)
+author: ddgksf2013, huangkouping
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id847764912
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png
 compat_arguments_desc: '【使用说明】
 
-  启用模块，确认 MitM 已开启且证书受信任，然后重新打开彩云天气。
+  开启 MitM 并信任证书，启用后彻底划掉彩云天气重新打开。
 
-  关闭其他彩云去广告模块，避免重复处理。
-
-  JS 已备份到本仓库，每 6 小时检查可莉官方脚本；失败时保留上次有效版本。
-
-  原规则为用户提供的可莉配置，JS 直连可莉官方分发（Moli-X/Tool），标注版本 2024-09-05；活动推广处理逻辑源自 RuCu6。不采用 RuCu6 原版：原版是会员破解脚本，会注入他人账号 token 并伪造 SVIP，与去广告无关且有安全风险。
-
-  保留源处理逻辑，仅增加异常透传；当前 App 效果待实测。'
+  基于墨鱼(ddgksf2013)逻辑，彻底清空底栏小助手、首页 feeds/banners 卡片及活动推广。'
 dns: {}
 rules:
 - domain:
@@ -32,14 +26,7 @@ rules:
     match: adx.caiyunapp.com
     policy: REJECT
 rewrites:
-- match: '(?i)^https://biz\.cyapi\.cn/(p/v1/entries|p/v1/trial_card/info|v2/product)'
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: '(?i)^https://starplucker\.cyapi\.cn/v3/(config/cypage/\w+/conditions|notification/message_center|operation/homefeatures)'
+- match: '(?i)^https?://ad\.cyapi\.cn/v\d+'
   actions:
   - respond:
       status: 200
@@ -48,9 +35,23 @@ rewrites:
       body: '{}'
 scriptings:
 - http_response:
-    name: 彩云天气去广告
-    match: '(?i)^https://(wrapper\\.cyapi\\.cn|api\\.caiyunapp\\.com|cdn-w\\.caiyunapp\\.com)/v1/activity\\?'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=a016f7331a4c
+    name: 彩云天气移除底栏小助手
+    match: '(?i)^https?://biz\.cyapi\.cn/(api/)?v\d+/user(_detail)?'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=2a245b9a66d0
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 彩云天气活动清洗
+    match: '(?i)^https?://(wrapper\.cyapi\.cn|api\.caiyunapp\.com|cdn-w\.caiyunapp\.com)/v\d+/activity'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=2a245b9a66d0
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 彩云天气首页卡片与浮窗清理
+    match: '(?i)^https?://starplucker\.cyapi\.cn/v\d+/(operation/(homefeatures|feeds|banners|features)|notification/message_center|config/cypage|campaigns)'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=2a245b9a66d0
     body_required: true
     timeout: 10
     update_interval: 3600
@@ -62,8 +63,9 @@ mitm:
     - wrapper.cyapi.cn
     - api.caiyunapp.com
     - cdn-w.caiyunapp.com
-description: '更新时间：2026-11-02 23:40
+    - ad.cyapi.cn
+description: '更新时间：2026-11-02 23:49
 
-  过滤首页推广、弹窗及部分页面广告。
+  彻底移除开屏广告、首页信息流卡片(feeds)、轮播横幅(banners)及底栏小助手。
 
-  同步状态：官方脚本同步正常；最近检查：2026-11-02 23:41'
+  同步状态：墨鱼脚本同步正常；最近检查：2026-11-02 23:49'

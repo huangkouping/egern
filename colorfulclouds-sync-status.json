@@ -1,11 +1,11 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-02 23:41",
-  "last_success": "2026-11-02 23:41",
-  "last_updated": "2026-11-02 23:40",
-  "source_url": "https://raw.githubusercontent.com/Moli-X/Tool/X/Loon/Plugin/Kelee/Script/ColorfulClouds_remove_ads.js",
-  "source_version": "2024-09-05",
-  "source_sha256": "51d20e0cd5f134603f541fdb7a05a3e9a259b8e3adece8347b90df237687c0a1",
-  "script_sha256": "a016f7331a4c7364a36ee0e923faec177d2edee40da6b3dfb2510d684b73b183",
-  "scope": "Sync the Kelee official JavaScript (Moli-X/Tool) directly, without the ifflagged mirror; local module rules are maintained separately."
+  "last_checked": "2026-11-02 23:49",
+  "last_success": "2026-11-02 23:49",
+  "last_updated": "2026-11-02 23:49",
+  "source_url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/master/caiyun_json.js",
+  "source_version": "ddgksf2013-latest",
+  "source_sha256": "1a165112aac24bf3830fa47b77d223d85beffdeaf91ee96eef05ab9429b36844",
+  "script_sha256": "2a245b9a66d08eceb0bfe718df860430e793a5f5f40e9fb42de06dd90d6b1ed0",
+  "scope": "Sync ddgksf2013 caiyun_json.js; remove assistant bar and feeds/banners."
 }

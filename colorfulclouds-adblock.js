@@ -1,46 +1,28 @@
-/* 可莉官方脚本备份（活动推广逻辑源自 RuCu6）；源逻辑保持，补充异常透传与单次完成。
- * Source: https://raw.githubusercontent.com/Moli-X/Tool/X/Loon/Plugin/Kelee/Script/ColorfulClouds_remove_ads.js
+/* 墨鱼 ddgksf2013 彩云天气去广告脚本镜像；补充异常透传与单次完成包装。
+ * Source: https://raw.githubusercontent.com/ddgksf2013/Scripts/master/caiyun_json.js
  */
 (function (complete) {
 let finished = false;
 const $done = value => { if (!finished) { finished = true; complete(value); } };
 try {
 if (typeof $response === "undefined" || typeof $response.body !== "string") return $done({});
-// 2024-09-05 11:06:15
-const url = $request.url;
-let obj = JSON.parse($response.body);
-if (url.includes("/api.caiyunapp.com/v1/activity")) {
-  if (url.includes("&type_id=A03&")) {
-    // 底栏控制项目 主页图标 天气助手 彩云ai
-    if (obj?.interval) {
-      obj.interval = 2592000; // 30天===2592000秒
-    }
-    if (obj?.activities?.length > 0) {
-      for (let item of obj.activities) {
-        if (item?.name && item?.type && item?.feature) {
-          item.feature = false;
-        }
-      }
-    }
-  } else {
-    // 其他请求
-    obj = { status: "ok", activities: [{ items: [] }] };
-  }
-} else if (url.includes("/wrapper.cyapi.cn/v1/activity")) {
-  // 彩云推广
-  if (["&type_id=A03&"]?.includes(url)) {
-    // 天气助手 彩云ai
-    if (obj?.interval) {
-      obj.interval = 2592000; // 30天===2592000秒
-    }
-    if (obj?.activities?.length > 0) {
-      obj.activities = [];
-    }
-  } else {
-    // 其他请求
-    obj = { status: "ok", activities: [{ items: [] }] };
-  }
-}
-$done({ body: JSON.stringify(obj) });
+/***********************************************
+> 应用名称：墨鱼自用彩云天气去广告脚本
+> 脚本作者：@ddgksf2013
+> 微信账号：墨鱼手记
+> 更新时间：2024-09-01
+> 通知频道：https://t.me/ddgksf2021
+> 贡献投稿：https://t.me/ddgksf2013_bot
+> 问题反馈：ddgksf2013@163.com
+> 特别提醒：如需转载请注明出处，谢谢合作！
+***********************************************/
+
+
+
+
+const version = 'V1.0.8';
+
+let responseBody={};$request.url.includes("/v2/user")?((responseBody=JSON.parse($response.body)).result.is_vip=1,responseBody.result.svip_expired_at=1892260800,responseBody.result.wt.vip.expired_at=1892260800,responseBody.result.svip_take_effect=1,responseBody.result.vip_type="s"):$request.url.includes("user_detail")?(responseBody=JSON.parse($response.body),["svip","vip"].forEach(e=>{responseBody.vip_info[e]&&(responseBody.vip_info[e]={expires_time:"1892260800",is_auto_renewal:!0})})):$request.url.includes("activity")?responseBody=$request.url.includes("type_id=A03")?{status:"ok",activities:[{type:"tabbar",name:"aichat",feature:!1}]}:{status:"ok",activities:[{items:[{}]}]}:$request.url.includes("operation/homefeatures")?responseBody={data:[]}:$request.url.includes("operation/feeds")?(responseBody=JSON.parse($response.body)).data=responseBody.data.filter(e=>-1!=e.category_times_text.indexOf("人查看")):$request.url.includes("operation/banners")?responseBody={data:[{avatar:"https://cdn-w.caiyunapp.com/p/app/operation/prod/banner/668502d5c3a2362582a2a5da/d9f198473e7f387d13ea892719959ddb.jpg",url:"https://cdn-w.caiyunapp.com/p/app/operation/prod/article/66850143c3a2362582a2a5d9/index.html",title:"暴雨来袭，这些避险“秘籍”你学会了吗？",banner_type:"article"}]}:$request.url.includes("operation/features")?(responseBody=JSON.parse($response.body)).data=responseBody.data.filter(e=>-1!=e.url.indexOf("cy://")):$request.url.includes("campaigns")?responseBody={campaigns:[{name:"driveweather",title:"驾驶天气新功能",url:"cy://page_driving_weather",cover:"https://cdn-w.caiyunapp.com/p/banner/test/668d442c4fe75aca7251c161.png"}]}:$request.url.includes("notification/message_center")?responseBody={messages:[]}:$request.url.includes("config/cypage")?responseBody={popups:[],actions:[]}:$done({}),$done({body:JSON.stringify(responseBody)});
+
 } catch (_) { $done({}); }
 })($done);
