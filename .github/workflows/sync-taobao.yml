@@ -1,0 +1,40 @@
+name: 淘宝去广告同步
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sync-taobao.yml'
+  schedule:
+    - cron: '15 */6 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-taobao
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: 安装 YAML 校验依赖
+        run: python -m pip install PyYAML
+      - name: 执行淘宝同步
+        run: python scripts/sync-taobao.py
+      - name: 提交同步结果
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add taobao-adblock.yaml taobao-adblock.js taobao-sync-status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "自动同步淘宝去广告模块"
+            git push
+          fi
