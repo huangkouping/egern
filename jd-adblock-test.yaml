@@ -1,7 +1,7 @@
 name: 京东去广告🅗 (直连IP封堵终极版)
 description: |-
   根据实测抓包封死京东 HTTPDNS 直连通道与数据打点，强行激活 MitM，移除底栏“逛”及首页大促。
-  更新时间：2026-11-02 16:01
+  更新时间：2026-11-02 16:08
 open_url: https://apps.apple.com/app/id414245413
 author: zbsdsb / Codex, 抓包逆向优化版
 homepage: https://github.com/zbsdsb/loon-adblock-plugins
@@ -17,26 +17,26 @@ rules:
   - domain_keyword:
       match: httpdns
       policy: REJECT
-  - ip:
-      match: 120.52.83.22
+  - ip_cidr:
+      match: 120.52.83.22/32
       policy: REJECT
-  - ip:
-      match: 39.156.62.242
+  - ip_cidr:
+      match: 39.156.62.242/32
       policy: REJECT
-  - ip:
-      match: 36.110.181.150
+  - ip_cidr:
+      match: 36.110.181.150/32
       policy: REJECT
-  - ip:
-      match: 111.202.8.189
+  - ip_cidr:
+      match: 111.202.8.189/32
       policy: REJECT
-  - ip:
-      match: 106.39.169.89
+  - ip_cidr:
+      match: 106.39.169.89/32
       policy: REJECT
-  - ip:
-      match: 111.13.29.201
+  - ip_cidr:
+      match: 111.13.29.201/32
       policy: REJECT
-  - ip:
-      match: 101.124.19.122
+  - ip_cidr:
+      match: 101.124.19.122/32
       policy: REJECT
   - domain:
       match: mars.jd.com
