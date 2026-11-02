@@ -96,7 +96,7 @@
 | YouTube去广告🅗 | 过滤 YouTube 广告并提供相关播放增强功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-enhance.yaml) |
 | YouTube双语翻译🅗 | 提供 YouTube 字幕翻译与双语字幕功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-translation.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-subtitles-translation.yaml) |
 | 知乎去广告🅥 | 过滤知乎中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhihu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhihu-adblock.yaml) |
-| 中华万年历去广告🅥 | 过滤中华万年历中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhwnl-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhwnl-adblock.yaml) |
+| 中华万年历去广告🅗 | 过滤广告及推广，精简页面，剔除插屏与屏保。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhwnl-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhwnl-adblock.yaml) |
 
 ### DNS 规则与策略规则
 
