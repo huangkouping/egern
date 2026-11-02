@@ -8,7 +8,8 @@
 本地转换：DOMAIN->rules、reject_dict->[Rewrite]->respond {} 重写、[Script]->scriptings、[MitM]->mitm。
 嫁接项（Thelongdarkorg 插件独有，写死在本脚本，上游同步不覆盖）：
 - 闲鱼开屏 mtop.taobao.idlecommerce.splash.ads、菜鸟 mtop.cainiao.adx.flyad.getad 两条 respond {}
-- 3 条 alicdn 广告图直链 url_rewrites（reject-dict），并为其补 gw.alicdn.com 的 MITM
+- 3 条 alicdn 广告图直链统一使用 Egern 原生 rewrites (204 截断)，杜绝图片资源挂起
+- 为其补齐 gw.alicdn.com 及 *.m.taobao.com 泛域名解密
 AMDC 拦截不加（用户 2026-11-01 确认：通用调度通道，有误伤可能的一律跳过）。
 上游出现无法识别的行时中止同步、保留上次有效版本并以非零码退出。
 """
@@ -28,16 +29,19 @@ JS_FILE = ROOT / "taobao-adblock.js"
 STATUS_FILE = ROOT / "taobao-sync-status.json"
 CST = timezone(timedelta(hours=8))
 
+# 响应空 JSON 的接口
 GRAFT_RESPOND = [
     r"(?i)^https://acs\.m\.taobao\.com/gw/mtop\.taobao\.idlecommerce\.splash\.ads",
     r"(?i)^https://guide-acs\.m\.taobao\.com/gw/mtop\.cainiao\.adx\.flyad\.getad",
 ]
-GRAFT_URL_REWRITES = [
+# 广告图片直链：统一使用 204 无内容响应直接截断，不再生成非标准的 url_rewrites
+GRAFT_IMAGE_REWRITES = [
     r"(?i)^https://heic\.alicdn\.com/imgextra/i\d/[A-Za-z0-9_!]+-\d+-tps-\d+-\d+\.png_\d+x\d+q\d+\.jpg_\.heic$",
     r"(?i)^https://heic\.alicdn\.com/imgextra/i\d/[A-Za-z0-9_!]+-\d+-tps-\d+-\d+\.jpg_\d+x\d+q\d+\.jpg_\.heic$",
     r"(?i)^https://gw\.alicdn\.com/imgextra/i\d+/[^/]+_!!\d+-\d+-tps-(?:720-1280|1080-1920|1125-1602|1242-2208)\.(?:jpg|png|jpeg)_[^/]+\.webp",
 ]
-EXTRA_MITM = ["gw.alicdn.com"]
+# 补充解密域名（带通配符以防备用网关逃逸）
+EXTRA_MITM = ["gw.alicdn.com", "*.m.taobao.com"]
 
 
 def fetch(url):
@@ -132,7 +136,7 @@ def build_yaml(domains, rewrites, scriptings, mitm, js_hash):
     out.append("icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png")
     out.append("")
     out.append("# 同步自可莉官方 GitHub 分发仓 Moli-X/Tool 的 RuCu6 淘宝插件，由 scripts/sync-taobao.py 每 6 小时自动转换；开屏脚本镜像至本仓库。")
-    out.append("# 本地嫁接（Thelongdarkorg 插件独有，同步时保留）：闲鱼开屏、菜鸟广告两条接口空回应，及 3 条广告图直链 reject，并为其补 gw.alicdn.com 的 MITM。")
+    out.append("# 本地嫁接（Thelongdarkorg 插件独有，同步时保留）：闲鱼开屏、菜鸟广告两条接口空回应，及 3 条广告图直链 204 截断，并为其补 gw.alicdn.com 与 *.m.taobao.com 的 MITM。")
     out.append("# AMDC 调度拦截不加：通用配置通道，有误伤可能（用户 2026-11-01 确认跳过）。")
     out.append("dns: {}")
     out.append("rules:")
@@ -141,6 +145,7 @@ def build_yaml(domains, rewrites, scriptings, mitm, js_hash):
         out.append(f"    match: {d}")
         out.append("    policy: REJECT")
     out.append("rewrites:")
+    # 接口类置空
     for p in rewrites + GRAFT_RESPOND:
         out.append(f"- match: {yaml_quote(p)}")
         out.append("  actions:")
@@ -148,10 +153,12 @@ def build_yaml(domains, rewrites, scriptings, mitm, js_hash):
         out.append("      status: 200")
         out.append('      headers: {"Content-Type":"application/json"}')
         out.append('      body: "{}"')
-    out.append("url_rewrites:")
-    for p in GRAFT_URL_REWRITES:
+    # 图片直链类返回 204，完全替代原有的 url_rewrites
+    for p in GRAFT_IMAGE_REWRITES:
         out.append(f"- match: {yaml_quote(p)}")
-        out.append("  location: http://reject-dict/")
+        out.append("  actions:")
+        out.append("  - respond:")
+        out.append("      status: 204")
     out.append("scriptings:")
     for name, pattern in scriptings:
         out.append("- http_response:")
@@ -168,7 +175,7 @@ def build_yaml(domains, rewrites, scriptings, mitm, js_hash):
         if h not in hosts:
             hosts.append(h)
     for h in hosts:
-        out.append(f"    - {h}")
+        out.append(f"    - '{h}'" if "*" in h else f"    - {h}")
     return "\n".join(out) + "\n"
 
 
@@ -219,16 +226,16 @@ def main():
         },
         "counts": {
             "rules": len(domains),
-            "rewrites": len(rewrites) + len(GRAFT_RESPOND),
-            "grafted_rewrites": len(GRAFT_RESPOND),
-            "url_rewrites": len(GRAFT_URL_REWRITES),
+            "rewrites": len(rewrites) + len(GRAFT_RESPOND) + len(GRAFT_IMAGE_REWRITES),
+            "grafted_respond": len(GRAFT_RESPOND),
+            "grafted_images": len(GRAFT_IMAGE_REWRITES),
             "scriptings": len(scriptings),
         },
         "synced_at": datetime.now(CST).strftime("%Y-%m-%d %H:%M:%S CST"),
         "error": None,
     }
     STATUS_FILE.write_text(json.dumps(status, ensure_ascii=False, indent=2) + "\n")
-    print(f"OK upstream_date={upstream_date} rules={len(domains)} rewrites={len(rewrites)}+{len(GRAFT_RESPOND)} scriptings={len(scriptings)} js_hash={js_hash}")
+    print(f"OK upstream_date={upstream_date} rules={len(domains)} rewrites={len(rewrites)}+{len(GRAFT_RESPOND)}+{len(GRAFT_IMAGE_REWRITES)} scriptings={len(scriptings)} js_hash={js_hash}")
 
 
 if __name__ == "__main__":
