@@ -46,7 +46,10 @@ def description(meta):
             f"同步状态：{state}；最近检查：{meta['last_checked']}")
 
 def build(version):
+    # 静态 Mock 空回应
     empty = {'respond': {'status': 200, 'headers': {'Content-Type': 'application/json'}, 'body': '{}'}}
+    script_url = 'https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=' + version
+    
     return {
         'name': '彩云天气去广告🅥', 'author': 'RuCu6[https://github.com/RuCu6]',
         'homepage': 'https://github.com/huangkouping/egern',
@@ -54,15 +57,27 @@ def build(version):
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png',
         'compat_arguments_desc': '【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开彩云天气。\n关闭其他彩云去广告模块，避免重复处理。\nJS 已备份到本仓库，每 6 小时检查可莉官方脚本；失败时保留上次有效版本。\n原规则为用户提供的可莉配置，JS 直连可莉官方分发（Moli-X/Tool），标注版本 2024-09-05；活动推广处理逻辑源自 RuCu6。不采用 RuCu6 原版：原版是会员破解脚本，会注入他人账号 token 并伪造 SVIP，与去广告无关且有安全风险。\n保留源处理逻辑，仅增加异常透传；当前 App 效果待实测。',
         'dns': {},
+        # 1. 扩充日志收集与广告域名拦截
         'rules': [{'domain': {'match': domain, 'policy': 'REJECT'}} for domain in
-                  ['abyss.cyapi.cn', 'ad.cyapi.cn', 'gather.colorfulclouds.net']],
+                  ['abyss.cyapi.cn', 'ad.cyapi.cn', 'gather.colorfulclouds.net', 'log.caiyunapp.com', 'adx.caiyunapp.com']],
+        # 2. 纯静态重写，移除混杂的 response_script
         'rewrites': [
             {'match': r'(?i)^https://biz\.cyapi\.cn/(p/v1/entries|p/v1/trial_card/info|v2/product)', 'actions': [empty]},
             {'match': r'(?i)^https://starplucker\.cyapi\.cn/v3/(config/cypage/\w+/conditions|notification/message_center|operation/homefeatures)', 'actions': [empty]},
-            {'name': '彩云天气去广告', 'match': r'(?i)^https://(wrapper\.cyapi\.cn|api\.caiyunapp\.com|cdn-w\.caiyunapp\.com)/v1/activity\?',
-             'actions': [{'response_script': {'name': '彩云天气去广告',
-                  'url': 'https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=' + version,
-                  'timeout': 20, 'body_required': True}}]}],
+        ],
+        # 3. 规范化收敛到 Egern 原生 scriptings
+        'scriptings': [
+            {
+                'http_response': {
+                    'name': '彩云天气去广告',
+                    'match': r'(?i)^https://(wrapper\\.cyapi\\.cn|api\\.caiyunapp\\.com|cdn-w\\.caiyunapp\\.com)/v1/activity\\?',
+                    'script_url': script_url,
+                    'body_required': True,
+                    'timeout': 10,
+                    'update_interval': 3600
+                }
+            }
+        ],
         'mitm': {'hostnames': {'includes': ['biz.cyapi.cn', 'starplucker.cyapi.cn',
                  'wrapper.cyapi.cn', 'api.caiyunapp.com', 'cdn-w.caiyunapp.com']}}}
 
@@ -83,7 +98,7 @@ def main():
         sha = hashlib.sha256(script.encode()).hexdigest()
         module = build(sha[:12])
         # Alias-free YAML is easier to inspect and compatible with Egern.
-        for rule in module['rewrites'][:2]:
+        for rule in module['rewrites']:
             rule['actions'] = json.loads(json.dumps(rule['actions']))
         changed = not SCRIPT.exists() or SCRIPT.read_text() != script
         if MODULE.exists():
