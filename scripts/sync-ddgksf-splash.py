@@ -11,8 +11,8 @@ from zoneinfo import ZoneInfo
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-# 上游墨鱼开屏规则源（若有镜像源可直接替换此URL）
-URL = 'https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/StartUp.conf'
+# 墨鱼开屏模块官方有效真实 raw 地址
+URL = 'https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Html/StartUp.conf'
 MODULE = ROOT / 'ddgksf2013-splash.yaml'
 META = ROOT / 'ddgksf2013-splash-sync-status.json'
 
@@ -94,15 +94,17 @@ def parse_conf_to_data(content):
         # 提取域名拦截与直连
         if line.startswith('DOMAIN-SUFFIX,'):
             parts = line.split(',')
-            rules.append({'domain_suffix': {'match': parts[1].strip(), 'policy': parts[2].strip()}})
+            if len(parts) >= 3:
+                rules.append({'domain_suffix': {'match': parts[1].strip(), 'policy': parts[2].strip()}})
         elif line.startswith('DOMAIN,'):
             parts = line.split(',')
-            domain = parts[1].strip()
-            policy = parts[2].strip()
+            if len(parts) >= 3:
+                domain = parts[1].strip()
+                policy = parts[2].strip()
             # 彻底剔除 12306 DIRECT
-            if domain == 'ad.12306.cn' and policy == 'DIRECT':
-                continue
-            rules.append({'domain': {'match': domain, 'policy': policy}})
+                if domain == 'ad.12306.cn' and policy == 'DIRECT':
+                    continue
+                rules.append({'domain': {'match': domain, 'policy': policy}})
             
         # 提取 Reject / Empty 重写
         elif 'url reject' in line or 'url 200' in line:
@@ -154,7 +156,7 @@ def process_data(content):
             r for r in raw_data.get('rules', [])
             if not (r.get('domain', {}).get('match') == 'ad.12306.cn' and r.get('domain', {}).get('policy') == 'DIRECT')
         ]
-        # 2. 替换 body 为标准空 JSON，丢弃 jq
+        # 2. 替换 body 为标准空 JSON，丢弃不支持的 jq
         safe_empty = {'status': 200, 'headers': {'Content-Type': 'application/json'}, 'body': '{}'}
         cleaned_rewrites = []
         for rw in raw_data.get('rewrites', []):
@@ -168,7 +170,7 @@ def process_data(content):
             cleaned_rewrites.append(rw)
         raw_data['rewrites'] = cleaned_rewrites
         
-        # 3. 压制脚本超时
+        # 3. 压制脚本超时并设置更新间隔
         for s in raw_data.get('scriptings', []):
             for key in ['http_response', 'http_request']:
                 if key in s:
@@ -190,7 +192,9 @@ def main():
     old_meta = json.loads(META.read_text()) if META.exists() else {}
     
     try:
-        req = urllib.request.Request(URL, headers={'User-Agent': 'Egern-Sync-Pipeline/1.0'})
+        req = urllib.request.Request(URL, headers={
+                'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15'
+            })
         with urllib.request.urlopen(req, timeout=30) as resp:
             content = resp.read().decode('utf-8')
             
@@ -209,9 +213,11 @@ def main():
         return 0
     except Exception as e:
         if MODULE.exists():
-            meta = dict(old_meta, status='failed', last_checked=checked, error=type(e).__name__)
+            meta = dict(old_meta, status='failed', last_checked=checked, error=str(e))
             META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
-        print(f"Sync failed; retained last-good version: {e}", file=sys.stderr)
+            print(f"Sync failed; retained last-good version: {e}", file=sys.stderr)
+            return 0
+        print(f"Sync failed without existing fallback: {e}", file=sys.stderr)
         return 1
 
 if __name__ == '__main__':
