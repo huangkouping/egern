@@ -1,110 +1,110 @@
 name: 网易新闻去广告🅗
-description: |-
-  清理网易新闻开屏广告、置顶内容、信息流推广及搜索推荐，补充广告接口与追踪域名拦截。
+description: '清理网易新闻开屏广告、置顶内容、信息流推广及搜索推荐，补充广告接口与追踪域名拦截。
+
   脚本镜像每 6 小时检查上游；同步失败时保留上次有效版本。
+
   注意：新增接口与信息流过滤效果需实测，部分网易系域名拦截可能影响相关功能。
-  更新时间：2026-11-02 14:49（同步成功）
+
+  更新时间：2026-11-02 14:49（同步成功）\n更新时间：2026-11-02 22:47（同步成功）'
 open_url: https://apps.apple.com/app/id425349261
 author: RuCu6[https://github.com/RuCu6], huangkouping
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/NeteaseNews.png
-compat_arguments_desc: |-
-  【使用说明】
+compat_arguments_desc: '【使用说明】
+
   开启 MitM 并信任证书，启用后重新打开网易新闻。
+
   与“网易新闻去开屏广告🅗”及其他网易新闻去广告模块二选一启用。
+
   【实际范围】
+
   1. 彻底清除开屏广告、置顶条目、信息流推广与搜索热词。
+
   2. 封禁网易广告追踪 SDK 与打点域名。
+
   3. 屏蔽文章内嵌推广与节日悬浮弹窗。
+
   【同步说明】
+
   JS 镜像每 6 小时检查更新，失败时保留上次有效版本。
-  更新时间：2026-11-02 14:49（同步成功）
+
+  更新时间：2026-11-02 14:49（同步成功）'
 dns: {}
-
 rules:
-  # 1. 前置封禁网易广告投放平台与素材 CDN
-  - domain:
-      match: iad.g.163.com
-      policy: REJECT
-  - domain:
-      match: fa.163.com
-      policy: REJECT
-  - domain:
-      match: crash.163.com
-      policy: REJECT
-  - domain:
-      match: log.m.163.com
-      policy: REJECT
-
+- domain:
+    match: iad.g.163.com
+    policy: REJECT
+- domain:
+    match: fa.163.com
+    policy: REJECT
+- domain:
+    match: crash.163.com
+    policy: REJECT
+- domain:
+    match: log.m.163.com
+    policy: REJECT
 rewrites:
-  # 1. 拦截文章内嵌广告与弹窗营销浮层
-  - match: (?i)^https?://gw\.m\.163\.com/nc/api/v\d+/(popup|article/ad-list)
-    actions:
-      - respond:
-          status: 200
-          headers: {"Content-Type":"application/json"}
-          body: "{}"
-
-  # 2. 原有静态接口与外围网易系广告拦截
-  - match: (?i)^https?://interface\.music\.163\.com/eapi/ad
-    actions:
-      - respond:
-          status: 404
-  - match: (?i)^https?://c\.m\.163\.com/nc/gl/
-    actions:
-      - respond:
-          status: 404
-  - match: (?i)^https?://client\.mail\.163\.com/apptrack/confinfo/searchMultiAds
-    actions:
-      - respond:
-          status: 404
-  - match: (?i)^https?://g1\.163\.com/madfeedback
-    actions:
-      - respond:
-          status: 404
-  - match: (?i)^https?://support\.you\.163\.com/xhr/boot/getBootMedia\.json
-    actions:
-      - respond:
-          status: 404
-  - match: (?i)^https?://interface3?\.music\.163\.com/eapi/(ad|abtest|sp|hot|store|search/(specialkeyword|defaultkeyword|hot))
-    actions:
-      - respond:
-          status: 404
-
+- match: (?i)^https?://gw\.m\.163\.com/nc/api/v\d+/(popup|article/ad-list)
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https?://interface\.music\.163\.com/eapi/ad
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://c\.m\.163\.com/nc/gl/
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://client\.mail\.163\.com/apptrack/confinfo/searchMultiAds
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://g1\.163\.com/madfeedback
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://support\.you\.163\.com/xhr/boot/getBootMedia\.json
+  actions:
+  - respond:
+      status: 404
+- match: (?i)^https?://interface3?\.music\.163\.com/eapi/(ad|abtest|sp|hot|store|search/(specialkeyword|defaultkeyword|hot))
+  actions:
+  - respond:
+      status: 404
 scriptings:
-  - http_response:
-      name: 移除网易新闻开屏广告
-      match: (?i)^https://nex\.163\.com/q
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=7313e7200f1f
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
-  - http_response:
-      name: 网易新闻置顶与推荐流清理
-      # 扩充匹配范围：同时接管 headline-list（置顶）和 normal-list（信息流）
-      match: (?i)^https://gw\.m\.163\.com/nc/api/v1/feed/dynamic/(headline-list|normal-list)\?
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=7313e7200f1f
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
-  - http_response:
-      name: 网易新闻搜索推荐清理
-      match: (?i)^https://gw\.m\.163\.com/nc/api/v1/search/hot-word
-      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=7313e7200f1f
-      body_required: true
-      timeout: 10
-      update_interval: 3600
-
+- http_response:
+    name: 移除网易新闻开屏广告
+    match: (?i)^https://nex\.163\.com/q
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=7313e7200f1f
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 网易新闻置顶与推荐流清理
+    match: (?i)^https://gw\.m\.163\.com/nc/api/v1/feed/dynamic/(headline-list|normal-list)\?
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=7313e7200f1f
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 网易新闻搜索推荐清理
+    match: (?i)^https://gw\.m\.163\.com/nc/api/v1/search/hot-word
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/netease-news-kelee.js?v=7313e7200f1f
+    body_required: true
+    timeout: 10
+    update_interval: 3600
 mitm:
   hostnames:
     includes:
-      - nex.163.com
-      - gw.m.163.com
-      - interface.music.163.com
-      - interface3.music.163.com
-      - c.m.163.com
-      - client.mail.163.com
-      - g1.163.com
-      - support.you.163.com
+    - nex.163.com
+    - gw.m.163.com
+    - interface.music.163.com
+    - interface3.music.163.com
+    - c.m.163.com
+    - client.mail.163.com
+    - g1.163.com
+    - support.you.163.com
