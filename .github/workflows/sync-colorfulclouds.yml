@@ -2,6 +2,7 @@ name: 彩云天气去广告同步
 
 on:
   workflow_dispatch:
+  # 请求立即同步墨鱼版
   push:
     paths:
       - '.github/workflows/sync-colorfulclouds.yml'
