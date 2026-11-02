@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - '.github/workflows/sync-colorfulclouds.yml'
+      - 'scripts/sync-colorfulclouds.py'
   schedule:
     - cron: '25 */6 * * *'
 
