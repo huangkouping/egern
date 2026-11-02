@@ -1,7 +1,7 @@
 name: 小红书去直播广告🅗 (完整修复版)
 description: |-
   屏蔽开屏、首页直播、广告与热搜推荐，支持笔记、评论图片、视频及实况保存去水印。
-  更新时间：2026-11-02 15:05
+  更新时间：2026-11-02 15:17
 author: huangkouping / Codex, AI 审计优化版
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
@@ -64,8 +64,8 @@ env_schema:
     - 'false'
   REMOVE_COMMENT_WATERMARK:
     name: 评论区图片与实况去水印
-    description: 处理评论及楼中楼身份标记、表情图片原地址和实况视频；受媒体去水印总开关控制。
-    default_value: 'true'
+    description: 处理评论及楼中楼身份标记、表情图片原地址和实况视频；建议保持 false 防止保存失败。
+    default_value: 'false'
     options:
     - 'true'
     - 'false'
@@ -97,7 +97,6 @@ scriptings:
 
 - http_response:
     name: 小红书开屏广告过滤
-    # 严格对齐外部 JS 脚本内明确支持的决策与配置接口
     match: ^https://edith\.xiaohongshu\.com/api/sns/v2/system_service/(?:splash_config|splash_online_decision|splash_async_optimization)(?:\?|$)
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.js?v=20261005-8
     body_required: true
@@ -122,20 +121,22 @@ scriptings:
 
 - http_response:
     name: 小红书评论区保存去水印
-    match: ^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/(?:note/comment/(?:list|sub_comments?|web/list)|interaction/comment/video/download)(?:\?|$)
+    match: ^https?://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/v\d+/note/comment/(?:list|sub_comments?|web/list)(?:\?|$)
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-watermark.js?v=20261101-1
     body_required: true
     timeout: 10
     update_interval: 3600
 
 rewrites:
-  # 阻断图片水印配置下载
+  # 水印配置接口返回 200 空对象，避免客户端报空指针或异常中断保存流程
   - match: "(?i)^https://ci\\.xiaohongshu\\.com/system_config/watermark"
     actions:
       - respond:
-          status: 204
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
 
-  # 直接在网络层拦截并置空外部脚本未支持的开屏预加载接口
+  # 拦截开屏预加载接口
   - match: "(?i)^https://edith\\.xiaohongshu\\.com/api/sns/v2/system_service/(splash_pull_online|splash_list)"
     actions:
       - respond:
@@ -143,7 +144,7 @@ rewrites:
           headers: {"Content-Type":"application/json"}
           body: '{"code":0,"success":true,"data":{"ads":[],"splash_list":[]}}'
 
-  # 拦截商业广告点击与曝光上报（节省流量与电量）
+  # 拦截商业广告点击与曝光上报
   - match: "(?i)^https?://[a-zA-Z0-9.-]+\\.xiaohongshu\\.com/api/sns/v\\d+/(ads/track|commercial/)"
     actions:
       - respond:
@@ -151,7 +152,7 @@ rewrites:
           headers: {"Content-Type":"application/json"}
           body: '{"code":0,"success":true}'
 
-  # 清空搜索框下方的商业推广热搜词（保持搜索发现清爽）
+  # 清空搜索框商业推广热搜词
   - match: "(?i)^https?://[a-zA-Z0-9.-]+\\.xiaohongshu\\.com/api/sns/v\\d+/search/trending"
     actions:
       - respond:
@@ -170,10 +171,7 @@ mitm:
 
 compat_arguments_desc: |-
   使用说明：启用HTTPS解密并信任证书；更新模块后重新打开小红书。
-  去水印建议先清除App媒体缓存，再进入笔记及评论区加载媒体，最后保存，旧相册图片不会自动改变。
-  三个新增开关分别控制媒体去水印、保存入口/限制处理、评论区去水印，默认开启。
-  原始视频和实况地址须先从详情/评论接口取得；本地最多缓存各300项、有效7天，不发起外部请求。
-  只用明确匹配的笔记/文件/视频ID替换保存地址，未取得原始地址时保留响应。
-  普通图片若水印已写入原图像素，接口规则无法直接擦除。
-  现有广告、直播和疑似医美过滤开关保持原逻辑。
+  去水印建议先清除App媒体缓存，再进入笔记加载媒体，最后保存。
+  三个开关分别控制媒体去水印、保存入口/限制处理、评论区去水印。
+  由于近期评论区图片防盗链收紧，若遇到保存失败请保持 REMOVE_COMMENT_WATERMARK 为 false。
   本模块自行维护，不受可莉镜像同步任务覆盖。
