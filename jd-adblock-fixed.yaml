@@ -1,0 +1,55 @@
+name: 京东去广告（修复版）🅗
+description: |-
+  全量去广告：开屏、首页推广楼层、我的/订单/物流页广告楼层与弹窗。
+  适配京东 15.9.50+ 新协议（响应体 base64 化）：限定关键广告接口清洗，降低性能损耗。
+  更新时间：2026-11-02 18:30
+open_url: https://apps.apple.com/app/id414245413
+author: zbsdsb[https://github.com/zbsdsb], AI 优化版
+homepage: https://github.com/zbsdsb/loon-adblock-plugins
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
+
+dns: {}
+
+rules:
+  # 拦截京东诊断上报
+  - url_regex:
+      match: "^http://\\w{32}\\.jddebug\\.com/diagnose\\?"
+      policy: REJECT
+
+  # 拦截广告打点、日志与追踪域名（前置阻断）
+  - domain:
+      match: dlog.jd.com
+      policy: REJECT
+  - domain:
+      match: dsp-x.jd.com
+      policy: REJECT
+  - domain:
+      match: kepler.jd.com
+      policy: REJECT
+  - domain:
+      match: janapi.jd.com
+      policy: REJECT
+
+rewrites:
+  # 标准化阻断开屏物料接口（返回空 JSON 字典，双保险）
+  - match: '^https?://api\\.m\\.jd\\.(com|hk)/client\\.action\\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+
+scriptings:
+- http_response:
+    name: 京东全量去广告（新协议适配）
+    # 精准匹配：仅将广告、开屏、楼层配置接口送入脚本，普通商品/支付/订单详情等核心业务直接放行
+    match: '^https?://api\\.m\\.jd\\.(com|hk)/client\\.action\\?(?:[^&]+&)*functionId=(?:welcomeHome|homePage|myOrderInfo|uniformRecommend|myDeliveryInfo|personInfoBusiness|getPersonalHome)(?:&|$)'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=8e5059b594
+    body_required: true
+    timeout: 10
+
+mitm:
+  hostnames:
+    includes:
+      - api.m.jd.com
+      - api.m.jd.hk
