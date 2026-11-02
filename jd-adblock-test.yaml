@@ -1,0 +1,81 @@
+name: 京东去广告🅗 (彻底精简与去底栏逛版)
+description: |-
+  全量去广告：开屏、首页大促楼层、悬浮红包、弹窗，移除底栏“逛”短视频菜单。
+  更新时间：2026-11-02 15:41
+open_url: https://apps.apple.com/app/id414245413
+author: zbsdsb / Codex, 深度定制版
+homepage: https://github.com/zbsdsb/loon-adblock-plugins
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
+
+dns: {}
+
+rules:
+  # 拦截京东诊断与测试上报
+  - url_regex:
+      match: "^http://\\w{32}\\.jddebug\\.com/diagnose\\?"
+      policy: REJECT
+  # 拦截广告打点、日志与追踪域名（前置阻断）
+  - domain:
+      match: dlog.jd.com
+      policy: REJECT
+  - domain:
+      match: dsp-x.jd.com
+      policy: REJECT
+  - domain:
+      match: kepler.jd.com
+      policy: REJECT
+  - domain:
+      match: janapi.jd.com
+      policy: REJECT
+
+rewrites:
+  # 1. 开屏启动物料拦截
+  - match: '^https?://api\.m\.jd\.(com|hk)/client\.action\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+
+  # 2. 拦截首页大促悬浮挂件、红包弹窗与横幅广告接口
+  - match: '^https?://api\.m\.jd\.(com|hk)/client\.action\?(?:[^&]+&)*functionId=(?:floatLayer|popup|queryFloatLayer|queryFloatingLayer|queryPopups|bannerNotice)(?:&|$)'
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: '{"code":"0","data":{}}'
+
+  # 3. 彻底移除底栏【逛】菜单 & 拦截大促顶底栏主题皮肤
+  # 通过 JQ 强行将导航栏数组中的“逛/发现/短视频/guang”入口剔除，仅保留基础四项
+  - match: '^https?://api\.m\.jd\.(com|hk)/client\.action\?(?:[^&]+&)*functionId=(?:queryNavigation|getNavigationInfo|queryTabList)(?:&|$)'
+    actions:
+      - response_body:
+          jq: >-
+            if .data?.navigationList? then
+              .data.navigationList |= map(select((.functionId // "" | test("guang|video|faxian|find") | not) and (.name // "" | test("逛|短视频|直播") | not)))
+            elif .data?.tabList? then
+              .data.tabList |= map(select((.functionId // "" | test("guang|video|faxian|find") | not) and (.name // "" | test("逛|短视频|直播") | not)))
+            else . end
+
+  # 4. 恢复默认原生底栏，阻断大促节日动态换肤（去掉双11大红底栏和挂件皮）
+  - match: '^https?://api\.m\.jd\.(com|hk)/client\.action\?(?:[^&]+&)*functionId=(?:skin|querySkin|getSkinInfo)(?:&|$)'
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: '{"code":"0","data":{}}'
+
+scriptings:
+- http_response:
+    name: 京东全量去广告（补齐大促动态楼层清洗）
+    # 扩大匹配范围：将 getHomeFloorData、floorData、dynamicFloor 等营销楼层一并送入 JS 清洗
+    match: '^https?://api\.m\.jd\.(com|hk)/client\.action\?(?:[^&]+&)*functionId=(?:welcomeHome|homePage|myOrderInfo|uniformRecommend|myDeliveryInfo|personInfoBusiness|getPersonalHome|getHomeFloorData|floorData|getDynamicFloor)(?:&|$)'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=8e5059b594
+    body_required: true
+    timeout: 10
+
+mitm:
+  hostnames:
+    includes:
+      - api.m.jd.com
+      - api.m.jd.hk
