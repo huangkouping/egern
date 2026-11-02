@@ -1,7 +1,7 @@
 name: 小羞片网站去广告🅗
-description: |-
-  屏蔽网页及视频插播广告。
-  更新时间：2026-11-02 21:20（修复 MitM 端口语法，补全 bfengbf 与 97img 通配解密）
+description: '屏蔽网页及视频插播广告。
+
+  更新时间：2026-11-03 00:21（CMS 同步正常；Pornhub 同步正常）'
 author: huangkouping, AI 审计优化版
 dns: {}
 scriptings:
@@ -155,7 +155,7 @@ scriptings:
     update_interval: 3600
 - http_response:
     name: CMS 插播过滤｜草榴資源
-    match: ^https:\/\/player\.cl9987\.com(?::188)?\/.+\/hls\/.+\.m3u8
+    match: ^https:\/\/player\.cl9987\.com:188\/.+\/hls\/.+\.m3u8
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/cms-adblock.js?v=26b2c1c95470
     body_required: true
     timeout: 10
@@ -192,8 +192,8 @@ scriptings:
     name: Pornhub 网页过滤
     match: ^https?://(?:cn|www)\.pornhub\.com/(?!(?:.*(?:api|login|cdn-cgi|verify|auth|captch|\.(?:js|css|jpg|jpeg|png|webp|gif|zip|woff|woff2|m3u8|mp4|mov|m4v|avi|mkv|flv|rmvb|wmv|rm|asf|asx|mp3|json|ico|otf|ttf))))
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/pornhub-adblock.js?v=3c29fe45944a
-    max_size: 4194304
-    timeout: 15
+    max_size: -1
+    timeout: 60
     body_required: true
     update_interval: 3600
 mitm:
@@ -252,6 +252,11 @@ mitm:
     - 91porn.com
     - www.91porn.com
     - '*.91porn.com'
+    - '*.97img.com'
+    - player.cl9987.com
+    - cn.pornhub.com
+    - www.pornhub.com
+    - '*.bfengbf.com'
     - m3u8.heimuertv.com
     - m3u8.hmrvideo.com
     - v.cdnlz*.com
@@ -267,18 +272,15 @@ mitm:
     - ukzy.ukubf*.com
     - '*.wgslsw.com'
     - askzycdn.com
-    - '*.97img.com'
+    - t0.97img.com
     - '*.bfbfhao.com'
-    - player.cl9987.com
+    - player.cl9987.com:188
     - v.ykv3.com
     - '*.3sybf.com'
     - bfnxxcdn.com
     - player.huangguam3u.com
     - leshiyuncdn.36s.top
     - cs1.feidaozy.com
-    - cn.pornhub.com
-    - www.pornhub.com
-    - '*.bfengbf.com'
 rewrites:
 - match: (^https?:\/\/s\d+\.bfengbf\.com\/video)(.+)_z5q\.ts
   actions:
@@ -292,3 +294,7 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
+url_rewrites:
+- match: (^https?:\/\/s\d+\.bfengbf\.com\/video)(.+)_z5q\.ts
+  location: $1$2.ts
+  status_code: 302
