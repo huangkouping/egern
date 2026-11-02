@@ -1,32 +1,55 @@
 name: 京东去广告🅗
 description: |-
   全量去广告：开屏、首页推广楼层、我的/订单/物流页广告楼层与弹窗。
-  适配京东 15.9.50+ 新协议（响应体 base64 化）：脚本解码后按内容特征清洗再按原格式回写，无可清内容原样放行。
-  更新时间：2026-11-01 16:52
+  适配京东 15.9.50+ 新协议（响应体 base64 化）：限定关键广告接口清洗，降低性能损耗。
+  更新时间：2026-11-02 18:30
 open_url: https://apps.apple.com/app/id414245413
-author: zbsdsb[https://github.com/zbsdsb]
+author: zbsdsb[https://github.com/zbsdsb], AI 优化版
 homepage: https://github.com/zbsdsb/loon-adblock-plugins
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
-# 基于 zbsdsb 的 JD_remove_ads_v2（2026-08-12，源头为 RuCu6/Maasea/可莉原插件）本地转换，脚本镜像至本仓库；2026-11-01 起替换此前仅开屏的极简版。
-# 保留此前极简版的两条开屏物料拦截（start/queryMaterialAdverts）作为请求层双保险；jddebug 诊断上报拦截来自 v2 原插件。
-# 注意：脚本会精简「我的」页工具栏（仅保留 10 个常用入口）并删除 PLUS 开通卡、评价提醒等楼层，均为 v2 原逻辑。已配置每 6 小时检查上游并安全同步，保留本地定制。
 dns: {}
+
 rules:
-- url_regex:
-    match: "^http://\\w{32}\\.jddebug\\.com/diagnose\\?"
-    policy: REJECT
-url_rewrites:
-- match: '^https?://api\\.m\\.jd\\.com/client\\.action\\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
-  location: http://reject-dict/
+  # 拦截京东诊断上报
+  - url_regex:
+      match: "^http://\\w{32}\\.jddebug\\.com/diagnose\\?"
+      policy: REJECT
+
+  # 拦截广告打点、日志与追踪域名（前置阻断）
+  - domain:
+      match: dlog.jd.com
+      policy: REJECT
+  - domain:
+      match: dsp-x.jd.com
+      policy: REJECT
+  - domain:
+      match: kepler.jd.com
+      policy: REJECT
+  - domain:
+      match: janapi.jd.com
+      policy: REJECT
+
+rewrites:
+  # 标准化阻断开屏物料接口（返回空 JSON 字典，双保险）
+  - match: '^https?://api\\.m\\.jd\\.(com|hk)/client\\.action\\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
+    actions:
+      - respond:
+          status: 200
+          headers: {"Content-Type":"application/json"}
+          body: "{}"
+
 scriptings:
 - http_response:
     name: 京东全量去广告（新协议适配）
-    match: "^https?://api\\.m\\.jd\\.com/client\\.action"
+    # 精准匹配：仅将广告、开屏、楼层配置接口送入脚本，普通商品/支付/订单详情等核心业务直接放行
+    match: '^https?://api\\.m\\.jd\\.(com|hk)/client\\.action\\?(?:[^&]+&)*functionId=(?:welcomeHome|homePage|myOrderInfo|uniformRecommend|myDeliveryInfo|personInfoBusiness|getPersonalHome)(?:&|$)'
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=8e5059b594
     body_required: true
-    timeout: 20
+    timeout: 10
+
 mitm:
   hostnames:
     includes:
-    - api.m.jd.com
+      - api.m.jd.com
+      - api.m.jd.hk
