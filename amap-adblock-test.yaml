@@ -1,8 +1,8 @@
 name: 高德地图去广告🅗
 description: |-
   精简开屏、首页推荐流、我的页面工具箱、搜索浮层与地点详情页。
-  基于 Egern JS 适配器构建，全量补齐界面精简接口，保全核心业务功能。
-  更新时间：2026-11-03 21:00
+  基于 Egern JS 适配器构建，已修复分类小图标显示，消除网络不畅报错。
+  更新时间：2026-11-03 21:06
 open_url: https://apps.apple.com/app/id461703208
 author: huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -78,7 +78,7 @@ rewrites:
       status: 200
       headers:
         Content-Type: application/json
-      body: '{}'
+      body: '{"code":1,"message":"success","data":{"modules":[]}}'
 scriptings:
 - http_response:
     name: amap_aocs_clean
