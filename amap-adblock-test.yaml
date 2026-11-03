@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥 (稳定修复版)
+name: 高德地图去广告🅥 (极简隔离版)
 description: |-
-  已修复网络不畅报错，恢复搜索快捷位彩色小图标，保留个人中心精简。
-  更新时间：2026-11-03 21:50
+  剔除所有误杀骨架与图标的首页 Mock 规则，仅保留已验证生效的核心精简项。
+  更新时间：2026-11-03 21:53
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -16,69 +16,6 @@ rewrites:
         Content-Type: application/json
       body: '{}'
 - match: (?i)^https://m5\.amap\.com/ws/aos/alimama/splash_screen\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/main-page-assets\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/main-page-aiqs\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5-zb\.amap\.com/ws/promotion-web/resource(/home)?\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/info_bff/rankingCard\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/shield/search_business/process/marketingOperationStructured\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/card-service-route-plan\?
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/asa/ads_attribution
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/valueadded/weather\?
   actions:
   - respond:
       status: 200
@@ -104,7 +41,5 @@ mitm:
   hostnames:
     includes:
     - m5.amap.com
-    - ai.amap.com
     - m5-zb.amap.com
     - sns.amap.com
-    - info.amap.com
