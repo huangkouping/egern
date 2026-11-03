@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥
+name: 高德地图去广告🅥 (稳定修复版)
 description: |-
-  完全还原原版 JQ 精准剔除逻辑，彻底消除网络不畅报错与小图标丢失问题。
-  更新时间：2026-11-03 21:48
+  已修复网络不畅报错，恢复搜索快捷位彩色小图标，保留个人中心精简。
+  更新时间：2026-11-03 21:50
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -85,14 +85,6 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
-  actions:
-  - response_body:
-      jq: if (try (.data | type == "object") catch false) then del(.data.operation_activity) else . end
-- match: (?i)^https://m5\.amap\.com/ws/shield/scene/recommend\?
-  actions:
-  - response_body:
-      jq: if (try (.data.toolsRecommend.data.default | type == "array") catch false) then .data.toolsRecommend.data.default |= map(select(.id == 102 or .id == 103 or .id == 106 or .id == 151 or .id == "102" or .id == "103" or .id == "106" or .id == "151")) else . end
 - match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
   actions:
   - respond:
