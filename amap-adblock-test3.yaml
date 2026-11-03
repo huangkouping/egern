@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥 (脚本过滤探索版)
+name: 高德地图去广告🅥
 description: |-
-  JS 脚本过滤 home_qs 真实流：仅保留去单位栏与探索本地 6 模块，其余模块与瀑布流切除，无报错。
-  更新时间：2026-11-03 23:37
+  保留探索本地6大分类卡片，切断底部瀑布流消除阴影与报错，精准精简个人中心。
+  更新时间：2026-11-04 00:02
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -53,14 +53,6 @@ rewrites:
   actions:
   - response_body:
       jq: if (try (.data.category | type == "array") catch false) then (.data.category[] | select(type == "object" and (.tools | type == "array")) | .tools) |= map(select(.id != 547 and .id != "547")) else . end
-scriptings:
-- http_response:
-    name: amap_home_qs_filter
-    match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs(\?|$)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-homeqs-filter.js
-    body_required: true
-    timeout: 10
-    update_interval: 86400
 mitm:
   hostnames:
     includes:
