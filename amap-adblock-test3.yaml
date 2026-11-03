@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥 (闭环终极版)
+name: 高德地图去广告🅥
 description: |-
-  原生全 JQ 架构：云控关闭推荐流消灭报错，恢复图标素材，保留个人中心精简。
-  更新时间：2026-11-03 22:07
+  小图标原生放行，个人中心精准收敛，附近流安全置空消灭报错。
+  更新时间：2026-11-03 22:12
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -22,17 +22,34 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/shield/frogserver/aocs/updatable/1\?
+- match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs\?
   actions:
-  - response_body:
-      jq: delpaths([["data","adStatementConfig"],["data","adCustomerRetainArchitecture"],["data","adImEntryConfig"],["data","adVenueConfig"],["data","adPerfSwitch"],["data","EndNaviC3AdCard"],["data","infoCpcReport"],["data","hotsaleConfig"],["data","marketing_resource_config"],["data","coupon_risk_asac"],["data","commonCouponSceneLog"],["data","sug_coupon_opt"],["data","giftEntryConfig"],["data","splashscreen"],["data","SplashScreenControl"],["data","splashview_config"],["data","feedback_banner"],["data","TrainOrderBanner"],["data","nearby_business_popup"],["data","shortcut_popup_frequency"],["data","tel_retention_popup"],["data","hotel_activity"],["data","taxi_activity"],["data","hotel_privilege"],["data","sportsActivityConfig"],["data","activity_qingke_contry_control"],["data","920bestwishes"],["data","custom_consultdata","widget_guide"],["data","free_ride"],["data","homepage_resource_config"],["data","home_message_guide"],["data","hotel_tipsicon"],["data","sur_bar"],["data","nearby_map_entry_guide"],["data","comment_info"],["data","small_biz_index"],["data","small_biz_fun"],["data","setpagesearch"],["data","wallet"]])
-- match: (?i)^https://m5\.amap\.com/ws/shield/frogserver/aocs/updatable/1\?
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5-zb\.amap\.com/ws/promotion-web/resource(/home)?\?
   actions:
-  - response_body:
-      jq: |-
-        .data.nore_rec.value |= (if (fromjson? | type) == "object" then (fromjson | .recommend = 0 | tojson) else . end)
-        | if ((try (.data.engine_render.value | type) catch null) == "string") then .data.engine_render.value |= (fromjson? | if type == "object" then del(.can_show_advert, .advert_note_num) | tojson else . end) else . end
-        | if ((try (.data.amap_basemap_config.value | type) catch null) == "string") then .data.amap_basemap_config.value |= (fromjson? | if type == "object" then del(.splash, .ai_splash, .mainBubble, .blueBar, .popup, .desk_card_footprint_check_in) | tojson else . end) else . end
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/info_bff/rankingCard\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{"code":1,"message":"success","data":{"operation_activity":null,"modules":[]}}'
 - match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
   actions:
   - respond:
@@ -43,7 +60,7 @@ rewrites:
 - match: (?i)^https://m5\.amap\.com/ws/shield/dsp/profile/index/nodefaasv3\?
   actions:
   - response_body:
-      jq: del(.data.tipData, .data.wallet) | .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4"))
+      jq: del(.data.tipData, .data.wallet) | .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4")) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | (.content // .data) | select(type == "object") | .entranceList_1 | select(type == "array")) |= map(select(.id == 7 or .id == 8 or .id == 10 or .id == 17 or .id == "7" or .id == "8" or .id == "10" or .id == "17")) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | (.content // .data) | select(type == "object") | .entranceList_2 | select(type == "array")) |= map(select(.id == 32 or .id == 4 or .id == 9 or .id == 16 or .id == 14 or .id == "32" or .id == "4" or .id == "9" or .id == "16" or .id == "14"))
 - match: (?i)^https://sns\.amap\.com/ws/opc/tools/list\?
   actions:
   - response_body:
@@ -52,5 +69,7 @@ mitm:
   hostnames:
     includes:
     - m5.amap.com
+    - ai.amap.com
     - m5-zb.amap.com
     - sns.amap.com
+    - info.amap.com
