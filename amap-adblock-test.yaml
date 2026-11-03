@@ -1,7 +1,7 @@
 name: 高德地图去广告🅥
 description: |-
-  1:1 继承原版精简效果，修复原版遗留的网络不畅报错与分类小图标丢失缺陷。
-  更新时间：2026-11-03 21:43
+  完全还原原版 JQ 精准剔除逻辑，彻底消除网络不畅报错与小图标丢失问题。
+  更新时间：2026-11-03 21:48
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -87,15 +87,12 @@ rewrites:
       body: '{}'
 - match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
   actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{"code":1,"message":"success","data":{"modules":[],"has_more":false}}'
+  - response_body:
+      jq: if (try (.data | type == "object") catch false) then del(.data.operation_activity) else . end
 - match: (?i)^https://m5\.amap\.com/ws/shield/scene/recommend\?
   actions:
   - response_body:
-      jq: if (try (.data.shadingWords.data.modules | type == "object") catch false) then .data.shadingWords.data.modules |= with_entries(select(.key == "searchFind" or .key == "quickLink")) else . end
+      jq: if (try (.data.toolsRecommend.data.default | type == "array") catch false) then .data.toolsRecommend.data.default |= map(select(.id == 102 or .id == 103 or .id == 106 or .id == 151 or .id == "102" or .id == "103" or .id == "106" or .id == "151")) else . end
 - match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
   actions:
   - respond:
@@ -110,7 +107,7 @@ rewrites:
 - match: (?i)^https://sns\.amap\.com/ws/opc/tools/list\?
   actions:
   - response_body:
-      jq: if (.data.category | type) == "array" then .data.category[] |= (if (.tools | type) == "array" then .tools |= map(select(.id != 547 and .id != "547")) else . end) else . end
+      jq: if (try (.data.category | type == "array") catch false) then (.data.category[] | select(type == "object" and (.tools | type == "array")) | .tools) |= map(select(.id != 547 and .id != "547")) else . end
 mitm:
   hostnames:
     includes:
