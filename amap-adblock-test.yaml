@@ -1,8 +1,8 @@
 name: 高德地图去广告🅗
 description: |-
-  精简开屏、首页推荐、搜索浮层与地点详情页推广。
-  针对 Egern 架构彻底重构：移除不兼容的复杂 JQ，改用高稳定性 JS 适配器。
-  更新时间：2026-11-03 20:43
+  精简开屏、首页推荐流、我的页面工具箱、搜索浮层与地点详情页。
+  基于 Egern JS 适配器构建，全量补齐界面精简接口，保全核心业务功能。
+  更新时间：2026-11-03 21:00
 open_url: https://apps.apple.com/app/id461703208
 author: huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -72,6 +72,13 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
 scriptings:
 - http_response:
     name: amap_aocs_clean
@@ -97,6 +104,24 @@ scriptings:
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
     env:
       MODE: profile
+    body_required: true
+    timeout: 5
+    update_interval: 86400
+- http_response:
+    name: amap_scene_recommend_clean
+    match: (?i)^https://m5\.amap\.com/ws/shield/scene/recommend\?
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
+    env:
+      MODE: scene_rec
+    body_required: true
+    timeout: 5
+    update_interval: 86400
+- http_response:
+    name: amap_hitch_passenger_clean
+    match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
+    env:
+      MODE: hitch_passenger
     body_required: true
     timeout: 5
     update_interval: 86400
