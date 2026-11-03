@@ -2,7 +2,7 @@ name: 高德地图去广告🅥
 description: |-
   开屏、首页及地点推广过滤，精简页面。
   同步状态：JQ镜像同步正常；最近检查：2026-11-04 03:48
-  更新时间：2026-11-04 06:52
+  更新时间：2026-11-01 12:22
 author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id461703208
@@ -45,36 +45,10 @@ rewrites:
         \ .taxi_coupon_entry_new,\n              .thailandCouponRedirectAimap, .isChauffeurUseNewCouponCenter,\n              .chauffeurComboCouponSwitch, .couponNewStyleV730, .is_favorable_show,\n              .taxi_personal_virtual_gold, .taxi_personal_virtual_gold_title,\n              .student_entry, .unionvip_white_list, .premium_customer_card_config,\n              .chauffeurTabKingToolConfig_alternative,\n              .chauffeurTabKingToolConfig_right, .chauffeur_fatigue_config,\n              .hitch_101_popup_polling, .ChauffeurViaPoisConfig,\n              .driveDiversionCardHitchTab, .pinzhi_daoliu, .CancelRetentionTec,\n              .intercity_atmosphere_config, .carpool_waiting_config\n            )\n          | .recommend_point_optimization = 0\n          | .recommend_point_service_overview = 0\n          | .end_point_optimization = 0\n          | .hitch_way_point_nav_default = 0\n          | tojson\n        )\n      elif $probe.parsed == null then \"null\"\n      else . end\n\
         \  )\n\n# 兴趣点 data.poi_folder_modules\n| if ((try (.data.poi_folder_modules.value | type) catch null) == \"string\")\n  then\n    .data.poi_folder_modules.value |= (\n      . as $raw\n      | (try fromjson catch null) as $src\n      | if ($src | type) == \"object\" then\n          ($src\n           | (if (.folder_modules | type) == \"array\" then .folder_modules |= shelf else . end)\n           | (if (.newFolderModules | type) == \"array\" then .newFolderModules |= shelf else . end)\n          ) as $new\n          | if $new == $src then $raw else ($new | tojson) end\n        else $raw end\n    )\n  else . end\n\n# 收藏夹 - 周边图片 data.favorites_info\n| .data.favorites_info.value |= (if (fromjson? | type) == \"object\" then\n      (fromjson | .nearby_picture_on = 0 | .nearby_picture_distance = 0 | tojson) else . end)\n\n# 附近信息流 POI 卡片多图 data.container_isolation\n| .data.container_isolation.value |= (if (fromjson? | type) == \"object\" then\n      (fromjson | .nearby_feed_poi_card_v2_multi_img\
         \ = 0 | tojson) else . end)\n\n# 附近推荐总开关 data.nore_rec\n| .data.nore_rec.value |= (if (fromjson? | type) == \"object\" then\n      (fromjson | .recommend = 0 | tojson) else . end)\n\n# 景区/机场到达后「找停车场 / 换乘摆渡车」推荐气泡 data.engine_eyrie\n| .data.engine_eyrie.value |= (if (fromjson? | type) == \"object\" then\n      (fromjson | del(.poi_area_bubble) | tojson) else . end)\n\n# 地图小程序引导教程 data.WIA\n| if ((try (\n      .data.WIA.value\n      | type\n    ) catch null) == \"string\")\nthen .data.WIA.value\n  |= (. as $raw\n      | (try fromjson catch null) as $o\n      | if ($o | type) == \"object\"\n          and ($o | has(\"orgGuideVideoConfig\"))\n        then ($o\n              | del(.orgGuideVideoConfig)\n              | tojson)\n        else $raw end)\nelse . end"
-- match: (?i)^https://amap-aos-info-nogw\.amap\.com/ws/aos/alimama/splash_screen_rt(\?|$)
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{"code":"1","message":"Successful.","data":{}}'
-- match: (?i)^https://(m5|m5-x)\.amap\.com/ws/shield/dsp/profile/index/nodefaasv3(\?|$)
+- match: (?i)^https://m5\.amap\.com/ws/shield/dsp/profile/index/nodefaasv3\?
   actions:
   - response_body:
-      jq: |-
-        def keep1: . == 7 or . == 8 or . == 10 or . == 17 or . == "7" or . == "8" or . == "10" or . == "17";
-        def keep2: . == 32 or . == 4 or . == 9 or . == 16 or . == 14 or . == "32" or . == "4" or . == "9" or . == "16" or . == "14";
-        if (try (.data | type == "object") catch false) then
-          del(.data.tipData, .data.wallet)
-          | if (.data.cardList? | type == "array") then
-              .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4"))
-              | .data.cardList |= map(
-                  if .dataKey == "MineNewBEntranceCardV4" then
-                    (if ((.content.entranceList_1 // null) | type == "array") then .content.entranceList_1 |= map(select(.id | keep1)) else . end)
-                    | (if ((.content.entranceList_2 // null) | type == "array") then .content.entranceList_2 |= map(select(.id | keep2)) else . end)
-                    | (if ((.data.entranceList_1 // null) | type == "array") then .data.entranceList_1 |= map(select(.id | keep1)) else . end)
-                    | (if ((.data.entranceList_2 // null) | type == "array") then .data.entranceList_2 |= map(select(.id | keep2)) else . end)
-                  else . end
-                )
-            else . end
-          | if (.data.card_list? | type == "array") then
-              .data.card_list |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4"))
-            else . end
-        else . end
+      jq: del(.data.tipData, .data.wallet) | .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4")) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | .content.entranceList_1) |= map(select(.id == 7 or .id == 8 or .id == 10 or .id == 17)) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | .content.entranceList_2) |= map(select(.id == 32 or .id == 4 or .id == 9 or .id == 16 or .id == 14))
 - match: (?i)^https://m5\.amap\.com/ws/shield/scene/recommend\?
   actions:
   - response_body:
@@ -210,8 +184,6 @@ mitm:
   hostnames:
     includes:
     - m5.amap.com
-    - m5-x.amap.com
-    - amap-aos-info-nogw.amap.com
     - ai.amap.com
     - m5-zb.amap.com
     - center.amap.com
