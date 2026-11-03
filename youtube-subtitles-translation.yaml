@@ -1,9 +1,9 @@
 name: YouTube双语翻译🅗
-description: '官方版本：v1.6.0；更新时间：2026-11-01 08:51
+description: '官方版本：v1.6.0；更新时间：2026-11-04 03:48
 
   YouTube 增强及双语字幕(歌词)
 
-  同步状态：官方发布版同步正常；最近检查：2026-11-03 15:14'
+  同步状态：官方发布版同步正常；最近检查：2026-11-04 03:48'
 compat_arguments:
   Type: Official
   Types: Translate
@@ -91,7 +91,7 @@ scriptings:
 - http_response:
     name: 🍿️ DualSubs.YouTube.Composite.TimedText.response
     match: ^https?:\/\/(www|m)\.youtube\.com\/api\/timedtext\?(.*)subtype=(Official|External)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-composite.js?v=e337a7d4d87b
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-composite.js?v=68281a6c0755
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
@@ -99,7 +99,7 @@ scriptings:
 - http_response:
     name: 🍿️ DualSubs.YouTube.Translate.TimedText.response
     match: ^https?:\/\/(www|m)\.youtube\.com\/api\/timedtext\?(.*)subtype=Translate
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=f065d9854c0a
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=0b2288ef93b1
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
@@ -124,7 +124,7 @@ scriptings:
 - http_response:
     name: 🍿️ DualSubs.YouTubeMusic.Translate.Lyrics.response.json
     match: ^https?:\/\/music\.youtube\.com\/youtubei\/v1\/browse\?(.*)subtype=Translate
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=f065d9854c0a
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=0b2288ef93b1
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
@@ -132,7 +132,7 @@ scriptings:
 - http_response:
     name: 🍿️ DualSubs.YouTubeMusic.Translate.Lyrics.response.proto
     match: ^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/browse\?(.*)subtype=Translate
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=f065d9854c0a
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-ui-translate.js?v=0b2288ef93b1
     env:
       _compat.$argument: Type="{{{Type}}}"&Types="{{{Types}}}"&AutoCC="{{{AutoCC}}}"&Position="{{{Position}}}"&Vendor="{{{Vendor}}}"&ShowOnly="{{{ShowOnly}}}"&Storage="{{{Storage}}}"&LogLevel="{{{LogLevel}}}"
     body_required: true
