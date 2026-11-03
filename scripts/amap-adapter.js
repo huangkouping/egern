@@ -1,9 +1,15 @@
 /**
  * Egern Adapter Script for Amap (高德地图)
- * 完整对齐正式版逻辑 (1:1 满血版，彻底移除 JQ 依赖)
+ * ES Module specification
+ * 
+ * 1. aocs: 顶层 40+ 键彻底剔除，嵌套 JSON 字符串全量清洗
+ * 2. poi_detail: 采用 94 个模块白名单骨架过滤机制
+ * 3. profile: 剔除钱包/提示，深度过滤 cardList 与宫格入口 ID
+ * 4. scene_rec: 修复快捷金刚位小图标（保留 quickLink），切除热搜推广词与冗余工具
+ * 5. hitch_passenger: 仅剔除顺风车横幅，保全发单功能
  */
 
-// POI 详情页白名单：完整还原正式版 94 个模块，保留地点固有业务数据，彻底剔除外部推广
+// POI 详情页保留白名单 (94 个完整骨架与专属数据)
 const POI_KEEP_MODULES = new Set([
   // 1. 基础骨架
   'baseInfo', 'poiDetailCommonConfig', 'navbarMore', 'backToTop',
@@ -20,7 +26,7 @@ const POI_KEEP_MODULES = new Set([
   // 3. 介绍与百科
   'wikiInfo', 'wikiInfoBelow', 'poiDetailNote', 'poiDetailWikiAndLOI',
 
-  // 4. 本地点专属业务数据（楼盘/酒店/景区/商场）
+  // 4. 本地点专属业务数据
   'human_traffic', 'floorGuideGbf', 'houseEvaluationInfo', 'residentialOwnersVO',
   'realtorRealStep', 'houseOfficeInfo', 'houseOfficeService', 'houseOfficeBrandIntroduction',
   'houseOfficeNotice', 'newHouseDetailInfo', 'house_apart_info', 'scenic_mustplay',
@@ -46,7 +52,7 @@ const POI_KEEP_MODULES = new Set([
   'venueBookingShelfModule', 'reserveShelf', 'DinnerBottomBar', 'poiDetailAppointmentRegister'
 ]);
 
-// 个人中心服务宫格保留 ID 白名单 (对齐正式版)
+// 个人中心服务宫格保留 ID 白名单
 const ENTRANCE_1_KEEP = new Set([7, 8, 10, 17]);
 const ENTRANCE_2_KEEP = new Set([32, 4, 9, 16, 14]);
 
@@ -67,12 +73,11 @@ export default async function (ctx) {
     let modified = false;
 
     // ==========================================
-    // 1. 云控配置清洗 (aocs/updatable/1)
+    // 1. 云控配置全量深度清洗 (aocs/updatable/1)
     // ==========================================
     if (mode === 'aocs') {
       const data = json.data;
       if (data && typeof data === 'object') {
-        // 顶层 40+ 键彻底删除
         const dropKeys = [
           'adStatementConfig', 'adCustomerRetainArchitecture', 'adImEntryConfig',
           'adVenueConfig', 'adPerfSwitch', 'EndNaviC3AdCard', 'infoCpcReport',
@@ -91,7 +96,6 @@ export default async function (ctx) {
           if (k in data) { delete data[k]; modified = true; }
         }
 
-        // 仅删除 custom_consultdata 下的 widget_guide，保留主体
         if (data.custom_consultdata && typeof data.custom_consultdata === 'object') {
           if ('widget_guide' in data.custom_consultdata) {
             delete data.custom_consultdata.widget_guide;
@@ -224,37 +228,6 @@ export default async function (ctx) {
       }
     }
 
-
-    // ==========================================
-    // 4. 首页/搜索页推荐清洗 (shield/scene/recommend) —— 对齐正式版三段 JQ 中的有效两段
-    // ==========================================
-    else if (mode === 'scene_rec') {
-      const data = json.data;
-      if (data && typeof data === 'object') {
-        // 工具推荐只保留正式版白名单 ID
-        const tools = data.toolsRecommend?.data?.default;
-        if (Array.isArray(tools)) {
-          const keepIds = new Set([102, 103, 106, 151]);
-          data.toolsRecommend.data.default = tools.filter(item => keepIds.has(Number(item?.id)));
-          modified = true;
-        }
-        // shadingWords: regions 只留 quickLink/history/searchFind，modules 只留 searchFind
-        const shading = data.shadingWords?.data;
-        if (shading && typeof shading === 'object') {
-          if (Array.isArray(shading.regions?.content)) {
-            const keepRegions = new Set(['quickLink', 'history', 'searchFind']);
-            shading.regions.content = shading.regions.content.filter(item => keepRegions.has(item));
-            modified = true;
-          }
-          if (shading.modules && typeof shading.modules === 'object' && !Array.isArray(shading.modules)) {
-            for (const k of Object.keys(shading.modules)) {
-              if (k !== 'searchFind') { delete shading.modules[k]; modified = true; }
-            }
-          }
-        }
-      }
-    }
-
     // ==========================================
     // 3. 个人中心清洗 (dsp/profile/index/nodefaasv3)
     // ==========================================
@@ -269,7 +242,6 @@ export default async function (ctx) {
           data.cardList = data.cardList.filter(card => {
             if (card?.dataKey === 'MineNewFootprintCard') return true;
             if (card?.dataKey === 'MineNewBEntranceCardV4') {
-              // 深度过滤宫格入口 ID
               const content = card.content;
               if (content && typeof content === 'object') {
                 if (Array.isArray(content.entranceList_1)) {
@@ -288,15 +260,51 @@ export default async function (ctx) {
       }
     }
 
+    // ==========================================
+    // 4. 搜索/推荐栏目清洗 (scene/recommend)
+    // ==========================================
+    else if (mode === 'scene_rec') {
+      const data = json.data;
+      if (data && typeof data === 'object') {
+        // 精简快捷工具 (仅保留核心工具)
+        const defTools = data.toolsRecommend?.data?.default;
+        if (Array.isArray(defTools)) {
+          const keepTools = new Set([102, 103, 106, 151]);
+          const beforeLen = defTools.length;
+          data.toolsRecommend.data.default = defTools.filter(t => keepTools.has(Number(t?.id)));
+          if (data.toolsRecommend.data.default.length !== beforeLen) modified = true;
+        }
+
+        // 核心修复：保留 quickLink (金刚位图标) 与 searchFind，仅剔除广告推广气泡
+        const swData = data.shadingWords?.data;
+        if (swData && typeof swData === 'object') {
+          if (Array.isArray(swData.regions?.content)) {
+            const keepRegions = new Set(['quickLink', 'history', 'searchFind']);
+            swData.regions.content = swData.regions.content.filter(r => keepRegions.has(r));
+            modified = true;
+          }
+          if (swData.modules && typeof swData.modules === 'object') {
+            for (const k of Object.keys(swData.modules)) {
+              if (k !== 'searchFind' && k !== 'quickLink') {
+                delete swData.modules[k];
+                modified = true;
+              }
+            }
+          }
+        }
+      }
+    }
 
     // ==========================================
-    // 5. 顺风车乘客页横幅切除 (amap/hitch/passenger/content_info) —— 对齐正式版：仅删 data.lubanData.banner
+    // 5. 顺风车乘客页 (hitch/passenger/content_info)
     // ==========================================
     else if (mode === 'hitch_passenger') {
       const luban = json.data?.lubanData;
-      if (luban && typeof luban === 'object' && 'banner' in luban) {
-        delete luban.banner;
-        modified = true;
+      if (luban && typeof luban === 'object') {
+        if ('banner' in luban) {
+          delete luban.banner;
+          return { body: JSON.stringify(json) };
+        }
       }
     }
 
