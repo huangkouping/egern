@@ -224,6 +224,37 @@ export default async function (ctx) {
       }
     }
 
+
+    // ==========================================
+    // 4. 首页/搜索页推荐清洗 (shield/scene/recommend) —— 对齐正式版三段 JQ 中的有效两段
+    // ==========================================
+    else if (mode === 'scene_rec') {
+      const data = json.data;
+      if (data && typeof data === 'object') {
+        // 工具推荐只保留正式版白名单 ID
+        const tools = data.toolsRecommend?.data?.default;
+        if (Array.isArray(tools)) {
+          const keepIds = new Set([102, 103, 106, 151]);
+          data.toolsRecommend.data.default = tools.filter(item => keepIds.has(Number(item?.id)));
+          modified = true;
+        }
+        // shadingWords: regions 只留 quickLink/history/searchFind，modules 只留 searchFind
+        const shading = data.shadingWords?.data;
+        if (shading && typeof shading === 'object') {
+          if (Array.isArray(shading.regions?.content)) {
+            const keepRegions = new Set(['quickLink', 'history', 'searchFind']);
+            shading.regions.content = shading.regions.content.filter(item => keepRegions.has(item));
+            modified = true;
+          }
+          if (shading.modules && typeof shading.modules === 'object' && !Array.isArray(shading.modules)) {
+            for (const k of Object.keys(shading.modules)) {
+              if (k !== 'searchFind') { delete shading.modules[k]; modified = true; }
+            }
+          }
+        }
+      }
+    }
+
     // ==========================================
     // 3. 个人中心清洗 (dsp/profile/index/nodefaasv3)
     // ==========================================
