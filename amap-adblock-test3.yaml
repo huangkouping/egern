@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥
+name: 高德地图去广告🅥 (稳定修复版)
 description: |-
-  完全还原原版 JQ 执行链路：动态清洗近邻推荐消除报错，深度精简个人中心宫格。
-  更新时间：2026-11-03 22:29
+  修复个人中心 JQ 容错保障精简，补全近邻推荐合法空游标消除网络不畅报错。
+  更新时间：2026-11-03 22:41
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -45,8 +45,11 @@ rewrites:
       body: '{}'
 - match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
   actions:
-  - response_body:
-      jq: delpaths([["data","operation_activity"]])
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{"code":1,"message":"success","data":{"operation_activity":null,"modules":[],"has_more":false,"total":0,"cursor":"0"}}'
 - match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
   actions:
   - respond:
@@ -57,11 +60,30 @@ rewrites:
 - match: (?i)^https://m5\.amap\.com/ws/shield/dsp/profile/index/nodefaasv3\?
   actions:
   - response_body:
-      jq: del(.data.tipData, .data.wallet) | .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4")) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | .content.entranceList_1) |= map(select(.id == 7 or .id == 8 or .id == 10 or .id == 17)) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | .content.entranceList_2) |= map(select(.id == 32 or .id == 4 or .id == 9 or .id == 16 or .id == 14))
+      jq: |-
+        def keep1: IN(7, 8, 10, 17, "7", "8", "10", "17");
+        def keep2: IN(32, 4, 9, 16, 14, "32", "4", "9", "16", "14");
+        if (try (.data | type == "object") catch false) then
+          del(.data.tipData, .data.wallet)
+          | if (try (.data.cardList | type == "array") catch false) then
+              .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4"))
+              | .data.cardList |= map(
+                  if .dataKey == "MineNewBEntranceCardV4" then
+                    (if ((.content.entranceList_1 // null) | type == "array") then .content.entranceList_1 |= map(select(.id | keep1)) else . end)
+                    | (if ((.content.entranceList_2 // null) | type == "array") then .content.entranceList_2 |= map(select(.id | keep2)) else . end)
+                    | (if ((.data.entranceList_1 // null) | type == "array") then .data.entranceList_1 |= map(select(.id | keep1)) else . end)
+                    | (if ((.data.entranceList_2 // null) | type == "array") then .data.entranceList_2 |= map(select(.id | keep2)) else . end)
+                  else . end
+                )
+            else . end
+        else . end
 - match: (?i)^https://sns\.amap\.com/ws/opc/tools/list\?
   actions:
   - response_body:
-      jq: if (try (.data.category | type == "array") catch false) then (.data.category[] | select(type == "object" and (.tools | type == "array")) | .tools) |= map(select(.id != 547 and .id != "547")) else . end
+      jq: |-
+        if (try (.data.category | type == "array") catch false) then
+          (.data.category[] | select(type == "object" and (.tools | type == "array")) | .tools) |= map(select(.id != 547 and .id != "547"))
+        else . end
 mitm:
   hostnames:
     includes:
