@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥 (精确保留探索本地版)
+name: 高德地图去广告🅥
 description: |-
-  保留探索本地6大分类，精准切除打车卡与双列瀑布流，消除阴影报错，精简个人中心。
-  更新时间：2026-11-03 23:29
+  秒开探索本地，动态截断瀑布流并标记加载结束，彻底消除阴影与网络不畅。
+  更新时间：2026-11-03 23:32
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -17,11 +17,14 @@ rewrites:
       body: '{"code":"1","message":"Successful.","data":{}}'
 - match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs(\?|$)
   actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: text/event-stream;charset=UTF-8
-      body: "event: data\ndata: {\"is_done\":true,\"component\":{\"is_done\":true,\"type\":\"container\",\"data\":{\"regions\":{\"content\":[\"MdCard_Explore_0\"]},\"modules\":{}}},\"has_more\":false}\n\nevent: COMPLETE\ndata: {}\n\n"
+  - response_body:
+      jq: |-
+        if (try (.data | type == "object") catch false) then
+          if (.data.component.data.regions.content? | type == "array") then
+            .data.component.data.regions.content |= map(select(. == "MdCard_Explore_0"))
+          else . end
+          | .has_more = false
+        else . end
 - match: (?i)^https://(m5|m5-x)\.amap\.com/ws/smartui/near_recommend(\?|$)
   actions:
   - response_body:
