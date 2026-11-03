@@ -4,8 +4,8 @@
  * 
  * 1. aocs: 顶层 40+ 键彻底剔除，嵌套 JSON 字符串全量清洗
  * 2. poi_detail: 采用 94 个模块白名单骨架过滤机制
- * 3. profile: 剔除钱包/提示，深度过滤 cardList 与宫格入口 ID
- * 4. scene_rec: 修复快捷金刚位小图标（保留 quickLink），切除热搜推广词与冗余工具
+ * 3. profile: 1:1 严格对齐原版 JQ（剔除 tipData/wallet，仅保留 FootprintCard 与 BEntranceCardV4，并精准过滤 entranceList_1/2）
+ * 4. scene_rec: 兼容原版逻辑清洗推荐与气泡
  * 5. hitch_passenger: 仅剔除顺风车横幅，保全发单功能
  */
 
@@ -51,10 +51,6 @@ const POI_KEEP_MODULES = new Set([
   'scenic_ticket', 'movieBookingShelf', 'hotelRooms', 'ktvBookingShelf',
   'venueBookingShelfModule', 'reserveShelf', 'DinnerBottomBar', 'poiDetailAppointmentRegister'
 ]);
-
-// 个人中心服务宫格保留 ID 白名单
-const ENTRANCE_1_KEEP = new Set([7, 8, 10, 17]);
-const ENTRANCE_2_KEEP = new Set([32, 4, 9, 16, 14]);
 
 export default async function (ctx) {
   const { response, env } = ctx ?? {};
@@ -229,33 +225,41 @@ export default async function (ctx) {
     }
 
     // ==========================================
-    // 3. 个人中心清洗 (dsp/profile/index/nodefaasv3)
+    // 3. 个人中心清洗 (dsp/profile/index/nodefaasv3) —— 1:1 对齐原版 JQ
     // ==========================================
     else if (mode === 'profile') {
       const data = json.data;
       if (data && typeof data === 'object') {
+        // 1. del(.data.tipData, .data.wallet)
         if ('tipData' in data) { delete data.tipData; modified = true; }
         if ('wallet' in data) { delete data.wallet; modified = true; }
 
+        // 2. cardList 仅保留 MineNewFootprintCard 与 MineNewBEntranceCardV4
         if (Array.isArray(data.cardList)) {
-          const beforeLen = data.cardList.length;
-          data.cardList = data.cardList.filter(card => {
-            if (card?.dataKey === 'MineNewFootprintCard') return true;
+          const keepCardKeys = new Set(['MineNewFootprintCard', 'MineNewBEntranceCardV4']);
+          const origLen = data.cardList.length;
+          data.cardList = data.cardList.filter(card => keepCardKeys.has(card?.dataKey));
+          if (data.cardList.length !== origLen) modified = true;
+
+          // 3. 精准过滤 entranceList_1 (7,8,10,17) 与 entranceList_2 (32,4,9,16,14)
+          const keep1 = new Set([7, 8, 10, 17, '7', '8', '10', '17']);
+          const keep2 = new Set([32, 4, 9, 16, 14, '32', '4', '9', '16', '14']);
+
+          for (const card of data.cardList) {
             if (card?.dataKey === 'MineNewBEntranceCardV4') {
-              const content = card.content;
-              if (content && typeof content === 'object') {
-                if (Array.isArray(content.entranceList_1)) {
-                  content.entranceList_1 = content.entranceList_1.filter(item => ENTRANCE_1_KEEP.has(Number(item?.id)));
+              const container = card.content || card.data;
+              if (container && typeof container === 'object') {
+                if (Array.isArray(container.entranceList_1)) {
+                  container.entranceList_1 = container.entranceList_1.filter(item => keep1.has(item?.id));
+                  modified = true;
                 }
-                if (Array.isArray(content.entranceList_2)) {
-                  content.entranceList_2 = content.entranceList_2.filter(item => ENTRANCE_2_KEEP.has(Number(item?.id)));
+                if (Array.isArray(container.entranceList_2)) {
+                  container.entranceList_2 = container.entranceList_2.filter(item => keep2.has(item?.id));
+                  modified = true;
                 }
               }
-              return true;
             }
-            return false;
-          });
-          if (data.cardList.length !== beforeLen) modified = true;
+          }
         }
       }
     }
@@ -266,7 +270,6 @@ export default async function (ctx) {
     else if (mode === 'scene_rec') {
       const data = json.data;
       if (data && typeof data === 'object') {
-        // 精简快捷工具 (仅保留核心工具)
         const defTools = data.toolsRecommend?.data?.default;
         if (Array.isArray(defTools)) {
           const keepTools = new Set([102, 103, 106, 151]);
@@ -275,7 +278,6 @@ export default async function (ctx) {
           if (data.toolsRecommend.data.default.length !== beforeLen) modified = true;
         }
 
-        // 核心修复：保留 quickLink (金刚位图标) 与 searchFind，仅剔除广告推广气泡
         const swData = data.shadingWords?.data;
         if (swData && typeof swData === 'object') {
           if (Array.isArray(swData.regions?.content)) {
