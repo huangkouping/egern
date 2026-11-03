@@ -1,0 +1,121 @@
+name: 高德地图去广告🅥
+description: |-
+  1:1 继承原版精简效果，修复原版遗留的网络不畅报错与分类小图标丢失缺陷。
+  更新时间：2026-11-03 21:43
+open_url: https://apps.apple.com/app/id461703208
+author: 可莉🅥 & huangkouping
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Amap.png
+dns: {}
+rewrites:
+- match: (?i)^https://m5\.amap\.com/ws/valueadded/alimama/splash_screen\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/aos/alimama/splash_screen\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/main-page-assets\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/main-page-aiqs\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5-zb\.amap\.com/ws/promotion-web/resource(/home)?\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/info_bff/rankingCard\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/shield/search_business/process/marketingOperationStructured\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/card-service-route-plan\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/asa/ads_attribution
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/valueadded/weather\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{"code":1,"message":"success","data":{"modules":[],"has_more":false}}'
+- match: (?i)^https://m5\.amap\.com/ws/shield/scene/recommend\?
+  actions:
+  - response_body:
+      jq: if (try (.data.shadingWords.data.modules | type == "object") catch false) then .data.shadingWords.data.modules |= with_entries(select(.key == "searchFind" or .key == "quickLink")) else . end
+- match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/shield/dsp/profile/index/nodefaasv3\?
+  actions:
+  - response_body:
+      jq: del(.data.tipData, .data.wallet) | .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4"))
+- match: (?i)^https://sns\.amap\.com/ws/opc/tools/list\?
+  actions:
+  - response_body:
+      jq: if (.data.category | type) == "array" then .data.category[] |= (if (.tools | type) == "array" then .tools |= map(select(.id != 547 and .id != "547")) else . end) else . end
+mitm:
+  hostnames:
+    includes:
+    - m5.amap.com
+    - ai.amap.com
+    - m5-zb.amap.com
+    - sns.amap.com
+    - info.amap.com
