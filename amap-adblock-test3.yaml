@@ -1,7 +1,7 @@
 name: 高德地图去广告🅥
 description: |-
-  小图标放行，补齐附近推荐合法空游标彻底消除报错，恢复个人中心稳定过滤。
-  更新时间：2026-11-03 22:20
+  完全还原原版 JQ 执行链路：动态清洗近邻推荐消除报错，深度精简个人中心宫格。
+  更新时间：2026-11-03 22:29
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -45,11 +45,8 @@ rewrites:
       body: '{}'
 - match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
   actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: application/json
-      body: '{"code":1,"message":"success","data":{"operation_activity":null,"modules":[],"list":[],"has_more":false,"cursor":""}}'
+  - response_body:
+      jq: delpaths([["data","operation_activity"]])
 - match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
   actions:
   - respond:
@@ -60,20 +57,11 @@ rewrites:
 - match: (?i)^https://m5\.amap\.com/ws/shield/dsp/profile/index/nodefaasv3\?
   actions:
   - response_body:
-      jq: |-
-        if (try (.data | type == "object") catch false) then
-          del(.data.tipData, .data.wallet)
-          | if (try (.data.cardList | type == "array") catch false) then
-              .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4"))
-            else . end
-        else . end
+      jq: del(.data.tipData, .data.wallet) | .data.cardList |= map(select(.dataKey == "MineNewFootprintCard" or .dataKey == "MineNewBEntranceCardV4")) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | .content.entranceList_1) |= map(select(.id == 7 or .id == 8 or .id == 10 or .id == 17)) | (.data.cardList[] | select(.dataKey == "MineNewBEntranceCardV4") | .content.entranceList_2) |= map(select(.id == 32 or .id == 4 or .id == 9 or .id == 16 or .id == 14))
 - match: (?i)^https://sns\.amap\.com/ws/opc/tools/list\?
   actions:
   - response_body:
-      jq: |-
-        if (try (.data.category | type == "array") catch false) then
-          (.data.category[] | select(type == "object" and (.tools | type == "array")) | .tools) |= map(select(.id != 547 and .id != "547"))
-        else . end
+      jq: if (try (.data.category | type == "array") catch false) then (.data.category[] | select(type == "object" and (.tools | type == "array")) | .tools) |= map(select(.id != 547 and .id != "547")) else . end
 mitm:
   hostnames:
     includes:
