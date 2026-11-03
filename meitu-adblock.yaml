@@ -1,25 +1,38 @@
-name: 美图秀秀去广告🅥
+name: 美图秀秀去广告🅗
 description: |-
-  拦截广告域名，精简部分页面推广。
-  更新时间：2026-10-31 21:16
+  拦截广告策略及追踪域名，精准剔除海报初始化推广。
+  基于 Egern JS 适配器规范构建。
+  更新时间：2026-11-03 20:34
 open_url: https://apps.apple.com/app/id416048305
-author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
-homepage: https://hub.kelee.one
+author: huangkouping
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MeiTu.png
-
-# 基于用户提供的完整配置备份，保留原处理逻辑。
-# 无远程 JS/jq 依赖；手动维护，未配置上游定时同步。
 dns: {}
 rules:
-  - domain:
-      match: adui.tg.meitu.com
-      policy: REJECT
-rewrites:
-  - match: '(?i)^https://api\.posters\.meitu\.com/common/init\.json'
-    actions:
-      - response_body:
-          jq: 'delpaths([["data","vip"]])'
+- domain:
+    match: adui.tg.meitu.com
+    policy: REJECT
+- domain:
+    match: strategy.tg.meitu.com
+    policy: REJECT
+- domain:
+    match: ad.meitu.com
+    policy: REJECT
+- domain:
+    match: rabbit.meitustat.com
+    policy: REJECT
+- domain:
+    match: log.meitu.com
+    policy: REJECT
+scriptings:
+- http_response:
+    name: meitu_posters_init_clean
+    match: (?i)^https://api\.posters\.meitu\.com/common/init\.json
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/meitu-init-adapter.js
+    body_required: true
+    timeout: 5
+    update_interval: 86400
 mitm:
   hostnames:
     includes:
-      - api.posters.meitu.com
+    - api.posters.meitu.com
