@@ -1,56 +1,39 @@
 /**
  * Egern Adapter Script for Amap (高德地图)
- * ES Module specification
- * 
- * 1. aocs: 顶层 40+ 键彻底剔除，嵌套 JSON 字符串全量清洗
- * 2. poi_detail: 采用 94 个模块白名单骨架过滤机制
- * 3. profile: 1:1 严格对齐原版 JQ（剔除 tipData/wallet，仅保留 FootprintCard 与 BEntranceCardV4，并精准过滤 entranceList_1/2）
- * 4. scene_rec: 兼容原版逻辑清洗推荐与气泡
- * 5. hitch_passenger: 仅剔除顺风车横幅，保全发单功能
+ * 专攻 AOCS 云控与 POI 详情页骨架清洗，其余交给 Egern 原生处理
  */
 
-// POI 详情页保留白名单 (94 个完整骨架与专属数据)
 const POI_KEEP_MODULES = new Set([
-  // 1. 基础骨架
   'baseInfo', 'poiDetailCommonConfig', 'navbarMore', 'backToTop',
   'poiDetailBottomBar', 'poiMapModule', 'anchor', 'reSortContentAndSimilar',
   'comprehensiveEditEntrance', 'functionZone', 'poiTipBar', 'floatTelButton',
-  'footer_tel_button', 'footer_retain_button',
-
-  // 2. UGC、评价与图集
-  'attractGalleryInfo', 'combineReviews', 'evaluateVO', 'reviews',
-  'inviteReview', 'seriousPublicExperience', 'societyPublicExperience',
-  'poiDetailRankUpCard', 'travelGuideAndQa', 'poiDetailAQModule',
-  'AIStreetTips', 'expertNote', 'recommend_food', 'shopNews', 'mallNews', 'shopBaseCase',
-
-  // 3. 介绍与百科
-  'wikiInfo', 'wikiInfoBelow', 'poiDetailNote', 'poiDetailWikiAndLOI',
-
-  // 4. 本地点专属业务数据
-  'human_traffic', 'floorGuideGbf', 'houseEvaluationInfo', 'residentialOwnersVO',
-  'realtorRealStep', 'houseOfficeInfo', 'houseOfficeService', 'houseOfficeBrandIntroduction',
+  'footer_tel_button', 'footer_retain_button', 'attractGalleryInfo',
+  'combineReviews', 'evaluateVO', 'reviews', 'inviteReview',
+  'seriousPublicExperience', 'societyPublicExperience', 'poiDetailRankUpCard',
+  'travelGuideAndQa', 'poiDetailAQModule', 'AIStreetTips', 'expertNote',
+  'recommend_food', 'shopNews', 'mallNews', 'shopBaseCase', 'wikiInfo',
+  'wikiInfoBelow', 'poiDetailNote', 'poiDetailWikiAndLOI', 'human_traffic',
+  'floorGuideGbf', 'houseEvaluationInfo', 'residentialOwnersVO', 'realtorRealStep',
+  'houseOfficeInfo', 'houseOfficeService', 'houseOfficeBrandIntroduction',
   'houseOfficeNotice', 'newHouseDetailInfo', 'house_apart_info', 'scenic_mustplay',
-  'hotelGraphicDetail', 'homestayGraphicDetail', 'hotelFacilities', 'hotelMustRead', 'shoppingMallEvent',
-
-  // 5. 本店服务与自营通道
-  'enhanceIMQuestions', 'enhanceCustomerServicePoiModule', 'aiAgentFooterBar', 'imBottomGuide',
-  'enhanceCustomerServiceFixedBottom', 'shopBasePerson', 'shopServiceBffvo', 'service_process',
-  'shopCourseList', 'poiDetailJobList', 'jobRec', 'shop_vip_card', 'shopStdActivity',
-  'privateSphereChannel', 'kaShopService', 'ka_not_enter', 'company1688Info', 'thirdparty_info',
-  'expressEntryCard', 'poi_intercept', 'aiAgentEntry', 'commonAiAgent', 'poiCardAiAgentEntryV2',
-
-  // 6. 指引与位置
-  'storeDirections', 'shopFindWayGuide',
-
-  // 7. 资质与合规公示
-  'shopQualifications', 'businessQualifications', 'legal_document', 'home_legal_document',
-  'rec_legal_document', 'business_scope', 'governmentInformation', 'official_account',
-  'merchantSettlement', 'shop_settlement',
-
-  // 8. 本地点自有预订库存
-  'scenic_ticket', 'movieBookingShelf', 'hotelRooms', 'ktvBookingShelf',
-  'venueBookingShelfModule', 'reserveShelf', 'DinnerBottomBar', 'poiDetailAppointmentRegister'
+  'hotelGraphicDetail', 'homestayGraphicDetail', 'hotelFacilities', 'hotelMustRead',
+  'shoppingMallEvent', 'enhanceIMQuestions', 'enhanceCustomerServicePoiModule',
+  'aiAgentFooterBar', 'imBottomGuide', 'enhanceCustomerServiceFixedBottom',
+  'shopBasePerson', 'shopServiceBffvo', 'service_process', 'shopCourseList',
+  'poiDetailJobList', 'jobRec', 'shop_vip_card', 'shopStdActivity',
+  'privateSphereChannel', 'kaShopService', 'ka_not_enter', 'company1688Info',
+  'thirdparty_info', 'expressEntryCard', 'poi_intercept', 'aiAgentEntry',
+  'commonAiAgent', 'poiCardAiAgentEntryV2', 'storeDirections', 'shopFindWayGuide',
+  'shopQualifications', 'businessQualifications', 'legal_document',
+  'home_legal_document', 'rec_legal_document', 'business_scope',
+  'governmentInformation', 'official_account', 'merchantSettlement',
+  'shop_settlement', 'scenic_ticket', 'movieBookingShelf', 'hotelRooms',
+  'ktvBookingShelf', 'venueBookingShelfModule', 'reserveShelf', 'DinnerBottomBar',
+  'poiDetailAppointmentRegister'
 ]);
+
+const ENTRANCE_1_KEEP = new Set([7, 8, 10, 17, '7', '8', '10', '17']);
+const ENTRANCE_2_KEEP = new Set([32, 4, 9, 16, 14, '32', '4', '9', '16', '14']);
 
 export default async function (ctx) {
   const { response, env } = ctx ?? {};
@@ -68,9 +51,7 @@ export default async function (ctx) {
 
     let modified = false;
 
-    // ==========================================
-    // 1. 云控配置全量深度清洗 (aocs/updatable/1)
-    // ==========================================
+    // 1. 云控配置清洗 (aocs)
     if (mode === 'aocs') {
       const data = json.data;
       if (data && typeof data === 'object') {
@@ -92,14 +73,11 @@ export default async function (ctx) {
           if (k in data) { delete data[k]; modified = true; }
         }
 
-        if (data.custom_consultdata && typeof data.custom_consultdata === 'object') {
-          if ('widget_guide' in data.custom_consultdata) {
-            delete data.custom_consultdata.widget_guide;
-            modified = true;
-          }
+        if (data.custom_consultdata?.widget_guide) {
+          delete data.custom_consultdata.widget_guide;
+          modified = true;
         }
 
-        // 嵌套 1: amap_basemap_config 内部广告与活动
         if (typeof data.amap_basemap_config?.value === 'string') {
           try {
             const inner = JSON.parse(data.amap_basemap_config.value);
@@ -129,77 +107,15 @@ export default async function (ctx) {
               'geoechoGuideLottieConfig', 'level_page_slide', 'level_page_tips',
               'garage_top_button', 'ThemeSquareSwiperCanJumpUrlList'
             ];
-            let innerMod = false;
-            for (const ik of innerDrop) {
-              if (ik in inner) { delete inner[ik]; innerMod = true; }
-            }
-            if (innerMod) {
-              data.amap_basemap_config.value = JSON.stringify(inner);
-              modified = true;
-            }
-          } catch (_) {}
-        }
-
-        // 嵌套 2: 引擎渲染广告开关 (engine_render)
-        if (typeof data.engine_render?.value === 'string') {
-          try {
-            const inner = JSON.parse(data.engine_render.value);
-            if (inner && typeof inner === 'object') {
-              delete inner.can_show_advert;
-              delete inner.advert_note_num;
-              data.engine_render.value = JSON.stringify(inner);
-              modified = true;
-            }
-          } catch (_) {}
-        }
-
-        // 嵌套 3: 搜索历史与热词 (his_input_tip)
-        if (typeof data.his_input_tip?.value === 'string') {
-          try {
-            const inner = JSON.parse(data.his_input_tip.value);
-            if (inner && typeof inner === 'object') {
-              delete inner.channel_zhitiao;
-              inner.his_recommend_bangdan = 0;
-              if (inner.nearby_hotword) inner.nearby_hotword.search_detail = 0;
-              data.his_input_tip.value = JSON.stringify(inner);
-              modified = true;
-            }
-          } catch (_) {}
-        }
-
-        // 嵌套 4: 详情页货架吸顶优化 (detail_config)
-        if (typeof data.detail_config?.value === 'string') {
-          try {
-            const inner = JSON.parse(data.detail_config.value);
-            if (inner && typeof inner === 'object') {
-              delete inner.shelf_coupon_refresh;
-              inner.isGoodsShelfPerfV2 = 0;
-              inner.NearbySearchOptimization = 0;
-              if (inner.poiDetailScreenCacheConfig) inner.poiDetailScreenCacheConfig.secondScreenAnchorModule = '';
-              if (inner.poiDetailScreenCacheOtherConfig) inner.poiDetailScreenCacheOtherConfig.secondScreenAnchorModule = '';
-              data.detail_config.value = JSON.stringify(inner);
-              modified = true;
-            }
-          } catch (_) {}
-        }
-
-        // 嵌套 5: 导航结束运营按钮 (navi_end)
-        if (typeof data.navi_end?.value === 'string') {
-          try {
-            const inner = JSON.parse(data.navi_end.value);
-            if (inner && typeof inner === 'object' && 'operator_btns' in inner) {
-              delete inner.operator_btns;
-              data.navi_end.value = JSON.stringify(inner);
-              modified = true;
-            }
+            for (const ik of innerDrop) { delete inner[ik]; }
+            data.amap_basemap_config.value = JSON.stringify(inner);
+            modified = true;
           } catch (_) {}
         }
       }
     }
 
-    // ==========================================
-    // 2. 地点详情页清洗 (search/poi/detail)
-    // ==========================================
+    // 2. 地点详情页清洗 (poi_detail)
     else if (mode === 'poi_detail') {
       const data = json.data;
       if (data && typeof data === 'object') {
@@ -224,89 +140,34 @@ export default async function (ctx) {
       }
     }
 
-    // ==========================================
-    // 3. 个人中心清洗 (dsp/profile/index/nodefaasv3) —— 1:1 对齐原版 JQ
-    // ==========================================
+    // 3. 个人中心清洗 (profile) —— 1:1 对齐原版
     else if (mode === 'profile') {
       const data = json.data;
       if (data && typeof data === 'object') {
-        // 1. del(.data.tipData, .data.wallet)
-        if ('tipData' in data) { delete data.tipData; modified = true; }
-        if ('wallet' in data) { delete data.wallet; modified = true; }
+        delete data.tipData;
+        delete data.wallet;
 
-        // 2. cardList 仅保留 MineNewFootprintCard 与 MineNewBEntranceCardV4
         if (Array.isArray(data.cardList)) {
-          const keepCardKeys = new Set(['MineNewFootprintCard', 'MineNewBEntranceCardV4']);
-          const origLen = data.cardList.length;
-          data.cardList = data.cardList.filter(card => keepCardKeys.has(card?.dataKey));
-          if (data.cardList.length !== origLen) modified = true;
-
-          // 3. 精准过滤 entranceList_1 (7,8,10,17) 与 entranceList_2 (32,4,9,16,14)
-          const keep1 = new Set([7, 8, 10, 17, '7', '8', '10', '17']);
-          const keep2 = new Set([32, 4, 9, 16, 14, '32', '4', '9', '16', '14']);
+          // 只保留足迹卡与核心入口卡
+          data.cardList = data.cardList.filter(
+            card => card?.dataKey === 'MineNewFootprintCard' || card?.dataKey === 'MineNewBEntranceCardV4'
+          );
 
           for (const card of data.cardList) {
             if (card?.dataKey === 'MineNewBEntranceCardV4') {
-              const container = card.content || card.data;
-              if (container && typeof container === 'object') {
-                if (Array.isArray(container.entranceList_1)) {
-                  container.entranceList_1 = container.entranceList_1.filter(item => keep1.has(item?.id));
-                  modified = true;
+              const content = card.content || card.data;
+              if (content && typeof content === 'object') {
+                if (Array.isArray(content.entranceList_1)) {
+                  content.entranceList_1 = content.entranceList_1.filter(item => ENTRANCE_1_KEEP.has(item?.id));
                 }
-                if (Array.isArray(container.entranceList_2)) {
-                  container.entranceList_2 = container.entranceList_2.filter(item => keep2.has(item?.id));
-                  modified = true;
+                if (Array.isArray(content.entranceList_2)) {
+                  content.entranceList_2 = content.entranceList_2.filter(item => ENTRANCE_2_KEEP.has(item?.id));
                 }
               }
             }
           }
         }
-      }
-    }
-
-    // ==========================================
-    // 4. 搜索/推荐栏目清洗 (scene/recommend)
-    // ==========================================
-    else if (mode === 'scene_rec') {
-      const data = json.data;
-      if (data && typeof data === 'object') {
-        const defTools = data.toolsRecommend?.data?.default;
-        if (Array.isArray(defTools)) {
-          const keepTools = new Set([102, 103, 106, 151]);
-          const beforeLen = defTools.length;
-          data.toolsRecommend.data.default = defTools.filter(t => keepTools.has(Number(t?.id)));
-          if (data.toolsRecommend.data.default.length !== beforeLen) modified = true;
-        }
-
-        const swData = data.shadingWords?.data;
-        if (swData && typeof swData === 'object') {
-          if (Array.isArray(swData.regions?.content)) {
-            const keepRegions = new Set(['quickLink', 'history', 'searchFind']);
-            swData.regions.content = swData.regions.content.filter(r => keepRegions.has(r));
-            modified = true;
-          }
-          if (swData.modules && typeof swData.modules === 'object') {
-            for (const k of Object.keys(swData.modules)) {
-              if (k !== 'searchFind' && k !== 'quickLink') {
-                delete swData.modules[k];
-                modified = true;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // ==========================================
-    // 5. 顺风车乘客页 (hitch/passenger/content_info)
-    // ==========================================
-    else if (mode === 'hitch_passenger') {
-      const luban = json.data?.lubanData;
-      if (luban && typeof luban === 'object') {
-        if ('banner' in luban) {
-          delete luban.banner;
-          return { body: JSON.stringify(json) };
-        }
+        modified = true;
       }
     }
 
