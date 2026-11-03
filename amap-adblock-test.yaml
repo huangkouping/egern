@@ -1,10 +1,10 @@
-name: 高德地图去广告🅗
+name: 高德地图去广告🅥
 description: |-
-  精简开屏、首页推荐流、我的页面工具箱、搜索浮层与地点详情页。
-  基于 Egern JS 适配器构建，1:1 对齐原版个人中心精简与核心过滤逻辑。
-  更新时间：2026-11-03 21:20
+  开屏、首页及地点推广过滤，精简页面。
+  针对 Egern 深度重构：以 JS 适配器安全接管 aocs/poi/profile，彻底解决 JQ 引擎崩溃隐患。
+  更新时间：2026-11-03 21:29
 open_url: https://apps.apple.com/app/id461703208
-author: huangkouping
+author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Amap.png
 dns: {}
@@ -23,7 +23,14 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
-- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/main-page-(assets|aiqs)\?
+- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/main-page-assets\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/faas/amap-navigation/main-page-aiqs\?
   actions:
   - respond:
       status: 200
@@ -72,7 +79,21 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/valueadded/weather\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
 - match: (?i)^https://m5\.amap\.com/ws/smartui/near_recommend\?
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{"code":1,"message":"success","data":{"modules":[]}}'
+- match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
   actions:
   - respond:
       status: 200
@@ -83,52 +104,36 @@ scriptings:
 - http_response:
     name: amap_aocs_clean
     match: (?i)^https://m5\.amap\.com/ws/shield/frogserver/aocs/updatable/1\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js?v=final_sync1
     env:
       MODE: aocs
     body_required: true
     timeout: 5
-    update_interval: 86400
+    update_interval: 0
 - http_response:
     name: amap_poi_detail_clean
     match: (?i)^https://info\.amap\.com/ws/shield/search/poi/detail\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js?v=final_sync1
     env:
       MODE: poi_detail
     body_required: true
     timeout: 5
-    update_interval: 86400
+    update_interval: 0
 - http_response:
     name: amap_profile_clean
     match: (?i)^https://m5\.amap\.com/ws/shield/dsp/profile/index/nodefaasv3\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js?v=final_sync1
     env:
       MODE: profile
     body_required: true
     timeout: 5
-    update_interval: 86400
-- http_response:
-    name: amap_scene_recommend_clean
-    match: (?i)^https://m5\.amap\.com/ws/shield/scene/recommend\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
-    env:
-      MODE: scene_rec
-    body_required: true
-    timeout: 5
-    update_interval: 86400
-- http_response:
-    name: amap_hitch_passenger_clean
-    match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-adapter.js
-    env:
-      MODE: hitch_passenger
-    body_required: true
-    timeout: 5
-    update_interval: 86400
+    update_interval: 0
 mitm:
   hostnames:
     includes:
     - m5.amap.com
     - ai.amap.com
     - m5-zb.amap.com
+    - center.amap.com
+    - sns.amap.com
     - info.amap.com
