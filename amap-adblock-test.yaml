@@ -106,7 +106,7 @@ rewrites:
 - match: (?i)^https://sns\.amap\.com/ws/opc/tools/list\?
   actions:
   - response_body:
-      jq: if (.data.category | type) == "array" then .data.category[].tools |= map(select(.id != 547 and .id != "547")) else . end
+      jq: if (.data.category | type) == "array" then .data.category[] |= (if (.tools | type) == "array" then .tools |= map(select(.id != 547 and .id != "547")) else . end) else . end
 mitm:
   hostnames:
     includes:
