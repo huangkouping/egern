@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥 (极简隔离版)
+name: 高德地图去广告🅥 (闭环终极版)
 description: |-
-  剔除所有误杀骨架与图标的首页 Mock 规则，仅保留已验证生效的核心精简项。
-  更新时间：2026-11-03 21:53
+  原生全 JQ 架构：云控关闭推荐流消灭报错，恢复图标素材，保留个人中心精简。
+  更新时间：2026-11-03 22:07
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -22,6 +22,17 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{}'
+- match: (?i)^https://m5\.amap\.com/ws/shield/frogserver/aocs/updatable/1\?
+  actions:
+  - response_body:
+      jq: delpaths([["data","adStatementConfig"],["data","adCustomerRetainArchitecture"],["data","adImEntryConfig"],["data","adVenueConfig"],["data","adPerfSwitch"],["data","EndNaviC3AdCard"],["data","infoCpcReport"],["data","hotsaleConfig"],["data","marketing_resource_config"],["data","coupon_risk_asac"],["data","commonCouponSceneLog"],["data","sug_coupon_opt"],["data","giftEntryConfig"],["data","splashscreen"],["data","SplashScreenControl"],["data","splashview_config"],["data","feedback_banner"],["data","TrainOrderBanner"],["data","nearby_business_popup"],["data","shortcut_popup_frequency"],["data","tel_retention_popup"],["data","hotel_activity"],["data","taxi_activity"],["data","hotel_privilege"],["data","sportsActivityConfig"],["data","activity_qingke_contry_control"],["data","920bestwishes"],["data","custom_consultdata","widget_guide"],["data","free_ride"],["data","homepage_resource_config"],["data","home_message_guide"],["data","hotel_tipsicon"],["data","sur_bar"],["data","nearby_map_entry_guide"],["data","comment_info"],["data","small_biz_index"],["data","small_biz_fun"],["data","setpagesearch"],["data","wallet"]])
+- match: (?i)^https://m5\.amap\.com/ws/shield/frogserver/aocs/updatable/1\?
+  actions:
+  - response_body:
+      jq: |-
+        .data.nore_rec.value |= (if (fromjson? | type) == "object" then (fromjson | .recommend = 0 | tojson) else . end)
+        | if ((try (.data.engine_render.value | type) catch null) == "string") then .data.engine_render.value |= (fromjson? | if type == "object" then del(.can_show_advert, .advert_note_num) | tojson else . end) else . end
+        | if ((try (.data.amap_basemap_config.value | type) catch null) == "string") then .data.amap_basemap_config.value |= (fromjson? | if type == "object" then del(.splash, .ai_splash, .mainBubble, .blueBar, .popup, .desk_card_footprint_check_in) | tojson else . end) else . end
 - match: (?i)^https://m5-zb\.amap\.com/ws/amap/hitch/passenger/content_info\?
   actions:
   - respond:
