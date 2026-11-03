@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥 (首页流实验版)
+name: 高德地图去广告🅥 (修复版)
 description: |-
-  home_qs 双事件 Mock：布局只下发 QS+探索本地，补真实流的 60001 完成事件消灭网络不畅。
-  更新时间：2026-11-04 00:04
+  首页 AI 流完全放行（双流驱动，外部 Mock 必闪烁），个人中心 JQ 去 IN() 兼容修复，其余精简保持。
+  更新时间：2026-11-04 06:47
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -15,13 +15,6 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{"code":"1","message":"Successful.","data":{}}'
-- match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs(\?|$)
-  actions:
-  - respond:
-      status: 200
-      headers:
-        Content-Type: text/event-stream;charset=UTF-8
-      body: "event: data\ndata: {\"exist_risk\":false,\"is_done\":false,\"component\":{\"is_done\":true,\"type\":\"container\",\"data\":{\"type\":\"pmt\",\"data\":{\"template\":\"aiPmtGenerate\",\"regions\":{\"content\":[\"MdCard_QS_0\",\"MdCard_Explore_0\"]},\"modules\":{}}}},\"has_more\":false}\n\nevent: data\ndata: {\"exist_risk\":false,\"is_done\":true,\"component\":{\"is_done\":true,\"data\":{\"is_done\":true,\"code\":\"60001\",\"data\":{},\"type\":\"markdown\"},\"type\":\"container\"},\"has_more\":false}\n\nevent: COMPLETE\ndata: {}\n\n"
 - match: (?i)^https://(m5|m5-x)\.amap\.com/ws/smartui/near_recommend(\?|$)
   actions:
   - response_body:
@@ -37,8 +30,8 @@ rewrites:
   actions:
   - response_body:
       jq: |-
-        def keep1: IN(7, 8, 10, 17, "7", "8", "10", "17");
-        def keep2: IN(32, 4, 9, 16, 14, "32", "4", "9", "16", "14");
+        def keep1: . == 7 or . == 8 or . == 10 or . == 17 or . == "7" or . == "8" or . == "10" or . == "17";
+        def keep2: . == 32 or . == 4 or . == 9 or . == 16 or . == 14 or . == "32" or . == "4" or . == "9" or . == "16" or . == "14";
         if (try (.data | type == "object") catch false) then
           del(.data.tipData, .data.wallet)
           | if (.data.cardList? | type == "array") then
