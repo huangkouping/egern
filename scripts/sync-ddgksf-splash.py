@@ -428,6 +428,7 @@ def convert_rule_file(content: str, timestamp_str: str, public_script_url: str =
 
     module_data = {
         'name': '墨鱼去开屏 🅗',
+        'icon': 'shield.lefthalf.filled',
         'description': description,
         'dns': {},
         'rules': rules,
