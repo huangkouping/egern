@@ -288,6 +288,18 @@ export default async function (ctx) {
       }
     }
 
+
+    // ==========================================
+    // 5. 顺风车乘客页横幅切除 (amap/hitch/passenger/content_info) —— 对齐正式版：仅删 data.lubanData.banner
+    // ==========================================
+    else if (mode === 'hitch_passenger') {
+      const luban = json.data?.lubanData;
+      if (luban && typeof luban === 'object' && 'banner' in luban) {
+        delete luban.banner;
+        modified = true;
+      }
+    }
+
     if (modified) {
       return { body: JSON.stringify(json) };
     }
