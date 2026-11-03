@@ -1,0 +1,40 @@
+name: 美图秀秀去广告🅥
+description: |-
+  拦截广告策略及追踪域名，精准剔除海报初始化推广。
+  基于 Egern JS 适配器规范构建。
+  更新时间：2026-11-03 20:17
+author: huangkouping
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/MeiTu.png
+dns: {}
+rules:
+  # 广告下发与推广策略集群
+  - domain_suffix:
+      match: tg.meitu.com
+    policy: REJECT
+  - domain:
+      match: ad.meitu.com
+    policy: REJECT
+
+  # 统计打点与追踪采集
+  - domain_suffix:
+      match: meitustat.com
+    policy: REJECT
+  - domain:
+      match: log.meitu.com
+    policy: REJECT
+
+scriptings:
+  # 通过专用脚本安全删除 data.vip，保留所有其他模板/海报正常配置
+  - http_response:
+      name: meitu_posters_init_clean
+      match: (?i)^https://api\.posters\.meitu\.com/common/init\.json
+      script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/meitu-init-adapter.js
+      body_required: true
+      timeout: 5
+      update_interval: 86400
+
+mitm:
+  hostnames:
+    includes:
+      - api.posters.meitu.com
