@@ -1,7 +1,7 @@
-name: 高德地图去广告🅥
+name: 高德地图去广告🅥 (脚本过滤探索版)
 description: |-
-  秒开探索本地，动态截断瀑布流并标记加载结束，彻底消除阴影与网络不畅。
-  更新时间：2026-11-03 23:32
+  JS 脚本过滤 home_qs 真实流：仅保留去单位栏与探索本地 6 模块，其余模块与瀑布流切除，无报错。
+  更新时间：2026-11-03 23:37
 open_url: https://apps.apple.com/app/id461703208
 author: 可莉🅥 & huangkouping
 homepage: https://github.com/huangkouping/egern
@@ -15,16 +15,6 @@ rewrites:
       headers:
         Content-Type: application/json
       body: '{"code":"1","message":"Successful.","data":{}}'
-- match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs(\?|$)
-  actions:
-  - response_body:
-      jq: |-
-        if (try (.data | type == "object") catch false) then
-          if (.data.component.data.regions.content? | type == "array") then
-            .data.component.data.regions.content |= map(select(. == "MdCard_Explore_0"))
-          else . end
-          | .has_more = false
-        else . end
 - match: (?i)^https://(m5|m5-x)\.amap\.com/ws/smartui/near_recommend(\?|$)
   actions:
   - response_body:
@@ -63,6 +53,14 @@ rewrites:
   actions:
   - response_body:
       jq: if (try (.data.category | type == "array") catch false) then (.data.category[] | select(type == "object" and (.tools | type == "array")) | .tools) |= map(select(.id != 547 and .id != "547")) else . end
+scriptings:
+- http_response:
+    name: amap_home_qs_filter
+    match: (?i)^https://ai\.amap\.com/v1/ai_rec/home_qs(\?|$)
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/scripts/amap-homeqs-filter.js
+    body_required: true
+    timeout: 10
+    update_interval: 86400
 mitm:
   hostnames:
     includes:
