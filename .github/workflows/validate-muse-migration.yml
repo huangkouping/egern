@@ -27,7 +27,7 @@ jobs:
           mkdir -p /tmp/muse-validation/scripts
           cp scripts/sync-meituan.py scripts/sync-baidu-search.py scripts/sync-taobao.py /tmp/muse-validation/scripts/
           cp meituan-adblock.yaml meituan-adblock.js meituan-sync-status.json /tmp/muse-validation/
-          cp baidu-search-adblock.yaml baidu-search-adblock.js baidu-autopager.js baidu-search-sync-status.json /tmp/muse-validation/
+          cp baidu-search-adblock.yaml baidu-search-adblock.js baidu-search-sync-status.json /tmp/muse-validation/
           cp taobao-adblock.yaml taobao-adblock.js taobao-sync-status.json /tmp/muse-validation/
           cd /tmp/muse-validation
           python scripts/sync-meituan.py
@@ -55,6 +55,13 @@ jobs:
           git add meituan-adblock.yaml meituan-adblock.js meituan-sync-status.json baidu-search-adblock.yaml baidu-search-adblock.js baidu-search-sync-status.json taobao-adblock.yaml taobao-adblock.js taobao-sync-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Sync migrated adblock modules'
-            git pull --rebase origin main
-            git push origin HEAD:main
+            for attempt in 1 2 3 4 5; do
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                exit 0
+              fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((attempt * 3))
+            done
+            echo "Unable to push after retries" >&2
+            exit 1
           fi
