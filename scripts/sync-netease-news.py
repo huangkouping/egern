@@ -41,7 +41,9 @@ def adapt(source):
 
 def description(meta, existing=''):
     import re
-    base = re.sub(r'(?m)^\\s*(?:同步状态：|更新时间：).*\\n?', '', existing).strip()
+    # Handle historical literal backslash-n sequences as well as real newlines.
+    existing = existing.replace('\\\\n', '\\n')
+    base = re.sub(r'(?m)^\\s*(?:同步状态：|更新时间：).*$', '', existing).strip()
     if not base:
         base = '清理网易新闻开屏广告、置顶内容、信息流推广及搜索推荐。'
     state = '同步成功' if meta.get('status') == 'ok' else '同步失败'
