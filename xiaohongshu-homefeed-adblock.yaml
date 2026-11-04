@@ -3,6 +3,7 @@ description: |-
   屏蔽开屏、首页直播和广告，支持笔记、评论图片、视频及实况保存去水印。
   更新时间：2026-11-02 15:31
 author: huangkouping / Codex
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 env_schema:
   BLOCK_HOME_ADS:

@@ -3,6 +3,7 @@ description: |-
   屏蔽网页及视频插播广告。
   更新时间：2026-11-03 00:21（CMS 同步正常；Pornhub 同步正常）
 author: huangkouping, AI 审计优化版
+homepage: https://github.com/huangkouping/egern
 dns: {}
 scriptings:
 - http_response:

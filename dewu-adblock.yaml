@@ -3,8 +3,8 @@ description: |-
   去除开屏及推广，精简搜索、消息和我的页面。
   更新时间：2026-10-31 21:16
 open_url: https://apps.apple.com/app/id1012871328
-author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
-homepage: https://hub.kelee.one
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], huangkouping
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Dewu.png
 
 # 基于用户提供的完整配置备份，仅删除重复的 background_words 规则。

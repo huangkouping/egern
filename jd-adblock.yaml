@@ -4,8 +4,8 @@ description: |-
   适配京东 15.9.50+ 新协议（响应体 base64 化）：限定关键广告接口清洗，降低性能损耗。
   更新时间：2026-11-02 18:30
 open_url: https://apps.apple.com/app/id414245413
-author: zbsdsb[https://github.com/zbsdsb], AI 优化版
-homepage: https://github.com/zbsdsb/loon-adblock-plugins
+author: zbsdsb[https://github.com/zbsdsb], AI 优化版, huangkouping
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png
 
 dns: {}

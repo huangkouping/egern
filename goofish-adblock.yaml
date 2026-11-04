@@ -3,8 +3,8 @@ description: |-
   去除广告及推荐，精简首页、搜索和我的页面。
   更新时间：2026-11-01 12:01
 open_url: https://apps.apple.com/app/id510909506
-author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
-homepage: https://hub.kelee.one
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], huangkouping
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/FleaMarket.png
 
 # 基于用户提供的完整配置备份，合并两条搜索接口响应处理。

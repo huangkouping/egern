@@ -3,6 +3,7 @@ description: |-
   百度&Google 移动端搜索结果自动翻页，独立于搜索去广告模块。
   更新时间：2026-11-01 22:12
 author: huangkouping
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png
 
 mitm:

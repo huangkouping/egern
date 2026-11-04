@@ -3,8 +3,8 @@ description: |-
   移除HTTPDNS和QUIC传输配置，移除开屏广告、信息流广告、回答页广告，移除回答页下的相关回答、专栏卡片及圈子卡片，移除直答页面推荐知识库和提问推荐，移除评论区评论氛围满意度调查，精简首页顶部标签及我的页面。
   更新时间：2026-10-31 22:04
 open_url: https://apps.apple.com/app/id432274380
-author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
-homepage: https://hub.kelee.one
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], huangkouping
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Zhihu.png
 # 基于用户提供的配置备份；无远程 JS/jq 依赖，手动维护。
 dns: {}

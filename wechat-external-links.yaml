@@ -3,7 +3,7 @@ description: |-
   外链确认页自动跳转，支持支付宝通知跳转及可选网页存档。
   更新时间：2026-10-31 22:53
 author: zZPiglet[https://github.com/zZPiglet], huangkouping
-homepage: https://github.com/zZPiglet/Task/blob/master/asset/UnblockURLinWeChat.js
+homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id414478124
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png
 compat_arguments_desc: |-
