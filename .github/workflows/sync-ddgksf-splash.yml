@@ -41,5 +41,13 @@ jobs:
           done
           if ! git diff --cached --quiet; then
             git commit -m "自动同步墨鱼去开屏规则"
-            git push
+            for attempt in 1 2 3 4 5; do
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                exit 0
+              fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((attempt * 3))
+            done
+            echo "Unable to push after retries" >&2
+            exit 1
           fi
