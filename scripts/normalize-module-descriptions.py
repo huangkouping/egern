@@ -12,25 +12,25 @@ for path in sorted(Path(".").glob("*.yaml")):
     original = path.read_text(encoding="utf-8")
     lines = original.splitlines(keepends=True)
     # Insert homepage without reserializing YAML, preserving all functional rules.
-    if not re.search(r"^homepage\\s*:", original, re.M):
-        insertion = next((i + 1 for i, line in enumerate(lines) if re.match(r"^author\\s*:", line)), None)
+    if not re.search(r"^homepage\s*:", original, re.M):
+        insertion = next((i + 1 for i, line in enumerate(lines) if re.match(r"^author\s*:", line)), None)
         if insertion is None:
-            insertion = next((i + 1 for i, line in enumerate(lines) if re.match(r"^name\\s*:", line)), 0)
-        lines.insert(insertion, f"homepage: {HOME}\\n")
+            insertion = next((i + 1 for i, line in enumerate(lines) if re.match(r"^name\s*:", line)), 0)
+        lines.insert(insertion, f"homepage: {HOME}\n")
     else:
-        lines = [re.sub(r"^homepage\\s*:.*$", f"homepage: {HOME}", line) if re.match(r"^homepage\\s*:", line) else line for line in lines]
+        lines = [re.sub(r"^homepage\s*:.*$", f"homepage: {HOME}", line) if re.match(r"^homepage\s*:", line) else line for line in lines]
     # Existing upstream author credits are kept, and repository maintainer appended once.
     for i, line in enumerate(lines):
-        m = re.match(r"^author:\\s*(.*?)\\s*$", line)
+        m = re.match(r"^author:\s*(.*?)\s*$", line)
         if m and m.group(1) and "huangkouping" not in m.group(1).lower():
-            lines[i] = f"author: {m.group(1)}, huangkouping\\n"
+            lines[i] = f"author: {m.group(1)}, huangkouping\n"
             break
-    if not any(re.match(r"^author\\s*:", line) for line in lines):
+    if not any(re.match(r"^author\s*:", line) for line in lines):
         name = next((line.split(":", 1)[1] for line in lines if line.startswith("name:")), "")
         # Only explicitly marked self-authored modules get sole credit.
         if "🅗" in name:
             idx = next((i for i, line in enumerate(lines) if line.startswith("name:")), -1)
-            lines.insert(idx + 1, "author: huangkouping\\n")
+            lines.insert(idx + 1, "author: huangkouping\n")
 
     start = next((i for i, line in enumerate(lines) if line.startswith("description:")), None)
     if start is None:
