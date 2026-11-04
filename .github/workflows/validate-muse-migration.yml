@@ -1,4 +1,4 @@
-name: 定时同步美团搜索淘宝
+name: 定时同步美团与淘宝
 on:
   workflow_dispatch:
   push:
@@ -25,20 +25,17 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/muse-validation/scripts
-          cp scripts/sync-meituan.py scripts/sync-baidu-search.py scripts/sync-taobao.py /tmp/muse-validation/scripts/
+          cp scripts/sync-meituan.py scripts/sync-taobao.py /tmp/muse-validation/scripts/
           cp meituan-adblock.yaml meituan-adblock.js meituan-sync-status.json /tmp/muse-validation/
-          cp baidu-search-adblock.yaml baidu-search-adblock.js baidu-search-sync-status.json /tmp/muse-validation/
           cp taobao-adblock.yaml taobao-adblock.js taobao-sync-status.json /tmp/muse-validation/
           cd /tmp/muse-validation
           python scripts/sync-meituan.py
-          python scripts/sync-baidu-search.py
           python scripts/sync-taobao.py
           test -s meituan-adblock.yaml
-          test -s baidu-search-adblock.yaml
           test -s taobao-adblock.yaml
           python - <<'PY'
           import yaml
-          for name in ('meituan', 'baidu-search', 'taobao'):
+          for name in ('meituan', 'taobao'):
               with open(f'{name}-adblock.yaml') as f:
                   data = yaml.safe_load(f)
               assert isinstance(data, dict) and data.get('name'), name
@@ -48,11 +45,10 @@ jobs:
         run: |
           set -euo pipefail
           cp /tmp/muse-validation/meituan-adblock.yaml /tmp/muse-validation/meituan-adblock.js /tmp/muse-validation/meituan-sync-status.json .
-          cp /tmp/muse-validation/baidu-search-adblock.yaml /tmp/muse-validation/baidu-search-adblock.js /tmp/muse-validation/baidu-search-sync-status.json .
           cp /tmp/muse-validation/taobao-adblock.yaml /tmp/muse-validation/taobao-adblock.js /tmp/muse-validation/taobao-sync-status.json .
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add meituan-adblock.yaml meituan-adblock.js meituan-sync-status.json baidu-search-adblock.yaml baidu-search-adblock.js baidu-search-sync-status.json taobao-adblock.yaml taobao-adblock.js taobao-sync-status.json
+          git add meituan-adblock.yaml meituan-adblock.js meituan-sync-status.json taobao-adblock.yaml taobao-adblock.js taobao-sync-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Sync migrated adblock modules'
             for attempt in 1 2 3 4 5; do
