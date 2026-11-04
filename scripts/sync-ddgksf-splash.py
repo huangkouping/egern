@@ -428,6 +428,8 @@ def convert_rule_file(content: str, timestamp_str: str, public_script_url: str =
 
     module_data = {
         'name': '墨鱼去开屏 🅗',
+        'author': 'ddgksf2013, huangkouping',
+        'homepage': 'https://github.com/huangkouping/egern',
         'icon': 'shield.fill',
         'description': description,
         'dns': {},
