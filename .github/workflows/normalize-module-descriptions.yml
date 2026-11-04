@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '*.yaml'
+      - 'scripts/*-base.yaml'
       - 'scripts/normalize-module-descriptions.py'
   schedule:
     - cron: '47 */6 * * *'
