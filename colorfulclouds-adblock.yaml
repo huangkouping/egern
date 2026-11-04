@@ -64,8 +64,7 @@ mitm:
     - api.caiyunapp.com
     - cdn-w.caiyunapp.com
     - ad.cyapi.cn
-description: '更新时间：2026-11-02 23:49
-
+description: |-
   彻底移除开屏广告、首页信息流卡片(feeds)、轮播横幅(banners)及底栏小助手。
-
-  同步状态：墨鱼脚本同步正常；最近检查：2026-11-04 14:58'
+  同步状态：墨鱼脚本同步正常；最近检查：2026-11-04 14:58
+  更新时间：2026-11-02 23:49
