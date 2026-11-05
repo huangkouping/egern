@@ -1,10 +1,11 @@
 name: 哔哩哔哩去广告🅥
-description: |-
+description: '更新时间：2026-11-06 04:16
+
   过滤广告、精简页面，保留可选空降助手等原功能。
-  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-05 15:24
-  更新时间：2026-11-05 15:24
+
+  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-06 04:16'
 open_url: https://apps.apple.com/app/id736536022
-author: kokoryh[https://github.com/kokoryh], huangkouping
+author: kokoryh[https://github.com/kokoryh]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png
 compat_arguments:
@@ -196,7 +197,7 @@ scriptings:
 - http_request:
     name: 空降助手
     match: (?i)^https://(?:grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(?:community\.service\.dm\.v1\.DM/DmSegMobile|app\.viewunite\.v1\.View/View|main\.community\.reply\.v1\.Reply/MainList)$
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-request.js?v=e00aa47d02b7
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-request.js?v=6871263d7092
     body_required: true
     binary_body: true
     timeout: 20
@@ -205,7 +206,7 @@ scriptings:
 - http_response:
     name: ProtoBuf处理
     match: (?i)^https://(grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(app\.(show\.v1\.Popular/Index|dynamic\.v2\.Dynamic/DynAll|view(unite)?\.v1\.View/(View|ViewProgress|RelatesFeed|AIRelateAsync)|playurl\.v1\.PlayURL/PlayView|playerunite\.v1\.Player/PlayViewUnite)|polymer\.app\.search\.v1\.Search/SearchAll|community\.service\.dm\.v1\.DM/DmView|main\.community\.reply\.v1\.Reply/MainList|pgc\.gateway\.player\.v2\.PlayURL/PlayView)$
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-response.js?v=b6ff48e02430
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-response.js?v=23d0064fef94
     body_required: true
     binary_body: true
     timeout: 20
