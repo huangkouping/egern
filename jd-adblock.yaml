@@ -13,7 +13,7 @@ dns: {}
 rules:
   # 拦截京东诊断上报
   - url_regex:
-      match: "^http://\\w{32}\\.jddebug\\.com/diagnose\\?"
+      match: "^http://\w{32}\.jddebug\.com/diagnose\\?"
       policy: REJECT
 
   # 拦截广告打点、日志与追踪域名（前置阻断）
@@ -32,7 +32,7 @@ rules:
 
 rewrites:
   # 标准化阻断开屏物料接口（返回空 JSON 字典，双保险）
-  - match: '^https?://api\\.m\\.jd\\.(com|hk)/client\\.action\\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
+  - match: '^https?://api\.m\.jd\.(com|hk)/client\.action\\?(?:[^&]+&)*functionId=(?:start|queryMaterialAdverts)(?:&|$)'
     actions:
       - respond:
           status: 200
@@ -43,7 +43,7 @@ scriptings:
 - http_response:
     name: 京东全量去广告（新协议适配）
     # 精准匹配：仅将广告、开屏、楼层配置接口送入脚本，普通商品/支付/订单详情等核心业务直接放行
-    match: '^https?://api\\.m\\.jd\\.(com|hk)/client\\.action\\?(?:[^&]+&)*functionId=(?:welcomeHome|homePage|myOrderInfo|uniformRecommend|myDeliveryInfo|personInfoBusiness|getPersonalHome)(?:&|$)'
+    match: '^https?://api\.m\.jd\.(com|hk)/client\.action\\?(?:[^&]+&)*functionId=(?:welcomeHome|homePage|myOrderInfo|uniformRecommend|myDeliveryInfo|personInfoBusiness|getPersonalHome)(?:&|$)'
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.js?v=8e5059b594
     body_required: true
     timeout: 10
