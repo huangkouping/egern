@@ -22,8 +22,6 @@
 - [模块安装索引](#模块安装索引)
 - [规则集](#规则集)
 - [去广告模块](#去广告模块)
-- [签到模块](#签到模块)
-- [链接跳转模块](#链接跳转模块)
 - [安装与使用](#安装与使用)
 - [自动化维护与配套任务（无需安装）](#自动化维护与配套任务无需安装)
 - [定时更新与同步状态](#定时更新与同步状态)
@@ -115,26 +113,6 @@
 | `apple-service-proxy.list` | 苹果服务代理规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/apple-service-proxy.list) |
 | `custom-direct.list` | 自定义直连规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/custom-direct.list) |
 | `us.list` | AI 与美国服务代理规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/us.list) |
-
-## 签到模块
-
-| 名称 | 功能 | 默认设置 | 链接 |
-| --- | --- | --- | --- |
-| PingMe签到🅗 | 定时执行 PingMe 签到，并支持抓取签到参数。 | 每 4 小时执行一次；代理策略为「美国节点」；抓取签到参数开启。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/pingme.yaml) |
-
-在模块设置中，将「代理策略」填写为主配置中实际存在的策略组名称，名称需要完全一致。签到时间可通过 Cron 表达式调整，默认是 `0 */4 * * *`。
-
-启用抓取后，模块匹配 `api.pingmeapp.net/app/queryBalanceAndBonus` 请求。关闭抓取开关后的行为由上游脚本实现；模块设置说明为每次运行随机生成设备 ID。是否签到成功应以任务日志和账户实际结果为准。
-
-## 链接跳转模块
-
-| 名称 | 功能 | 可选客户端 | 链接 |
-| --- | --- | --- | --- |
-| Telegram跳转🅗 | 将经过 Egern HTTP 请求处理的 `t.me`、`telegram.me` 链接转换为所选客户端的深链接。 | Telegram、Nagram、Swiftgram、Turrit、iMe、Nicegram、Lingogram；默认 Nagram。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) · [源码](https://github.com/huangkouping/egern/blob/main/telegram-redirect.yaml) |
-
-脚本包含公开用户名、帖子、邀请入群、贴纸、表情、主题、语言、分享及代理链接的转换逻辑。实际支持情况取决于所安装客户端。
-
-**适用边界：** 如果 iOS 或来源 App 在发起网页请求前直接唤起 Telegram，模块就没有可拦截的 HTTP 请求，无法强制改为第三方客户端。直接的 `tg://` 链接也不在此模块匹配范围内。因此本模块不保证所有 Telegram 链接都进入所选客户端。
 
 ## 安装与使用
 
