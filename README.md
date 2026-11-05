@@ -70,7 +70,7 @@
 | 优酷视频去广告🅥 | 非原创 · 可莉改编 | 原作者 / 可莉；[huangkouping](https://github.com/huangkouping)（适配维护） | 过滤优酷视频中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youku-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youku-adblock.yaml) |
 | 知乎去广告🅥 | 非原创 · 可莉改编 | 原作者 / 可莉；[huangkouping](https://github.com/huangkouping)（适配维护） | 过滤知乎中匹配的广告或推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhihu-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhihu-adblock.yaml) |
 
-**版本提示：** 小红书普通版与增强版建议二选一启用。部分去广告模块需开启 HTTPS 解密并信任 Egern 证书。
+**版本提示：** 小红书仅保留去直播广告增强版；原版模块已下架，共用脚本继续保留。部分去广告模块需开启 HTTPS 解密并信任 Egern 证书。
 
 ### 功能与辅助模块
 #### 🅗 自主维护模块（优先展示）
@@ -82,7 +82,6 @@
 | Telegram跳转🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 将 Telegram 网页链接转换为指定第三方客户端链接。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/telegram-redirect.yaml) |
 | 微信外部链接解锁🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 优化微信内外部链接的打开与跳转限制。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-external-links.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/wechat-external-links.yaml) |
 | 京东比价🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 查询京东商品历史价格，展示比价信息。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/jd-price.yaml) |
-| 小红书去直播广告🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤小红书开屏、首页推广及直播卡片，支持媒体保存去水印，可按需开关。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
 | 小红书去直播广告(增强版)🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 屏蔽开屏、首页直播、广告与热搜推荐，支持媒体保存去水印。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-enhanced.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-enhanced.yaml) |
 | YouTube双语翻译🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 提供 YouTube 字幕翻译与双语字幕功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-translation.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-subtitles-translation.yaml) |
 
@@ -213,7 +212,7 @@
 | 京东去广告🅗 | 每 6 小时检查上游 v2 脚本并保留本地适配。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/sync-jd-adblock.yml) |
 | luestr 脚本检查 | GitHub 检查上游更新；不自动覆盖模块。 | [查看任务](https://github.com/huangkouping/egern/actions/workflows/check-luestr-updates.yml) |
 | 京东比价、大麦 | Muse 检查上游变化并通知，不自动改动仓库。 | [京东比价](https://github.com/huangkouping/egern/blob/main/jd-price.yaml) · [大麦](https://github.com/huangkouping/egern/blob/main/damai-adblock.yaml) |
-| 小红书去直播广告（原版与增强版）、Telegram跳转、京东去开屏广告 | 手动维护，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
+| 小红书去直播广告（增强版）、Telegram跳转、京东去开屏广告 | 手动维护，未配置上游自动同步任务。 | [提交记录](https://github.com/huangkouping/egern/commits/main/) |
 
 ### 如何判断更新与同步
 
