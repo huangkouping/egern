@@ -34,6 +34,7 @@
 **所有可安装模块集中在这里，点击「安装」即可使用。** 🅗 自主维护优先展示，🅥 上游改编随后；同步工作流不属于安装模块。
 
 ### 去广告模块
+#### 🅗 自主维护模块（优先展示）
 
 | 模块名称 | 原创属性 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- | --- | --- | --- |
@@ -45,6 +46,11 @@
 | 汽水音乐净化·墨鱼版🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 基于墨鱼规则净化汽水音乐相关广告内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/soda-music-ddgksf2013.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/soda-music-ddgksf2013.yaml) |
 | YouTube去广告🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤 YouTube 广告并提供相关播放增强功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-enhance.yaml) |
 | 中华万年历去广告🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤广告及推广，精简页面，剔除插屏与屏保。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhwnl-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/zhwnl-adblock.yaml) |
+
+#### 🅥 上游改编模块
+
+| 模块名称 | 原创属性 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 查看源码 |
+| --- | --- | --- | --- | --- | --- |
 | 淘宝去广告🅥 | 非原创 · 可莉改编 | 原作者 / 可莉；[huangkouping](https://github.com/huangkouping)（适配维护） | 过滤淘宝 App 的部分广告与推广入口。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/taobao-adblock.yaml) |
 | 微信小程序去广告🅥 | 非原创 · 可莉改编 | 原作者 / 可莉；[huangkouping](https://github.com/huangkouping)（适配维护） | 过滤已适配微信小程序中的广告请求及展示内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/weixin-mini-programs-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/weixin-mini-programs-adblock.yaml) |
 | 广告平台拦截器🅥 | 非原创 · 可莉改编 | 原作者 / 可莉；[huangkouping](https://github.com/huangkouping)（适配维护） | 拦截常见广告平台域名与相关请求。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/ad-platform-blocker.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/ad-platform-blocker.yaml) |
@@ -92,6 +98,7 @@
 **版本提示：** 小红书普通版与增强版建议二选一启用。部分去广告模块需开启 HTTPS 解密并信任 Egern 证书。
 
 ### 功能与辅助模块
+#### 🅗 自主维护模块（优先展示）
 
 | 模块名称 | 原创属性 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 查看源码 |
 | --- | --- | --- | --- | --- | --- |
@@ -103,6 +110,12 @@
 | 小红书去直播广告🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤小红书开屏、首页推广及直播卡片，支持媒体保存去水印，可按需开关。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-homefeed-adblock.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-homefeed-adblock.yaml) |
 | 小红书去直播广告(增强版)🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 屏蔽开屏、首页直播、广告与热搜推荐，支持媒体保存去水印。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-enhanced.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/xiaohongshu-enhanced.yaml) |
 | YouTube双语翻译🅗 | 自主维护 · 原创性见源文件 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 提供 YouTube 字幕翻译与双语字幕功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-translation.yaml) | [源码](https://github.com/huangkouping/egern/blob/main/youtube-subtitles-translation.yaml) |
+
+#### 🅥 上游改编模块
+
+| 模块名称 | 原创属性 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 查看源码 |
+| --- | --- | --- | --- | --- | --- |
+
 
 ### DNS 规则与策略规则
 
