@@ -1,10 +1,11 @@
 name: 哔哩哔哩去广告🅥
-description: |-
+description: '更新时间：2026-11-07 03:40
+
   过滤广告、精简页面，保留可选空降助手等原功能。
-  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-06 15:24
-  更新时间：2026-11-06 15:24
+
+  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-07 03:40'
 open_url: https://apps.apple.com/app/id736536022
-author: kokoryh[https://github.com/kokoryh], huangkouping
+author: kokoryh[https://github.com/kokoryh]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png
 compat_arguments:
