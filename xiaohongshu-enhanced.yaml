@@ -1,12 +1,26 @@
 name: 小红书去直播广告(完整版)🅗
 description: |-
-  去首页及搜索广告、直播；开屏过滤，媒体与评论去水印。
-  更新时间：2026-11-08 09:40
+  去首页、搜索及关注页广告直播；开屏过滤、媒体去水印。
+  更新时间：2026-11-08 10:04
 author: huangkouping / Codex, AI 精准校准版
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
 
 env_schema:
+  BLOCK_FOLLOW_LIVE:
+    name: 屏蔽关注页直播
+    description: 过滤关注信息流中的直播卡片。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+  HIDE_FOLLOW_STORIES:
+    name: 隐藏关注页顶部动态头像
+    description: 清理关注页顶部最近更新与直播头像条。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
   BLOCK_SEARCH_ADS:
     name: 屏蔽搜索结果广告
     description: 复用首页商业广告字段识别。
@@ -102,6 +116,14 @@ rules:
       policy: REJECT
 
 scriptings:
+- http_response:
+    name: 小红书关注页直播及动态过滤
+    match: ^https://[a-zA-Z0-9.-]+\\.xiaohongshu\\.com/api/sns/(?:v\\d+|web/v\\d+)/(?:follow|followfeed|feed/follow|note/follow).*
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-follow-filter.js?v=20261108-1
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+
 - http_response:
     name: 小红书搜索结果广告与直播过滤
     match: ^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/search/|web/v\d+/search/).*
