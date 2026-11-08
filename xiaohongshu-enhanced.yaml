@@ -1,7 +1,6 @@
 name: 小红书去直播广告(完整版)🅗
 description: |-
-  屏蔽开屏、首页直播、广告与热搜推荐，支持笔记、评论图片、视频及实况保存去水印。
-  新增搜索结果广告与直播过滤，保留原增强版全部功能。
+  去首页及搜索广告、直播；开屏过滤，媒体与评论去水印。
   更新时间：2026-11-08 09:40
 author: huangkouping / Codex, AI 精准校准版
 homepage: https://github.com/huangkouping/egern
