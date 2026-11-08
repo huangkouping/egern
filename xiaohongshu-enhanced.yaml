@@ -1,7 +1,7 @@
 name: 小红书去直播广告(完整版)🅗
 description: |-
   去首页、搜索及关注页广告直播；开屏过滤、媒体去水印。
-  更新时间：2026-11-08 10:20
+  更新时间：2026-11-08 10:12
 author: huangkouping / Codex, AI 精准校准版
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
@@ -119,7 +119,7 @@ scriptings:
 - http_response:
     name: 小红书关注页直播及动态过滤
     match: ^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v1/hey/followfeed|v2/user/followings/dualfeed)(?:\?|$)
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-follow-filter.js?v=20261108-3
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-follow-filter.js?v=20261108-4
     body_required: true
     timeout: 10
     update_interval: 3600
