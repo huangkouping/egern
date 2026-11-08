@@ -16,7 +16,8 @@
  };
  let removed=0,rows=0;
  const filter=a=>{if(!Array.isArray(a))return;const b=a.filter(x=>{if(isLive(x)){removed++;return false}return true});a.splice(0,a.length,...b)};
- const d=p?.data;\n if(/\/v1\/hey\/followfeed(?:\?|$)/.test(url) && Array.isArray(d) && on("HIDE_FOLLOW_STORIES")){const n=d.length;p.data=[];console.log("[小红书关注顶部] 清除 "+n+" 个头像动态");return $done({body:JSON.stringify(p)}); }
+ const d=p?.data;
+ if(/\/v1\/hey\/followfeed(?:\?|$)/.test(url) && Array.isArray(d) && on("HIDE_FOLLOW_STORIES")){const n=d.length;p.data=[];console.log("[小红书关注顶部] 清除 "+n+" 个头像动态");return $done({body:JSON.stringify(p)}); }
  if(d&&typeof d==="object"){
   if(on("BLOCK_FOLLOW_LIVE")){
    for(const key of ["note_infos","items","feeds","notes","list","note_list","follow_feeds"])filter(d[key]);
