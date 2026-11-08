@@ -1,0 +1,38 @@
+name: 小红书搜索去直播(测试版)🅗
+description: |-
+  独立过滤搜索结果中的直播卡片与正在直播的作者内容；不修改原增强版模块。
+  仅依据明确直播字段过滤，普通图文、视频和商品笔记尽量保留。
+  更新时间：2026-11-08 08:54
+author: huangkouping / ChatGPT
+homepage: https://github.com/huangkouping/egern
+icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
+
+env_schema:
+  BLOCK_SEARCH_LIVE:
+    name: 屏蔽搜索结果直播
+    description: 关闭后不修改搜索结果。
+    default_value: 'true'
+    options:
+    - 'true'
+    - 'false'
+
+scriptings:
+- http_response:
+    name: 小红书搜索直播过滤测试
+    match: ^https://[a-zA-Z0-9.-]+\\.xiaohongshu\\.com/api/sns/(?:v\\d+/search/|web/v\\d+/search/).*
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-search-live-test.js?v=20261108-1
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+
+mitm:
+  hostnames:
+    includes:
+    - edith.xiaohongshu.com
+    - www.xiaohongshu.com
+    - rec.xiaohongshu.com
+
+compat_arguments_desc: |-
+  本模块为独立测试版，可与小红书去直播广告(增强版)🅗同时开启。
+  只处理搜索接口，不修改首页、开屏或去水印功能。
+  如搜索结果仍出现直播，请提供 Egern 对应搜索请求的 URL 与脱敏响应结构，以便精准补充规则。
