@@ -124,8 +124,8 @@
   // 搜索结果的外层包装与首页不同，逐层检查卡片本身及 note_card。
   const searchCard = (item) => {
     if (!item || typeof item !== "object") return null;
-    const nodes = [item, item.note_card, item.card, item.content, item.note, item.note_info].filter(x => x && typeof x === "object");
-    if (blockAds && nodes.some(isPromotedAd)) return "广告";
+    const nodes = [item, item.note_card, item.card, item.content, item.note, item.note_info, item.ads, item.ads?.note].filter(x => x && typeof x === "object");
+    if (blockAds && (item.model_type === 'ads' || (item.ads && typeof item.ads === 'object') || nodes.some(isPromotedAd))) return "广告";
     if (blockLive && nodes.some(isLiveCard)) return "直播";
     if (blockMedical && nodes.some(isMedicalPromotion)) return "医美";
     return null;
