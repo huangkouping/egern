@@ -19,7 +19,7 @@ env_schema:
 scriptings:
 - http_response:
     name: 小红书搜索直播过滤测试
-    match: ^https://[a-zA-Z0-9.-]+\\.xiaohongshu\\.com/api/sns/(?:v\\d+/search/|web/v\\d+/search/).*
+    match: ^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/search/|web/v\d+/search/).*
     script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-search-live-test.js?v=20261108-1
     body_required: true
     timeout: 10
