@@ -6,7 +6,7 @@
  let p;try{p=JSON.parse($response.body)}catch(_){return $done({})}
  const env=typeof ctx!=="undefined"&&ctx&&ctx.env||{};
  const on=k=>!["false","0","off","no"].includes(String(env[k]??"true").toLowerCase());
- const live=v=>{if(!v||typeof v!=="object")return false;const s=Number(v.live_status??v.status??v.room_status);return s===1||s===2||!!(v.room_id&&(v.live_link||v.stream_url||v.cover))};
+ const live=v=>{if(!v||typeof v!=="object")return false;const s=Number(v.live_status??v.status??v.room_status);return s===1||s===2||!!(v.room_id&&(v.live_link||v.stream_url||v.cover))||!!(v.room_extra_info&&typeof v.room_extra_info==="string"&&v.room_extra_info.includes("live_stream_info"))};
  const isLive=x=>{
   if(!x||typeof x!=="object")return false;
   return [x,x.note_card,x.card,x.note,x.content].filter(Boolean).some(v=>{
