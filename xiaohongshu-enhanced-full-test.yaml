@@ -2,7 +2,7 @@ name: 小红书去直播广告(完整测试版)🅗
 description: |-
   屏蔽开屏、首页直播、广告与热搜推荐，支持笔记、评论图片、视频及实况保存去水印。
   新增搜索结果广告与直播过滤，复用首页精准识别逻辑，保留原增强版全部功能。
-  更新时间：2026-11-08 09:15
+  更新时间：2026-11-08 09:25
 author: huangkouping / Codex, AI 精准校准版
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/xiaohongshu.png
@@ -106,7 +106,7 @@ scriptings:
 - http_response:
     name: 小红书搜索结果广告与直播过滤（测试）
     match: ^https://[a-zA-Z0-9.-]+\.xiaohongshu\.com/api/sns/(?:v\d+/search/|web/v\d+/search/).*
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-search-live-test.js?v=20261108-2
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-search-live-test.js?v=20261108-3
     body_required: true
     timeout: 10
     update_interval: 3600
@@ -187,6 +187,7 @@ mitm:
     includes:
     - ci.xiaohongshu.com
     - rec.xiaohongshu.com
+    - so.xiaohongshu.com
     - www.xiaohongshu.com
     - edith.xiaohongshu.com
     - '*.xiaohongshu.com'
