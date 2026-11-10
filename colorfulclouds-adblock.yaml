@@ -3,7 +3,7 @@ author: ddgksf2013, huangkouping
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id847764912
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png
-compat_arguments_desc: '去开屏、首页推广、底栏小助手、右侧悬浮入口及反馈天气。
+compat_arguments_desc: '去开屏、首页推广、底栏小助手及右侧悬浮入口。
 
   更新时间：2026-11-10 09:47（同步成功）'
 dns: {}
@@ -63,5 +63,5 @@ mitm:
     - cdn-w.caiyunapp.com
     - ad.cyapi.cn
 description: |-
-  去开屏、首页推广、底栏小助手、右侧悬浮入口及反馈天气。
+  去开屏、首页推广、底栏小助手及右侧悬浮入口。
   更新时间：2026-11-10 09:47（同步成功）
