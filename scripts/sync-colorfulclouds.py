@@ -43,7 +43,8 @@ def adapt(source):
     patched = "$request.url.includes(\"activity\")?(responseBody=JSON.parse($response.body),$request.url.includes(\"type_id=A03\")&&Array.isArray(responseBody.activities)&&(responseBody.activities=responseBody.activities.filter(e=>![\"aichat\",\"ai_chat\",\"assistant\"].includes(e.name)).map(e=>e.name===\"operational\"||e.name===\"operational_show\"?Object.assign({},e,{feature:false}):e)),$request.url.includes(\"type_id=A08\")&&Array.isArray(responseBody.activities)&&(responseBody.activities=[])):"
     if legacy not in source:
         raise ValueError('Upstream activity handler changed; review before syncing')
-    source = source.replace(legacy, patched)\n    result = ('/* 墨鱼 ddgksf2013 彩云天气去广告脚本镜像；补充异常透传与单次完成包装。\n'
+    source = source.replace(legacy, patched)
+    result = ('/* 墨鱼 ddgksf2013 彩云天气去广告脚本镜像；补充异常透传与单次完成包装。\n'
               ' * Source: ' + URL + '\n */\n'
               '(function (complete) {\nlet finished = false;\n'
               'const $done = value => { if (!finished) { finished = true; complete(value); } };\n'
@@ -73,7 +74,7 @@ def build(version):
         'homepage': 'https://github.com/huangkouping/egern',
         'open_url': 'https://apps.apple.com/app/id847764912',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png',
-        'compat_arguments_desc': '【使用说明】\\n开启 MitM 并信任证书，更新后彻底关闭 App 再打开。\\n去除开屏、首页推广、底栏小助手和右侧悬浮入口。\\n更新时间：2026-11-10 09:16（同步成功）',
+        'compat_arguments_desc': '开启 MitM 并信任证书，更新后彻底关闭 App 再打开。',
         'dns': {},
         # 网络层直接拦截广告与日志上报
         'rules': [{'domain': {'match': domain, 'policy': 'REJECT'}} for domain in
@@ -153,26 +154,31 @@ def main():
             previous = yaml.safe_load(MODULE.read_text())
             previous.pop('description', None)
             changed = changed or previous != module
-        # Guard against silently replacing user-maintained module rules.
-        # All customizations must be encoded in build()/adapt(); stop if an
-        # existing non-generated rule differs from the new output.
+        # Preserve local module customizations instead of replacing the whole YAML.
         if MODULE.exists():
-            previous_full = yaml.safe_load(MODULE.read_text()) or {}
+            original = yaml.safe_load(MODULE.read_text()) or {}
             for section in ('rules', 'rewrites', 'scriptings'):
-                old_entries = previous_full.get(section, []) or []
-                new_entries = module.get(section, []) or []
-                if any(entry not in new_entries for entry in old_entries):
-                    raise ValueError('Protected local customization differs in ' + section)
-            old_hosts = set(previous_full.get('mitm', {}).get('hostnames', {}).get('includes', []))
-            new_hosts = set(module.get('mitm', {}).get('hostnames', {}).get('includes', []))
-            if not old_hosts.issubset(new_hosts):
-                raise ValueError('Protected local MITM hostnames would be lost')
+                existing = original.get(section, []) or []
+                generated = module.get(section, []) or []
+                if section == 'scriptings':
+                    generated_names = {e.get('http_response', {}).get('name') for e in generated}
+                    extras = [e for e in existing if e.get('http_response', {}).get('name') not in generated_names]
+                else:
+                    extras = [e for e in existing if e not in generated]
+                module[section] = generated + extras
+            existing_hosts = original.get('mitm', {}).get('hostnames', {}).get('includes', [])
+            module['mitm']['hostnames']['includes'] = list(dict.fromkeys(
+                module['mitm']['hostnames']['includes'] + existing_hosts))
+            for key, value in original.items():
+                if key not in module and key != 'description':
+                    module[key] = value
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_url': URL, 'source_version': 'ddgksf2013-latest',
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
                 'scope': 'Sync ddgksf2013 caiyun_json.js; remove assistant bar and feeds/banners.'}
         module['description'] = description(meta)
+        module['compat_arguments_desc'] = module['description']
         SCRIPT.write_text(script)
         # 使用自定义的 safe_dump_yaml 生成，避免破坏合法转义
         MODULE.write_text(safe_dump_yaml(module))
@@ -185,6 +191,7 @@ def main():
             meta = dict(old, status='failed', last_checked=checked, error=type(error).__name__)
             module = yaml.safe_load(MODULE.read_text())
             module['description'] = description(meta)
+            module['compat_arguments_desc'] = module['description']
             MODULE.write_text(safe_dump_yaml(module))
             META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
         print('ColorfulClouds sync failed; last good rules retained:', type(error).__name__, file=sys.stderr)
