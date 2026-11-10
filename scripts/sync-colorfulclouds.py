@@ -148,6 +148,11 @@ def main():
             req = urllib.request.Request(URL, headers={'User-Agent': 'Egern-Public-Mirror-Sync/1.0'})
             with urllib.request.urlopen(req, timeout=30) as response:
                 source = response.read(200001).decode('utf-8')
+        # Do not overwrite hand-edited JS that differs from the last published sync.
+        if SCRIPT.exists() and old.get('script_sha256'):
+            current_sha = hashlib.sha256(SCRIPT.read_bytes()).hexdigest()
+            if current_sha != old['script_sha256']:
+                raise ValueError('Local JS differs from last synced output; manual review required')
         script = adapt(source)
         sha = hashlib.sha256(script.encode()).hexdigest()
         module = build(sha[:12])
@@ -177,7 +182,10 @@ def main():
             previous = yaml.safe_load(MODULE.read_text()) or {}
             for field in ('description', 'compat_arguments_desc'):
                 previous.pop(field, None)
-            changed = changed or previous != module
+            comparable = dict(module)
+            for field in ('description', 'compat_arguments_desc'):
+                comparable.pop(field, None)
+            changed = changed or previous != comparable
         module_updated_at = checked if changed else (old.get('module_updated_at') or old.get('last_updated', checked))
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'module_updated_at': module_updated_at,
@@ -188,7 +196,8 @@ def main():
         module['description'] = description(meta)
         module['compat_arguments_desc'] = module['description']
         # Only publish after script validation and module merge have succeeded.
-        SCRIPT.write_text(script)
+        if changed:
+            SCRIPT.write_text(script)
         # 使用自定义的 safe_dump_yaml 生成，避免破坏合法转义
         MODULE.write_text(safe_dump_yaml(module))
         
