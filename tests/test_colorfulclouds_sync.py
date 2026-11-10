@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Regression checks for local-first Caiyun three-way YAML merges."""
 import importlib.util
+import sys
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(root / 'scripts'))
 spec = importlib.util.spec_from_file_location('caiyun_sync', root / 'scripts/sync-colorfulclouds.py')
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
