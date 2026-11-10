@@ -19,6 +19,7 @@ MODULE = ROOT / 'colorfulclouds-adblock.yaml'
 SCRIPT = ROOT / 'colorfulclouds-adblock.js'
 META = ROOT / 'colorfulclouds-sync-status.json'
 BASE = ROOT / 'scripts/colorfulclouds-sync-base.js'
+YAML_BASE = ROOT / 'scripts/colorfulclouds-sync-base.yaml'
 
 class EgernSafeDumper(yaml.SafeDumper):
     """Custom YAML Dumper to preserve raw regex backslashes using single quotes."""
@@ -136,6 +137,65 @@ def build(version):
         }
     }
 
+_MISSING = object()
+
+def merge_value(base, local, incoming, path='root'):
+    """Recursive three-way merge; local edits win when both sides change."""
+    if local is _MISSING:
+        return _MISSING if base is not _MISSING else incoming
+    if incoming is _MISSING:
+        return local if local != base else _MISSING
+    if local == base:
+        return incoming
+    if incoming == base or local == incoming:
+        return local
+    if isinstance(base, dict) and isinstance(local, dict) and isinstance(incoming, dict):
+        result = {}
+        for key in dict.fromkeys([*base, *local, *incoming]):
+            value = merge_value(base.get(key, _MISSING), local.get(key, _MISSING),
+                                incoming.get(key, _MISSING), path + '.' + str(key))
+            if value is not _MISSING:
+                result[key] = value
+        return result
+    if isinstance(local, list) and isinstance(incoming, list):
+        if path.endswith('.includes') or path.endswith('.rules'):
+            result = [v for v in local]
+            for item in incoming:
+                if item not in result and (not isinstance(base, list) or item not in base):
+                    result.append(item)
+            return result
+        if path.endswith('.scriptings') or path.endswith('.rewrites'):
+            def key(item):
+                if not isinstance(item, dict):
+                    return repr(item)
+                if 'http_response' in item:
+                    response = item['http_response']
+                    return ('response', response.get('name', response.get('match')))
+                return ('rewrite', item.get('match', repr(item)))
+            bmap = {key(v): v for v in base} if isinstance(base, list) else {}
+            lmap = {key(v): v for v in local}
+            imap = {key(v): v for v in incoming}
+            keys = list(dict.fromkeys([*lmap, *imap]))
+            result = []
+            for k in keys:
+                value = merge_value(bmap.get(k, _MISSING), lmap.get(k, _MISSING),
+                                    imap.get(k, _MISSING), path + '.' + str(k))
+                if value is not _MISSING:
+                    result.append(value)
+            return result
+    # Concurrent edits of a scalar: local value is authoritative.
+    return local
+
+def validate_module(module):
+    if not isinstance(module, dict) or not isinstance(module.get('scriptings'), list):
+        raise ValueError('Invalid Egern module structure')
+    if not isinstance(module.get('mitm', {}).get('hostnames', {}).get('includes'), list):
+        raise ValueError('Invalid MitM host list')
+    if not any('小助手' in str(item) for item in module['scriptings']):
+        raise ValueError('Critical local assistant fix is missing')
+    if not any('activity' in str(item) for item in module['scriptings']):
+        raise ValueError('Critical activity handler is missing')
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source-file', type=Path)
@@ -175,24 +235,15 @@ def main():
         for rule in module['rewrites']:
             rule['actions'] = json.loads(json.dumps(rule['actions']))
         changed = not SCRIPT.exists() or SCRIPT.read_text() != script
-        # Preserve local module customizations instead of replacing the whole YAML.
+        generated_module = json.loads(json.dumps(module))
         if MODULE.exists():
             original = yaml.safe_load(MODULE.read_text()) or {}
-            for section in ('rules', 'rewrites', 'scriptings'):
-                existing = original.get(section, []) or []
-                generated = module.get(section, []) or []
-                if section == 'scriptings':
-                    generated_names = {e.get('http_response', {}).get('name') for e in generated}
-                    extras = [e for e in existing if e.get('http_response', {}).get('name') not in generated_names]
-                else:
-                    extras = [e for e in existing if e not in generated]
-                module[section] = generated + extras
-            existing_hosts = original.get('mitm', {}).get('hostnames', {}).get('includes', [])
-            module['mitm']['hostnames']['includes'] = list(dict.fromkeys(
-                module['mitm']['hostnames']['includes'] + existing_hosts))
-            for key, value in original.items():
-                if key not in module and key != 'description':
-                    module[key] = value
+            previous_base = yaml.safe_load(YAML_BASE.read_text()) if YAML_BASE.exists() else original
+            for item in (original, previous_base):
+                item.pop('description', None)
+                item.pop('compat_arguments_desc', None)
+            module = merge_value(previous_base, original, module)
+        validate_module(module)
         if MODULE.exists():
             previous = yaml.safe_load(MODULE.read_text()) or {}
             for field in ('description', 'compat_arguments_desc'):
@@ -214,6 +265,7 @@ def main():
         if changed:
             SCRIPT.write_text(script)
         BASE.write_text(incoming)
+        YAML_BASE.write_text(safe_dump_yaml(generated_module))
         # 使用自定义的 safe_dump_yaml 生成，避免破坏合法转义
         MODULE.write_text(safe_dump_yaml(module))
         
