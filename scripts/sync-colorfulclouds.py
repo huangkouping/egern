@@ -54,9 +54,9 @@ def adapt(source):
 
 def description(meta):
     state = '墨鱼脚本同步正常' if meta['status'] == 'ok' else '脚本同步失败，保留上次有效规则'
-    return (f"更新时间：{meta.get('last_updated', '未知')}\n"
-            '彻底移除开屏广告、首页信息流卡片(feeds)、轮播横幅(banners)及底栏小助手。\n'
-            f"同步状态：{state}；最近检查：{meta['last_checked']}")
+    return ('过滤开屏、首页推广、底栏小助手和右侧悬浮入口。\\n'
+            f"同步状态：{state}；最近检查：{meta['last_checked']}\\n"
+            f"更新时间：{meta.get('last_updated', '未知')}")
 
 def build(version):
     empty = {'respond': {'status': 200, 'headers': {'Content-Type': 'application/json'}, 'body': '{}'}}
@@ -68,7 +68,7 @@ def build(version):
         'homepage': 'https://github.com/huangkouping/egern',
         'open_url': 'https://apps.apple.com/app/id847764912',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png',
-        'compat_arguments_desc': '【使用说明】\n开启 MitM 并信任证书，启用后彻底划掉彩云天气重新打开。\n基于墨鱼(ddgksf2013)逻辑，彻底清空底栏小助手、首页 feeds/banners 卡片及活动推广。',
+        'compat_arguments_desc': '【使用说明】\\n开启 MitM 并信任证书，更新后彻底关闭 App 再打开。\\n去除开屏、首页推广、底栏小助手和右侧悬浮入口。\\n更新时间：2026-11-10 09:16',
         'dns': {},
         # 网络层直接拦截广告与日志上报
         'rules': [{'domain': {'match': domain, 'policy': 'REJECT'}} for domain in
