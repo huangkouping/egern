@@ -116,6 +116,8 @@ def merge_value(base, local, incoming, path='root'):
     """Recursive three-way merge; local edits win when both sides change."""
     if local is _MISSING:
         return _MISSING if base is not _MISSING else incoming
+    if base is _MISSING and isinstance(local, dict) and isinstance(incoming, dict):
+        return merge_value({}, local, incoming, path)
     if incoming is _MISSING:
         return local if local != base else _MISSING
     if local == base:
