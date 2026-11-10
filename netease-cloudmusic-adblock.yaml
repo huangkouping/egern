@@ -1,10 +1,11 @@
 name: 网易云音乐去广告🅥
-description: |-
+description: '更新时间：2026-11-11 04:00
+
   过滤开屏、页面推广及评论区广告，支持界面开关。
-  同步状态：源脚本同步正常；最近检查：2026-11-10 15:44
-  更新时间：2026-11-10 15:44
+
+  同步状态：源脚本同步正常；最近检查：2026-11-11 04:00'
 open_url: https://apps.apple.com/app/id590338362
-author: RuCu6[https://github.com/RuCu6], Keywos[https://github.com/Keywos], huangkouping
+author: RuCu6[https://github.com/RuCu6], Keywos[https://github.com/Keywos]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/Keywos/rule/main/tv/app/144px/Netease.png
 compat_arguments_desc: 使用说明：开启HTTPS解密并信任证书，更新后重启网易云音乐。界面隐藏开关在模块环境变量中设置，默认均关闭。基于2025-02-19 Keywos源脚本wyres.js直连同步（不再经可莉Kelee镜像），已适配Egern二进制加解密与gzip处理，异常返回原始响应；保留源脚本会员等级等界面显示修改；服务端权益以实际账号为准。关注列表提示沿用源逻辑。接口与加密协议变化可能导致失效，当前App效果需实测。每6小时检查源JS，结构变化或语法校验失败时保留可用版本；模块匹配规则单独维护。

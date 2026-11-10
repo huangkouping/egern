@@ -1,10 +1,11 @@
 name: 12306去广告🅥
-description: |-
+description: '更新时间：2026-11-11 04:00
+
   清理开屏广告及指定应用内推广。
-  同步状态：脚本镜像同步正常；最近检查：2026-11-10 15:44
-  更新时间：2026-11-10 15:44
+
+  同步状态：脚本镜像同步正常；最近检查：2026-11-11 04:00'
 open_url: https://apps.apple.com/app/id564818797
-author: RuCu6[https://github.com/RuCu6], 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], huangkouping
+author: RuCu6[https://github.com/RuCu6], 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/12306.png
 compat_arguments_desc: 使用说明：启用 HTTPS 解密并信任证书，更新后重新打开铁路12306。开屏响应删除 materialsList/advertParam；应用内根据 operation-type 请求头拦截活动横幅、会员常见问题、热门资讯、商品信息流及支付成功页商业推广。登录、车票查询及购票等未命中操作正常放行。请求头名称不区分大小写。脚本源版本 2024-11-24，仅在12306指定接口执行；当前 App 效果待实测。每6小时检查公开JS镜像，失败保留上次有效规则；模块匹配规则单独维护。
