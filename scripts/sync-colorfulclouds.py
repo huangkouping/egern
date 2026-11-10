@@ -38,7 +38,12 @@ def adapt(source):
         raise ValueError('Unexpected source size')
     if any(token in source for token in ['<html', '<!DOCTYPE', '404: Not Found', 'eval(', '$httpClient', '$task.fetch', 'import(']):
         raise ValueError('Unexpected upstream content or network code')
-    # 本地精确修复：保留天气活动配置，仅禁用 A03 运营悬浮入口和 A08 双十一推广。\n    legacy = "$request.url.includes(\"activity\")?responseBody=$request.url.includes(\"type_id=A03\")?{status:\"ok\",activities:[{type:\"tabbar\",name:\"aichat\",feature:!1}]}:{status:\"ok\",activities:[{items:[{}]}]}:"\n    patched = "$request.url.includes(\"activity\")?(responseBody=JSON.parse($response.body),$request.url.includes(\"type_id=A03\")&&Array.isArray(responseBody.activities)&&(responseBody.activities=responseBody.activities.filter(e=>![\"aichat\",\"ai_chat\",\"assistant\"].includes(e.name)).map(e=>e.name===\"operational\"||e.name===\"operational_show\"?Object.assign({},e,{feature:false}):e)),$request.url.includes(\"type_id=A08\")&&Array.isArray(responseBody.activities)&&(responseBody.activities=[])):"\n    if legacy not in source:\n        raise ValueError('Upstream activity handler changed; review before syncing')\n    source = source.replace(legacy, patched)\n    result = ('/* 墨鱼 ddgksf2013 彩云天气去广告脚本镜像；补充异常透传与单次完成包装。\n'
+    # 本地精确修复：保留天气活动配置，仅禁用 A03 运营悬浮入口和 A08 双十一推广。
+    legacy = "$request.url.includes(\"activity\")?responseBody=$request.url.includes(\"type_id=A03\")?{status:\"ok\",activities:[{type:\"tabbar\",name:\"aichat\",feature:!1}]}:{status:\"ok\",activities:[{items:[{}]}]}:"
+    patched = "$request.url.includes(\"activity\")?(responseBody=JSON.parse($response.body),$request.url.includes(\"type_id=A03\")&&Array.isArray(responseBody.activities)&&(responseBody.activities=responseBody.activities.filter(e=>![\"aichat\",\"ai_chat\",\"assistant\"].includes(e.name)).map(e=>e.name===\"operational\"||e.name===\"operational_show\"?Object.assign({},e,{feature:false}):e)),$request.url.includes(\"type_id=A08\")&&Array.isArray(responseBody.activities)&&(responseBody.activities=[])):"
+    if legacy not in source:
+        raise ValueError('Upstream activity handler changed; review before syncing')
+    source = source.replace(legacy, patched)\n    result = ('/* 墨鱼 ddgksf2013 彩云天气去广告脚本镜像；补充异常透传与单次完成包装。\n'
               ' * Source: ' + URL + '\n */\n'
               '(function (complete) {\nlet finished = false;\n'
               'const $done = value => { if (!finished) { finished = true; complete(value); } };\n'
@@ -55,7 +60,7 @@ def adapt(source):
 def description(meta):
     state = '同步成功' if meta['status'] == 'ok' else '同步失败'
     updated = meta.get('last_updated', '未知')
-    return ('去开屏、首页推广、底栏小助手及右侧悬浮入口。\\n'
+    return ('去开屏、首页推广、底栏小助手及右侧悬浮入口。\n'
             f"更新时间：{updated}（{state}）")
 
 def build(version):
@@ -148,6 +153,20 @@ def main():
             previous = yaml.safe_load(MODULE.read_text())
             previous.pop('description', None)
             changed = changed or previous != module
+        # Guard against silently replacing user-maintained module rules.
+        # All customizations must be encoded in build()/adapt(); stop if an
+        # existing non-generated rule differs from the new output.
+        if MODULE.exists():
+            previous_full = yaml.safe_load(MODULE.read_text()) or {}
+            for section in ('rules', 'rewrites', 'scriptings'):
+                old_entries = previous_full.get(section, []) or []
+                new_entries = module.get(section, []) or []
+                if any(entry not in new_entries for entry in old_entries):
+                    raise ValueError('Protected local customization differs in ' + section)
+            old_hosts = set(previous_full.get('mitm', {}).get('hostnames', {}).get('includes', []))
+            new_hosts = set(module.get('mitm', {}).get('hostnames', {}).get('includes', []))
+            if not old_hosts.issubset(new_hosts):
+                raise ValueError('Protected local MITM hostnames would be lost')
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_url': URL, 'source_version': 'ddgksf2013-latest',
