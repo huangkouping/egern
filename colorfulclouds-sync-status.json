@@ -1,12 +1,12 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-10 09:36",
-  "last_success": "2026-11-10 09:36",
-  "module_updated_at": "2026-11-10 09:36",
-  "last_updated": "2026-11-10 09:36",
+  "last_checked": "2026-11-10 09:38",
+  "last_success": "2026-11-10 09:38",
+  "module_updated_at": "2026-11-10 09:38",
+  "last_updated": "2026-11-10 09:38",
   "source_url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/master/caiyun_json.js",
   "source_version": "ddgksf2013-latest",
   "source_sha256": "1a165112aac24bf3830fa47b77d223d85beffdeaf91ee96eef05ab9429b36844",
-  "script_sha256": "269b346cc5fa8220db3f5f2add8122faddbdcf3cdfd4832e663d3682e0017282",
+  "script_sha256": "dcbaa8555efd76e42230f5da457b24fc934acfe5354325645379b1c569699678",
   "scope": "Sync ddgksf2013 caiyun_json.js; remove assistant bar and feeds/banners."
 }
