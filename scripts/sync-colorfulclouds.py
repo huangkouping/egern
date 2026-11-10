@@ -150,10 +150,6 @@ def main():
         for rule in module['rewrites']:
             rule['actions'] = json.loads(json.dumps(rule['actions']))
         changed = not SCRIPT.exists() or SCRIPT.read_text() != script
-        if MODULE.exists():
-            previous = yaml.safe_load(MODULE.read_text())
-            previous.pop('description', None)
-            changed = changed or previous != module
         # Preserve local module customizations instead of replacing the whole YAML.
         if MODULE.exists():
             original = yaml.safe_load(MODULE.read_text()) or {}
@@ -172,6 +168,11 @@ def main():
             for key, value in original.items():
                 if key not in module and key != 'description':
                     module[key] = value
+        if MODULE.exists():
+            previous = yaml.safe_load(MODULE.read_text()) or {}
+            for field in ('description', 'compat_arguments_desc'):
+                previous.pop(field, None)
+            changed = changed or previous != module
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_url': URL, 'source_version': 'ddgksf2013-latest',
@@ -179,6 +180,7 @@ def main():
                 'scope': 'Sync ddgksf2013 caiyun_json.js; remove assistant bar and feeds/banners.'}
         module['description'] = description(meta)
         module['compat_arguments_desc'] = module['description']
+        # Only publish after script validation and module merge have succeeded.
         SCRIPT.write_text(script)
         # 使用自定义的 safe_dump_yaml 生成，避免破坏合法转义
         MODULE.write_text(safe_dump_yaml(module))
