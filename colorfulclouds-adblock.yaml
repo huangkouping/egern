@@ -37,21 +37,21 @@ scriptings:
 - http_response:
     name: 彩云天气移除底栏小助手
     match: '(?i)^https?://biz\.cyapi\.cn/(api/)?v\d+/user(_detail)?'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=202611100912
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=202611100916
     body_required: true
     timeout: 10
     update_interval: 3600
 - http_response:
     name: 彩云天气活动清洗
     match: '(?i)^https?://(wrapper\.cyapi\.cn|api\.caiyunapp\.com|cdn-w\.caiyunapp\.com)/v\d+/activity'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=202611100912
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=202611100916
     body_required: true
     timeout: 10
     update_interval: 3600
 - http_response:
     name: 彩云天气首页卡片与浮窗清理
     match: '(?i)^https?://starplucker\.cyapi\.cn/v\d+/(operation/(homefeatures|feeds|banners|features)|notification/message_center|config/cypage|campaigns)'
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=202611100912
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=202611100916
     body_required: true
     timeout: 10
     update_interval: 3600
@@ -67,4 +67,4 @@ mitm:
 description: |-
   过滤开屏、首页推广和底栏小助手，禁用运营悬浮入口及活动广告。
   同步状态：墨鱼脚本同步正常；最近检查：2026-11-10 06:41
-  更新时间：2026-11-10 09:12
+  更新时间：2026-11-10 09:16
