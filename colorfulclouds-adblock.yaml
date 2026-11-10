@@ -5,7 +5,7 @@ open_url: https://apps.apple.com/app/id847764912
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png
 compat_arguments_desc: '去开屏、首页推广、底栏小助手、右侧悬浮入口及反馈天气。
 
-  更新时间：2026-11-10 09:34（同步成功）'
+  更新时间：2026-11-10 09:36（同步成功）'
 dns: {}
 rules:
 - domain:
@@ -64,4 +64,4 @@ mitm:
     - ad.cyapi.cn
 description: '去开屏、首页推广、底栏小助手、右侧悬浮入口及反馈天气。
 
-  更新时间：2026-11-10 09:34（同步成功）'
+  更新时间：2026-11-10 09:36（同步成功）'
