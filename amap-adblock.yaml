@@ -1,9 +1,10 @@
 name: 高德地图去广告🅥
-description: |-
+description: '更新时间：2026-11-01 12:22
+
   开屏、首页及地点推广过滤，精简页面。
-  同步状态：JQ镜像同步正常；最近检查：2026-11-10 06:41
-  更新时间：2026-11-01 12:22
-author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], huangkouping
+
+  同步状态：JQ镜像同步正常；最近检查：2026-11-10 09:13'
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id461703208
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Amap.png
