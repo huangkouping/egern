@@ -40,7 +40,7 @@ def adapt(source):
         raise ValueError('Unexpected upstream content or network code')
     # 本地精确修复：保留天气活动配置，仅禁用 A03 运营悬浮入口和 A08 双十一推广。
     legacy = "$request.url.includes(\"activity\")?responseBody=$request.url.includes(\"type_id=A03\")?{status:\"ok\",activities:[{type:\"tabbar\",name:\"aichat\",feature:!1}]}:{status:\"ok\",activities:[{items:[{}]}]}:"
-    patched = '$request.url.includes("activity")?(responseBody=JSON.parse($response.body),$request.url.includes("type_id=A03")&&(responseBody={status:"ok",activities:[{type:"tabbar",name:"aichat",feature:false}]}),$request.url.includes("type_id=A08")&&Array.isArray(responseBody.activities)&&(responseBody.activities=[])):'
+    patched = '$request.url.includes("activity")?(responseBody=$request.url.includes("type_id=A03")?{status:"ok",activities:[{type:"tabbar",name:"aichat",feature:!1}]}:JSON.parse($response.body),$request.url.includes("type_id=A08")&&Array.isArray(responseBody.activities)&&(responseBody.activities=[]),Array.isArray(responseBody.activities)&&(responseBody.activities=responseBody.activities.map(e=>e&&["operational","operational_show"].includes(e.name)?Object.assign({},e,{feature:!1}):e))):'
     if legacy not in source:
         raise ValueError('Upstream activity handler changed; review before syncing')
     source = source.replace(legacy, patched)
