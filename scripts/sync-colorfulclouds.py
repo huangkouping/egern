@@ -18,6 +18,7 @@ URL = 'https://raw.githubusercontent.com/ddgksf2013/Scripts/master/caiyun_json.j
 MODULE = ROOT / 'colorfulclouds-adblock.yaml'
 SCRIPT = ROOT / 'colorfulclouds-adblock.js'
 META = ROOT / 'colorfulclouds-sync-status.json'
+BASE = ROOT / 'scripts/colorfulclouds-sync-base.js'
 
 class EgernSafeDumper(yaml.SafeDumper):
     """Custom YAML Dumper to preserve raw regex backslashes using single quotes."""
@@ -148,12 +149,26 @@ def main():
             req = urllib.request.Request(URL, headers={'User-Agent': 'Egern-Public-Mirror-Sync/1.0'})
             with urllib.request.urlopen(req, timeout=30) as response:
                 source = response.read(200001).decode('utf-8')
-        # Do not overwrite hand-edited JS that differs from the last published sync.
-        if SCRIPT.exists() and old.get('script_sha256'):
-            current_sha = hashlib.sha256(SCRIPT.read_bytes()).hexdigest()
-            if current_sha != old['script_sha256']:
-                raise ValueError('Local JS differs from last synced output; manual review required')
-        script = adapt(source)
+        incoming = adapt(source)
+        script = incoming
+        if SCRIPT.exists() and BASE.exists():
+            with tempfile.TemporaryDirectory() as temp:
+                current_file = Path(temp) / 'local.js'
+                base_file = Path(temp) / 'base.js'
+                incoming_file = Path(temp) / 'incoming.js'
+                current_file.write_text(SCRIPT.read_text())
+                base_file.write_text(BASE.read_text())
+                incoming_file.write_text(incoming)
+                merge = subprocess.run(['git', 'merge-file', '-p', str(current_file), str(base_file), str(incoming_file)], capture_output=True, text=True, timeout=20)
+                if merge.returncode != 0:
+                    raise ValueError('Conflicting JS changes require review; last good version retained')
+                script = merge.stdout
+        with tempfile.NamedTemporaryFile(suffix='.js', mode='w') as check_file:
+            check_file.write(script)
+            check_file.flush()
+            syntax = subprocess.run(['node', '--check', check_file.name], capture_output=True, text=True, timeout=15)
+            if syntax.returncode:
+                raise ValueError('Merged JavaScript syntax check failed')
         sha = hashlib.sha256(script.encode()).hexdigest()
         module = build(sha[:12])
         # Alias-free YAML is easier to inspect and compatible with Egern.
@@ -198,6 +213,7 @@ def main():
         # Only publish after script validation and module merge have succeeded.
         if changed:
             SCRIPT.write_text(script)
+        BASE.write_text(incoming)
         # 使用自定义的 safe_dump_yaml 生成，避免破坏合法转义
         MODULE.write_text(safe_dump_yaml(module))
         
