@@ -75,7 +75,7 @@ def build(version):
     script_url = 'https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=' + version
 
     return {
-        'name': '彩云天气去广告🅥 (墨鱼优化版)',
+        'name': '彩云天气去广告(同步优化版) 🅥',
         'author': 'ddgksf2013, huangkouping',
         'homepage': 'https://github.com/huangkouping/egern',
         'open_url': 'https://apps.apple.com/app/id847764912',
