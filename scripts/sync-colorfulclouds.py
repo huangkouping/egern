@@ -63,7 +63,7 @@ def adapt(source):
 
 def description(meta):
     state = '同步成功' if meta['status'] == 'ok' else '同步失败'
-    updated = meta.get('last_updated', '未知')
+    updated = meta.get('module_updated_at') or meta.get('last_updated', '未知')
     return ('去开屏、首页推广、底栏小助手、右侧悬浮入口及反馈天气。\n'
             f"更新时间：{updated}（{state}）")
 
@@ -176,8 +176,10 @@ def main():
             for field in ('description', 'compat_arguments_desc'):
                 previous.pop(field, None)
             changed = changed or previous != module
+        module_updated_at = checked if changed else (old.get('module_updated_at') or old.get('last_updated', checked))
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
-                'last_updated': checked if changed else old.get('last_updated', checked),
+                'module_updated_at': module_updated_at,
+                'last_updated': module_updated_at,
                 'source_url': URL, 'source_version': 'ddgksf2013-latest',
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
                 'scope': 'Sync ddgksf2013 caiyun_json.js; remove assistant bar and feeds/banners.'}
@@ -195,6 +197,9 @@ def main():
         if MODULE.exists():
             meta = dict(old, status='failed', last_checked=checked, error=type(error).__name__)
             module = yaml.safe_load(MODULE.read_text())
+            # A failed sync does not modify the published module's behavior.
+            # Keep its visible last-modified timestamp unchanged.
+            meta['module_updated_at'] = old.get('module_updated_at') or old.get('last_updated', checked)
             module['description'] = description(meta)
             module['compat_arguments_desc'] = module['description']
             MODULE.write_text(safe_dump_yaml(module))
