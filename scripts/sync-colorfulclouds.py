@@ -54,9 +54,11 @@ def adapt(source):
 
 def description(meta):
     state = '墨鱼脚本同步正常' if meta['status'] == 'ok' else '脚本同步失败，保留上次有效规则'
-    return ('过滤开屏、首页推广、底栏小助手和右侧悬浮入口。\\n'
+    updated = meta.get('last_updated', '未知')
+    return (f"更新：{updated}\\n"
+            '去开屏、首页推广、底栏小助手及右侧悬浮入口。\\n'
             f"同步状态：{state}；最近检查：{meta['last_checked']}\\n"
-            f"更新时间：{meta.get('last_updated', '未知')}")
+            f"更新时间：{updated}")
 
 def build(version):
     empty = {'respond': {'status': 200, 'headers': {'Content-Type': 'application/json'}, 'body': '{}'}}
