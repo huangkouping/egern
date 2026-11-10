@@ -45,6 +45,8 @@ def adapt(source):
         raise ValueError('Upstream activity handler changed; review before syncing')
     source = source.replace(legacy, patched)
     source = source.replace(':$done({}),$done({body:JSON.stringify(responseBody)})', ':responseBody=JSON.parse($response.body),$done({body:JSON.stringify(responseBody)})')
+    source = source.replace('let responseBody={};$request.url.includes', 'let responseBody=JSON.parse($response.body);$request.url.includes')
+    source = source.replace(':responseBody=JSON.parse($response.body),$done({body:JSON.stringify(responseBody)});', ':0,$done({body:JSON.stringify(responseBody)});')
     source = source.replace('$done({body:JSON.stringify(responseBody)});', '$done({body:JSON.stringify(hideWeatherFeedback(responseBody))});')
     feedback_helper = "function hideWeatherFeedback(root){const match=x=>{if(!x||typeof x!==\"object\")return false;const s=[x.name,x.title,x.text,x.label,x.key,x.id,x.action,x.url].filter(v=>typeof v===\"string\").join(\" \").toLowerCase();return /反馈天气|天气反馈|feedback.weather|weather.feedback|weather_feedback|feedback_weather|weatherfeedback/.test(s)};const walk=(x,d)=>{if(!x||typeof x!==\"object\"||d>8)return x;if(Array.isArray(x))return x.filter(v=>!match(v)).map(v=>walk(v,d+1));for(const k of Object.keys(x)){if(/^(weather_feedback|feedback_weather|weatherFeedback|feedbackWeather)$/.test(k)){if(typeof x[k]===\"boolean\")x[k]=false;else if(x[k]&&typeof x[k]===\"object\")x[k]={...x[k],enabled:false,visible:false,show:false}}else x[k]=walk(x[k],d+1)}return x};return walk(root,0)}\n"
     result = ('/* 墨鱼 ddgksf2013 彩云天气去广告脚本镜像；补充异常透传与单次完成包装。\n'
