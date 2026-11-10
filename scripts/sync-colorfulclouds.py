@@ -53,12 +53,10 @@ def adapt(source):
     return result
 
 def description(meta):
-    state = '墨鱼脚本同步正常' if meta['status'] == 'ok' else '脚本同步失败，保留上次有效规则'
+    state = '同步成功' if meta['status'] == 'ok' else '同步失败'
     updated = meta.get('last_updated', '未知')
-    return (f"更新：{updated}\\n"
-            '去开屏、首页推广、底栏小助手及右侧悬浮入口。\\n'
-            f"同步状态：{state}；最近检查：{meta['last_checked']}\\n"
-            f"更新时间：{updated}")
+    return ('去开屏、首页推广、底栏小助手及右侧悬浮入口。\\n'
+            f"更新时间：{updated}（{state}）")
 
 def build(version):
     empty = {'respond': {'status': 200, 'headers': {'Content-Type': 'application/json'}, 'body': '{}'}}
@@ -70,7 +68,7 @@ def build(version):
         'homepage': 'https://github.com/huangkouping/egern',
         'open_url': 'https://apps.apple.com/app/id847764912',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png',
-        'compat_arguments_desc': '【使用说明】\\n开启 MitM 并信任证书，更新后彻底关闭 App 再打开。\\n去除开屏、首页推广、底栏小助手和右侧悬浮入口。\\n更新时间：2026-11-10 09:16',
+        'compat_arguments_desc': '【使用说明】\\n开启 MitM 并信任证书，更新后彻底关闭 App 再打开。\\n去除开屏、首页推广、底栏小助手和右侧悬浮入口。\\n更新时间：2026-11-10 09:16（同步成功）',
         'dns': {},
         # 网络层直接拦截广告与日志上报
         'rules': [{'domain': {'match': domain, 'policy': 'REJECT'}} for domain in
