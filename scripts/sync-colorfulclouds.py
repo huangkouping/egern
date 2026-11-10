@@ -68,7 +68,7 @@ def adapt(source):
 def description(meta):
     state = '同步成功' if meta['status'] == 'ok' else '同步失败'
     updated = meta.get('module_updated_at') or meta.get('last_updated', '未知')
-    return ('去开屏、首页推广、底栏小助手、右侧悬浮入口及反馈天气。\n'
+    return ('去开屏、首页推广、底栏小助手及右侧悬浮入口。\n'
             f"更新时间：{updated}（{state}）")
 
 def build(version):
