@@ -1,0 +1,61 @@
+name: 彩云天气去广告(同步优化版) 🅥
+author: ddgksf2013, huangkouping
+homepage: https://github.com/huangkouping/egern
+open_url: https://apps.apple.com/app/id847764912
+icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png
+dns: {}
+rules:
+- domain:
+    match: abyss.cyapi.cn
+    policy: REJECT
+- domain:
+    match: ad.cyapi.cn
+    policy: REJECT
+- domain:
+    match: gather.colorfulclouds.net
+    policy: REJECT
+- domain:
+    match: log.caiyunapp.com
+    policy: REJECT
+- domain:
+    match: adx.caiyunapp.com
+    policy: REJECT
+rewrites:
+- match: '(?i)^https?://ad\.cyapi\.cn/v\d+'
+  actions:
+  - respond:
+      status: 200
+      headers:
+        Content-Type: application/json
+      body: '{}'
+scriptings:
+- http_response:
+    name: 彩云天气移除底栏小助手
+    match: '(?i)^https?://biz\.cyapi\.cn/(api/)?v\d+/user(_detail)?'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=dcbaa8555efd
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 彩云天气活动清洗
+    match: '(?i)^https?://(wrapper\.cyapi\.cn|api\.caiyunapp\.com|cdn-w\.caiyunapp\.com)/v\d+/activity'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=dcbaa8555efd
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+- http_response:
+    name: 彩云天气首页卡片与浮窗清理
+    match: '(?i)^https?://starplucker\.cyapi\.cn/v\d+/(operation/(homefeatures|feeds|banners|features)|notification/message_center|config/cypage|campaigns)'
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/colorfulclouds-adblock.js?v=dcbaa8555efd
+    body_required: true
+    timeout: 10
+    update_interval: 3600
+mitm:
+  hostnames:
+    includes:
+    - biz.cyapi.cn
+    - starplucker.cyapi.cn
+    - wrapper.cyapi.cn
+    - api.caiyunapp.com
+    - cdn-w.caiyunapp.com
+    - ad.cyapi.cn
