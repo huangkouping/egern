@@ -3,6 +3,7 @@ author: ddgksf2013, huangkouping
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id847764912
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/ColorfulClouds.png
+compat_arguments_desc: 开启 MitM 并信任证书，更新后彻底关闭 App 再打开。
 dns: {}
 rules:
 - domain:
