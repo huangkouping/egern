@@ -1,11 +1,10 @@
 name: 小桔充电去广告🅥
-description: '更新时间：2026-11-12 03:51
-
+description: |-
   移除横幅、弹窗及搜索推荐，替换我的页面资源。
-
-  同步状态：脚本镜像同步正常；最近检查：2026-11-12 03:51'
+  同步状态：脚本镜像同步正常；最近检查：2026-11-12 03:51
+  更新时间：2026-11-12 03:51
 open_url: https://apps.apple.com/app/id1670782986
-author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], huangkouping
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/XiaojukejiCharge.png
 compat_arguments_desc: 使用说明：启用 HTTPS 解密并信任证书，更新后重新打开小桔充电。保留原模块四条广告/推荐接口规则；我的页面通过完整 JS 资源替换实现，该文件不是代理执行脚本。整包公开镜像约1.7MB，依赖客户端页面结构，版本变化后可能需要关闭对应替换规则。未验证当前 App 页面效果。每6小时检查公开整包JS镜像，大小、结构和语法检查失败则保留上次有效版本；模块规则单独维护。
