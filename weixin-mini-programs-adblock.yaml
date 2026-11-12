@@ -1,10 +1,11 @@
 name: 微信小程序去广告🅥
-description: |-
+description: '更新时间：2026-11-13 04:26
+
   收录常用小程序去广告，保留原模块全部功能。
-  同步状态：全部脚本及图片同步正常；最近检查：2026-11-12 15:43
-  更新时间：2026-11-12 15:43
+
+  同步状态：全部脚本及图片同步正常；最近检查：2026-11-13 04:26'
 open_url: https://apps.apple.com/app/id414478124
-author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md], huangkouping
+author: 可莉🅥[https://github.com/luestr/ProxyResource/blob/main/README.md]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/WeixinMiniPrograms.png
 compat_arguments_desc: 使用说明：启用HTTPS解密并信任证书，更新后重新打开对应小程序。保留公开模块全部域名规则、接口规则及12项脚本功能，脚本作者署名沿用原模块。茶颜悦色替换图片也备份至本仓库。适用已收录小程序，并非所有微信小程序；共享接口亦可能影响相应App。每6小时检查12个公开JS镜像及图片，全部校验成功后统一更新；失败保留上次完整版本。模块匹配规则单独维护。页面效果需实机验证。

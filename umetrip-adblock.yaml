@@ -1,10 +1,11 @@
 name: 航旅纵横去广告🅥
-description: |-
+description: '更新时间：2026-11-13 04:26
+
   过滤开屏接口及指定首页广告响应。
-  同步状态：脚本镜像同步正常；最近检查：2026-11-12 15:43
-  更新时间：2026-11-12 15:43
+
+  同步状态：脚本镜像同步正常；最近检查：2026-11-13 04:26'
 open_url: https://apps.apple.com/app/id480161784
-author: 佚名, huangkouping
+author: 佚名
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Umetrip.png
 compat_arguments_desc: 使用说明：启用模块并重新打开航旅纵横；HTTPS 请求需启用解密并信任证书。拦截 discardrp/startup 的指定接口；首页响应依据请求头 rpid 包含 1000002 或 1000019 返回 404，其他请求放行。源脚本 V1.0.1，已增加异常透传。模块匹配修正原域名分组并覆盖 HTTP/HTTPS。每 6 小时检查公开 JS 镜像，失败保留上次有效规则；模块匹配规则单独维护。当前 App 实际效果待实机验证。
