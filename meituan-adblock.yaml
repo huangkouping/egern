@@ -1,5 +1,5 @@
 name: 美团去广告🅗
-author: ZenmoFeiShi[https://github.com/ZenmoFeiShi/Qx]
+author: ZenmoFeiShi[https://github.com/ZenmoFeiShi/Qx], huangkouping
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/1024px/%E7%BE%8E%E5%9B%A2.png
 compat_arguments_desc: '【使用说明】
@@ -251,8 +251,7 @@ mitm:
     - assistify.meituan.com
     - httpdns.meituan.com
     - httpdnsmultiapi.meituan.com
-description: '更新时间：2026-11-14 03:48
-
+description: |-
   去除美团开屏、首页Tab、搜索热词、个人中心等广告与推广。
-
-  同步状态：上游同步正常；最近检查：2026-11-14 03:48'
+  同步状态：上游同步正常；最近检查：2026-11-14 03:48
+  更新时间：2026-11-14 03:48
