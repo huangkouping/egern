@@ -1,10 +1,11 @@
 name: 哔哩哔哩去广告🅥
-description: |-
+description: '更新时间：2026-11-18 15:55
+
   过滤广告、精简页面，保留可选空降助手等原功能。
-  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-18 05:20
-  更新时间：2026-11-18 05:20
+
+  同步状态：全部JS及jq镜像同步正常；最近检查：2026-11-18 15:55'
 open_url: https://apps.apple.com/app/id736536022
-author: kokoryh[https://github.com/kokoryh], huangkouping
+author: kokoryh[https://github.com/kokoryh]
 homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png
 compat_arguments:
@@ -196,7 +197,7 @@ scriptings:
 - http_request:
     name: 空降助手
     match: (?i)^https://(?:grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(?:community\.service\.dm\.v1\.DM/DmSegMobile|app\.viewunite\.v1\.View/View|main\.community\.reply\.v1\.Reply/MainList)$
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-request.js?v=6871263d7092
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-request.js?v=756a884390ae
     body_required: true
     binary_body: true
     timeout: 20
@@ -205,7 +206,7 @@ scriptings:
 - http_response:
     name: ProtoBuf处理
     match: (?i)^https://(grpc\.biliapi\.net|app\.bilibili\.com)/bilibili\.(app\.(show\.v1\.Popular/Index|dynamic\.v2\.Dynamic/DynAll|view(unite)?\.v1\.View/(View|ViewProgress|RelatesFeed|AIRelateAsync)|playurl\.v1\.PlayURL/PlayView|playerunite\.v1\.Player/PlayViewUnite)|polymer\.app\.search\.v1\.Search/SearchAll|community\.service\.dm\.v1\.DM/DmView|main\.community\.reply\.v1\.Reply/MainList|pgc\.gateway\.player\.v2\.PlayURL/PlayView)$
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-response.js?v=23d0064fef94
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-response.js?v=bf9ec0e2cab0
     body_required: true
     binary_body: true
     timeout: 20
@@ -214,7 +215,7 @@ scriptings:
 - http_response:
     name: 移除直播间广告
     match: (?i)^https://api\.live\.bilibili\.com/xlive/(?:app-interface/v2/index/feed|app-room/v1/index/getInfoBy(?:Room|User))\?
-    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-json.js?v=fff85afa42df
+    script_url: https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-json.js?v=9ff3750db28e
     body_required: true
     binary_body: false
     timeout: 20
