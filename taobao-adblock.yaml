@@ -3,8 +3,8 @@ description: |-
   过滤淘宝开屏广告（图片/视频/活动弹窗）与广告下发接口，含闲鱼欢迎页与开屏。
   纯规则加一个开屏处理脚本，脚本仅把开屏素材清空、等待时长归零，不改其他数据。
 open_url: https://apps.apple.com/app/id387682726
-author: RuCu6[https://github.com/RuCu6]
-homepage: https://hub.kelee.one
+author: RuCu6[https://github.com/RuCu6], huangkouping
+homepage: https://github.com/huangkouping/egern
 icon: https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png
 
 # 同步自可莉官方 GitHub 分发仓 Moli-X/Tool 的 RuCu6 淘宝插件，由 scripts/sync-taobao.py 每 6 小时自动转换；开屏脚本镜像至本仓库。
