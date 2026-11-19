@@ -10,7 +10,7 @@
 
 ### 🅗 自主维护模块（优先展示）
 
-| 模块名称 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 模块标注更新时间 |
+| 模块名称 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 更新时间 |
 | --- | --- | --- | --- | --- |
 | 搜索去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤百度、Bing、Google 搜索广告，保留 Google 域名重定向。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | 2026-11-01 |
 | 美团去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 清理美团 App 内匹配的广告及推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.yaml) | 2026-11-19 |
@@ -30,7 +30,7 @@
 
 ### 🅥 上游改编模块
 
-| 模块名称 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 模块标注更新时间 |
+| 模块名称 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 更新时间 |
 | --- | --- | --- | --- | --- |
 | 淘宝去广告🅥 | 原作者 / 可莉；[huangkouping](https://github.com/huangkouping)（适配维护） | 过滤淘宝 App 的部分广告与推广入口。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/taobao-adblock.yaml) | 未标注 |
 | 微信小程序去广告🅥 | 原作者 / 可莉；[huangkouping](https://github.com/huangkouping)（适配维护） | 过滤已适配微信小程序中的广告请求及展示内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/weixin-mini-programs-adblock.yaml) | 2026-11-19 |
