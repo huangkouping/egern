@@ -80,13 +80,13 @@
 
 ### DNS 规则与策略规则
 
-| 文件 | 用途 | 链接 |
-| --- | --- | --- |
-| `dns-cn.list` | 国内 DNS 规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/dns-cn.list) |
-| `dns-global.list` | 国外 DNS 规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/dns-global.list) |
-| `apple-service-proxy.list` | 苹果服务代理规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/apple-service-proxy.list) |
-| `custom-direct.list` | 自定义直连规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/custom-direct.list) |
-| `us.list` | AI 与美国服务代理规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/us.list) |
+| 文件 | 用途 | 链接 | 更新时间 |
+| --- | --- | --- | --- |
+| `dns-cn.list` | 国内 DNS 规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/dns-cn.list) | 2026-11-19 15:36:46 |
+| `dns-global.list` | 国外 DNS 规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/dns-global.list) | 2026-11-19 15:53:06 |
+| `apple-service-proxy.list` | 苹果服务代理规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/apple-service-proxy.list) | 2026-08-21 15:24:09 |
+| `custom-direct.list` | 自定义直连规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/custom-direct.list) | 2026-08-21 21:12:23 |
+| `us.list` | AI 与美国服务代理规则 | [订阅](https://raw.githubusercontent.com/huangkouping/egern/main/us.list) | 2026-11-19 15:17:51 |
 
 ## 作者与原创声明
 
