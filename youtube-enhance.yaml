@@ -1,9 +1,8 @@
 name: YouTube去广告🅗
-description: '更新时间：2026-11-20 04:58
-
+description: |-
   同步Maasea原版，过滤YouTube及Music广告并保留原功能。
-
-  同步状态：同步失败，保留上次有效配置；最近检查：2026-11-20 15:45'
+  同步状态：同步失败，保留上次有效配置；最近检查：2026-11-20 15:45
+  更新时间：2026-11-20 04:58
 author: Maasea[https://github.com/Maasea], huangkouping
 homepage: https://github.com/huangkouping/egern
 open_url: https://apps.apple.com/app/id544007664
