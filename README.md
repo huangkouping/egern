@@ -18,23 +18,23 @@
 
 ### 🅗 自主维护模块（优先展示）
 
-| 模块名称 | 作者 / 维护者 | 功能说明 | Egern 安装地址 | 更新时间 |
+| 模块名称 | 作者 / 维护者 | 功能说明 | Egern | 更新时间 |
 | --- | --- | --- | --- | --- |
-| 搜索去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤百度、Bing、Google 搜索广告，保留 Google 域名重定向。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | 2026-11-01 |
-| 美团去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 清理美团 App 内匹配的广告及推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.yaml) | 2026-11-19 |
-| 小羞片网站去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 清理指定网站的网页广告及部分视频播放广告。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) | 2026-11-03 |
-| 叮咚买菜去广告完美版🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 完美适配叮咚买菜去广告，去除底部Ai菜单，精简我的页面。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/dingdong-adblock-gemini.yaml) | 2026-11-02 |
-| 京东去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤京东开屏及部分页面推广内容，兼容新协议。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) | 2026-11-02 |
-| 汽水音乐净化·墨鱼版🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 基于墨鱼规则净化汽水音乐相关广告内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/soda-music-ddgksf2013.yaml) | 2025-09-26 |
-| YouTube去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤 YouTube 广告并提供相关播放增强功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance.yaml) | 2026-11-19 |
-| 中华万年历去广告🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 过滤广告及推广，精简页面，剔除插屏与屏保。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhwnl-adblock.yaml) | 2026-11-02 |
-| 百度&Google搜索自动翻页🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 百度与 Google 移动端搜索结果滚动自动加载；与搜索去广告模块独立使用。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/search_autopage.yaml) | 2026-11-01 |
-| PingMe签到🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 定时签到，并支持签到参数抓取与设置。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) | 2026-11-18 |
-| Telegram跳转🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 将 Telegram 网页链接转换为指定第三方客户端链接。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) | 2026-10-06 |
-| 微信外部链接解锁🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 优化微信内外部链接的打开与跳转限制。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-external-links.yaml) | 2026-10-31 |
-| 京东比价🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 查询京东商品历史价格，展示比价信息。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.yaml) | 2026-10-31 |
-| 小红书去直播广告(完整版)🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 屏蔽开屏、首页与搜索结果的广告及直播，支持媒体保存去水印。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-enhanced.yaml) | 2026-11-08 |
-| YouTube双语翻译🅗 | [huangkouping](https://github.com/huangkouping)（维护）；如有上游，原作者见模块 | 提供 YouTube 字幕翻译与双语字幕功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-translation.yaml) | 2026-11-04 |
+| 搜索去广告🅗 | [huangkouping](https://github.com/huangkouping) | 过滤百度、Bing、Google 搜索广告，保留 Google 域名重定向。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/baidu-search-adblock.yaml) | 2026-11-01 |
+| 美团去广告🅗 | [huangkouping](https://github.com/huangkouping) | 清理美团 App 内匹配的广告及推广内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/meituan-adblock.yaml) | 2026-11-19 |
+| 小羞片网站去广告🅗 | [huangkouping](https://github.com/huangkouping) | 清理指定网站的网页广告及部分视频播放广告。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/attract-adblock.yaml) | 2026-11-03 |
+| 叮咚买菜去广告完美版🅗 | [huangkouping](https://github.com/huangkouping) | 完美适配叮咚买菜去广告，去除底部Ai菜单，精简我的页面。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/dingdong-adblock-gemini.yaml) | 2026-11-02 |
+| 京东去广告🅗 | [huangkouping](https://github.com/huangkouping) | 过滤京东开屏及部分页面推广内容，兼容新协议。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-adblock.yaml) | 2026-11-02 |
+| 汽水音乐净化·墨鱼版🅗 | [huangkouping](https://github.com/huangkouping) | 基于墨鱼规则净化汽水音乐相关广告内容。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/soda-music-ddgksf2013.yaml) | 2025-09-26 |
+| YouTube去广告🅗 | [huangkouping](https://github.com/huangkouping) | 过滤 YouTube 广告并提供相关播放增强功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-enhance.yaml) | 2026-11-19 |
+| 中华万年历去广告🅗 | [huangkouping](https://github.com/huangkouping) | 过滤广告及推广，精简页面，剔除插屏与屏保。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/zhwnl-adblock.yaml) | 2026-11-02 |
+| 百度&Google搜索自动翻页🅗 | [huangkouping](https://github.com/huangkouping) | 百度与 Google 移动端搜索结果滚动自动加载；与搜索去广告模块独立使用。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/search_autopage.yaml) | 2026-11-01 |
+| PingMe签到🅗 | [huangkouping](https://github.com/huangkouping) | 定时签到，并支持签到参数抓取与设置。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/pingme.yaml) | 2026-11-18 |
+| Telegram跳转🅗 | [huangkouping](https://github.com/huangkouping) | 将 Telegram 网页链接转换为指定第三方客户端链接。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/telegram-redirect.yaml) | 2026-10-06 |
+| 微信外部链接解锁🅗 | [huangkouping](https://github.com/huangkouping) | 优化微信内外部链接的打开与跳转限制。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/wechat-external-links.yaml) | 2026-10-31 |
+| 京东比价🅗 | [huangkouping](https://github.com/huangkouping) | 查询京东商品历史价格，展示比价信息。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/jd-price.yaml) | 2026-10-31 |
+| 小红书去直播广告(完整版)🅗 | [huangkouping](https://github.com/huangkouping) | 屏蔽开屏、首页与搜索结果的广告及直播，支持媒体保存去水印。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/xiaohongshu-enhanced.yaml) | 2026-11-08 |
+| YouTube双语翻译🅗 | [huangkouping](https://github.com/huangkouping) | 提供 YouTube 字幕翻译与双语字幕功能。 | [安装](https://raw.githubusercontent.com/huangkouping/egern/main/youtube-subtitles-translation.yaml) | 2026-11-04 |
 
 ### 🅥 上游改编模块
 
