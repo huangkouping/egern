@@ -2,6 +2,12 @@
 
 本仓库收录 Egern 分流规则、去广告模块、自动签到和链接跳转模块。提供分流规则、DNS 规则、去广告及功能模块，并配有上游同步和更新检查任务。
 
+## 项目统计
+
+[![Stars](https://img.shields.io/github/stars/huangkouping/egern?style=flat-square&label=收藏)](https://github.com/huangkouping/egern/stargazers) [![Forks](https://img.shields.io/github/forks/huangkouping/egern?style=flat-square&label=派生)](https://github.com/huangkouping/egern/forks)
+
+> 上述为 GitHub 公开统计，不代表实际安装或活跃用户数。Raw 文件下载及订阅刷新不计入发行附件下载量。本统计面板不向安装脚本或模块添加设备追踪。
+
 ## 作者与原创声明
 
 - **仓库维护者：** [huangkouping](https://github.com/huangkouping)；**项目主页：** https://github.com/huangkouping/egern
