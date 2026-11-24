@@ -2,12 +2,6 @@
 
 本仓库收录 Egern 分流规则、去广告模块、自动签到和链接跳转模块。提供分流规则、DNS 规则、去广告及功能模块，并配有上游同步和更新检查任务。
 
-## 项目统计
-
-[![Stars](https://img.shields.io/github/stars/huangkouping/egern?style=flat-square&label=收藏)](https://github.com/huangkouping/egern/stargazers) [![Forks](https://img.shields.io/github/forks/huangkouping/egern?style=flat-square&label=派生)](https://github.com/huangkouping/egern/forks)
-
-> 上述为 GitHub 公开统计，不代表实际安装或活跃用户数。Raw 文件下载及订阅刷新不计入发行附件下载量。本统计面板不向安装脚本或模块添加设备追踪。
-
 ## 作者与原创声明
 
 - **仓库维护者：** [huangkouping](https://github.com/huangkouping)；**项目主页：** https://github.com/huangkouping/egern
@@ -220,3 +214,9 @@
 - **上游失败：** PingMe、CMS 和 Pornhub 同步逻辑包含沿用现有版本的处理；规则集生成失败时也应以 Actions 日志判断，不要只看文件是否仍能下载。
 
 仓库同步和手机更新是两个步骤：仓库生成了新文件后，Egern 还需要拉取远程配置及相关脚本。脚本的更新间隔通常配置为 3600 秒，模块和规则集的订阅拉取间隔以客户端设置为准。
+
+## 项目统计
+
+[![Stars](https://img.shields.io/github/stars/huangkouping/egern?style=flat-square&label=收藏)](https://github.com/huangkouping/egern/stargazers) [![Forks](https://img.shields.io/github/forks/huangkouping/egern?style=flat-square&label=派生)](https://github.com/huangkouping/egern/forks)
+
+> 上述为 GitHub 公开统计，不代表实际安装或活跃用户数。Raw 文件下载及订阅刷新不计入发行附件下载量。本统计面板不向安装脚本或模块添加设备追踪。
