@@ -10,6 +10,7 @@ DDGK_AI_UPSTREAM = "https://ddgksf2013.top/filter/Ai.yaml"
 GOOGLEVOICE_UPSTREAM = "https://github.com/blackmatrix7/ios_rule_script/raw/master/rule/Loon/GoogleVoice/GoogleVoice.list"
 OPENAI_UPSTREAM = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/OpenAI/OpenAI.list"
 GEMINI_UPSTREAM = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Gemini/Gemini.list"
+PAYPAL_UPSTREAM = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/PayPal/PayPal.list"
 OUTPUT = Path("us.list")
 
 EXTRA_AI_RULES = [
@@ -114,6 +115,21 @@ openai_rules = collect(fetch(OPENAI_UPSTREAM), seen)
 gemini_rules = collect(fetch(GEMINI_UPSTREAM), seen)
 googlevoice_rules = collect(fetch(GOOGLEVOICE_UPSTREAM, "https://github.com/"), seen)
 
+paypal_raw = fetch(PAYPAL_UPSTREAM)
+paypal_source = [line.strip() for line in paypal_raw.splitlines()
+                 if line.strip() and not line.strip().startswith("#")]
+paypal_keys = {line.replace(" ", "").lower() for line in paypal_source}
+if len(paypal_keys) < 100 or not {"domain-suffix,paypal.com", "domain-suffix,paypalobjects.com"} <= paypal_keys:
+    raise RuntimeError("PayPal upstream incomplete")
+existing_keys = {line.replace(" ", "").lower() for line in seen}
+paypal_rules = []
+for rule in paypal_source:
+    key = rule.replace(" ", "").lower()
+    if key not in existing_keys and not is_direct_only_rule(rule):
+        existing_keys.add(key)
+        seen.add(rule)
+        paypal_rules.append(rule)
+
 custom_rules = []
 for rule in EXTRA_AI_RULES + MUSE_RULES + RAKSMART_RULES + EBAY_RULES:
     if not is_direct_only_rule(rule) and rule not in seen:
@@ -131,9 +147,10 @@ lines = [
     f"# Google Voice 上游：{GOOGLEVOICE_UPSTREAM}",
     f"# OpenAI 上游：{OPENAI_UPSTREAM}",
     f"# Gemini 上游：{GEMINI_UPSTREAM}",
+    f"# PayPal 上游：{PAYPAL_UPSTREAM}",
     '# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组',
     "# 直连排除：sentry.io 及其子域名（由直连规则集处理）",
-    "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice + RakSmart + eBay",
+    "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice + RakSmart + eBay + PayPal",
     "",
     "# ===== AI 服务（可莉上游同步） =====",
     *ai_rules,
@@ -155,6 +172,9 @@ lines = [
     "",
     "# ===== eBay =====",
     *[rule for rule in EBAY_RULES if rule in custom_rules],
+    "",
+    "# ===== PayPal（Blackmatrix7 上游同步，排重） =====",
+    *paypal_rules,
     "",
     "# ===== Google Voice（Blackmatrix7 上游同步） =====",
     *googlevoice_rules,
