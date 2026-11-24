@@ -59,6 +59,12 @@ EBAY_RULES = [
     "DOMAIN-SUFFIX,ebay.com",
 ]
 
+REDPOCKET_RULES = [
+    "DOMAIN-SUFFIX,redpocket.com",
+    "DOMAIN-SUFFIX,redpocketmobile.com",
+    "DOMAIN-SUFFIX,goredpocket.com",
+]
+
 MUSE_RULES = [
     "DOMAIN-SUFFIX,meta.ai",
     "DOMAIN-SUFFIX,ai.meta.com",
@@ -131,7 +137,7 @@ for rule in paypal_source:
         paypal_rules.append(rule)
 
 custom_rules = []
-for rule in EXTRA_AI_RULES + MUSE_RULES + RAKSMART_RULES + EBAY_RULES:
+for rule in EXTRA_AI_RULES + MUSE_RULES + RAKSMART_RULES + EBAY_RULES + REDPOCKET_RULES:
     if not is_direct_only_rule(rule) and rule not in seen:
         seen.add(rule)
         custom_rules.append(rule)
@@ -150,7 +156,7 @@ lines = [
     f"# PayPal 上游：{PAYPAL_UPSTREAM}",
     '# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组',
     "# 直连排除：sentry.io 及其子域名（由直连规则集处理）",
-    "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice + RakSmart + eBay + PayPal",
+    "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice + RakSmart + eBay + PayPal + RedPocket",
     "",
     "# ===== AI 服务（可莉上游同步） =====",
     *ai_rules,
@@ -165,7 +171,7 @@ lines = [
     *gemini_rules,
     "",
     "# ===== 海外主流 AI + Muse 自定义补充规则 =====",
-    *[rule for rule in custom_rules if rule not in RAKSMART_RULES + EBAY_RULES],
+    *[rule for rule in custom_rules if rule not in RAKSMART_RULES + EBAY_RULES + REDPOCKET_RULES],
     "",
     "# ===== RakSmart（官网、客户中心及全部子域名） =====",
     *[rule for rule in RAKSMART_RULES if rule in custom_rules],
@@ -175,6 +181,9 @@ lines = [
     "",
     "# ===== PayPal（Blackmatrix7 上游同步，排重） =====",
     *paypal_rules,
+    "",
+    "# ===== RedPocket Mobile（红包卡） =====",
+    *[rule for rule in REDPOCKET_RULES if rule in custom_rules],
     "",
     "# ===== Google Voice（Blackmatrix7 上游同步） =====",
     *googlevoice_rules,
