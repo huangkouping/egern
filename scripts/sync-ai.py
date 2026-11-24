@@ -54,6 +54,10 @@ RAKSMART_RULES = [
     "DOMAIN-SUFFIX,raksmart.com",
 ]
 
+EBAY_RULES = [
+    "DOMAIN-SUFFIX,ebay.com",
+]
+
 MUSE_RULES = [
     "DOMAIN-SUFFIX,meta.ai",
     "DOMAIN-SUFFIX,ai.meta.com",
@@ -111,7 +115,7 @@ gemini_rules = collect(fetch(GEMINI_UPSTREAM), seen)
 googlevoice_rules = collect(fetch(GOOGLEVOICE_UPSTREAM, "https://github.com/"), seen)
 
 custom_rules = []
-for rule in EXTRA_AI_RULES + MUSE_RULES + RAKSMART_RULES:
+for rule in EXTRA_AI_RULES + MUSE_RULES + RAKSMART_RULES + EBAY_RULES:
     if not is_direct_only_rule(rule) and rule not in seen:
         seen.add(rule)
         custom_rules.append(rule)
@@ -129,7 +133,7 @@ lines = [
     f"# Gemini 上游：{GEMINI_UPSTREAM}",
     '# 使用方法：在 Egern 中订阅本文件，并将策略设置为“美国节点”或你的 US 策略组',
     "# 直连排除：sentry.io 及其子域名（由直连规则集处理）",
-    "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice + RakSmart",
+    "# 同步策略：可莉 AI + DDGKSF AI（统一排重）+ 海外主流 AI 补充 + Muse + Google Voice + RakSmart + eBay",
     "",
     "# ===== AI 服务（可莉上游同步） =====",
     *ai_rules,
@@ -144,10 +148,13 @@ lines = [
     *gemini_rules,
     "",
     "# ===== 海外主流 AI + Muse 自定义补充规则 =====",
-    *[rule for rule in custom_rules if rule not in RAKSMART_RULES],
+    *[rule for rule in custom_rules if rule not in RAKSMART_RULES + EBAY_RULES],
     "",
     "# ===== RakSmart（官网、客户中心及全部子域名） =====",
     *[rule for rule in RAKSMART_RULES if rule in custom_rules],
+    "",
+    "# ===== eBay =====",
+    *[rule for rule in EBAY_RULES if rule in custom_rules],
     "",
     "# ===== Google Voice（Blackmatrix7 上游同步） =====",
     *googlevoice_rules,
