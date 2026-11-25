@@ -41,14 +41,15 @@ def adapt(source):
 
 def description(meta, existing=''):
     import re
-    # Handle historical literal backslash-n sequences as well as real newlines.
-    existing = existing.replace('\\\\n', '\\n')
-    base = re.sub(r'(?m)^\\s*(?:同步状态：|更新时间：).*$', '', existing).strip()
+    # Split historical escaped timestamp separators without touching ordinary text.
+    lines = re.split(r'\\n(?=\s*(?:同步状态|更新时间)[：:])|\r?\n', existing)
+    base = '\n'.join(line for line in lines
+                     if not re.match(r'^\s*(?:同步状态|更新时间)[：:]', line)).strip()
     if not base:
         base = '清理网易新闻开屏广告、置顶内容、信息流推广及搜索推荐。'
     state = '同步成功' if meta.get('status') == 'ok' else '同步失败'
-    checked = meta.get('last_checked', '未知')
-    return f'{base}\\n更新时间：{checked}（{state}）'
+    updated = meta.get('display_updated_at') or meta.get('last_updated') or meta.get('last_checked', '未知')
+    return f'{base}\n更新时间：{updated}（{state}）'
 
 def build(version):
     template = (ROOT / 'scripts/netease-news-base.yaml').read_text()
@@ -79,12 +80,14 @@ def main():
         if MODULE.exists():
             previous = yaml.safe_load(MODULE.read_text())
             previous.pop('description', None)
-            changed = changed or previous != module
+            changed = changed or previous != {k: v for k, v in module.items() if k != 'description'}
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_url': URL, 'source_version': '2024-01-12',
                 'source_sha256': hashlib.sha256(source.encode()).hexdigest(), 'script_sha256': sha,
                 'scope': 'Sync the public JavaScript mirror; local module rules are maintained separately.'}
+        meta['display_updated_at'] = (checked if changed or old.get('status') != 'ok'
+                                      else old.get('display_updated_at') or meta['last_updated'])
         module['description'] = description(meta, module.get('description', ''))
         SCRIPT.write_text(script)
         MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
@@ -94,6 +97,8 @@ def main():
     except Exception as error:
         if MODULE.exists():
             meta = dict(old, status='failed', last_checked=checked, error=type(error).__name__)
+            meta['display_updated_at'] = (checked if old.get('status') != 'failed'
+                                          else old.get('display_updated_at') or old.get('last_checked') or checked)
             module = yaml.safe_load(MODULE.read_text())
             module['description'] = description(meta, module.get('description', ''))
             MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
