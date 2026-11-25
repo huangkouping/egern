@@ -32,15 +32,16 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           from datetime import datetime
+          from zoneinfo import ZoneInfo
           import os
           import re
 
           path = Path("pingme.yaml")
           text = path.read_text()
           status = os.environ["SYNC_STATUS"]
-          now = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M")
+          now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M")
           previous = Path("/tmp/pingme-previous.yaml").read_text()
-          old_time = re.search(r"更新时间：([^（\\n]+)", previous)
+          old_time = re.search(r"更新时间：([^（\n]+)", previous)
           updated_at = old_time.group(1).strip() if old_time else now
           text = re.sub(
               r"(?m)^name:.*$",
@@ -95,8 +96,26 @@ jobs:
               text,
               count=1,
           )
+          previous_author = re.search(r"(?m)^author: .+$", previous)
+          author = (
+              previous_author.group(0)
+              if previous_author and "huangkouping" in previous_author.group(0)
+              else "author: mickeu 修改为Egern版（添加随机设备ID与参数开关）, huangkouping"
+          )
+          previous_homepage = re.search(r"(?m)^homepage: .+$", previous)
+          homepage = (
+              previous_homepage.group(0)
+              if previous_homepage
+              else "homepage: https://github.com/huangkouping/egern"
+          )
+          text = re.sub(r"(?m)^homepage:[^\n]*(?:\n|$)", "", text)
+          text, author_count = re.subn(
+              r"(?m)^author:[^\n]*$", lambda _: f"{author}\n{homepage}", text, count=1
+          )
+          if not author_count:
+              text = f"{text.rstrip()}\n{author}\n{homepage}\n"
           if text != previous:
-              text = re.sub(r"更新时间：[^（\\n]+", f"更新时间：{now}", text, count=1)
+              text = re.sub(r"更新时间：[^（\n]+", f"更新时间：{now}", text, count=1)
           path.write_text(text)
           PY
 
