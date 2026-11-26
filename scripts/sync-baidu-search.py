@@ -37,6 +37,8 @@ BING_MATCH = r'^https?://(www|cn)\.bing\.com/search\?'
 GOOGLE_MATCH = r'^https?://www\.google\.com(\.hk|\.tw)?/search'
 GOOGLE_CN_PATTERN = r'^https?://(www\.)?(g|google)\.cn(/.*)?$'
 GOOGLE_CN_LOCATION = 'https://www.google.com$3'
+# Baidu mobile SERP embeds megabytes of page data; Egern defaults to 1 MiB.
+BAIDU_RESULTS_MAX_SIZE = 8 * 1024 * 1024
 
 BAIDU_CARD_FILTER = r"""
 (() => {
@@ -217,6 +219,8 @@ def build(version, patterns):
             'name': name, 'match': pattern,
             'script_url': RAW_BASE + 'baidu-search-adblock.js?v=' + version,
             'body_required': True, 'timeout': 20}})
+        if name == '百度搜索结果去广告':
+            scriptings[-1]['http_response']['max_size'] = BAIDU_RESULTS_MAX_SIZE
     if results_pattern is None:
         raise ValueError('Baidu results pattern missing')
     injector_url = RAW_BASE + 'baidu-search-adblock.js?v=' + version
