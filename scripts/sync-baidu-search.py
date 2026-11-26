@@ -201,11 +201,9 @@ console.log("smoke ok");
 
 
 def description(meta):
-    state = '上游同步正常' if meta['status'] == 'ok' else '上游同步失败，保留上次有效规则'
-    return ('保留百度、Bing、Google 搜索去广告及 Google 中国域名重定向。\n'
-            '补充过滤百度搜索结果中标有广告的推广卡片。\n'
-            f"同步状态：{state}；最近检查：{meta['last_checked']}\n"
-            f"更新时间：{meta.get('last_updated', '未知')}")
+    suffix = '（同步失败）' if meta['status'] != 'ok' else ''
+    return ('去除百度、Bing、Google 搜索广告。\n'
+            f"更新时间：{meta.get('last_updated', '未知')}{suffix}")
 
 
 def build(version, patterns):
@@ -231,13 +229,7 @@ def build(version, patterns):
         'author': 'limbopro[https://github.com/limbopro/Adblock4limbo], huangkouping',
         'homepage': 'https://github.com/huangkouping/egern',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Baidu.png',
-        'compat_arguments_desc': ('【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开浏览器访问百度、Bing 或 Google。\n'
-            '本模块只摘取 limbopro/Adblock4limbo 合集中的搜索引擎部分，不含其数百个其他站点规则。百度走合集原规则（知道、搜索首页、搜索结果 3 条）；Bing、Google 用同一注入器运行 limbopro 用户脚本自带的搜索引擎逻辑（去广告与内容农场结果过滤，其脚本 @match 本就包含这两家）。\n'
-            '注入器镜像自 limbopro 原仓库，每 6 小时自动检查上游更新，失败时保留上次有效版本；页面脚本与分域名 CSS 运行时由 limbopro.com 加载（作者分发方式）。\n'
-            '已按作者在脚本头注明的官方方法，拦截 Adblock4limbo.function.js：右下角导航按钮、导航面板及其附带功能（沉浸式翻译、划词搜索等）全部禁用，只保留纯去广告。\n'
-            '百度搜索结果补充过滤标有广告或商业推广的卡片；自动翻页仍为独立模块。\n'
-            '另含谷歌域名重定向（源 DivineEngine）：google.cn / g.cn 自动跳转 google.com，并保留路径与搜索词。NobyDa 的人机验证增强依赖 Surge/QX 的代理策略 API，Egern 不支持，未并入。\n'
-            '若某个搜索页面异常，先停用本模块排查。'),
+        'compat_arguments_desc': '请启用 MitM 并信任证书。',
         'dns': {},
         'scriptings': scriptings,
         'url_rewrites': [{'match': FUNCTION_JS_PATTERN, 'location': 'http://reject-dict/'},
