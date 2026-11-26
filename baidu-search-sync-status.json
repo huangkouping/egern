@@ -2,15 +2,14 @@
   "status": "ok",
   "last_checked": "2026-11-01 16:33",
   "last_success": "2026-11-01 16:33",
-  "last_updated": "2026-11-01 16:33",
+  "last_updated": "2026-11-26 23:00",
   "source_conf": "https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adblock4limbo.conf",
   "source_injector": "https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js",
   "source_sha256": "57c39a847098d11a3185dd0f34edf0b2e1a48624c19d52a59109846cd51befc8",
-  "script_sha256": "4f85ea6f8f09d16674b8838cb6f99b3dc77126a979cb898440141232434c7662",
-  "pager_sha256": "a98fc80ec9e87d0f3622d93f05e2376c62e35f24ef59844e42ce7404a0de0422",
+  "script_sha256": "1dee7fe2812d68fbc7aef68c267a8e2c06a2de8de33a80656b2cf65a96c933c0",
   "counts": {
-    "scriptings": 8,
+    "scriptings": 5,
     "url_rewrites": 2
   },
-  "scope": "Search-engine slice of limbopro/Adblock4limbo: Baidu 3 response rules + mirrored injector, plus Bing/Google injector rules running the userscript built-in search-engine logic; Adblock4limbo.function.js rejected to disable the navigation panel per the author-documented switch; plus a local hand-maintained multi-engine auto-pager (baidu-autopager.js, referenced by hash, never overwritten by sync); plus a DivineEngine google.cn/g.cn -> google.com 302 redirect preserving path and query; auto-sync every 6h via Muse cron; last-good retained on failure."
+  "scope": "Search ads only; local Baidu card filter, mirrored upstream injector and unchanged Google redirect. Auto-paging is independent."
 }

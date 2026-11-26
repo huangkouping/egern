@@ -1,9 +1,24 @@
-/* limbopro 百度搜索去广告注入器备份（源自 limbopro/Adblock4limbo 的 Adguard/Adblock4limbo.js）；源逻辑保持，补充异常透传与单次完成。
+/* limbopro 百度搜索去广告注入器镜像；含 huangkouping 百度搜索推广卡片补充过滤。
  * Source: https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adguard/Adblock4limbo.js
  */
 (function (complete) {
 let finished = false;
-const $done = value => { if (!finished) { finished = true; complete(value); } };
+
+const localPatch = "<script id=\"egern-baidu-card-filter\">\n(() => {\n  // Search-result cards only. Ordinary enterprise listings and snippets can mention ads.\n  const ids = '#results, #content_left';\n  const card = ':is(.c-result,.result,.result-op,.c-container)';\n  const marker = '[data-tuiguang], [data-module=\"ad\"], .ec-tuiguang, .ecfc-tuiguang, .ec-result, .ecom-result, .ec_wise_ad, [data-lp][data-placeid]';\n  const flag = 'data-egern-baidu-sponsored';\n  const norm = text => (text || '').replace(/[\\s\\u200b-\\u200d\\ufeff]/g, '');\n  const badgeText = /^(广告|商业推广|赞助广告)$/;\n  const style = document.createElement('style');\n  style.textContent = '[' + flag + ']{display:none!important}';\n  (document.head || document.documentElement).appendChild(style);\n  const label = 'span,small,i,em,div,a,button,[aria-label]';\n  function inFooter(node, item) {\n    // Accept the exact disclosure only in card chrome, not a result title or snippet.\n    if (node.closest('h1,h2,h3,h4,p,summary,[role=\"heading\"]')) return false;\n    for (let el = node; el && el !== item; el = el.parentElement) {\n      if (el.matches('footer,[role=\"contentinfo\"]') ||\n          /(?:^|[\\s_-])(?:foot(?:er)?|ad[-_]?label|ad[-_]?tag|disclaimer|disclosure|source|site|origin)(?:$|[\\s_-])/i.test(el.className || '')) return true;\n      if (el.parentElement === item && el === item.lastElementChild && el !== node &&\n          !el.querySelector('h1,h2,h3,h4,p,article,summary,[role=\"heading\"]') &&\n          norm(el.textContent).length <= 80 && item.children.length > 1 &&\n          [...el.children].some(s => s !== node && !s.contains(node) && norm(s.textContent).length > 2)) return true;\n    }\n    return false;\n  }\n  function scan() {\n    for (const root of document.querySelectorAll(ids)) {\n      for (const item of root.children) {\n        if (item.tagName !== 'DIV' && item.tagName !== 'ARTICLE') continue;\n        if (item.hasAttribute(flag)) continue;\n        // Do not promote a nested result's ad marker into a hide of an entire results list.\n        const candidate = item.matches(card) || item.matches(marker);\n        if (!candidate || item.querySelector(ids)) continue;\n        if (item.matches(marker) ||\n          [...item.querySelectorAll(marker)].some(el => !el.closest('h1,h2,h3,h4,p,summary'))) {\n          item.setAttribute(flag, '');\n          continue;\n        }\n        for (const node of item.querySelectorAll(label)) {\n          if (node.children.length || !inFooter(node, item)) continue;\n          if (badgeText.test(norm(node.textContent)) ||\n              badgeText.test(norm(node.getAttribute('aria-label')))) {\n            item.setAttribute(flag, '');\n            break;\n          }\n          if (!norm(node.textContent) && /(?:ad|tag|tip|label|badge|tuiguang)/i.test(node.className || '') &&\n              ['::before','::after'].some(p => badgeText.test(norm(getComputedStyle(node,p).content).replace(/^['\"]|['\"]$/g,'')))) {\n            item.setAttribute(flag, '');\n            break;\n          }\n        }\n      }\n    }\n  }\n  let queued = false;\n  const schedule = () => {\n    if (queued) return;\n    queued = true;\n    requestAnimationFrame(() => { queued = false; scan(); });\n  };\n  scan();\n  new MutationObserver(schedule).observe(document.documentElement, {childList:true,subtree:true,characterData:true});\n})();\n</script>";
+const $done = value => {
+    if (finished) return;
+    finished = true;
+    try {
+        if (value && typeof value.body === 'string' &&
+            /^https?:\/\/(?:m|www)\.baidu\.com\/(?:s\?|from=[^?#]*\/(?:s\?|s(?:\/|$)|tc\?))/i.test($request.url) &&
+            !value.body.includes('id="egern-baidu-card-filter"')) {
+            const body = value.body;
+            const tag = /<\/body\s*>/i;
+            if (tag.test(body)) value = {...value, body: body.replace(tag, m => localPatch + m)};
+        }
+    } catch (_) { /* Leave upstream result untouched if the local overlay fails. */ }
+    complete(value);
+};
 try {
 /**
  * Adblock4limbo - Web Ad Removal Script
