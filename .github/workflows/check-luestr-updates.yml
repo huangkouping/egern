@@ -27,9 +27,19 @@ jobs:
             local label="$1"
             local local_file="$2"
             local remote_url="$3"
-            local saved remote
-            saved="$(grep -oP 'from luestr/userscripts.*v\K[0-9]+\.[0-9]+\.[0-9]+' "$local_file" | head -n1)"
-            remote="$(curl -fsSL "$remote_url" | grep -oP '@version\s+\K[0-9]+\.[0-9]+\.[0-9]+' | head -n1)"
+            local saved remote source
+            if ! saved="$(grep -m1 -oP 'from luestr/userscripts.*v\K[0-9]+\.[0-9]+\.[0-9]+(?=[[:space:]]|$)' "$local_file")"; then
+              echo "::warning::$label: no valid version in $local_file; skipping."
+              return 0
+            fi
+            if ! source="$(curl -fsSL --connect-timeout 8 --max-time 25 "$remote_url")"; then
+              echo "::warning::$label: upstream fetch failed; skipping."
+              return 0
+            fi
+            if ! remote="$(grep -m1 -oP '^[[:blank:]]*//[[:blank:]]*@version[[:blank:]]+\K[0-9]+\.[0-9]+\.[0-9]+(?=[[:space:]]*$)' <<< "$source")"; then
+              echo "::warning::$label: no valid upstream version; skipping."
+              return 0
+            fi
             echo "$label: saved=$saved remote=$remote"
             if [ "$saved" != "$remote" ]; then
               echo "$label: $saved -> $remote" >> updates.txt
