@@ -5,6 +5,11 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
 import yaml
+
+PANEL_FIELDS = frozenset({'name', 'description', 'author', 'homepage', 'icon', 'open_url', 'compat_arguments_desc'})
+
+def filtering_config(module):
+    return {key: value for key, value in module.items() if key not in PANEL_FIELDS}
 ROOT=Path(__file__).resolve().parents[1]
 URL='https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/Bilibili_remove_ads/kelee_'
 SPARKLE='https://raw.githubusercontent.com/kokoryh/Sparkle/master/dist/'
@@ -107,7 +112,10 @@ def main():
             entry['script_url']='https://raw.githubusercontent.com/huangkouping/egern/main/bilibili-'+key+'.js?v='+sha[:12]
         changed=any(not (ROOT/name).exists() or (ROOT/name).read_text()!=text for name,text in outputs.items())
         if MODULE.exists():
-            previous=yaml.safe_load(MODULE.read_text());previous.pop('description',None);changed=changed or previous!=module
+            previous = yaml.safe_load(MODULE.read_text())
+            changed = changed or filtering_config(previous) != filtering_config(module)
+        else:
+            changed = True
         meta={'status':'ok','last_checked':checked,'last_success':checked,'last_updated':checked if changed else old.get('last_updated',checked),
               'sources':{k:{'url':URLS[k],'sha256':hashlib.sha256(v.encode()).hexdigest()} for k,v in sources.items()},
               'scope':'Sync 3 JS from kokoryh/Sparkle dist (original author) and 2 JQ mirrors; module rules and native adapter separately maintained.',

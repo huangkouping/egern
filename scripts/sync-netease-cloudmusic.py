@@ -12,6 +12,11 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 import yaml
 
+PANEL_FIELDS = frozenset({'name', 'description', 'author', 'homepage', 'icon', 'open_url', 'compat_arguments_desc'})
+
+def filtering_config(module):
+    return {key: value for key, value in module.items() if key not in PANEL_FIELDS}
+
 ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js'
 MODULE = ROOT / 'netease-cloudmusic-adblock.yaml'
@@ -76,8 +81,9 @@ def main():
         changed = not SCRIPT.exists() or SCRIPT.read_text() != script
         if MODULE.exists():
             previous = yaml.safe_load(MODULE.read_text())
-            previous.pop('description', None)
-            changed = changed or previous != module
+            changed = changed or filtering_config(previous) != filtering_config(module)
+        else:
+            changed = True
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_url': URL, 'source_version': '2025-02-19',

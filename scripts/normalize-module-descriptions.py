@@ -75,7 +75,11 @@ for path in paths:
             path.write_text(changed, encoding="utf-8")
             print("Normalized:", path)
         continue
-    clean.append(timestamps[-1])
+    if path.name == "meituan-adblock.yaml":
+        # Keep the content date above the check status, as emitted by sync-meituan.
+        clean.insert(1, timestamps[-1])
+    else:
+        clean.append(timestamps[-1])
     replacement = ["description: |-\n"] + ["  " + s + "\n" for s in clean]
     changed = "".join(lines[:start] + replacement + lines[end:])
     if changed != original:
