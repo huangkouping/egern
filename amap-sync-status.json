@@ -1,10 +1,10 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-28 05:37",
-  "last_success": "2026-11-28 05:37",
+  "last_checked": "2026-11-28 16:26",
+  "last_success": "2026-11-28 16:26",
   "last_updated": "2026-11-01 12:22",
   "upstream_repository": "ifflagged/Romeo",
-  "upstream_commit": "e204d4cd19dd91a8d03108ba94ec0a4f69663689",
+  "upstream_commit": "6722b634833a5c5f7be63870e3479fa44e994c79",
   "source_paths": {
     "updatable.jq": "Modules/JavaScript/Kelee/Amap_remove_ads/kelee_updatable.jq",
     "search_poi_detail.jq": "Modules/JavaScript/Kelee/Amap_remove_ads/kelee_search_poi_detail.jq"
