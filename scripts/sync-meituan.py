@@ -147,10 +147,36 @@ function run(url, bodyObj) {
     return result
 
 
+PANEL_FIELDS = frozenset({'name', 'description', 'author', 'homepage', 'icon', 'compat_arguments_desc'})
+
+class PanelDescription(str):
+    pass
+
+
+class ModuleDumper(yaml.SafeDumper):
+    pass
+
+
+ModuleDumper.add_representer(
+    PanelDescription,
+    lambda dumper, value: dumper.represent_scalar('tag:yaml.org,2002:str', value, style='|'),
+)
+
+
+def filtering_config(module):
+    return {key: value for key, value in module.items() if key not in PANEL_FIELDS}
+
+
+def write_module(module, meta):
+    ordered = {'name': module['name'], 'description': PanelDescription(description(meta))}
+    ordered.update((key, value) for key, value in module.items() if key not in ordered)
+    MODULE.write_text(yaml.dump(ordered, Dumper=ModuleDumper, allow_unicode=True, sort_keys=False, width=1000), encoding='utf-8')
+
+
 def description(meta):
     state = '上游同步正常' if meta['status'] == 'ok' else '上游同步失败，保留上次有效规则'
-    return (f"更新时间：{meta.get('last_updated', '未知')}\n"
-            '去除美团开屏、首页Tab、搜索热词、个人中心等广告与推广。\n'
+    return ('去除美团开屏、首页Tab、搜索热词、个人中心等广告与推广。\n'
+            f"更新时间：{meta.get('last_updated', '未知')}\n"
             f"同步状态：{state}；最近检查：{meta['last_checked']}")
 
 
@@ -169,7 +195,7 @@ def build(version, parsed):
     app = meta.get('name', '美团')
     return {
         'name': '美团去广告🅗',
-        'author': 'ZenmoFeiShi[https://github.com/ZenmoFeiShi/Qx]',
+        'author': 'ZenmoFeiShi[https://github.com/ZenmoFeiShi/Qx], huangkouping',
         'homepage': 'https://github.com/huangkouping/egern',
         'icon': 'https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/1024px/%E7%BE%8E%E5%9B%A2.png',
         'compat_arguments_desc': ('【使用说明】\n启用模块，确认 MitM 已开启且证书受信任，然后重新打开美团。\n关闭其他美团去广告模块，避免重复处理。\n'
@@ -195,8 +221,9 @@ def main():
         changed = not SCRIPT.exists() or SCRIPT.read_text() != script
         if MODULE.exists():
             previous = yaml.safe_load(MODULE.read_text())
-            previous.pop('description', None)
-            changed = changed or previous != module
+            changed = changed or filtering_config(previous) != filtering_config(module)
+        else:
+            changed = True
         meta = {'status': 'ok', 'last_checked': checked, 'last_success': checked,
                 'last_updated': checked if changed else old.get('last_updated', checked),
                 'source_snippet': SNIPPET_URL, 'source_script': JS_URL,
@@ -205,9 +232,8 @@ def main():
                 'counts': {'domains': len(parsed[1]), 'ip_cidr': len(parsed[2]),
                            'url_regex': len(parsed[3]), 'scriptings': len(parsed[4])},
                 'scope': 'Mirror ZenmoFeiShi/Qx MT.snippet rules (converted to Egern rules) and MT.js; auto-sync every 6h via Muse cron; last-good retained on failure.'}
-        module['description'] = description(meta)
         SCRIPT.write_text(script)
-        MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
+        write_module(module, meta)
         META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
         print('Meituan module sync OK; changed =', changed)
         return 0
@@ -215,8 +241,7 @@ def main():
         if MODULE.exists():
             meta = dict(old, status='failed', last_checked=checked, error=type(error).__name__)
             module = yaml.safe_load(MODULE.read_text())
-            module['description'] = description(meta)
-            MODULE.write_text(yaml.safe_dump(module, allow_unicode=True, sort_keys=False, width=1000))
+            write_module(module, meta)
             META.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
         print('Meituan sync failed; last good rules retained:', type(error).__name__, file=sys.stderr)
         return 1
