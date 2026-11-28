@@ -1,20 +1,20 @@
 {
   "status": "ok",
-  "last_checked": "2026-11-28 16:26",
-  "last_success": "2026-11-28 16:26",
-  "last_updated": "2026-11-28 16:26",
+  "last_checked": "2026-11-29 00:25",
+  "last_success": "2026-11-29 00:25",
+  "last_updated": "2026-11-29 00:25",
   "sources": {
     "request": {
       "url": "https://raw.githubusercontent.com/kokoryh/Sparkle/master/dist/bilibili.protobuf.request.js",
-      "sha256": "3d7cf60fb5730ac5ab14ab0aa11826df09f009db724562eb8483d907e4564bf0"
+      "sha256": "d02b96784a83697a73898774a00070482bb2d34e806a167ca6f21dd377b48285"
     },
     "response": {
       "url": "https://raw.githubusercontent.com/kokoryh/Sparkle/master/dist/bilibili.protobuf.response.js",
-      "sha256": "4a70452a6f6ca07f9d81069005075dbf2957c349cfe981d26af2d295ebbc016e"
+      "sha256": "93a77434ed67c63f4af2b62c70a8e490e260ba14b5bfb46a4b346d560f6090ac"
     },
     "json": {
       "url": "https://raw.githubusercontent.com/kokoryh/Sparkle/master/dist/bilibili.json.js",
-      "sha256": "5b2e1a9c2b203648a75c1e7d1c8b20081005fce6d909fb378ab2c3b5c3b8e4cb"
+      "sha256": "2dd3fdb3a699b3646ed2bb549b028403e0024f09ab6827cf8959bdb0bbff6cb6"
     },
     "tab": {
       "url": "https://raw.githubusercontent.com/ifflagged/Romeo/main/Modules/JavaScript/Kelee/Bilibili_remove_ads/kelee_tab_Bilibili_remove_ads.jq",
